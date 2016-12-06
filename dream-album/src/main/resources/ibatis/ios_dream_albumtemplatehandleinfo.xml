@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="albumtemplatehandleinfo"
+	class="com.dreambox.core.dto.album.AlbumTemplateHandleInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="template_id" property="templateId" jdbcType="INTEGER" />
+		<result column="handle_infos" property="handleInfos" jdbcType="VARCHAR" />
+		<result column="step" property="step" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<insert id="insertOrUpdateAlbumTemplateHandleInfo"
+	parameterClass="com.dreambox.core.dto.album.AlbumTemplateHandleInfo">
+		<![CDATA[
+		INSERT IGNORE INTO wechat_app_album_handle_info (`id`,`user_id`,`template_id`,`handle_infos`,`step`,
+		`status`,`update_time`,`create_time`)
+		VALUES(null, #userId#,#templateId#,#handleInfos#,#step#,0, now(),now())
+		]]>
+	</insert>
+	<insert id="insertOrIgnoreAlbumTemplateHandleInfo"
+	parameterClass="com.dreambox.core.dto.album.AlbumTemplateHandleInfo">
+		<![CDATA[
+		INSERT IGNORE INTO wechat_app_album_handle_info (`id`,`user_id`,`template_id`,`handle_infos`,`step`,
+		`status`,`update_time`,`create_time`)
+		VALUES(null, #userId#,#templateId#,#handleInfos#,#step#,0, now(),now())
+		]]>
+	</insert>
+	<update id="updateAlbumTemplateHandleInfoStatus"
+	parameterClass="com.dreambox.core.dto.album.AlbumTemplateHandleInfo">
+		<![CDATA[
+		UPDATE `wechat_app_album_handle_info` SET `status` = #status# WHERE `user_id=#userId# ;
+		]]>
+	</update>
+	<select id="queryAlbumTemplateHandleInfoById" parameterClass="java.lang.Integer"
+	resultMap="albumtemplatehandleinfo">
+		<![CDATA[
+		SELECT * FROM `wechat_app_album_handle_info` WHERE `id` = #startId#;
+		]]>
+	</select>
+	<select id="queryAlbumTemplateHandleInfoListByStartId"
+	parameterClass="java.util.Map" resultMap="albumtemplatehandleinfo">
+		<![CDATA[
+		SELECT * FROM `wechat_app_album_handle_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		]]>
+	</select>
+	<select id="queryAlbumTemplateHandleInfoByIds" parameterClass="java.util.Map"
+	resultMap="albumtemplatehandleinfo">
+		SELECT * FROM `wechat_app_album_handle_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#</iterate>
+	</select>
+	<select id="queryAlbumTemplateHandleInfoListByFilter"
+	parameterClass="java.util.Map" resultMap="albumtemplatehandleinfo">
+		SELECT * FROM `wechat_app_album_handle_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">`status` =
+					#status#</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+	<select id="countAlbumTemplateHandleInfoByFilter"
+	parameterClass="java.util.Map" resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `wechat_app_album_handle_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">`status` =
+					#status#</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>
