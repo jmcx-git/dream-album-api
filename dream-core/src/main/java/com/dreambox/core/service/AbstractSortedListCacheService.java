@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import redis.clients.jedis.JedisPool;
 
+import com.dreambox.core.DbStatus;
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
-import com.dreambox.core.dto.StatusSerializable;
 import com.dreambox.core.utils.RedisCacheUtils;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
@@ -23,8 +23,7 @@ import com.dreambox.web.utils.CollectionUtils;
  * @author luofei@appchina.com (Your Name Here)
  *
  */
-public abstract class AbstractSortedListCacheService<T extends StatusSerializable> extends
-        AbsCommonCacheDataLoadService<T> {
+public abstract class AbstractSortedListCacheService<T extends DbStatus> extends AbsCommonCacheDataLoadService<T> {
     public ListWrapResp<T> listInfo(StartSizeCacheFilter filter) {
         long total = count(filter);
         List<Integer> ids = getIds(filter);

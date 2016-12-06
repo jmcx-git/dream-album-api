@@ -9,6 +9,10 @@ import com.dreambox.core.DbStatus;
  *
  */
 public class UserAlbumItemInfo extends DbStatus {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4757574731556524150L;
     private int id;
     private int userAlbumId;
     private int albumId;

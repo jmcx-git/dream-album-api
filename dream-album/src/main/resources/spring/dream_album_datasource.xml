@@ -9,15 +9,15 @@
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/task
 		http://www.springframework.org/schema/task/spring-task-3.2.xsd">
-	<bean id="ios-dream-dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+	<bean id="dream-album-dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
-		<property name="jdbcUrl" value="${datasource.ios.info.jdbc.url}"></property>
-		<property name="user" value="${datasource.ios.info.jdbc.username}"></property>
-		<property name="password" value="${datasource.ios.info.jdbc.password}"></property>
-		<property name="initialPoolSize" value="${datasource.ios.info.jdbc.maxIdle}"></property>
-		<property name="minPoolSize" value="${datasource.ios.info.jdbc.maxIdle}"></property>
-		<property name="maxPoolSize" value="${datasource.ios.info.jdbc.maxActive}"></property>
+		<property name="jdbcUrl" value="${datasource.dream.album.jdbc.url}"></property>
+		<property name="user" value="${datasource.dream.album.jdbc.username}"></property>
+		<property name="password" value="${datasource.dream.album.jdbc.password}"></property>
+		<property name="initialPoolSize" value="${datasource.dream.album.jdbc.maxIdle}"></property>
+		<property name="minPoolSize" value="${datasource.dream.album.jdbc.maxIdle}"></property>
+		<property name="maxPoolSize" value="${datasource.dream.album.jdbc.maxActive}"></property>
 		<property name="maxIdleTime" value="1800"></property>
 		<property name="acquireIncrement" value="2"></property>
 		<property name="idleConnectionTestPeriod" value="45"></property>
@@ -32,11 +32,11 @@
 		<property name="preferredTestQuery" value="select 1" />
 	</bean>
 
-	<bean id="ios-dream-sql-client" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
-		<property name="configLocation" value="classpath:ibatis/ios_dream_config.xml" />
+	<bean id="dream-album-sql-client" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:ibatis/dream_album_config.xml" />
 		<property name="transactionConfigClass"
 			value="com.ibatis.sqlmap.engine.transaction.jdbc.JdbcTransactionConfig" />
-		<property name="dataSource" ref="ios-dream-dataSource" />
+		<property name="dataSource" ref="dream-album-dataSource" />
 	</bean>
 
 

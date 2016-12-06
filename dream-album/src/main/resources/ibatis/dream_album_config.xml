@@ -8,4 +8,6 @@
 		maxTransactions="10" useStatementNamespaces="false"
 		defaultStatementTimeout="60" />
 
+	<sqlMap resource="ibatis/dream_album_albuminfo.xml" />
+
 </sqlMapConfig>

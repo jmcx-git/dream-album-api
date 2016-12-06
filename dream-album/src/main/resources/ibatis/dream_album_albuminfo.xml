@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="albuminfo" class="com.dreambox.core.dto.album.AlbumInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateAlbumInfo" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
+		<![CDATA[
+			INSERT INTO album_info (`id`,`title`,`keyword`,`totalItems`, `cover`, `priviewImg`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #priviewImg#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreAlbumInfo" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
+		<![CDATA[
+			INSERT INTO album_info (`id`,`title`,`keyword`,`totalItems`, `cover`, `priviewImg`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #priviewImg#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertAlbumInfoReturnId" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
+		<![CDATA[
+			INSERT INTO album_info (`id`,`title`,`keyword`,`totalItems`, `cover`, `priviewImg`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #priviewImg#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateAlbumInfoStatus" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
+        <![CDATA[
+        	UPDATE `album_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryAlbumInfoById" parameterClass="java.lang.Integer"
+		resultMap="albuminfo">
+		<![CDATA[
+			SELECT * FROM `album_info` WHERE `id` = #startId#;
+		]]>
+	</select>
+
+	<select id="queryAlbumInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="albuminfo">
+		<![CDATA[
+			SELECT * FROM `album_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		]]>
+	</select>
+
+	<select id="queryAlbumInfoByIds" parameterClass="java.util.Map"
+		resultMap="albuminfo">
+		SELECT * FROM `album_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryAlbumInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="albuminfo">
+		SELECT * FROM `album_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="keyword">
+				<isNotNull property="keyword" prepend=" and ">
+					`keyword` like
+					#keyword#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countAlbumInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `album_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="keyword">
+				<isNotNull property="keyword" prepend=" and ">
+					`keyword` like
+					#keyword#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

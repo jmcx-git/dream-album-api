@@ -8,6 +8,10 @@ import com.dreambox.core.DbStatus;
  * @author mokous86@gmail.com create date: Dec 6, 2016 用户生成相册信息表
  */
 public class UserAlbumInfo extends DbStatus {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1929636011391406410L;
     private int id;
     private int userId;// 用户id
     private int albumId;// 选用的相册模板

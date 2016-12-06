@@ -2,6 +2,7 @@
 
 package com.dreambox.core;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -10,7 +11,11 @@ import java.util.Map;
  * @author luofei@refanqie.com (Your Name Here)
  *
  */
-public class DbStatus {
+public class DbStatus implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 4412904861639919118L;
     public static final int STATUS_ALL = StatusType.STATUS_ALL.getStatus();
     public static final int STATUS_OK = StatusType.STATUS_OK.getStatus();
     public static final int STATUS_DEL = StatusType.STATUS_DEL.getStatus();

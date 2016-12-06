@@ -9,6 +9,10 @@ import com.dreambox.core.DbStatus;
  *
  */
 public class AlbumItemInfo extends DbStatus {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -4058233262573193853L;
     private int id;
     private int albumId;
     private String editImgUrl;// 可编辑图片区域为透明区域人图片
