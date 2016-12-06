@@ -9,5 +9,8 @@
 		defaultStatementTimeout="60" />
 
 	<sqlMap resource="ibatis/dream_album_albuminfo.xml" />
+	<sqlMap resource="ibatis/dream_album_albuminfoitem.xml" />
+	<sqlMap resource="ibatis/dream_album_useralbuminfo.xml" />
+	<sqlMap resource="ibatis/dream_album_useralbuminfoitem.xml" />
 
 </sqlMapConfig>

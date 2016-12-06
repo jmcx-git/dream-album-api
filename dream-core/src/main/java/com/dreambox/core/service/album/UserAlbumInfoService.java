@@ -6,10 +6,8 @@ import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.service.AbstractSortedListCacheService;
 
 /**
- * @author mokous86@gmail.com
- * create date: Dec 6, 2016
+ * @author mokous86@gmail.com create date: Dec 6, 2016
  *
- 
  */
 public abstract class UserAlbumInfoService extends AbstractSortedListCacheService<UserAlbumInfo> {
 

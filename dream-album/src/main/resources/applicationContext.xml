@@ -9,13 +9,10 @@
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/task
 		http://www.springframework.org/schema/task/spring-task-3.2.xsd">
-
 	<bean id="placeholderConfig"
 		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="locations">
 			<list>
-				<value>file:///${DREAM_ALBUM_DEPLOY_HOME}/conf/platform/dream-core/dream_core_biz.properties
-				</value>
 				<value>file:///${DREAM_ALBUM_DEPLOY_HOME}/conf/platform/dream-album/dream_album_biz.properties
 				</value>
 				<value>file:///${DREAM_ALBUM_DEPLOY_HOME}/conf/platform/dream-album/dream_album_db.properties

@@ -9,7 +9,11 @@
 		http://www.springframework.org/schema/context/spring-context-3.2.xsd
 		http://www.springframework.org/schema/task
 		http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+	<import resource="classpath:spring/dream_info_datasource.xml" />
+    <import resource="classpath:core_applicationContext.xml" />
 
 	<context:annotation-config />
-	<context:component-scan base-package="com.dreambox.core.service.impl" />
+	<context:component-scan base-package="com.dream.info.dao.ibatis" />
+	<context:component-scan base-package="com.dream.info.service.impl" />
+
 </beans>

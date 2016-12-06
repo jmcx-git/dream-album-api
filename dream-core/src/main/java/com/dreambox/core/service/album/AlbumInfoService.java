@@ -19,4 +19,5 @@ import com.dreambox.web.model.ListWrapResp;
 public abstract class AlbumInfoService extends AbstractSortedListCacheService<AlbumInfo> {
 
     public abstract ListWrapResp<AlbumInfo> searchInfos(String keyword, int start, int size) throws ServiceException;
+
 }

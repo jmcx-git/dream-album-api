@@ -10,5 +10,4 @@ import com.dreambox.core.service.AbstractSortedListCacheService;
  *
  */
 public abstract class UserAlbumItemInfoService extends AbstractSortedListCacheService<UserAlbumItemInfo> {
-
 }
