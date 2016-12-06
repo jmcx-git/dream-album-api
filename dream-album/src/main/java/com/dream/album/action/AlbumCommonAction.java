@@ -11,7 +11,7 @@ import com.dreambox.web.action.IosBaseAction;
  * @date 2016年12月6日
  */
 @Controller
-@RequestMapping("/dream/album/common/")
+@RequestMapping("/dream/album/common/*")
 public class AlbumCommonAction extends IosBaseAction {
     private static final Logger log = Logger.getLogger(AlbumCommonAction.class);
 

@@ -4,15 +4,15 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
-import com.dream.album.dao.AlbumUserInfoDao;
+import com.dream.album.dao.UserAlbumItemInfoDao;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 /**
  * @author liuxinglong
  * @date 2016年12月6日
  */
-@Repository("albumUserInfoDao")
-public abstract class AlbumUserInfoDaoImpl extends AlbumUserInfoDao {
+@Repository("userAlbumItemInfoDao")
+public abstract class UserAlbumItemInfoDaoImpl extends UserAlbumItemInfoDao {
     @Resource(name = "ios-dream-sql-client")
     private SqlMapClient sqlMapClient;
 

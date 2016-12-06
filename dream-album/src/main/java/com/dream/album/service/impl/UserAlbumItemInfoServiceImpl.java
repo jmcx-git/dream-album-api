@@ -3,22 +3,22 @@ package com.dream.album.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dream.album.dao.AlbumUserInfoDao;
+import com.dream.album.dao.UserAlbumItemInfoDao;
 import com.dreambox.core.dao.CommonDao;
-import com.dreambox.core.dto.album.AlbumUserInfo;
-import com.dreambox.core.service.album.AlbumUserInfoService;
+import com.dreambox.core.dto.album.UserAlbumItemInfo;
+import com.dreambox.core.service.album.UserAlbumItemInfoService;
 
 /**
  * @author liuxinglong
  * @date 2016年12月6日
  */
-@Service("albumUserInfoService")
-public abstract class AlbumUserInfoServiceImpl extends AlbumUserInfoService {
+@Service("userAlbumItemInfoService")
+public abstract class UserAlbumItemInfoServiceImpl extends UserAlbumItemInfoService {
     @Autowired
-    private AlbumUserInfoDao albumUserInfoDao;
+    private UserAlbumItemInfoDao userAlbumItemInfoDao;
 
     @Override
-    public CommonDao<AlbumUserInfo> getCommonDao() {
-        return albumUserInfoDao;
+    public CommonDao<UserAlbumItemInfo> getCommonDao() {
+        return userAlbumItemInfoDao;
     }
 }

@@ -7,8 +7,8 @@
 	lazyLoadingEnabled="true" maxRequests="128" maxSessions="20"
 	maxTransactions="10" useStatementNamespaces="false"
 	defaultStatementTimeout="60" />
-	<sqlMap resource="ibatis/ios_dream_albumuserinfo.xml" />
-	<sqlMap resource="ibatis/ios_dream_albumtemplatehandleinfo.xml" />
-	<sqlMap resource="ibatis/ios_dream_albumtemplatecreatedinfo.xml" />
-	<sqlMap resource="ibatis/ios_dream_albumtemplateinfo.xml" />
+	<sqlMap resource="ibatis/ios_dream_albuminfo.xml" />
+	<sqlMap resource="ibatis/ios_dream_albumiteminfo.xml" />
+	<sqlMap resource="ibatis/ios_dream_useralbuminfo.xml" />
+	<sqlMap resource="ibatis/ios_dream_useralbumiteminfo.xml" />
 </sqlMapConfig>
