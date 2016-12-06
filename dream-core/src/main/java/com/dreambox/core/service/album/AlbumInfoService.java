@@ -10,5 +10,4 @@ import com.dreambox.web.exception.ServiceException;
  */
 public abstract class AlbumInfoService extends AbsCommonDataService<AlbumInfo> {
 
-//    public abstract AlbumInfo getAlbumInfoById(int id) throws ServiceException;
 }

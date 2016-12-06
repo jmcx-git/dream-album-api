@@ -1,10 +1,14 @@
 package com.dream.info.dao.ibatis;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
 import com.dream.info.dao.AlbumInfoDao;
+import com.dreambox.core.dto.album.AlbumInfo;
+import com.dreambox.core.utils.SQLUtils;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 /**

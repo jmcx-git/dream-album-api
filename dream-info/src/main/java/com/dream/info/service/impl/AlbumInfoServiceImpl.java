@@ -1,5 +1,7 @@
 package com.dream.info.service.impl;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +24,5 @@ public class AlbumInfoServiceImpl extends AlbumInfoService {
     public CommonDao<AlbumInfo> getCommonDao() {
         return albumInfoDao;
     }
+
 }

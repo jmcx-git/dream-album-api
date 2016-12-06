@@ -33,6 +33,12 @@
 		UPDATE `wechat_app_album_info` SET `status` = #status# WHERE `id=#id# ;
 		]]>
 	</update>
+	<select id="queryAlbumInfoByKeyword" parameterClass="java.lang.String"
+	resultMap="albuminfo">
+		<![CDATA[
+		SELECT * FROM `wechat_app_album_info` WHERE `keyword` like '%keyword%';
+		]]>
+	</select>
 	<select id="queryAlbumInfoById" parameterClass="java.lang.Integer"
 	resultMap="albuminfo">
 		<![CDATA[
@@ -57,6 +63,7 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+				<isNotNull property="keyword" prepend=" and ">`keyword` like '%$keyword$%'</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 		ORDER BY id DESC LIMIT #start#, #size#
@@ -68,6 +75,7 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+				<isNotNull property="keyword" prepend=" and ">`keyword` like '%$keyword$%'</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 	</select>
