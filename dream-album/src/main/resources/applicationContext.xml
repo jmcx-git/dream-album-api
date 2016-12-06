@@ -19,19 +19,18 @@
 				</value>
 				<value>file:///${DREAM_ALBUM_DEPLOY_HOME}/conf/platform/dream-album/dream_album_db.properties
 				</value>
+				<value>file:///${DREAM_ALBUM_DEPLOY_HOME}/conf/platform/dream-info/dream_info_biz.properties
+				</value>
+				<value>file:///${DREAM_ALBUM_DEPLOY_HOME}/conf/platform/dream-info/dream_info_db.properties
+				</value>
 			</list>
 		</property>
 	</bean>
 	
 	<context:annotation-config />
-	<import resource="classpath:spring/ios_dream_datasource.xml" />
     <import resource="classpath:core_applicationContext.xml" />
+    <import resource="classpath:info_applicationContext.xml" />
     <context:annotation-config />
-	<context:component-scan base-package="com.dream.album.dao.ibatis" />
 	<context:component-scan base-package="com.dream.album.service.impl" />
-	
-	<!-- <task:scheduler id="taskScheduler" pool-size="4" />
-	<task:annotation-driven scheduler="taskScheduler" /> -->
-
 </beans>
 
