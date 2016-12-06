@@ -6,7 +6,7 @@ package com.dream.album.dto;
  * @author liuxinglong
  * @date 2016年12月6日
  */
-public class AlbumTemplatePageInfo {
+public class AlbumTemplatePageInfoModel {
 
     /**
      * 需要嵌入图片的区域坐标x

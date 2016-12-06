@@ -6,3 +6,4 @@ target*
 .project
 
 
+dream-album/src/main/java/com/dream/album/dto/AlbumTemplate.java

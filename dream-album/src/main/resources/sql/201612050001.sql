@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `wechat_app_album_created_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`user_id` varchar(255) NOT NULL,
 	`template_id` int(11) NOT NULL,
-	`template_handle_id` int(11) NOT NULL,
+	`handle_infos` varchar(255) NOT NULL,
 	`h5_url` varchar(255) DEFAULT NULL,
     `png_url` varchar(255) DEFAULT NULL,
 	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `wechat_app_album_handle_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`user_id` varchar(255) NOT NULL,
 	`template_id` int(11) NOT NULL,
-	`template_handle_id` int(11) NOT NULL,
+	`handle_infos` varchar(255) NOT NULL,
 	`step` int(11) NOT NULL,
 	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -47,19 +47,12 @@ CREATE TABLE IF NOT EXISTS `wechat_app_album_handle_info`(
 
 CREATE TABLE IF NOT EXISTS `wechat_app_album_template_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`background_img` varchar(255) NOT NULL,
-	`template_info` varchar(255) NOT NULL,
+	`title` varchar(255) NOT NULL,
+	`pre_Img` varchar(255) NOT NULL,
+	`background_imgs` varchar(255) NOT NULL,
+	`page_infos` varchar(255) NOT NULL,
 	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序相册模版信息表';
-
-CREATE TABLE IF NOT EXISTS `wechat_app_album_template_handle_info`(
-	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`handle_info` varchar(255) NOT NULL,
-	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
-    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `create_time` datetime NOT NULL COMMENT '记录创建时间',
-    PRIMARY KEY (`id`)
-)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序相册模版操作信息表';
