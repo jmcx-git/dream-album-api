@@ -7,7 +7,7 @@ import java.util.Map;
  * @author liuxinglong
  * @date 2016年12月6日
  */
-public class AlbumTemplate {
+public class AlbumTemplateModel {
 
     /**
      * 相册模版的标题
@@ -24,7 +24,7 @@ public class AlbumTemplate {
     /**
      * 相册模版每页的信息集
      */
-    private Map<String, AlbumTemplatePageInfo> pageInfos;
+    private Map<String, AlbumTemplatePageInfoModel> pageInfos;
 
     public String getTitle() {
         return title;
@@ -50,11 +50,11 @@ public class AlbumTemplate {
         this.backgoundImgs = backgoundImgs;
     }
 
-    public Map<String, AlbumTemplatePageInfo> getPageInfos() {
+    public Map<String, AlbumTemplatePageInfoModel> getPageInfos() {
         return pageInfos;
     }
 
-    public void setPageInfos(Map<String, AlbumTemplatePageInfo> pageInfos) {
+    public void setPageInfos(Map<String, AlbumTemplatePageInfoModel> pageInfos) {
         this.pageInfos = pageInfos;
     }
 

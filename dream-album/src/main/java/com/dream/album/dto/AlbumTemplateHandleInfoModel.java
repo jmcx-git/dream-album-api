@@ -7,18 +7,18 @@ import java.util.Map;
  * @author liuxinglong
  * @date 2016年12月6日
  */
-public class AlbumTemplateHandleInfo {
+public class AlbumTemplateHandleInfoModel {
 
     /**
-     * 相册模版的标题
+     * 相册模版的操作信息
      */
-    private Map<String, AlbumTemplatePageInfo> handleInfo;
+    private Map<String, AlbumTemplatePageInfoModel> handleInfo;
 
-    public Map<String, AlbumTemplatePageInfo> getHandleInfo() {
+    public Map<String, AlbumTemplatePageInfoModel> getHandleInfo() {
         return handleInfo;
     }
 
-    public void setHandleInfo(Map<String, AlbumTemplatePageInfo> handleInfo) {
+    public void setHandleInfo(Map<String, AlbumTemplatePageInfoModel> handleInfo) {
         this.handleInfo = handleInfo;
     }
 
