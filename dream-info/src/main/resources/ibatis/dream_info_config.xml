@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+"http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+	lazyLoadingEnabled="true" maxRequests="128" maxSessions="20"
+	maxTransactions="10" useStatementNamespaces="false"
+	defaultStatementTimeout="60" />
+	<sqlMap resource="ibatis/dream_info_albuminfo.xml" />
+	<sqlMap resource="ibatis/dream_info_albumiteminfo.xml" />
+	<sqlMap resource="ibatis/dream_info_useralbuminfo.xml" />
+	<sqlMap resource="ibatis/dream_info_useralbumiteminfo.xml" />
+</sqlMapConfig>
