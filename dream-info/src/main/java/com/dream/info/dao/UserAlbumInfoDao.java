@@ -8,5 +8,4 @@ import com.dreambox.core.dto.album.UserAlbumInfo;
  * @date 2016年12月6日
  */
 public abstract class UserAlbumInfoDao extends AbsCommonDao<UserAlbumInfo> {
-
 }

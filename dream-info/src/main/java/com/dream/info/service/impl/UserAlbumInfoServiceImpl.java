@@ -13,7 +13,7 @@ import com.dreambox.core.service.album.UserAlbumInfoService;
  * @date 2016年12月6日
  */
 @Service("userAlbumInfoService")
-public abstract class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
+public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
     @Autowired
     private UserAlbumInfoDao userAlbumInfoDao;
 

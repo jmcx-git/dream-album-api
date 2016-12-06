@@ -2,6 +2,7 @@ package com.dreambox.core.service.album;
 
 import com.dreambox.core.dto.album.AlbumInfo;
 import com.dreambox.core.service.AbsCommonDataService;
+import com.dreambox.web.exception.ServiceException;
 
 /**
  * @author liuxinglong
@@ -9,4 +10,5 @@ import com.dreambox.core.service.AbsCommonDataService;
  */
 public abstract class AlbumInfoService extends AbsCommonDataService<AlbumInfo> {
 
+//    public abstract AlbumInfo getAlbumInfoById(int id) throws ServiceException;
 }

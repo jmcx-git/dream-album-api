@@ -12,8 +12,8 @@ import com.ibatis.sqlmap.client.SqlMapClient;
  * @date 2016年12月6日
  */
 @Repository("userAlbumItemInfoDao")
-public abstract class UserAlbumItemInfoDaoImpl extends UserAlbumItemInfoDao {
-    @Resource(name = "ios-info-sql-client")
+public class UserAlbumItemInfoDaoImpl extends UserAlbumItemInfoDao {
+    @Resource(name = "dream-info-sql-client")
     private SqlMapClient sqlMapClient;
 
     @Override
