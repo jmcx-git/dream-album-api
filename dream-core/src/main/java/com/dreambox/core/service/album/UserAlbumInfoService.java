@@ -6,6 +6,8 @@ import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.service.AbstractSortedListCacheService;
 
 /**
+ * 用户制作相册相关数据服务
+ * 
  * @author mokous86@gmail.com create date: Dec 6, 2016
  *
  */

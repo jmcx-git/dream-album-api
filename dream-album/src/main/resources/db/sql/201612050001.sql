@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `wechat_app_user_album_info`(
+CREATE TABLE IF NOT EXISTS `user_album_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`user_id` int(11) NOT NULL,
 	`album_id` int(11) DEFAULT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS `wechat_app_user_album_info`(
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序用户相册信息表';
 
-CREATE TABLE IF NOT EXISTS `wechat_app_user_album_item_info`(
+CREATE TABLE IF NOT EXISTS `user_album_item_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`user_album_id` int(11) NOT NULL,
 	`album_id` int(11) NOT NULL,
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `wechat_app_user_album_item_info`(
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序用户相册子信息表';
 
-CREATE TABLE IF NOT EXISTS `wechat_app_album_info`(
+CREATE TABLE IF NOT EXISTS `album_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`title` varchar(255) NOT NULL,
 	`keyword` varchar(255) NOT NULL,
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `wechat_app_album_info`(
     PRIMARY KEY (`id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序相册信息表';
 
-CREATE TABLE IF NOT EXISTS `wechat_app_album_item_info`(
+CREATE TABLE IF NOT EXISTS `album_item_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`album_id` int(11) NOT NULL,
 	`edit_img_url` varchar(255) NOT NULL,

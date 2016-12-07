@@ -1,80 +1,84 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
 <sqlMap namespace="rfq">
-	<resultMap id="albumiteminfo"
-	class="com.dreambox.core.dto.album.AlbumItemInfo">
+	<resultMap id="albumiteminfo" class="com.dreambox.core.dto.album.AlbumItemInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="album_id" property="albumId" jdbcType="INTEGER" />
 		<result column="edit_img_url" property="editImgUrl" jdbcType="VARCHAR" />
-		<result column="preview_img_url" property="previewImgUrl" jdbcType="VARCHAR" />
+		<result column="preview_img_url" property="previewImgUrl"
+			jdbcType="VARCHAR" />
 		<result column="rank" property="rank" jdbcType="INTEGER" />
-		<result column="edit_img_infos" property="editImgInfos" jdbcType="VARCHAR" />
-		<result column="edit_text_infos" property="editTextInfos" jdbcType="VARCHAR" />
+		<result column="edit_img_infos" property="editImgInfos"
+			jdbcType="VARCHAR" />
+		<result column="edit_text_infos" property="editTextInfos"
+			jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
-	<insert id="insertOrUpdateAlbumItemInfo"
-	parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
+	<insert id="insertOrUpdateAlbumItemInfo" parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
 		<![CDATA[
-		INSERT IGNORE INTO wechat_app_album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`rank`,`edit_img_infos`,
+		INSERT IGNORE INTO album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`rank`,`edit_img_infos`,
 		`edit_text_infos`,`status`,`update_time`,`create_time`)
 		VALUES(null, #albumId#,#editImgUrl#,#previewImgUrl#,#rank#,#editImgInfos#,#editTextInfos#,0, now(),now())
 		]]>
 	</insert>
-	<insert id="insertOrIgnoreAlbumItemInfo"
-	parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
+	<insert id="insertOrIgnoreAlbumItemInfo" parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
 		<![CDATA[
-		INSERT IGNORE INTO wechat_app_album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`rank`,`edit_img_infos`,
+		INSERT IGNORE INTO album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`rank`,`edit_img_infos`,
 		`edit_text_infos`,`status`,`update_time`,`create_time`)
 		VALUES(null, #albumId#,#editImgUrl#,#previewImgUrl#,#rank#,#editImgInfos#,#editTextInfos#,0, now(),now())
 		]]>
 	</insert>
-	<update id="updateAlbumItemInfoStatus"
-	parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
+	<update id="updateAlbumItemInfoStatus" parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
 		<![CDATA[
-		UPDATE `wechat_app_album_item_info` SET `status` = #status# WHERE `id=#id# ;
+		UPDATE `album_item_info` SET `status` = #status# WHERE `id=#id# ;
 		]]>
 	</update>
 	<select id="queryAlbumItemInfoById" parameterClass="java.lang.Integer"
-	resultMap="albumiteminfo">
+		resultMap="albumiteminfo">
 		<![CDATA[
-		SELECT * FROM `wechat_app_album_item_info` WHERE `id` = #startId#;
+		SELECT * FROM `album_item_info` WHERE `id` = #startId#;
 		]]>
 	</select>
-	<select id="queryAlbumItemInfoListByStartId"
-	parameterClass="java.util.Map" resultMap="albumiteminfo">
+	<select id="queryAlbumItemInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="albumiteminfo">
 		<![CDATA[
-		SELECT * FROM `wechat_app_album_item_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		SELECT * FROM `album_item_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
 		]]>
 	</select>
 	<select id="queryAlbumItemInfoByIds" parameterClass="java.util.Map"
-	resultMap="albumiteminfo">
-		SELECT * FROM `wechat_app_album_item_info`
-		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#</iterate>
+		resultMap="albumiteminfo">
+		SELECT * FROM `album_item_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#
+		</iterate>
 	</select>
-	<select id="queryAlbumItemInfoListByFilter"
-	parameterClass="java.util.Map" resultMap="albumiteminfo">
-		SELECT * FROM `wechat_app_album_item_info`
+	<select id="queryAlbumItemInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="albumiteminfo">
+		SELECT * FROM `album_item_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
-					#status#</isNotNull>
+					#status#
+				</isNotNull>
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
-					#albumId#</isNotNull>
+					#albumId#
+				</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 		ORDER BY id DESC LIMIT #start#, #size#
 	</select>
-	<select id="countAlbumItemInfoByFilter"
-	parameterClass="java.util.Map" resultClass="java.lang.Long">
-		SELECT COUNT(*) FROM `wechat_app_album_item_info`
+	<select id="countAlbumItemInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `album_item_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
-					#status#</isNotNull>
+					#status#
+				</isNotNull>
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
-					#albumId#</isNotNull>
+					#albumId#
+				</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 	</select>

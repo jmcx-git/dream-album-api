@@ -19,7 +19,7 @@
 	<insert id="insertOrUpdateUserAlbumItemInfo"
 	parameterClass="com.dreambox.core.dto.album.UserAlbumItemInfo">
 		<![CDATA[
-		INSERT IGNORE INTO wechat_app_user_album_item_info (`id`,`user_album_id`,`album_id`,`album_item_id`,`user_origin_img_url`,
+		INSERT IGNORE INTO user_album_item_info (`id`,`user_album_id`,`album_id`,`album_item_id`,`user_origin_img_url`,
 		`preview_img_url`,`rank`,`edit_img_infos`,`edit_text_infos`,`status`,`update_time`,`create_time`)
 		VALUES(null, #userAlbumId#,#albumId#,#albumItemId#,#userOriginImgUrl#,#previewImgUrl#,#rank#,#editImgInfos#,#editTextInfos#,
 		0, now(),now())
@@ -28,7 +28,7 @@
 	<insert id="insertOrIgnoreUserAlbumItemInfo"
 	parameterClass="com.dreambox.core.dto.album.UserAlbumItemInfo">
 		<![CDATA[
-		INSERT IGNORE INTO wechat_app_user_album_item_info (`id`,`user_album_id`,`album_id`,`album_item_id`,`user_origin_img_url`,
+		INSERT IGNORE INTO user_album_item_info (`id`,`user_album_id`,`album_id`,`album_item_id`,`user_origin_img_url`,
 		`preview_img_url`,`rank`,`edit_img_infos`,`edit_text_infos`,`status`,`update_time`,`create_time`)
 		VALUES(null, #userAlbumId#,#albumId#,#albumItemId#,#userOriginImgUrl#,#previewImgUrl#,#rank#,#editImgInfos#,#editTextInfos#,
 		0, now(),now())
@@ -37,29 +37,29 @@
 	<update id="updateUserAlbumItemInfoStatus"
 	parameterClass="com.dreambox.core.dto.album.UserAlbumItemInfo">
 		<![CDATA[
-		UPDATE `wechat_app_user_album_item_info` SET `status` = #status# WHERE `id=#id# ;
+		UPDATE `user_album_item_info` SET `status` = #status# WHERE `id=#id# ;
 		]]>
 	</update>
 	<select id="queryUserAlbumItemInfoById" parameterClass="java.lang.Integer"
 	resultMap="useralbumiteminfo">
 		<![CDATA[
-		SELECT * FROM `wechat_app_user_album_item_info` WHERE `id` = #startId#;
+		SELECT * FROM `user_album_item_info` WHERE `id` = #startId#;
 		]]>
 	</select>
 	<select id="queryUserAlbumItemInfoListByStartId"
 	parameterClass="java.util.Map" resultMap="useralbumiteminfo">
 		<![CDATA[
-		SELECT * FROM `wechat_app_user_album_item_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		SELECT * FROM `user_album_item_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
 		]]>
 	</select>
 	<select id="queryUserAlbumItemInfoByIds" parameterClass="java.util.Map"
 	resultMap="useralbumiteminfo">
-		SELECT * FROM `wechat_app_user_album_item_info`
+		SELECT * FROM `user_album_item_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#</iterate>
 	</select>
 	<select id="queryUserAlbumItemInfoListByFilter"
 	parameterClass="java.util.Map" resultMap="useralbumiteminfo">
-		SELECT * FROM `wechat_app_user_album_item_info`
+		SELECT * FROM `user_album_item_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
@@ -70,7 +70,7 @@
 	</select>
 	<select id="countUserAlbumItemInfoByFilter"
 	parameterClass="java.util.Map" resultClass="java.lang.Long">
-		SELECT COUNT(*) FROM `wechat_app_user_album_item_info`
+		SELECT COUNT(*) FROM `user_album_item_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
