@@ -64,6 +64,8 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+				<isNotNull property="userAlbumId" prepend=" and ">`user_album_id` =
+					#userAlbumId#</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 		ORDER BY id DESC LIMIT #start#, #size#
@@ -75,6 +77,8 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+				<isNotNull property="userAlbumId" prepend=" and ">`user_album_id` =
+					#userAlbumId#</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 	</select>

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `user_album_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`user_id` int(11) NOT NULL,
+	`user_id` varchar(255) NOT NULL,
 	`album_id` int(11) DEFAULT NULL,
     `step` int(11) DEFAULT NULL,
     `complete` int(11) DEFAULT NULL,

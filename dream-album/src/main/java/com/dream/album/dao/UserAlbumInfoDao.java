@@ -1,5 +1,7 @@
 package com.dream.album.dao;
 
+import java.sql.SQLException;
+
 import com.dreambox.core.dao.AbsCommonDao;
 import com.dreambox.core.dto.album.UserAlbumInfo;
 
@@ -8,4 +10,6 @@ import com.dreambox.core.dto.album.UserAlbumInfo;
  * @date 2016年12月6日
  */
 public abstract class UserAlbumInfoDao extends AbsCommonDao<UserAlbumInfo> {
+
+    public abstract void updateUserAlbumInfoStep(UserAlbumInfo info) throws SQLException;
 }

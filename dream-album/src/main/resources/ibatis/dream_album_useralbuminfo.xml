@@ -4,7 +4,7 @@
 	<resultMap id="useralbuminfo"
 	class="com.dreambox.core.dto.album.UserAlbumInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
 		<result column="album_id" property="albumId" jdbcType="INTEGER" />
 		<result column="step" property="step" jdbcType="INTEGER" />
 		<result column="complete" property="complete" jdbcType="INTEGER" />
@@ -29,6 +29,12 @@
 		VALUES(null, #userId#,#albumId#,#step#,#complete#,#priviewImg#,0, now(),now())
 		]]>
 	</insert>
+	<update id="updateUserAlbumInfoStep"
+	parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
+		<![CDATA[
+		UPDATE `user_album_info` SET `step` = #step# WHERE `id=#id# ;
+		]]>
+	</update>
 	<update id="updateUserAlbumInfoStatus"
 	parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[
@@ -59,6 +65,12 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+				<isNotNull property="userId" prepend=" and ">`user_id` =
+					#userId#</isNotNull>
+				<isNotNull property="albumId" prepend=" and ">`album_id` =
+					#album_id#</isNotNull>
+				<isNotNull property="complete" prepend=" and ">`complete` =
+					#complete#</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 		ORDER BY id DESC LIMIT #start#, #size#
@@ -70,6 +82,12 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+				<isNotNull property="userId" prepend=" and ">`user_id` =
+					#userId#</isNotNull>
+				<isNotNull property="albumId" prepend=" and ">`album_id` =
+					#album_id#</isNotNull>
+				<isNotNull property="complete" prepend=" and ">`complete` =
+					#complete#</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 	</select>

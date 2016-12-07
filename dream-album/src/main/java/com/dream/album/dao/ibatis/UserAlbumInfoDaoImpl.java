@@ -1,10 +1,14 @@
 package com.dream.album.dao.ibatis;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
 import com.dream.album.dao.UserAlbumInfoDao;
+import com.dreambox.core.dto.album.UserAlbumInfo;
+import com.dreambox.core.utils.SQLUtils;
 import com.ibatis.sqlmap.client.SqlMapClient;
 
 /**
@@ -20,4 +24,10 @@ public class UserAlbumInfoDaoImpl extends UserAlbumInfoDao {
     public SqlMapClient getSqlMapClient() {
         return sqlMapClient;
     }
+
+    @Override
+    public void updateUserAlbumInfoStep(UserAlbumInfo info) throws SQLException {
+        SQLUtils.update(sqlMapClient, "updateUserAlbumInfoStep", info);
+    }
+
 }

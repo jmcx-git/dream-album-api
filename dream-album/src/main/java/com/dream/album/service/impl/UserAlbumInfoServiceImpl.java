@@ -2,6 +2,8 @@
 
 package com.dream.album.service.impl;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -18,6 +20,7 @@ import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.utils.RedisCacheUtils;
+import com.dreambox.web.exception.ServiceException;
 
 /**
  * @author mokous86@gmail.com create date: Dec 7, 2016
@@ -74,6 +77,15 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
     @Override
     public CommonDao<UserAlbumInfo> getCommonDao() {
         return this.userAlbumInfoDao;
+    }
+
+    @Override
+    public void modifyUserAlbumInfoStep(UserAlbumInfo info) throws ServiceException {
+        try {
+            userAlbumInfoDao.updateUserAlbumInfoStep(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
     }
 
 }
