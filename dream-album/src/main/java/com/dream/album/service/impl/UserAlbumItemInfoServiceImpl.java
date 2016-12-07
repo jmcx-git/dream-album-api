@@ -4,6 +4,7 @@ import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ShardedJedisPool;
@@ -20,6 +21,7 @@ import com.dreambox.core.utils.RedisCacheUtils;
  * @author liuxinglong
  * @date 2016年12月7日
  */
+@Service("userAlbumItemInfoService")
 public class UserAlbumItemInfoServiceImpl extends UserAlbumItemInfoService {
     private static final Logger log = Logger.getLogger(UserAlbumItemInfoServiceImpl.class);
     @Autowired
