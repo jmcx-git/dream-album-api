@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="userinfo" class="com.dreambox.core.dto.album.UserInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="gender" property="gender" jdbcType="INTEGER" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="VARCHAR" />
+		<result column="country" property="country" jdbcType="VARCHAR" />
+		<result column="avatar_url" property="avatarUrl" jdbcType="VARCHAR" />
+		<result column="open_id" property="openId" jdbcType="VARCHAR" />
+		<result column="union_id" property="unionId" jdbcType="VARCHAR" />
+		<result column="appid" property="appid" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateUserInfo" parameterClass="com.dreambox.core.dto.album.UserInfo">
+		<![CDATA[
+			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
+			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreUserInfo" parameterClass="com.dreambox.core.dto.album.UserInfo">
+		<![CDATA[
+			INSERT IGNORE INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
+			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertUserInfoReturnId" parameterClass="com.dreambox.core.dto.album.UserInfo">
+		<![CDATA[
+			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
+			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateUserInfoStatus" parameterClass="com.dreambox.core.dto.album.UserInfo">
+        <![CDATA[
+        	UPDATE `user_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryUserInfoById" parameterClass="java.lang.Integer"
+		resultMap="userinfo">
+		<![CDATA[
+			SELECT * FROM `user_info` WHERE `id` = #startId#;
+		]]>
+	</select>
+
+	<select id="queryUserInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="userinfo">
+		<![CDATA[
+			SELECT * FROM `user_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		]]>
+	</select>
+
+	<select id="queryUserInfoByIds" parameterClass="java.util.Map"
+		resultMap="userinfo">
+		SELECT * FROM `user_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryUserInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="userinfo">
+		SELECT * FROM `user_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="nickName">
+				<isNotNull property="nickName" prepend=" and ">
+					`nick_name` like
+					#nickName#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countUserInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `user_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="nickName">
+				<isNotNull property="nickName" prepend=" and ">
+					`nick_name` like
+					#nickName#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

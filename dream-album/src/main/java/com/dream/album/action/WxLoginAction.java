@@ -1,5 +1,7 @@
 package com.dream.album.action;
 
+import java.util.UUID;
+
 import javax.annotation.Resource;
 
 import org.apache.commons.codec.binary.Base64;
@@ -39,20 +41,24 @@ public class WxLoginAction {
     public String getUser3rdSesseion(String code) {
         UserOpenIdInfo info = userOpenIdInfoService.getUser3rdSesseion(code);
         // 放入缓存
-        String threeSessionKey = "";
-        RedisCacheUtils.set(threeSessionKey, info.getSession_key() + "#" + info.getOpenid(), jedisDbPool);
+        String sessionKey = UUID.randomUUID().toString().replace("-", "");
+        RedisCacheUtils.set(sessionKey, info.getSession_key() + "#" + info.getOpenid(), jedisDbPool);
         System.out.println(info.getSession_key() + "#" + info.getOpenid());
-        return info.getSession_key();
+        return sessionKey;
     }
 
     @RequestMapping("/getUserInfo.json")
     @ResponseBody
-    public UserFullInfo getUserInfo(String sessionKey, String encryptedData, String iv) {
+    public UserFullInfo getUserInfo(String threeSessionKey, String encryptedData, String iv) {
         String userInfo = null;
+        String secret = RedisCacheUtils.get(threeSessionKey, jedisDbPool);
+        if (StringUtils.isEmpty(secret)) {
+            return null;
+        }
         try {
             AES aes = new AES();
-            byte[] resultByte = aes.decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(sessionKey),
-                    Base64.decodeBase64(iv));
+            byte[] resultByte = aes.decrypt(Base64.decodeBase64(encryptedData),
+                    Base64.decodeBase64(secret.split("#")[0]), Base64.decodeBase64(iv));
             if (null != resultByte && resultByte.length > 0) {
                 userInfo = new String(resultByte, "UTF-8");
             }
