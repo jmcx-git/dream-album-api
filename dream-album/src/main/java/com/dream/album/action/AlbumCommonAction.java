@@ -106,7 +106,7 @@ public class AlbumCommonAction extends IosBaseAction {
      * @param userId
      * @param albumId
      */
-    @RequestMapping("/startmakeuseralbum")
+    @RequestMapping("/startmakeuseralbum.json")
     @ResponseBody
     public List<UserAlbumItemInfo> createUserAlbum(String userId, Integer albumId) {
         UserAlbumInfo info = new UserAlbumInfo();
@@ -136,14 +136,16 @@ public class AlbumCommonAction extends IosBaseAction {
      * @param image
      * @param userId
      * @param albumId
-     * @param step
+     * @param rank
      * @param positionX
      * @param positionY
      * @param rotate
+     * @param width
+     * @param height
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public void uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId, Integer step,
+    public void uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId, Integer rank,
             Integer positionX, Integer positionY, Integer rotate, Integer width, Integer height) {
         UserAlbumInfo info = new UserAlbumInfo();
         info.setUserId(userId);
@@ -152,14 +154,15 @@ public class AlbumCommonAction extends IosBaseAction {
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
         List<UserAlbumInfo> userAlbum = userAlbumInfoService.listDirectFromDb(info);
         UserAlbumInfo userAlbumInfo = userAlbum.get(0);
-        if (step > userAlbumInfo.getStep()) {
+        if (rank > userAlbumInfo.getStep()) {
+            userAlbumInfo.setStep(rank);
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
         }
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
         ua.setUserAlbumId(userAlbumInfo.getId());
         ua.setAlbumId(userAlbumInfo.getAlbumId());
         // 在album中所有图片的第几张
-        ua.setRank(step);
+        ua.setRank(rank);
         // 保存图片
         String picName = "album_" + new Date().getTime() + ".png";
         try {
@@ -176,5 +179,6 @@ public class AlbumCommonAction extends IosBaseAction {
         ua.setEditImgInfos(cssJson);
         // TODO 生成priviewImg
         ua.setPreviewImgUrl("");
+        userAlbumItemInfoService.addData(ua);
     }
 }

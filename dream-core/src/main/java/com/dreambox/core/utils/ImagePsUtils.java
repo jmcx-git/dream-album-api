@@ -173,7 +173,6 @@ public class ImagePsUtils {
      * @return
      */
     public BufferedImage modifyImageYe(BufferedImage img) {
-
         try {
             int w = img.getWidth();
             int h = img.getHeight();
@@ -187,38 +186,68 @@ public class ImagePsUtils {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
         return img;
     }
 
-    public BufferedImage modifyImagetogeter(BufferedImage b, BufferedImage d) {
-
+    public BufferedImage modifyImagetogeter(BufferedImage b, BufferedImage d, int x, int y, int width, int height) {
         try {
-            // int w = b.getWidth();
-            // int h = b.getHeight();
             g = d.createGraphics();
-            g.drawImage(b, 391, 35, 73, 87, null);
+            g.drawImage(b, x, y, width, height, null);
             g.dispose();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
         return d;
     }
 
     public static void main(String[] args) {
+        EasyImage image = new EasyImage();
+        try {
+            // 读取第一张图片
+            File fileOne = new File(
+                    "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png");
+            BufferedImage imageOne = ImageIO.read(fileOne);
+            int width = imageOne.getWidth();// 图片宽度
+            int height = imageOne.getHeight();// 图片高度
+            // 从图片中读取RGB
+            int[] imageArrayOne = new int[width * height];
+            imageArrayOne = imageOne.getRGB(0, 0, width, height, imageArrayOne, 0, width);
 
-        ImagePsUtils tt = new ImagePsUtils();
+            File fileTwo = new File("/Users/liuxinglong/Desktop/证书/images/handsome.jpg");
+            BufferedImage imageTwo = ImageIO.read(fileTwo);
+            int width2 = imageTwo.getWidth();// 图片宽度
+            int height2 = imageTwo.getHeight();// 图片高度
+            // 从图片中读取RGB
+            int[] imageArrayTwo = new int[width2 * height2];
+            imageArrayTwo = imageTwo.getRGB(0, 0, width2, height2, imageArrayTwo, 0, width2);
 
-        BufferedImage d = tt.loadImageLocal("/Users/liuxinglong/Desktop/证书/images/guanggun.png");
-        tt.modifyImage(d, "sinlor", 314, 53);
-        tt.modifyImage(d, "男", 314, 82);
-        tt.modifyImage(d, "18", 314, 109);
-        tt.modifyImage(d, "123", 345, 269);
-        tt.modifyImage(d, "123", 400, 285);
-        // 将多张图片合在一起
-        BufferedImage b = tt.loadImageLocal("/Users/liuxinglong/Desktop/证书/images/handsome.jpg");
-        tt.writeImageLocal("/Users/liuxinglong/Desktop/test.png", tt.modifyImagetogeter(b, d));
-        System.out.println("success");
+            BufferedImage imageNew = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            imageNew.setRGB(0, 0, width, height, imageArrayOne, 0, width);
+            imageNew.setRGB(108, 252, width2, height2, imageArrayTwo, 0, width2);
+            File outFile = new File("/Users/liuxinglong/Desktop/test.png");
+            ImageIO.write(imageNew, "png", outFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // try {
+        // image.mergeBothImage(
+        // "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png",
+        // "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 252, 200,
+        // 200,
+        // "/Users/liuxinglong/Desktop/test.jpg");
+        // } catch (IOException e) {
+        // System.out.println(e.getMessage());
+        // }
+        // ImagePsUtils tt = new ImagePsUtils();
+        // BufferedImage background = tt
+        // .loadImageLocal("/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png");
+        // // 将多张图片合在一起
+        // tt.writeImageLocal("/Users/liuxinglong/Desktop/back.png",
+        // background);
+        // BufferedImage image =
+        // tt.loadImageLocal("/Users/liuxinglong/Desktop/证书/images/handsome.jpg");
+        // tt.writeImageLocal("/Users/liuxinglong/Desktop/test.png",
+        // tt.modifyImagetogeter(image, background, 108, 252, 200, 200));
+        System.out.println("success!");
     }
 }
