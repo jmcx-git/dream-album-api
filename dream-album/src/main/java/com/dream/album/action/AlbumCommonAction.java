@@ -1,6 +1,5 @@
 package com.dream.album.action;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,6 +14,7 @@ import com.dreambox.core.dto.album.AlbumInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.service.album.AlbumInfoService;
 import com.dreambox.core.service.album.AlbumItemInfoService;
+import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 
 /**
@@ -32,17 +32,20 @@ public class AlbumCommonAction extends IosBaseAction {
 
     @RequestMapping("/homepage.json")
     @ResponseBody
-    public AlbumHomePageModel getHomepage(String keyword) {
+    public AlbumHomePageModel getHomepage(String keyword, Integer start, Integer size) {
+        start = ParameterUtils.formatStart(start);
+        size = ParameterUtils.formatSize(size);
         AlbumHomePageModel model = new AlbumHomePageModel();
-        // 获取所有相册信息
-        List<AlbumInfo> infos = new ArrayList<AlbumInfo>();
+        // 获取所有相册信息(目前缓存无效暂用直接用数据库取数据)
+        // ListWrapResp<AlbumInfo> searchInfos =
+        // albumInfoService.searchInfos(keyword, start, size);
+        List<AlbumInfo> infos;
         if (StringUtils.isBlank(keyword)) {
-            infos = albumInfoService.listDirectFromDb(null);
+            infos = albumInfoService.listDirectFromDb(null, start, size);
         } else {
             AlbumInfo info = new AlbumInfo();
-            info.setStatus(AlbumInfo.STATUS_OK);
             info.setKeyword(keyword);
-            infos = albumInfoService.listDirectFromDb(info);
+            infos = albumInfoService.listDirectFromDb(info, start, size);
         }
         model.setAlbumList(infos);
         return model;

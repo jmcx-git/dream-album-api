@@ -39,5 +39,63 @@
 		<property name="dataSource" ref="dream-album-dataSource" />
 	</bean>
 
+	<bean name="jmcx-wx-rediscachepoolconfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${jmcx.dream.album.redis.cache.max.total}" />
+		<property name="maxIdle" value="${jmcx.dream.album.redis.cache.max.idle}" />
+		<property name="maxWaitMillis" value="${jmcx.dream.album.redis.cache.max.wait}" />
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<bean id="jmcx-wx-rediscacheshardedpool" class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg
+			type="org.apache.commons.pool2.impl.GenericObjectPoolConfig" ref="jmcx-wx-rediscachepoolconfig">
+		</constructor-arg>
+		<constructor-arg type="java.util.List">
+			<list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0"
+						value="${jmcx.dream.album.redis.cache.ip}">
+					</constructor-arg>
+					<constructor-arg index="1"
+						value="${jmcx.dream.album.redis.cache.port}">
+					</constructor-arg>
+					<constructor-arg index="2"
+						value="${jmcx.dream.album.redis.cache.timeout}">
+					</constructor-arg>
+				</bean>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0"
+						value="${jmcx.dream.album.redis.cache.ip1}">
+					</constructor-arg>
+					<constructor-arg index="1"
+						value="${jmcx.dream.album.redis.cache.port1}">
+					</constructor-arg>
+					<constructor-arg index="2"
+						value="${jmcx.dream.album.redis.cache.timeout}">
+					</constructor-arg>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean name="jmcx-wx-redisdbpoolconfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${jmcx.dream.album.redis.db.max.total}" />
+		<property name="maxIdle" value="${jmcx.dream.album.redis.db.max.idle}" />
+		<property name="maxWaitMillis" value="${jmcx.dream.album.redis.db.max.wait}" />
+		<property name="testOnBorrow" value="true" />
+	</bean>
+
+	<bean id="jmcx-wx-redisdbpool" class="redis.clients.jedis.JedisPool">
+		<constructor-arg index="0"
+			ref="jmcx-wx-redisdbpoolconfig">
+		</constructor-arg>
+		<constructor-arg index="1"
+			value="${jmcx.dream.album.redis.db.ip}" type="java.lang.String"></constructor-arg>
+		<constructor-arg index="2"
+			value="${jmcx.dream.album.redis.db.port}"></constructor-arg>
+		<constructor-arg index="3"
+			value="${jmcx.dream.album.redis.db.timeout}">
+		</constructor-arg>
+	</bean>
 
 </beans>

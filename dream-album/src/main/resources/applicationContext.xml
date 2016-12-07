@@ -20,6 +20,7 @@
 			</list>
 		</property>
 	</bean>
+	<import resource="classpath:spring/dream_album_datasource.xml" />
 
 	<context:annotation-config />
 	<context:component-scan base-package="com.dream.album.dao.ibatis" />

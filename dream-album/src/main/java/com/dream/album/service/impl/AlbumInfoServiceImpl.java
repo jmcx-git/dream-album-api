@@ -103,7 +103,7 @@ public class AlbumInfoServiceImpl extends AlbumInfoService {
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
-        return new ListWrapResp<>(total, infos, start, size);
+        return new ListWrapResp<AlbumInfo>(total, infos, start, size);
 
     }
 

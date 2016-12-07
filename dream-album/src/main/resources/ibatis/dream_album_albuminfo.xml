@@ -3,9 +3,11 @@
 <sqlMap namespace="rfq">
 	<resultMap id="albuminfo" class="com.dreambox.core.dto.album.AlbumInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="user_name" property="userName" jdbcType="VARCHAR" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
-		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="keyword" property="keyword" jdbcType="VARCHAR" />
+		<result column="total_items" property="totalItems" jdbcType="INTEGER" />
+		<result column="cover" property="cover" jdbcType="VARCHAR" />
+		<result column="priview_img" property="priviewImg" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -13,21 +15,21 @@
 
 	<insert id="insertOrUpdateAlbumInfo" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
 		<![CDATA[
-			INSERT INTO album_info (`id`,`title`,`keyword`,`totalItems`, `cover`, `priviewImg`, `status`,`update_time`,`create_time`)
+			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `priview_img`, `status`,`update_time`,`create_time`)
 			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #priviewImg#, 0, now(),now())
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreAlbumInfo" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
 		<![CDATA[
-			INSERT INTO album_info (`id`,`title`,`keyword`,`totalItems`, `cover`, `priviewImg`, `status`,`update_time`,`create_time`)
+			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `priview_img`, `status`,`update_time`,`create_time`)
 			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #priviewImg#, 0, now(),now())
 		]]>
 	</insert>
 
 	<insert id="insertAlbumInfoReturnId" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
 		<![CDATA[
-			INSERT INTO album_info (`id`,`title`,`keyword`,`totalItems`, `cover`, `priviewImg`, `status`,`update_time`,`create_time`)
+			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `priview_img`, `status`,`update_time`,`create_time`)
 			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #priviewImg#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">

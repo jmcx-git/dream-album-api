@@ -22,6 +22,7 @@ public class AlbumHomePageModel {
         this.keywords = list;
     }
 
+
     public List<AlbumInfo> getAlbumList() {
         return albumList;
     }

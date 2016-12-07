@@ -14,7 +14,7 @@ import com.ibatis.sqlmap.client.SqlMapClient;
  *
  */
 @Repository("albumInfoDao")
-public class AlbumInfoDaoImplAlbumInfoDao extends AlbumInfoDao {
+public class AlbumInfoDaoImpl extends AlbumInfoDao {
     @Resource(name = "dream-album-sql-client")
     private SqlMapClient sqlMapClient;
 
