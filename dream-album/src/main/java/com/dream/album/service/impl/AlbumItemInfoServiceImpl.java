@@ -29,9 +29,9 @@ public class AlbumItemInfoServiceImpl extends AlbumItemInfoService {
     private static final Logger log = Logger.getLogger(AlbumItemInfoServiceImpl.class);
     @Autowired
     private AlbumItemInfoDao albumItemInfoDao;
-    @Resource(name = "jmcx-wx-redisdbpool")
+//    @Resource(name = "jmcx-wx-redisdbpool")
     private JedisPool jedisDbPool;
-    @Resource(name = "jmcx-wx-rediscacheshardedpool")
+//    @Resource(name = "jmcx-wx-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
     private String infoKey = "album:item:info";
     private String listKey = "album:info:item:ids";

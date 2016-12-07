@@ -13,4 +13,5 @@
 	<sqlMap resource="ibatis/dream_album_useralbuminfo.xml" />
 	<sqlMap resource="ibatis/dream_album_useralbumiteminfo.xml" />
 
+	<sqlMap resource="ibatis/dream_album_userinfo.xml" />
 </sqlMapConfig>
