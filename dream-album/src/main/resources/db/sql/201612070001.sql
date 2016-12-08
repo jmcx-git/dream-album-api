@@ -12,5 +12,6 @@ CREATE TABLE IF NOT EXISTS `user_info`(
 	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+     UNIQUE KEY `UK_OPENID`(`open_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序用户信息表';
