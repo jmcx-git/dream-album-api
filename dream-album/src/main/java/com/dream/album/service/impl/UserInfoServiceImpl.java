@@ -31,5 +31,23 @@ public class UserInfoServiceImpl extends UserInfoService {
         }
     }
 
+    @Override
+    public UserInfo getDirectFromDbByOpenId(String openId) throws ServiceException {
+        try {
+            return userInfoDao.getUserInfoByOpenId(openId);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+    }
+
+    @Override
+    public void modifyUserInfo(UserInfo g) throws ServiceException {
+        try {
+            userInfoDao.update(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+    }
+
 
 }

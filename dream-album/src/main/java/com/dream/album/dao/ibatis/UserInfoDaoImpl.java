@@ -27,4 +27,9 @@ public class UserInfoDaoImpl extends UserInfoDao {
         return SQLUtils.insertReturnId(sqlMapClient, "insertUserInfoReturnId", g);
     }
 
+    @Override
+    public UserInfo getUserInfoByOpenId(String openId) throws SQLException {
+        return SQLUtils.queryObject(sqlMapClient, "getUserInfoByOpenId", openId);
+    }
+
 }

@@ -9,4 +9,6 @@ public abstract class UserInfoDao extends AbsCommonDao<UserInfo> {
 
     public abstract int insertAndReturnId(UserInfo g) throws SQLException;
 
+    public abstract UserInfo getUserInfoByOpenId(String openId) throws SQLException ;
+
 }

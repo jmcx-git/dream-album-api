@@ -52,6 +52,15 @@ public class WxLoginAction {
         return sessionKey;
     }
 
+    @RequestMapping("/addUser.json")
+    @ResponseBody
+    public String addUser(String code) {
+        UserInfo g = new UserInfo();
+        g.setOpenId(UUID.randomUUID().toString().replace("-", ""));
+        int id = userInfoService.addDataAndReturnId(g);
+        return String.valueOf(id);
+    }
+
     @RequestMapping("/getUserInfo.json")
     @ResponseBody
     public String getUserInfo(String threeSessionKey, String encryptedData, String iv) {
@@ -73,11 +82,18 @@ public class WxLoginAction {
         if (!StringUtils.isEmpty(userInfo)) {
             try {
                 UserFullInfo info = GsonUtils.convert(userInfo, UserFullInfo.class);
-                UserInfo g = new UserInfo();
+                UserInfo g = userInfoService.getDirectFromDbByOpenId(info.getOpenId());
+                if (g == null) {
+                    g = new UserInfo();
+                }
                 BeanUtils.copyProperties(info, g);
                 g.setAppid(info.getWatermark().getAppid());
-                int id = userInfoService.addDataAndReturnId(g);
-                return String.valueOf(id);
+                if (g.getId() == 0) {
+                    return String.valueOf(userInfoService.addDataAndReturnId(g));
+                } else {
+                    userInfoService.modifyUserInfo(g);
+                    return String.valueOf(g.getId());
+                }
             } catch (Exception e) {
                 log.error("parse userinfo failed." + e.getMessage());
             }
