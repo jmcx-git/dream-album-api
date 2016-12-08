@@ -2,7 +2,7 @@
 
 package com.dream.album.service.impl;
 
-import javax.annotation.Resource;
+import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.service.album.AlbumItemInfoService;
 import com.dreambox.core.utils.RedisCacheUtils;
+import com.dreambox.web.exception.ServiceException;
 
 /**
  * @author mokous86@gmail.com create date: Dec 7, 2016
@@ -29,9 +30,9 @@ public class AlbumItemInfoServiceImpl extends AlbumItemInfoService {
     private static final Logger log = Logger.getLogger(AlbumItemInfoServiceImpl.class);
     @Autowired
     private AlbumItemInfoDao albumItemInfoDao;
-//    @Resource(name = "jmcx-wx-redisdbpool")
+    // @Resource(name = "jmcx-wx-redisdbpool")
     private JedisPool jedisDbPool;
-//    @Resource(name = "jmcx-wx-rediscacheshardedpool")
+    // @Resource(name = "jmcx-wx-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
     private String infoKey = "album:item:info";
     private String listKey = "album:info:item:ids";
@@ -82,6 +83,15 @@ public class AlbumItemInfoServiceImpl extends AlbumItemInfoService {
     @Override
     protected Logger getLogger() {
         return log;
+    }
+
+    @Override
+    public AlbumItemInfo getAlbumItemInfoByUk(AlbumItemInfo info) throws ServiceException {
+        try {
+            return albumItemInfoDao.queryAlbumItemInfoByUk(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
     }
 
 }

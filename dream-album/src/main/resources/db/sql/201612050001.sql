@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS `user_album_item_info`(
 	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY UK_UAII_UAI_AI_R(`user_album_id`,`album_id`,`rank`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序用户相册子信息表';
 
 CREATE TABLE IF NOT EXISTS `album_info`(
@@ -51,5 +52,6 @@ CREATE TABLE IF NOT EXISTS `album_item_info`(
 	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id`),
+    UNIQUE KEY UK_AII_AI_R(`album_id`,`rank`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序相册子信息表';

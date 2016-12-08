@@ -1,5 +1,7 @@
 package com.dream.album.dao;
 
+import java.sql.SQLException;
+
 import com.dreambox.core.dao.AbsCommonDao;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 
@@ -9,4 +11,5 @@ import com.dreambox.core.dto.album.AlbumItemInfo;
  */
 public abstract class AlbumItemInfoDao extends AbsCommonDao<AlbumItemInfo> {
 
+    public abstract AlbumItemInfo queryAlbumItemInfoByUk(AlbumItemInfo info) throws SQLException;
 }

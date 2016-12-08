@@ -65,10 +65,16 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
 				<isNotNull property="userId" prepend=" and ">`user_id` =
 					#userId#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="albumId">
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
 					#album_id#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="complete">
 				<isNotNull property="complete" prepend=" and ">`complete` =
 					#complete#</isNotNull>
 			</isPropertyAvailable>
@@ -82,10 +88,16 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
 				<isNotNull property="userId" prepend=" and ">`user_id` =
 					#userId#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="albumId">
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
 					#album_id#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="complete">
 				<isNotNull property="complete" prepend=" and ">`complete` =
 					#complete#</isNotNull>
 			</isPropertyAvailable>

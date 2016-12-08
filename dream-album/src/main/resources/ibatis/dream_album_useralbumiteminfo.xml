@@ -23,6 +23,8 @@
 		`preview_img_url`,`rank`,`edit_img_infos`,`edit_text_infos`,`status`,`update_time`,`create_time`)
 		VALUES(null, #userAlbumId#,#albumId#,#albumItemId#,#userOriginImgUrl#,#previewImgUrl#,#rank#,#editImgInfos#,#editTextInfos#,
 		0, now(),now())
+		ON DUPLICATE KEY UPDATE `user_origin_img_url` = #userOriginImgUrl# ,`preview_img_url` = #previewImgUrl#,
+		`edit_img_infos`=#editImgInfos#,`edit_text_infos`=#editTextInfos#;
 		]]>
 	</insert>
 	<insert id="insertOrIgnoreUserAlbumItemInfo"
@@ -32,6 +34,8 @@
 		`preview_img_url`,`rank`,`edit_img_infos`,`edit_text_infos`,`status`,`update_time`,`create_time`)
 		VALUES(null, #userAlbumId#,#albumId#,#albumItemId#,#userOriginImgUrl#,#previewImgUrl#,#rank#,#editImgInfos#,#editTextInfos#,
 		0, now(),now())
+		ON DUPLICATE KEY UPDATE `user_origin_img_url` = #userOriginImgUrl# ,`preview_img_url` = #previewImgUrl#,
+		`edit_img_infos`=#editImgInfos#,`edit_text_infos`=#editTextInfos#;
 		]]>
 	</insert>
 	<update id="updateUserAlbumItemInfoStatus"
@@ -64,6 +68,8 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userAlbumId">
 				<isNotNull property="userAlbumId" prepend=" and ">`user_album_id` =
 					#userAlbumId#</isNotNull>
 			</isPropertyAvailable>
@@ -77,6 +83,8 @@
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
 					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userAlbumId">
 				<isNotNull property="userAlbumId" prepend=" and ">`user_album_id` =
 					#userAlbumId#</isNotNull>
 			</isPropertyAvailable>

@@ -25,6 +25,7 @@ import com.dreambox.core.service.album.AlbumInfoService;
 import com.dreambox.core.service.album.AlbumItemInfoService;
 import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.service.album.UserAlbumItemInfoService;
+import com.dreambox.core.utils.ImagePsUtils;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.utils.CollectionUtils;
@@ -70,7 +71,7 @@ public class AlbumCommonAction extends IosBaseAction {
             infos = albumInfoService.listDirectFromDb(null, start, size);
         } else {
             AlbumInfo info = new AlbumInfo();
-            info.setKeyword(keyword);
+            info.setKeyword("%" + keyword + "%");
             infos = albumInfoService.listDirectFromDb(info, start, size);
         }
         model.setAlbumList(infos);
@@ -164,7 +165,8 @@ public class AlbumCommonAction extends IosBaseAction {
         // 在album中所有图片的第几张
         ua.setRank(rank);
         // 保存图片
-        String picName = "album_" + new Date().getTime() + ".png";
+        long cttime = new Date().getTime();
+        String picName = "album_" + cttime + ".png";
         try {
             File outputfile = new File(ALBUM_PRE_IMAGE_LOCAL + picName);
             ImageIO.write(ImageIO.read(image.getInputStream()), "png", outputfile);
@@ -178,7 +180,21 @@ public class AlbumCommonAction extends IosBaseAction {
         String cssJson = GsonUtils.toJson(model);
         ua.setEditImgInfos(cssJson);
         // TODO 生成priviewImg
-        ua.setPreviewImgUrl("");
+        ImagePsUtils img = new ImagePsUtils();
+        String picPreName = "album_pre_" + cttime + ".png";
+        AlbumItemInfo g = new AlbumItemInfo();
+        g.setAlbumId(albumId);
+        g.setRank(rank);
+        AlbumItemInfo item = albumItemInfoService.getAlbumItemInfoByUk(g);
+        try {
+            img.mergeBothImage(item.getEditImgUrl(), ALBUM_PRE_IMAGE_LOCAL + picName, positionX, positionY, width,
+                    height, ALBUM_PRE_IMAGE_LOCAL + picPreName);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        String picPreUrl = "http://10.1.1.197:8080/dream-album/images/made/" + picPreName;
+        ua.setPreviewImgUrl(picPreUrl);
         userAlbumItemInfoService.addData(ua);
+        System.out.println("生成预览图:" + picPreUrl);
     }
 }

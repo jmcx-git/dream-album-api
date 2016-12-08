@@ -6,12 +6,12 @@
 		<result column="album_id" property="albumId" jdbcType="INTEGER" />
 		<result column="edit_img_url" property="editImgUrl" jdbcType="VARCHAR" />
 		<result column="preview_img_url" property="previewImgUrl"
-			jdbcType="VARCHAR" />
+		jdbcType="VARCHAR" />
 		<result column="rank" property="rank" jdbcType="INTEGER" />
 		<result column="edit_img_infos" property="editImgInfos"
-			jdbcType="VARCHAR" />
+		jdbcType="VARCHAR" />
 		<result column="edit_text_infos" property="editTextInfos"
-			jdbcType="VARCHAR" />
+		jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -35,50 +35,55 @@
 		UPDATE `album_item_info` SET `status` = #status# WHERE `id=#id# ;
 		]]>
 	</update>
+	<select id="queryAlbumItemInfoByAlbumIdAndRank" parameterClass="com.dreambox.core.dto.album.AlbumItemInfo"
+	resultMap="albumiteminfo">
+		<![CDATA[
+		SELECT * FROM `album_item_info` WHERE `album_id` = #albumId# AND `rank`=#rank#;
+		]]>
+	</select>
 	<select id="queryAlbumItemInfoById" parameterClass="java.lang.Integer"
-		resultMap="albumiteminfo">
+	resultMap="albumiteminfo">
 		<![CDATA[
 		SELECT * FROM `album_item_info` WHERE `id` = #startId#;
 		]]>
 	</select>
 	<select id="queryAlbumItemInfoListByStartId" parameterClass="java.util.Map"
-		resultMap="albumiteminfo">
+	resultMap="albumiteminfo">
 		<![CDATA[
 		SELECT * FROM `album_item_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
 		]]>
 	</select>
 	<select id="queryAlbumItemInfoByIds" parameterClass="java.util.Map"
-		resultMap="albumiteminfo">
+	resultMap="albumiteminfo">
 		SELECT * FROM `album_item_info`
-		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#
-		</iterate>
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#</iterate>
 	</select>
 	<select id="queryAlbumItemInfoListByFilter" parameterClass="java.util.Map"
-		resultMap="albumiteminfo">
+	resultMap="albumiteminfo">
 		SELECT * FROM `album_item_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
-					#status#
-				</isNotNull>
+					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="albumId">
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
-					#albumId#
-				</isNotNull>
+					#albumId#</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 		ORDER BY id DESC LIMIT #start#, #size#
 	</select>
 	<select id="countAlbumItemInfoByFilter" parameterClass="java.util.Map"
-		resultClass="java.lang.Long">
+	resultClass="java.lang.Long">
 		SELECT COUNT(*) FROM `album_item_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">`status` =
-					#status#
-				</isNotNull>
+					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="albumId">
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
-					#albumId#
-				</isNotNull>
+					#albumId#</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
 	</select>

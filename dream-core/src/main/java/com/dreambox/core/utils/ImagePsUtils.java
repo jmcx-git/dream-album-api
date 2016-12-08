@@ -2,16 +2,24 @@ package com.dreambox.core.utils;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 
 /**
@@ -200,54 +208,67 @@ public class ImagePsUtils {
         return d;
     }
 
-    public static void main(String[] args) {
-        EasyImage image = new EasyImage();
+    /**
+     * 合并图片(按指定初始x、y坐标将附加图片贴到底图之上) 并指定宽高
+     * 
+     * 
+     * @param negativeImagePath 背景图片路径
+     * @param additionImagePath 附加图片路径
+     * @param x 附加图片的起始点x坐标
+     * @param y 附加图片的起始点y坐标
+     * @param toPath 图片写入路径
+     * @param width 覆盖的图片宽
+     * @param height 覆盖的图片高
+     * @throws IOException
+     */
+    public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, int width, int height,
+            String toPath) throws IOException {
+        InputStream is = null;
+        InputStream is2 = null;
+        OutputStream os = null;
         try {
-            // 读取第一张图片
-            File fileOne = new File(
-                    "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png");
-            BufferedImage imageOne = ImageIO.read(fileOne);
-            int width = imageOne.getWidth();// 图片宽度
-            int height = imageOne.getHeight();// 图片高度
+            is = new FileInputStream(negativeImagePath);
+            is2 = new FileInputStream(additionImagePath);
+            BufferedImage image = ImageIO.read(is);
+            int w = image.getWidth();// 图片宽度
+            int h = image.getHeight();// 图片高度
             // 从图片中读取RGB
-            int[] imageArrayOne = new int[width * height];
-            imageArrayOne = imageOne.getRGB(0, 0, width, height, imageArrayOne, 0, width);
+            int[] imageArrayOne = new int[w * h];
+            imageArrayOne = image.getRGB(0, 0, w, h, imageArrayOne, 0, w);
 
-            File fileTwo = new File("/Users/liuxinglong/Desktop/证书/images/handsome.jpg");
-            BufferedImage imageTwo = ImageIO.read(fileTwo);
-            int width2 = imageTwo.getWidth();// 图片宽度
-            int height2 = imageTwo.getHeight();// 图片高度
-            // 从图片中读取RGB
-            int[] imageArrayTwo = new int[width2 * height2];
-            imageArrayTwo = imageTwo.getRGB(0, 0, width2, height2, imageArrayTwo, 0, width2);
+            BufferedImage imageNew = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+            imageNew.setRGB(0, 0, w, h, imageArrayOne, 0, w);
 
-            BufferedImage imageNew = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            imageNew.setRGB(0, 0, width, height, imageArrayOne, 0, width);
-            imageNew.setRGB(108, 252, width2, height2, imageArrayTwo, 0, width2);
-            File outFile = new File("/Users/liuxinglong/Desktop/test.png");
+            BufferedImage image2 = ImageIO.read(is2);
+            Graphics g = imageNew.getGraphics();
+            g.drawImage(image2, x, y, width, height, null);
+            File outFile = new File(toPath);
             ImageIO.write(imageNew, "png", outFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (os != null) {
+                os.close();
+            }
+            if (is2 != null) {
+                is2.close();
+            }
+            if (is != null) {
+                is.close();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        ImagePsUtils img = new ImagePsUtils();
+        try {
+            img.mergeBothImage(
+                    "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
+                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 252, 400, 400,
+                    "/Users/liuxinglong/Desktop/test.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // try {
-        // image.mergeBothImage(
-        // "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png",
-        // "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 252, 200,
-        // 200,
-        // "/Users/liuxinglong/Desktop/test.jpg");
-        // } catch (IOException e) {
-        // System.out.println(e.getMessage());
-        // }
-        // ImagePsUtils tt = new ImagePsUtils();
-        // BufferedImage background = tt
-        // .loadImageLocal("/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png");
-        // // 将多张图片合在一起
-        // tt.writeImageLocal("/Users/liuxinglong/Desktop/back.png",
-        // background);
-        // BufferedImage image =
-        // tt.loadImageLocal("/Users/liuxinglong/Desktop/证书/images/handsome.jpg");
-        // tt.writeImageLocal("/Users/liuxinglong/Desktop/test.png",
-        // tt.modifyImagetogeter(image, background, 108, 252, 200, 200));
         System.out.println("success!");
     }
 }
