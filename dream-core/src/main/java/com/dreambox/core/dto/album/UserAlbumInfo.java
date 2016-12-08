@@ -21,6 +21,17 @@ public class UserAlbumInfo extends DbStatus {
     private int complete;// 是否生成了相册
     private String priviewImg;// 在用户户生成完相册后根据信息生成预览图
 
+    public UserAlbumInfo() {
+        super();
+    }
+
+    public UserAlbumInfo(String userId, int albumId, int complete) {
+        super();
+        this.userId = userId;
+        this.albumId = albumId;
+        this.complete = complete;
+    }
+
     public int getId() {
         return id;
     }

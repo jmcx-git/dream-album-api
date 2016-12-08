@@ -1,13 +1,12 @@
 package com.dreambox.core.utils;
 
+import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -17,9 +16,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 
 /**
@@ -233,15 +229,15 @@ public class ImagePsUtils {
             int w = image.getWidth();// 图片宽度
             int h = image.getHeight();// 图片高度
             // 从图片中读取RGB
-            int[] imageArrayOne = new int[w * h];
-            imageArrayOne = image.getRGB(0, 0, w, h, imageArrayOne, 0, w);
-
             BufferedImage imageNew = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-            imageNew.setRGB(0, 0, w, h, imageArrayOne, 0, w);
+            imageNew.setRGB(0, 0, w, h, new int[w * h], 0, w);
 
             BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = imageNew.getGraphics();
+            Graphics2D g = (Graphics2D) imageNew.getGraphics();
             g.drawImage(image2, x, y, width, height, null);
+            // 设置透明度
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
+            g.drawImage(image, 0, 0, w, h, null);
             File outFile = new File(toPath);
             ImageIO.write(imageNew, "png", outFile);
         } catch (Exception e) {
@@ -264,7 +260,7 @@ public class ImagePsUtils {
         try {
             img.mergeBothImage(
                     "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
-                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 252, 400, 400,
+                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 248, 561, 435,
                     "/Users/liuxinglong/Desktop/test.png");
         } catch (IOException e) {
             e.printStackTrace();

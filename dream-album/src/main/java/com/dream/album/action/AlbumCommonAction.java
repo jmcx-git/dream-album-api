@@ -2,8 +2,10 @@ package com.dream.album.action;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -25,6 +27,7 @@ import com.dreambox.core.service.album.AlbumInfoService;
 import com.dreambox.core.service.album.AlbumItemInfoService;
 import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.service.album.UserAlbumItemInfoService;
+import com.dreambox.core.utils.EasyImage;
 import com.dreambox.core.utils.ImagePsUtils;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
@@ -40,6 +43,10 @@ import com.dreambox.web.utils.GsonUtils;
 public class AlbumCommonAction extends IosBaseAction {
     private static final Logger log = Logger.getLogger(AlbumCommonAction.class);
     private static final String ALBUM_PRE_IMAGE_LOCAL = "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/made/";
+    private static final String ALBUM_PRE_IMAGE_INTERNET = "http://10.1.1.197:8080/dream-album/images/made/";
+    private static final String ALBUM_IMAGE_LOCAL = "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/";
+    private static final String ALBUM_IMAGE_INTERNET = "http://10.1.1.197:8080/dream-album/images/";
+
     @Autowired
     private AlbumInfoService albumInfoService;
     @Autowired
@@ -110,13 +117,8 @@ public class AlbumCommonAction extends IosBaseAction {
     @RequestMapping("/startmakeuseralbum.json")
     @ResponseBody
     public List<UserAlbumItemInfo> createUserAlbum(String userId, Integer albumId) {
-        UserAlbumInfo info = new UserAlbumInfo();
-        info.setUserId(userId);
-        info.setAlbumId(albumId);
-        info.setComplete(0);
+        UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
-        // List<UserAlbumInfo> listDirectFromDb =
-        // userAlbumInfoService.listDirectFromDb(info);
         UserAlbumInfo userAlbum = userAlbumInfoService.getUserAlbumInfoByUk(info);
         if (userAlbum == null) {
             // 新建记录
@@ -149,10 +151,13 @@ public class AlbumCommonAction extends IosBaseAction {
     @ResponseBody
     public String uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId, Integer rank,
             Integer positionX, Integer positionY, Integer rotate, Integer width, Integer height) {
-        UserAlbumInfo info = new UserAlbumInfo();
-        info.setUserId(userId);
-        info.setAlbumId(albumId);
-        info.setComplete(0);
+        positionX = positionX == null ? 0 : positionX;
+        positionY = positionY == null ? 0 : positionY;
+        rotate = rotate == null ? 0 : rotate;
+        width = width == null ? 0 : width;
+        height = height == null ? 0 : height;
+
+        UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
         UserAlbumInfo userAlbumInfo = userAlbumInfoService.getUserAlbumInfoByUk(info);
         if (rank > userAlbumInfo.getStep()) {
@@ -173,7 +178,7 @@ public class AlbumCommonAction extends IosBaseAction {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        String picUrl = "http://10.1.1.197:8080/dream-album/images/made/" + picName;
+        String picUrl = ALBUM_PRE_IMAGE_INTERNET + picName;
         ua.setUserOriginImgUrl(picUrl);
         // 操作信息
         AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(positionX, positionY, rotate, width, height);
@@ -186,18 +191,51 @@ public class AlbumCommonAction extends IosBaseAction {
         g.setAlbumId(albumId);
         g.setRank(rank);
         AlbumItemInfo item = albumItemInfoService.getAlbumItemInfoByUk(g);
+        // http://10.1.1.197:8080/dream-album/images/1/detail/page.png
         try {
-            img.mergeBothImage(
-                    "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
+            img.mergeBothImage(item.getEditImgUrl().replace(ALBUM_IMAGE_INTERNET, ALBUM_IMAGE_LOCAL),
                     ALBUM_PRE_IMAGE_LOCAL + picName, positionX, positionY, width, height, ALBUM_PRE_IMAGE_LOCAL
                             + picPreName);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        String picPreUrl = "http://10.1.1.197:8080/dream-album/images/made/" + picPreName;
+        String picPreUrl = ALBUM_PRE_IMAGE_INTERNET + picPreName;
         ua.setPreviewImgUrl(picPreUrl);
         userAlbumItemInfoService.addData(ua);
         System.out.println("生成预览图:" + picPreUrl);
         return picPreUrl;
     }
+
+    /**
+     * 
+     * 点击完成制作，生成最终成品预览图
+     * 
+     * @param userId
+     * @param albumId
+     * @return
+     */
+    @RequestMapping("/madeuseralbum.json")
+    @ResponseBody
+    public String madeUserAlbum(String userId, int albumId) {
+        UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
+        // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
+        UserAlbumInfo userAlbum = userAlbumInfoService.getUserAlbumInfoByUk(info);
+
+        // 根据查到的记录获取用户相册信息id
+        UserAlbumItemInfo ua = new UserAlbumItemInfo();
+        ua.setUserAlbumId(userAlbum.getId());
+        // 根据用户信息id拉取用户相册的操作记录历史
+        List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(ua);
+        List<String> prwImgList = new ArrayList<String>();
+        for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
+            String previewImgUrl = userAlbumItemInfo.getPreviewImgUrl();
+            prwImgList.add(previewImgUrl.replace(ALBUM_PRE_IMAGE_INTERNET, ALBUM_PRE_IMAGE_LOCAL));
+        }
+        EasyImage image = new EasyImage();
+        String productPreImg = "/Users/liuxinglong/Desktop/test" + new Random().nextInt(10) + ".png";
+        // 纵向拼接成品相册预览图
+        image.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png", productPreImg);
+        return productPreImg;
+    }
+
 }
