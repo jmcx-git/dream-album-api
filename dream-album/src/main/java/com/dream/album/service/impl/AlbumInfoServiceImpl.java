@@ -68,7 +68,7 @@ public class AlbumInfoServiceImpl extends AlbumInfoService {
 
     @Override
     protected ShardedJedisPool getSharedJedisPool() {
-        return this.shardedJedisPool;
+        return shardedJedisPool;
     }
 
     @Override
@@ -93,13 +93,13 @@ public class AlbumInfoServiceImpl extends AlbumInfoService {
         g.setKeyword("%" + keyword + "%");
         long total;
         try {
-            total = this.albumInfoDao.count(g);
+            total = albumInfoDao.count(g);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
         List<AlbumInfo> infos;
         try {
-            infos = this.albumInfoDao.queryList(g, start, size);
+            infos = albumInfoDao.queryList(g, start, size);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }

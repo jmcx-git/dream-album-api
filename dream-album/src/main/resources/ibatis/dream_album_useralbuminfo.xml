@@ -32,7 +32,7 @@
 	<update id="updateUserAlbumInfoStep"
 	parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[
-		UPDATE `user_album_info` SET `step` = #step# WHERE `id=#id# ;
+		UPDATE `user_album_info` SET `step` = #step# WHERE `id`=#id# ;
 		]]>
 	</update>
 	<update id="updateUserAlbumInfoStatus"
@@ -41,6 +41,12 @@
 		UPDATE `user_album_info` SET `status` = #status# WHERE `id=#id# ;
 		]]>
 	</update>
+	<select id="queryUserAlbumInfoByUk" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo"
+	resultMap="useralbuminfo">
+		<![CDATA[
+		SELECT * FROM `user_album_info` WHERE `user_id` = #userId# and `album_id` = #albumId# and `complete` = #complete#;
+		]]>
+	</select>
 	<select id="queryUserAlbumInfoById" parameterClass="java.lang.Integer"
 	resultMap="useralbuminfo">
 		<![CDATA[
@@ -58,8 +64,8 @@
 		SELECT * FROM `user_album_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#</iterate>
 	</select>
-	<select id="queryUserAlbumInfoListByFilter"
-	parameterClass="java.util.Map" resultMap="useralbuminfo">
+	<select id="queryUserAlbumInfoListByFilter" parameterClass="java.util.Map"
+	resultMap="useralbuminfo">
 		SELECT * FROM `user_album_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
@@ -72,7 +78,7 @@
 			</isPropertyAvailable>
 			<isPropertyAvailable property="albumId">
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
-					#album_id#</isNotNull>
+					#albumId#</isNotNull>
 			</isPropertyAvailable>
 			<isPropertyAvailable property="complete">
 				<isNotNull property="complete" prepend=" and ">`complete` =
@@ -81,8 +87,8 @@
 		</dynamic>
 		ORDER BY id DESC LIMIT #start#, #size#
 	</select>
-	<select id="countUserAlbumInfoByFilter"
-	parameterClass="java.util.Map" resultClass="java.lang.Long">
+	<select id="countUserAlbumInfoByFilter" parameterClass="java.util.Map"
+	resultClass="java.lang.Long">
 		SELECT COUNT(*) FROM `user_album_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
@@ -95,7 +101,7 @@
 			</isPropertyAvailable>
 			<isPropertyAvailable property="albumId">
 				<isNotNull property="albumId" prepend=" and ">`album_id` =
-					#album_id#</isNotNull>
+					#albumId#</isNotNull>
 			</isPropertyAvailable>
 			<isPropertyAvailable property="complete">
 				<isNotNull property="complete" prepend=" and ">`complete` =

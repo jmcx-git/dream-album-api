@@ -30,4 +30,9 @@ public class UserAlbumInfoDaoImpl extends UserAlbumInfoDao {
         SQLUtils.update(sqlMapClient, "updateUserAlbumInfoStep", info);
     }
 
+    @Override
+    public UserAlbumInfo queryUserAlbumInfoByUk(UserAlbumInfo info) throws SQLException {
+        return SQLUtils.queryObject(sqlMapClient, "queryUserAlbumInfoByUk", info);
+    }
+
 }

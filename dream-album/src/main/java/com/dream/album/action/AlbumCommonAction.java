@@ -115,16 +115,17 @@ public class AlbumCommonAction extends IosBaseAction {
         info.setAlbumId(albumId);
         info.setComplete(0);
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
-        List<UserAlbumInfo> userAlbum = userAlbumInfoService.listDirectFromDb(info);
-        if (CollectionUtils.emptyOrNull(userAlbum)) {
+        // List<UserAlbumInfo> listDirectFromDb =
+        // userAlbumInfoService.listDirectFromDb(info);
+        UserAlbumInfo userAlbum = userAlbumInfoService.getUserAlbumInfoByUk(info);
+        if (userAlbum == null) {
             // 新建记录
             userAlbumInfoService.addData(info);
             return null;
         } else {
             // 根据查到的记录获取用户相册信息id
-            UserAlbumInfo userAlbumInfo = userAlbum.get(0);
             UserAlbumItemInfo ua = new UserAlbumItemInfo();
-            ua.setUserAlbumId(userAlbumInfo.getId());
+            ua.setUserAlbumId(userAlbum.getId());
             // 根据用户信息id拉取用户相册的操作记录历史
             List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(ua);
             return uaItems;
@@ -146,15 +147,14 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public void uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId, Integer rank,
+    public String uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId, Integer rank,
             Integer positionX, Integer positionY, Integer rotate, Integer width, Integer height) {
         UserAlbumInfo info = new UserAlbumInfo();
         info.setUserId(userId);
         info.setAlbumId(albumId);
         info.setComplete(0);
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
-        List<UserAlbumInfo> userAlbum = userAlbumInfoService.listDirectFromDb(info);
-        UserAlbumInfo userAlbumInfo = userAlbum.get(0);
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getUserAlbumInfoByUk(info);
         if (rank > userAlbumInfo.getStep()) {
             userAlbumInfo.setStep(rank);
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
@@ -187,8 +187,10 @@ public class AlbumCommonAction extends IosBaseAction {
         g.setRank(rank);
         AlbumItemInfo item = albumItemInfoService.getAlbumItemInfoByUk(g);
         try {
-            img.mergeBothImage(item.getEditImgUrl(), ALBUM_PRE_IMAGE_LOCAL + picName, positionX, positionY, width,
-                    height, ALBUM_PRE_IMAGE_LOCAL + picPreName);
+            img.mergeBothImage(
+                    "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
+                    ALBUM_PRE_IMAGE_LOCAL + picName, positionX, positionY, width, height, ALBUM_PRE_IMAGE_LOCAL
+                            + picPreName);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
@@ -196,5 +198,6 @@ public class AlbumCommonAction extends IosBaseAction {
         ua.setPreviewImgUrl(picPreUrl);
         userAlbumItemInfoService.addData(ua);
         System.out.println("生成预览图:" + picPreUrl);
+        return picPreUrl;
     }
 }

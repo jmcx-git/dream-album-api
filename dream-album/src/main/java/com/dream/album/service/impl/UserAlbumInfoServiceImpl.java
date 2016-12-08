@@ -56,7 +56,7 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
 
     @Override
     protected LoadDao<UserAlbumInfo> getLoadDao() {
-        return this.userAlbumInfoDao;
+        return userAlbumInfoDao;
     }
 
     @Override
@@ -76,13 +76,22 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
 
     @Override
     public CommonDao<UserAlbumInfo> getCommonDao() {
-        return this.userAlbumInfoDao;
+        return userAlbumInfoDao;
     }
 
     @Override
     public void modifyUserAlbumInfoStep(UserAlbumInfo info) throws ServiceException {
         try {
             userAlbumInfoDao.updateUserAlbumInfoStep(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+    }
+
+    @Override
+    public UserAlbumInfo getUserAlbumInfoByUk(UserAlbumInfo info) throws ServiceException {
+        try {
+            return userAlbumInfoDao.queryUserAlbumInfoByUk(info);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }

@@ -71,7 +71,7 @@
 					#albumId#</isNotNull>
 			</isPropertyAvailable>
 		</dynamic>
-		ORDER BY id DESC LIMIT #start#, #size#
+		ORDER BY rank LIMIT #start#, #size#
 	</select>
 	<select id="countAlbumItemInfoByFilter" parameterClass="java.util.Map"
 	resultClass="java.lang.Long">
