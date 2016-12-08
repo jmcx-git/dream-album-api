@@ -56,7 +56,6 @@ public class WxLoginAction {
     @ResponseBody
     public String addUser(String code) {
         UserInfo g = new UserInfo();
-        g.setOpenId(UUID.randomUUID().toString().replace("-", ""));
         int id = userInfoService.addDataAndReturnId(g);
         return String.valueOf(id);
     }
