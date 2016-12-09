@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="useralbumcollectinfo"
+		class="com.dreambox.core.dto.album.UserAlbumCollectInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="album_id" property="albumId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateUserAlbumCollectInfo" parameterClass="com.dreambox.core.dto.album.UserAlbumCollectInfo">
+		<![CDATA[
+			INSERT INTO user_album_collect_info (`id`,`album_id`,`user_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #albumId#,#userId#, #status#, now(),now())
+			ON DUPLICATE KEY UPDATE `status`=#status#
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreUserAlbumCollectInfo" parameterClass="com.dreambox.core.dto.album.UserAlbumCollectInfo">
+		<![CDATA[
+			INSERT INTO user_album_collect_info (`id`,`album_id`,`user_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #albumId#,#userId#, #status#, now(),now())
+			ON DUPLICATE KEY UPDATE `status`=#status#
+		]]>
+	</insert>
+
+	<insert id="insertUserAlbumCollectInfoReturnId" parameterClass="com.dreambox.core.dto.album.UserAlbumCollectInfo">
+		<![CDATA[
+			INSERT INTO user_album_collect_info (`id`,`album_id`,`user_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #albumId#,#userId#, #status#, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateUserAlbumCollectInfoStatus" parameterClass="com.dreambox.core.dto.album.UserAlbumCollectInfo">
+        <![CDATA[
+        	UPDATE `user_album_collect_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryUserAlbumCollectInfoById" parameterClass="java.lang.Integer"
+		resultMap="useralbumcollectinfo">
+		<![CDATA[
+			SELECT * FROM `user_album_collect_info` WHERE `id` = #startId#;
+		]]>
+	</select>
+
+	<select id="queryUserAlbumCollectInfoListByStartId"
+		parameterClass="java.util.Map" resultMap="useralbumcollectinfo">
+		<![CDATA[
+			SELECT * FROM `user_album_collect_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		]]>
+	</select>
+
+	<select id="getUserAlbumCollectInfoAlbumId" parameterClass="java.lang.Integer"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT album_id FROM `user_album_collect_info`  WHERE `user_id`=#userId# group by album_id order by update_time desc;
+		]]>
+	</select>
+
+	<select id="queryUserAlbumCollectInfoByIds" parameterClass="java.util.Map"
+		resultMap="useralbumcollectinfo">
+		SELECT * FROM `user_album_collect_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryUserAlbumCollectInfoListByFilter"
+		parameterClass="java.util.Map" resultMap="useralbumcollectinfo">
+		SELECT * FROM `user_album_collect_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id`=
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countUserAlbumCollectInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `user_album_collect_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id`=
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

@@ -15,3 +15,14 @@ CREATE TABLE IF NOT EXISTS `user_info`(
     PRIMARY KEY (`id`),
      UNIQUE KEY `UK_OPENID`(`open_id`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序用户信息表';
+
+CREATE TABLE IF NOT EXISTS `user_album_collect_info`(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`album_id` int(11) NOT NULL,
+	`user_id` int(11) NOT NULL,
+	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
+    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `create_time` datetime NOT NULL COMMENT '记录创建时间',
+    PRIMARY KEY (`id`),
+     UNIQUE KEY `UK_AU`(`album_id`,`user_id`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信小程序用户收藏模版信息表';
