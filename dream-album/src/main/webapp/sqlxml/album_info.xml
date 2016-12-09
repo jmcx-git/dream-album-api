@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<RECORDS>
+<RECORD>
+	<id>1</id>
+	<title>圣诞相册</title>
+	<keyword>圣诞节</keyword>
+	<total_items>5</total_items>
+	<cover>http://10.1.1.197:8080/dream-album/images/1/detail/page.png</cover>
+	<priview_img>http://10.1.1.197:8080/dream-album/images/1/pre.jpg</priview_img>
+	<status>0</status>
+	<update_time>12/06/2016 19:04:06</update_time>
+	<create_time>12/06/2016 19:04:07</create_time>
+</RECORD>
+<RECORD>
+	<id>2</id>
+	<title>亲子相册</title>
+	<keyword>亲子</keyword>
+	<total_items>5</total_items>
+	<cover>http://10.1.1.197:8080/dream-album/images/2/detail/page.png</cover>
+	<priview_img>http://10.1.1.197:8080/dream-album/images/1/pre.jpg</priview_img>
+	<status>0</status>
+	<update_time>12/06/2016 19:04:44</update_time>
+	<create_time>12/06/2016 19:04:48</create_time>
+</RECORD>
+<RECORD>
+	<id>3</id>
+	<title>时光相册</title>
+	<keyword>青春</keyword>
+	<total_items>5</total_items>
+	<cover>http://10.1.1.197:8080/dream-album/images/3/detail/page.png</cover>
+	<priview_img>http://10.1.1.197:8080/dream-album/images/3/pre.png</priview_img>
+	<status>0</status>
+	<update_time>12/06/2016 19:04:44</update_time>
+	<create_time>12/06/2016 19:04:48</create_time>
+</RECORD>
+</RECORDS>

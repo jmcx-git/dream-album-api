@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<RECORDS>
+<RECORD>
+	<id>1</id>
+	<user_album_id>1</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481268864803.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481268864803.png</preview_img_url>
+	<rank>1</rank>
+	<edit_img_infos>{"positionX":108,"positionY":248,"rotate":0,"width":562,"height":435}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 15:34:25</update_time>
+	<create_time>12/08/2016 17:46:45</create_time>
+</RECORD>
+<RECORD>
+	<id>2</id>
+	<user_album_id>1</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481268873165.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481268873165.png</preview_img_url>
+	<rank>2</rank>
+	<edit_img_infos>{"positionX":108,"positionY":248,"rotate":0,"width":562,"height":435}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 15:34:33</update_time>
+	<create_time>12/08/2016 18:15:15</create_time>
+</RECORD>
+<RECORD>
+	<id>3</id>
+	<user_album_id>1</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481268879656.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481268879656.png</preview_img_url>
+	<rank>3</rank>
+	<edit_img_infos>{"positionX":108,"positionY":248,"rotate":0,"width":562,"height":435}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 15:34:40</update_time>
+	<create_time>12/08/2016 18:15:52</create_time>
+</RECORD>
+<RECORD>
+	<id>4</id>
+	<user_album_id>1</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481268897209.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481268897209.png</preview_img_url>
+	<rank>4</rank>
+	<edit_img_infos>{"positionX":108,"positionY":248,"rotate":0,"width":562,"height":435}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 15:34:58</update_time>
+	<create_time>12/08/2016 18:16:07</create_time>
+</RECORD>
+<RECORD>
+	<id>14</id>
+	<user_album_id>2</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/1/detail/page.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/1/detail/page.png</preview_img_url>
+	<rank>0</rank>
+	<edit_img_infos>{"positionX":42,"positionY":100,"rotate":4,"width":240,"height":200}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 18:34:17</update_time>
+	<create_time>12/09/2016 17:09:51</create_time>
+</RECORD>
+<RECORD>
+	<id>15</id>
+	<user_album_id>2</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481279891754.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481279891754.png</preview_img_url>
+	<rank>1</rank>
+	<edit_img_infos>{"positionX":42,"positionY":100,"rotate":4,"width":240,"height":200}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 18:38:12</update_time>
+	<create_time>12/09/2016 17:09:56</create_time>
+</RECORD>
+<RECORD>
+	<id>16</id>
+	<user_album_id>2</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481279896003.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481279896003.png</preview_img_url>
+	<rank>2</rank>
+	<edit_img_infos>{"positionX":42,"positionY":100,"rotate":4,"width":240,"height":200}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 18:38:16</update_time>
+	<create_time>12/09/2016 17:10:06</create_time>
+</RECORD>
+<RECORD>
+	<id>17</id>
+	<user_album_id>2</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481279899636.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481279899636.png</preview_img_url>
+	<rank>3</rank>
+	<edit_img_infos>{"positionX":42,"positionY":100,"rotate":4,"width":240,"height":200}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 18:38:19</update_time>
+	<create_time>12/09/2016 17:10:15</create_time>
+</RECORD>
+<RECORD>
+	<id>18</id>
+	<user_album_id>2</user_album_id>
+	<album_id>1</album_id>
+	<album_item_id>0</album_item_id>
+	<user_origin_img_url>http://10.1.1.197:8080/dream-album/images/made/album_1481279903117.png</user_origin_img_url>
+	<preview_img_url>http://10.1.1.197:8080/dream-album/images/made/album_pre_1481279903117.png</preview_img_url>
+	<rank>4</rank>
+	<edit_img_infos>{"positionX":42,"positionY":100,"rotate":4,"width":240,"height":200}</edit_img_infos>
+	<status>0</status>
+	<update_time>12/09/2016 18:38:23</update_time>
+	<create_time>12/09/2016 17:10:21</create_time>
+</RECORD>
+</RECORDS>
