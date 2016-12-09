@@ -35,6 +35,12 @@
 		UPDATE `user_album_info` SET `step` = #step# WHERE `id`=#id# ;
 		]]>
 	</update>
+	<update id="updateUserAlbumInfoCompleteAndPreImg"
+	parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
+		<![CDATA[
+		UPDATE `user_album_info` SET `complete` = #complete#,`priview_img` = #priviewImg# WHERE `id`=#id# ;
+		]]>
+	</update>
 	<update id="updateUserAlbumInfoStatus"
 	parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[

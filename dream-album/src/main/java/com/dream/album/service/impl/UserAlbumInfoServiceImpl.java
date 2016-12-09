@@ -97,4 +97,13 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
         }
     }
 
+    @Override
+    public void modifyUserAlbumInfoCompleteAndPreImg(UserAlbumInfo info) throws ServiceException {
+        try {
+            userAlbumInfoDao.updateUserAlbumInfoCompleteAndPreImg(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+    }
+
 }

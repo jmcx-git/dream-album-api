@@ -31,7 +31,7 @@ import com.dreambox.core.utils.EasyImage;
 import com.dreambox.core.utils.ImagePsUtils;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
-import com.dreambox.web.utils.CollectionUtils;
+import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.utils.GsonUtils;
 
 /**
@@ -149,61 +149,101 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public String uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId, Integer rank,
-            Integer positionX, Integer positionY, Integer rotate, Integer width, Integer height) {
+    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId,
+            Integer rank, Integer positionX, Integer positionY, Integer rotate, Integer width, Integer height,
+            Integer isMadeStatus) {
         positionX = positionX == null ? 0 : positionX;
         positionY = positionY == null ? 0 : positionY;
         rotate = rotate == null ? 0 : rotate;
         width = width == null ? 0 : width;
         height = height == null ? 0 : height;
+        isMadeStatus = isMadeStatus == null ? 0 : isMadeStatus;
+        if (StringUtils.isBlank(userId)) {
+            return new ApiRespWrapper<String>(-1, "userId不能为空!");
+        }
 
         UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
         UserAlbumInfo userAlbumInfo = userAlbumInfoService.getUserAlbumInfoByUk(info);
-        if (rank > userAlbumInfo.getStep()) {
-            userAlbumInfo.setStep(rank);
-            userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
+        if (userAlbumInfo == null) {
+            return new ApiRespWrapper<String>(-1, "未找到用户:" + userId + " 制作相册模版ID为:" + albumId + "的相关记录!");
         }
+
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
         ua.setUserAlbumId(userAlbumInfo.getId());
         ua.setAlbumId(userAlbumInfo.getAlbumId());
-        // 在album中所有图片的第几张
-        ua.setRank(rank);
-        // 保存图片
+        ua.setRank(rank);// 在album中所有图片的第几张
+
+        // 保存用户自己上传的图片
         long cttime = new Date().getTime();
         String picName = "album_" + cttime + ".png";
         try {
             File outputfile = new File(ALBUM_PRE_IMAGE_LOCAL + picName);
             ImageIO.write(ImageIO.read(image.getInputStream()), "png", outputfile);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
         }
         String picUrl = ALBUM_PRE_IMAGE_INTERNET + picName;
         ua.setUserOriginImgUrl(picUrl);
-        // 操作信息
+
+        // 保存用户上传图片的位置信息json
         AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(positionX, positionY, rotate, width, height);
         String cssJson = GsonUtils.toJson(model);
         ua.setEditImgInfos(cssJson);
-        // TODO 生成priviewImg
+
+        // 根据已上传数据生成该页的预览图
         ImagePsUtils img = new ImagePsUtils();
         String picPreName = "album_pre_" + cttime + ".png";
         AlbumItemInfo g = new AlbumItemInfo();
         g.setAlbumId(albumId);
         g.setRank(rank);
-        AlbumItemInfo item = albumItemInfoService.getAlbumItemInfoByUk(g);
-        // http://10.1.1.197:8080/dream-album/images/1/detail/page.png
+        AlbumItemInfo item = albumItemInfoService.getAlbumItemInfoByUk(g);// 根据相册模版ID和rank获得具体某一张模版的原始数据
+        if (item == null) {
+            return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumId + "第" + rank + "项的模版相关记录!");
+        }
         try {
             img.mergeBothImage(item.getEditImgUrl().replace(ALBUM_IMAGE_INTERNET, ALBUM_IMAGE_LOCAL),
                     ALBUM_PRE_IMAGE_LOCAL + picName, positionX, positionY, width, height, ALBUM_PRE_IMAGE_LOCAL
                             + picPreName);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            log.info(e.getMessage());
         }
         String picPreUrl = ALBUM_PRE_IMAGE_INTERNET + picPreName;
         ua.setPreviewImgUrl(picPreUrl);
-        userAlbumItemInfoService.addData(ua);
-        System.out.println("生成预览图:" + picPreUrl);
-        return picPreUrl;
+
+        userAlbumItemInfoService.addData(ua);// 保存操作数据至数据库
+        // 更新该用户相册操作到第几步
+        if (rank > userAlbumInfo.getStep()) {
+            userAlbumInfo.setStep(rank);
+            userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
+        }
+
+        // 若isMadeStatus为1,表示执行最后一步并制作相册大图预览图
+        if (isMadeStatus == 1) {
+            UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
+            uaNew.setUserAlbumId(userAlbumInfo.getId());
+            // 根据用户信息id拉取用户相册最新的操作记录历史
+            List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
+            // 获取用户相册所有的单页预览图
+            List<String> prwImgList = new ArrayList<String>();
+            for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
+                String previewImgUrl = userAlbumItemInfo.getPreviewImgUrl();
+                prwImgList.add(previewImgUrl.replace(ALBUM_PRE_IMAGE_INTERNET, ALBUM_PRE_IMAGE_LOCAL));
+            }
+            EasyImage e = new EasyImage();
+            String productPreImg = "/Users/liuxinglong/Desktop/test" + new Random().nextInt(10) + ".png";
+            // 纵向拼接成品相册预览图
+            boolean madeResult = e.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png",
+                    productPreImg);
+            // 完成相册制作
+            if (madeResult) {
+                userAlbumInfo.setComplete(1);
+                userAlbumInfo.setPriviewImg(productPreImg);
+                userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbumInfo);
+            }
+            return new ApiRespWrapper<String>(0, "相册生成成功!", productPreImg);
+        }
+        return new ApiRespWrapper<String>(0, "数据上传成功!");
     }
 
     /**
@@ -234,8 +274,34 @@ public class AlbumCommonAction extends IosBaseAction {
         EasyImage image = new EasyImage();
         String productPreImg = "/Users/liuxinglong/Desktop/test" + new Random().nextInt(10) + ".png";
         // 纵向拼接成品相册预览图
-        image.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png", productPreImg);
+        boolean madeResult = image.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png",
+                productPreImg);
+        if (madeResult) {
+            userAlbum.setComplete(1);
+            userAlbum.setPriviewImg(productPreImg);
+            userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbum);
+        }
         return productPreImg;
     }
 
+    /**
+     * 
+     * 获取该userId已创建完成的相册
+     * 
+     * @param userId
+     * @return
+     */
+    @RequestMapping("/myalbum.json")
+    @ResponseBody
+    public List<UserAlbumInfo> getMyAlbumList(String userId) {
+        if (StringUtils.isBlank(userId)) {
+            return null;
+        }
+        UserAlbumInfo info = new UserAlbumInfo();
+        info.setUserId(userId);
+        info.setComplete(1);
+        // 获取该userid已完成的相册
+        List<UserAlbumInfo> listDirectFromDb = userAlbumInfoService.listDirectFromDb(info);
+        return listDirectFromDb;
+    }
 }
