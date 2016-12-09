@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dream.album.dto.AlbumHomePageModel;
+import com.dream.album.dto.MyAlbumModel;
 import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dreambox.core.dto.album.AlbumInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
@@ -69,7 +70,7 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/homepage.json")
     @ResponseBody
-    public AlbumHomePageModel getHomepage(String keyword,Integer userId, Integer start, Integer size) {
+    public AlbumHomePageModel getHomepage(String keyword, Integer userId, Integer start, Integer size) {
         start = ParameterUtils.formatStart(start);
         size = ParameterUtils.formatSize(size);
         AlbumHomePageModel model = new AlbumHomePageModel();
@@ -85,11 +86,11 @@ public class AlbumCommonAction extends IosBaseAction {
             infos = albumInfoService.listDirectFromDb(info, start, size);
         }
         List<Integer> albumId = userAlbumCollectInfoService.getCollectAlbumInfoId(userId);
-        if(albumId!=null && albumId.size()>0){
-            for(AlbumInfo g:infos){
-                if(albumId.contains(g.getId())){
+        if (albumId != null && albumId.size() > 0) {
+            for (AlbumInfo g : infos) {
+                if (albumId.contains(g.getId())) {
                     g.setCollect(1);
-                }else{
+                } else {
                     g.setCollect(0);
                 }
             }
@@ -306,7 +307,7 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/myalbum.json")
     @ResponseBody
-    public List<AlbumInfo> getMyAlbumList(String userId) {
+    public List<MyAlbumModel> getMyAlbumList(String userId) {
         if (StringUtils.isBlank(userId)) {
             return null;
         }
@@ -315,12 +316,21 @@ public class AlbumCommonAction extends IosBaseAction {
         // 获取该userId已完成和制作中的的相册
         info.setComplete(UserAlbumInfo.STATUS_ALL);
         List<UserAlbumInfo> listDirectFromDb = userAlbumInfoService.listDirectFromDb(info);
-        List<Integer> ids = new ArrayList<Integer>();
+        List<MyAlbumModel> resultData = new ArrayList<MyAlbumModel>();
+        // 拼装数据
         for (UserAlbumInfo userAlbumInfo : listDirectFromDb) {
-            ids.add(userAlbumInfo.getAlbumId());
+            MyAlbumModel model = new MyAlbumModel();
+            AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
+            model.setAlbumId(albumInfo.getId());
+            model.setTitle(albumInfo.getTitle());
+            model.setCover(albumInfo.getCover());
+            model.setPriviewImg(albumInfo.getPriviewImg());
+            model.setUserAlbumId(userAlbumInfo.getId());
+            model.setStep(userAlbumInfo.getStep());
+            model.setComplete(userAlbumInfo.getComplete());
+            model.setProductImg(userAlbumInfo.getPriviewImg());
+            resultData.add(model);
         }
-        // List<AlbumInfo> resultData = albumInfoService.getData(ids); //暂时不走缓存
-        List<AlbumInfo> resultData = albumInfoService.getDirectFromDb(ids);
         return resultData;
     }
 }
