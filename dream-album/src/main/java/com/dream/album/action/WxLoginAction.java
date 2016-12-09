@@ -16,16 +16,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import redis.clients.jedis.JedisPool;
 
+import com.dream.album.model.UserCollectInfoModel;
 import com.dream.album.model.UserFullInfo;
 import com.dream.album.model.UserOpenIdInfo;
 import com.dream.album.service.UserOpenIdInfoService;
 import com.dream.album.util.AES;
 import com.dreambox.core.dto.album.AlbumInfo;
 import com.dreambox.core.dto.album.UserAlbumCollectInfo;
+import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.service.AsyncService;
 import com.dreambox.core.service.album.AlbumInfoService;
 import com.dreambox.core.service.album.UserAlbumCollectInfoService;
+import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.core.utils.RedisCacheUtils;
 import com.dreambox.web.utils.GsonUtils;
@@ -50,6 +53,8 @@ public class WxLoginAction {
     private AsyncService asyncService;
     @Autowired
     private AlbumInfoService albumInfoService;
+    @Autowired
+    private UserAlbumInfoService userAlbumInfoService;
 
     @Resource(name = "jmcx-wx-redisdbpool")
     private JedisPool jedisDbPool;
@@ -130,9 +135,17 @@ public class WxLoginAction {
 
     @RequestMapping("/getUserCollectAlbum.json")
     @ResponseBody
-    public List<AlbumInfo> getUserCollectAlbum(Integer userId) {
+    public UserCollectInfoModel getUserCollectAlbum(Integer userId) {
         List<Integer> albumId = userAlbumCollectInfoService.getCollectAlbumInfoId(userId);
         List<AlbumInfo> gg = albumInfoService.getDirectFromDb(albumId);
-        return gg;
+        UserAlbumInfo info = new UserAlbumInfo();
+        info.setUserId(String.valueOf(userId));
+        // 获取该userId已完成和制作中的的相册
+        info.setComplete(UserAlbumInfo.STATUS_ALL);
+        long count = userAlbumInfoService.countDirectFromDb(info);
+        UserCollectInfoModel model = new UserCollectInfoModel();
+        model.setCollectList(gg);
+        model.setCount(count);
+        return model;
     }
 }
