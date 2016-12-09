@@ -101,10 +101,10 @@ public class WxLoginAction {
                 BeanUtils.copyProperties(info, g);
                 g.setAppid(info.getWatermark().getAppid());
                 if (g.getId() == 0) {
-                    return String.valueOf(userInfoService.addDataAndReturnId(g));
+                    return String.valueOf(userInfoService.addDataAndReturnId(g) + "#" + g.getAvatarUrl());
                 } else {
                     userInfoService.modifyUserInfo(g);
-                    return String.valueOf(g.getId());
+                    return String.valueOf(g.getId() + "#" + g.getAvatarUrl());
                 }
             } catch (Exception e) {
                 log.error("parse userinfo failed." + e.getMessage());
