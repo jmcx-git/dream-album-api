@@ -20,6 +20,8 @@ public class AlbumInfo extends DbStatus {
     private String cover;// 封面图
     private String priviewImg;// 预览图
 
+    private int collect;
+
     public int getId() {
         return id;
     }
@@ -67,5 +69,14 @@ public class AlbumInfo extends DbStatus {
     public void setPriviewImg(String priviewImg) {
         this.priviewImg = priviewImg;
     }
+
+    public int getCollect() {
+        return collect;
+    }
+
+    public void setCollect(int collect) {
+        this.collect = collect;
+    }
+
 
 }

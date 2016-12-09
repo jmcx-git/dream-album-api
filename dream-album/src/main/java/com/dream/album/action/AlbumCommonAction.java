@@ -25,6 +25,7 @@ import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.service.album.AlbumInfoService;
 import com.dreambox.core.service.album.AlbumItemInfoService;
+import com.dreambox.core.service.album.UserAlbumCollectInfoService;
 import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.service.album.UserAlbumItemInfoService;
 import com.dreambox.core.utils.EasyImage;
@@ -55,6 +56,8 @@ public class AlbumCommonAction extends IosBaseAction {
     private UserAlbumInfoService userAlbumInfoService;
     @Autowired
     private UserAlbumItemInfoService userAlbumItemInfoService;
+    @Autowired
+    private UserAlbumCollectInfoService userAlbumCollectInfoService;
 
     /**
      * 首页数据接口，获取关键字及相册列表
@@ -66,7 +69,7 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/homepage.json")
     @ResponseBody
-    public AlbumHomePageModel getHomepage(String keyword, Integer start, Integer size) {
+    public AlbumHomePageModel getHomepage(String keyword,Integer userId, Integer start, Integer size) {
         start = ParameterUtils.formatStart(start);
         size = ParameterUtils.formatSize(size);
         AlbumHomePageModel model = new AlbumHomePageModel();
@@ -80,6 +83,16 @@ public class AlbumCommonAction extends IosBaseAction {
             AlbumInfo info = new AlbumInfo();
             info.setKeyword("%" + keyword + "%");
             infos = albumInfoService.listDirectFromDb(info, start, size);
+        }
+        List<Integer> albumId = userAlbumCollectInfoService.getCollectAlbumInfoId(userId);
+        if(albumId!=null && albumId.size()>0){
+            for(AlbumInfo g:infos){
+                if(albumId.contains(g.getId())){
+                    g.setCollect(1);
+                }else{
+                    g.setCollect(0);
+                }
+            }
         }
         model.setAlbumList(infos);
         return model;

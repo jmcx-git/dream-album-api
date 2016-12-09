@@ -61,7 +61,7 @@
 	<select id="getUserAlbumCollectInfoAlbumId" parameterClass="java.lang.Integer"
 		resultClass="java.lang.Integer">
 		<![CDATA[
-			SELECT album_id FROM `user_album_collect_info`  WHERE `user_id`=#userId# group by album_id order by update_time desc;
+			SELECT album_id FROM `user_album_collect_info`  WHERE `user_id`=#userId# AND `status` =1 group by album_id order by update_time desc;
 		]]>
 	</select>
 
