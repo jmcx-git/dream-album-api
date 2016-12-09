@@ -4,6 +4,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -218,7 +219,7 @@ public class ImagePsUtils {
      * @throws IOException
      */
     public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, int width, int height,
-            String toPath) throws IOException {
+            int degree, String toPath) throws IOException {
         InputStream is = null;
         InputStream is2 = null;
         OutputStream os = null;
@@ -233,11 +234,21 @@ public class ImagePsUtils {
             imageNew.setRGB(0, 0, w, h, new int[w * h], 0, w);
 
             BufferedImage image2 = ImageIO.read(is2);
-            Graphics2D g = (Graphics2D) imageNew.getGraphics();
-            g.drawImage(image2, x, y, width, height, null);
-            // 设置透明度
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1.0f));
-            g.drawImage(image, 0, 0, w, h, null);
+            Graphics2D gNew = (Graphics2D) imageNew.getGraphics();
+            // 设置背景透明
+            imageNew = gNew.getDeviceConfiguration().createCompatibleImage(w, h, Transparency.TRANSLUCENT);
+            gNew.dispose();
+
+            gNew = (Graphics2D) imageNew.getGraphics();
+            // 旋转
+            gNew.rotate(Math.toRadians(degree), x + width / 2, y + height / 2);
+            gNew.drawImage(image2, x, y, width, height, null);
+
+            // 设置图片透明度alpha
+            // gNew.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP,
+            // 1.0f));
+            gNew.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
+            gNew.drawImage(image, 0, 0, w, h, null);
             File outFile = new File(toPath);
             ImageIO.write(imageNew, "png", outFile);
         } catch (Exception e) {
@@ -260,7 +271,7 @@ public class ImagePsUtils {
         try {
             img.mergeBothImage(
                     "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
-                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 248, 561, 435,
+                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 248, 561, 435, 30,
                     "/Users/liuxinglong/Desktop/test.png");
         } catch (IOException e) {
             e.printStackTrace();

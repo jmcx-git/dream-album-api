@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorConvertOp;
@@ -441,6 +442,11 @@ public class EasyImage {
              * 生成新图片
              */
             BufferedImage ImageNew = new BufferedImage(dst_width, dst_height, BufferedImage.TYPE_INT_RGB);
+            
+            //设置背景色透明
+            Graphics2D g = (Graphics2D)ImageNew.getGraphics();
+            ImageNew = g.getDeviceConfiguration().createCompatibleImage(dst_width, dst_height, Transparency.TRANSLUCENT);
+            g.dispose();
             int height_i = 0;
             for (int i = 0; i < images.length; i++) {
                 ImageNew.setRGB(0, height_i, dst_width, images[i].getHeight(), imageArrays[i], 0, dst_width);

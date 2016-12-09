@@ -203,7 +203,7 @@ public class AlbumCommonAction extends IosBaseAction {
         }
         try {
             img.mergeBothImage(item.getEditImgUrl().replace(ALBUM_IMAGE_INTERNET, ALBUM_IMAGE_LOCAL),
-                    ALBUM_PRE_IMAGE_LOCAL + picName, positionX, positionY, width, height, ALBUM_PRE_IMAGE_LOCAL
+                    ALBUM_PRE_IMAGE_LOCAL + picName, positionX, positionY, width, height, rotate, ALBUM_PRE_IMAGE_LOCAL
                             + picPreName);
         } catch (IOException e) {
             log.info(e.getMessage());
@@ -293,15 +293,21 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/myalbum.json")
     @ResponseBody
-    public List<UserAlbumInfo> getMyAlbumList(String userId) {
+    public List<AlbumInfo> getMyAlbumList(String userId) {
         if (StringUtils.isBlank(userId)) {
             return null;
         }
         UserAlbumInfo info = new UserAlbumInfo();
         info.setUserId(userId);
-        info.setComplete(1);
-        // 获取该userid已完成的相册
+        // 获取该userId已完成和制作中的的相册
+        info.setComplete(UserAlbumInfo.STATUS_ALL);
         List<UserAlbumInfo> listDirectFromDb = userAlbumInfoService.listDirectFromDb(info);
-        return listDirectFromDb;
+        List<Integer> ids = new ArrayList<Integer>();
+        for (UserAlbumInfo userAlbumInfo : listDirectFromDb) {
+            ids.add(userAlbumInfo.getAlbumId());
+        }
+        // List<AlbumInfo> resultData = albumInfoService.getData(ids); //暂时不走缓存
+        List<AlbumInfo> resultData = albumInfoService.getDirectFromDb(ids);
+        return resultData;
     }
 }

@@ -2,6 +2,7 @@
 
 package com.dreambox.core.dto.album;
 
+import com.dreambox.core.DbField.SELECT_ALL_KEY;
 import com.dreambox.core.DbStatus;
 import com.dreambox.core.DbField.ZERO_ENABLE;
 
@@ -17,6 +18,7 @@ public class UserAlbumInfo extends DbStatus {
     private String userId;// 用户id
     private int albumId;// 选用的相册模板
     private int step;// 当前操作到第几步
+    @SELECT_ALL_KEY
     @ZERO_ENABLE
     private int complete;// 是否生成了相册
     private String priviewImg;// 在用户户生成完相册后根据信息生成预览图
