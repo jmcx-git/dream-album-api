@@ -18,6 +18,7 @@ public class AlbumItemInfo extends DbStatus {
     private String editImgUrl;// 可编辑图片区域为透明区域人图片
     private String previewImgUrl;// 预览图
     private int rank; // 在album中所有图片的第几张
+    private int editCount;// 可编辑元素个数
     private String editImgInfos;// json 【css arrtibute json object】
     private String editTextInfos;// json【css arrtibute json object】
 
@@ -75,6 +76,14 @@ public class AlbumItemInfo extends DbStatus {
 
     public void setEditTextInfos(String editTextInfos) {
         this.editTextInfos = editTextInfos;
+    }
+
+    public int getEditCount() {
+        return editCount;
+    }
+
+    public void setEditCount(int editCount) {
+        this.editCount = editCount;
     }
 
 }

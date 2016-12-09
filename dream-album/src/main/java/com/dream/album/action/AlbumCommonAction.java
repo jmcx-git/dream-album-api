@@ -165,12 +165,19 @@ public class AlbumCommonAction extends IosBaseAction {
     @ResponseBody
     public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, String userId, Integer albumId,
             Integer rank, Integer positionX, Integer positionY, Integer rotate, Integer width, Integer height,
-            Integer isMadeStatus) {
-        positionX = positionX == null ? 0 : positionX;
-        positionY = positionY == null ? 0 : positionY;
+            Integer bgWidth, Integer bgHeight, Integer isMadeStatus) {
+        // 在宽高转换之前保存用户上传图片的位置信息json
+        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(positionX, positionY, rotate, width, height);
+        bgWidth = bgWidth == null ? 0 : bgWidth;// 750
+        bgHeight = bgHeight == null ? 0 : bgHeight;// 1330
+        // 宽高转换
+        float xPercent = 750f / bgWidth;
+        float yPercent = 1330f / bgHeight;
+        positionX = positionX == null ? 0 : Math.round((float) (positionX * xPercent + 0.5));
+        positionY = positionY == null ? 0 : Math.round((float) (positionY * yPercent + 0.5));
         rotate = rotate == null ? 0 : rotate;
-        width = width == null ? 0 : width;
-        height = height == null ? 0 : height;
+        width = width == null ? 0 : Math.round((float) (width * xPercent + 0.5));
+        height = height == null ? 0 : Math.round((float) (height * yPercent + 0.5));
         isMadeStatus = isMadeStatus == null ? 0 : isMadeStatus;
         if (StringUtils.isBlank(userId)) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
@@ -200,8 +207,6 @@ public class AlbumCommonAction extends IosBaseAction {
         String picUrl = ALBUM_PRE_IMAGE_INTERNET + picName;
         ua.setUserOriginImgUrl(picUrl);
 
-        // 保存用户上传图片的位置信息json
-        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(positionX, positionY, rotate, width, height);
         String cssJson = GsonUtils.toJson(model);
         ua.setEditImgInfos(cssJson);
 
@@ -224,7 +229,6 @@ public class AlbumCommonAction extends IosBaseAction {
         }
         String picPreUrl = ALBUM_PRE_IMAGE_INTERNET + picPreName;
         ua.setPreviewImgUrl(picPreUrl);
-
         userAlbumItemInfoService.addData(ua);// 保存操作数据至数据库
         // 更新该用户相册操作到第几步
         if (rank > userAlbumInfo.getStep()) {
@@ -242,7 +246,7 @@ public class AlbumCommonAction extends IosBaseAction {
             List<String> prwImgList = new ArrayList<String>();
             for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
                 String previewImgUrl = userAlbumItemInfo.getPreviewImgUrl();
-                prwImgList.add(previewImgUrl.replace(ALBUM_PRE_IMAGE_INTERNET, ALBUM_PRE_IMAGE_LOCAL));
+                prwImgList.add(previewImgUrl.replace(ALBUM_IMAGE_INTERNET, ALBUM_IMAGE_LOCAL));
             }
             EasyImage e = new EasyImage();
             String productPreImg = "/Users/liuxinglong/Desktop/test" + new Random().nextInt(10) + ".png";
@@ -283,7 +287,7 @@ public class AlbumCommonAction extends IosBaseAction {
         List<String> prwImgList = new ArrayList<String>();
         for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
             String previewImgUrl = userAlbumItemInfo.getPreviewImgUrl();
-            prwImgList.add(previewImgUrl.replace(ALBUM_PRE_IMAGE_INTERNET, ALBUM_PRE_IMAGE_LOCAL));
+            prwImgList.add(previewImgUrl.replace(ALBUM_IMAGE_INTERNET, ALBUM_IMAGE_LOCAL));
         }
         EasyImage image = new EasyImage();
         String productPreImg = "/Users/liuxinglong/Desktop/test" + new Random().nextInt(10) + ".png";

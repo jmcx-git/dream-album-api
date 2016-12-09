@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS `album_item_info`(
 	`edit_img_url` varchar(255) DEFAULT NULL,
 	`preview_img_url` varchar(255) DEFAULT NULL,
 	`rank` int(11) NOT NULL DEFAULT '0',
+	`edit_count` int(11) DEFAULT '0',
 	`edit_img_infos` varchar(255) DEFAULT NULL,
 	`edit_text_infos` varchar(255) DEFAULT NULL,
 	`status` int(11) NOT NULL DEFAULT '0' COMMENT '0 init',
