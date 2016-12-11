@@ -27,8 +27,8 @@ import javax.imageio.ImageReadParam;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
+//import com.sun.image.codec.jpeg.JPEGCodec;
+//import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  * @author liuxinglong
@@ -89,31 +89,31 @@ public class EasyImage {
      * @param heightRatio 高度缩小比例
      * @throws IOException
      */
-    public void reduceImageByRatio(String srcImagePath, String toImagePath, int widthRatio, int heightRatio)
-            throws IOException {
-        FileOutputStream out = null;
-        try {
-            // 读入文件
-            File file = new File(srcImagePath);
-            // 构造Image对象
-            BufferedImage src = javax.imageio.ImageIO.read(file);
-            int width = src.getWidth();
-            int height = src.getHeight();
-            // 缩小边长
-            BufferedImage tag = new BufferedImage(width / widthRatio, height / heightRatio, BufferedImage.TYPE_INT_RGB);
-            // 绘制 缩小 后的图片
-            tag.getGraphics().drawImage(src, 0, 0, width / widthRatio, height / heightRatio, null);
-            out = new FileOutputStream(toImagePath);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
+//    public void reduceImageByRatio(String srcImagePath, String toImagePath, int widthRatio, int heightRatio)
+//            throws IOException {
+//        FileOutputStream out = null;
+//        try {
+//            // 读入文件
+//            File file = new File(srcImagePath);
+//            // 构造Image对象
+//            BufferedImage src = javax.imageio.ImageIO.read(file);
+//            int width = src.getWidth();
+//            int height = src.getHeight();
+//            // 缩小边长
+//            BufferedImage tag = new BufferedImage(width / widthRatio, height / heightRatio, BufferedImage.TYPE_INT_RGB);
+//            // 绘制 缩小 后的图片
+//            tag.getGraphics().drawImage(src, 0, 0, width / widthRatio, height / heightRatio, null);
+//            out = new FileOutputStream(toImagePath);
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            encoder.encode(tag);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (out != null) {
+//                out.close();
+//            }
+//        }
+//    }
 
     /**
      * 长高等比例缩小图片
@@ -123,30 +123,30 @@ public class EasyImage {
      * @param ratio 缩小比例
      * @throws IOException
      */
-    public void reduceImageEqualProportion(String srcImagePath, String toImagePath, int ratio) throws IOException {
-        FileOutputStream out = null;
-        try {
-            // 读入文件
-            File file = new File(srcImagePath);
-            // 构造Image对象
-            BufferedImage src = javax.imageio.ImageIO.read(file);
-            int width = src.getWidth();
-            int height = src.getHeight();
-            // 缩小边长
-            BufferedImage tag = new BufferedImage(width / ratio, height / ratio, BufferedImage.TYPE_INT_RGB);
-            // 绘制 缩小 后的图片
-            tag.getGraphics().drawImage(src, 0, 0, width / ratio, height / ratio, null);
-            out = new FileOutputStream(toImagePath);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
+//    public void reduceImageEqualProportion(String srcImagePath, String toImagePath, int ratio) throws IOException {
+//        FileOutputStream out = null;
+//        try {
+//            // 读入文件
+//            File file = new File(srcImagePath);
+//            // 构造Image对象
+//            BufferedImage src = javax.imageio.ImageIO.read(file);
+//            int width = src.getWidth();
+//            int height = src.getHeight();
+//            // 缩小边长
+//            BufferedImage tag = new BufferedImage(width / ratio, height / ratio, BufferedImage.TYPE_INT_RGB);
+//            // 绘制 缩小 后的图片
+//            tag.getGraphics().drawImage(src, 0, 0, width / ratio, height / ratio, null);
+//            out = new FileOutputStream(toImagePath);
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            encoder.encode(tag);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (out != null) {
+//                out.close();
+//            }
+//        }
+//    }
 
     /**
      * 按倍率放大图片
@@ -157,31 +157,31 @@ public class EasyImage {
      * @param heightRatio 高度放大比例
      * @throws IOException
      */
-    public void enlargementImageByRatio(String srcImagePath, String toImagePath, int widthRatio, int heightRatio)
-            throws IOException {
-        FileOutputStream out = null;
-        try {
-            // 读入文件
-            File file = new File(srcImagePath);
-            // 构造Image对象
-            BufferedImage src = javax.imageio.ImageIO.read(file);
-            int width = src.getWidth();
-            int height = src.getHeight();
-            // 放大边长
-            BufferedImage tag = new BufferedImage(width * widthRatio, height * heightRatio, BufferedImage.TYPE_INT_RGB);
-            // 绘制放大后的图片
-            tag.getGraphics().drawImage(src, 0, 0, width * widthRatio, height * heightRatio, null);
-            out = new FileOutputStream(toImagePath);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
+//    public void enlargementImageByRatio(String srcImagePath, String toImagePath, int widthRatio, int heightRatio)
+//            throws IOException {
+//        FileOutputStream out = null;
+//        try {
+//            // 读入文件
+//            File file = new File(srcImagePath);
+//            // 构造Image对象
+//            BufferedImage src = javax.imageio.ImageIO.read(file);
+//            int width = src.getWidth();
+//            int height = src.getHeight();
+//            // 放大边长
+//            BufferedImage tag = new BufferedImage(width * widthRatio, height * heightRatio, BufferedImage.TYPE_INT_RGB);
+//            // 绘制放大后的图片
+//            tag.getGraphics().drawImage(src, 0, 0, width * widthRatio, height * heightRatio, null);
+//            out = new FileOutputStream(toImagePath);
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            encoder.encode(tag);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (out != null) {
+//                out.close();
+//            }
+//        }
+//    }
 
 
     /**
@@ -192,30 +192,30 @@ public class EasyImage {
      * @param ratio 放大比例
      * @throws IOException
      */
-    public void enlargementImageEqualProportion(String srcImagePath, String toImagePath, int ratio) throws IOException {
-        FileOutputStream out = null;
-        try {
-            // 读入文件
-            File file = new File(srcImagePath);
-            // 构造Image对象
-            BufferedImage src = javax.imageio.ImageIO.read(file);
-            int width = src.getWidth();
-            int height = src.getHeight();
-            // 放大边长
-            BufferedImage tag = new BufferedImage(width * ratio, height * ratio, BufferedImage.TYPE_INT_RGB);
-            // 绘制放大后的图片
-            tag.getGraphics().drawImage(src, 0, 0, width * ratio, height * ratio, null);
-            out = new FileOutputStream(toImagePath);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
+//    public void enlargementImageEqualProportion(String srcImagePath, String toImagePath, int ratio) throws IOException {
+//        FileOutputStream out = null;
+//        try {
+//            // 读入文件
+//            File file = new File(srcImagePath);
+//            // 构造Image对象
+//            BufferedImage src = javax.imageio.ImageIO.read(file);
+//            int width = src.getWidth();
+//            int height = src.getHeight();
+//            // 放大边长
+//            BufferedImage tag = new BufferedImage(width * ratio, height * ratio, BufferedImage.TYPE_INT_RGB);
+//            // 绘制放大后的图片
+//            tag.getGraphics().drawImage(src, 0, 0, width * ratio, height * ratio, null);
+//            out = new FileOutputStream(toImagePath);
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            encoder.encode(tag);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (out != null) {
+//                out.close();
+//            }
+//        }
+//    }
 
     /**
      * 重置图形的边长大小
@@ -226,28 +226,28 @@ public class EasyImage {
      * @param height
      * @throws IOException
      */
-    public void resizeImage(String srcImagePath, String toImagePath, int width, int height) throws IOException {
-        FileOutputStream out = null;
-        try {
-            // 读入文件
-            File file = new File(srcImagePath);
-            // 构造Image对象
-            BufferedImage src = javax.imageio.ImageIO.read(file);
-            // 放大边长
-            BufferedImage tag = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-            // 绘制放大后的图片
-            tag.getGraphics().drawImage(src, 0, 0, width, height, null);
-            out = new FileOutputStream(toImagePath);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-            encoder.encode(tag);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-        }
-    }
+//    public void resizeImage(String srcImagePath, String toImagePath, int width, int height) throws IOException {
+//        FileOutputStream out = null;
+//        try {
+//            // 读入文件
+//            File file = new File(srcImagePath);
+//            // 构造Image对象
+//            BufferedImage src = javax.imageio.ImageIO.read(file);
+//            // 放大边长
+//            BufferedImage tag = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+//            // 绘制放大后的图片
+//            tag.getGraphics().drawImage(src, 0, 0, width, height, null);
+//            out = new FileOutputStream(toImagePath);
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            encoder.encode(tag);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (out != null) {
+//                out.close();
+//            }
+//        }
+//    }
 
     /**
      * 横向拼接图片（两张）
@@ -471,35 +471,35 @@ public class EasyImage {
      * @param toPath 图片写入路径
      * @throws IOException
      */
-    public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, x, y, null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, x, y, null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 合并图片(按指定初始x、y坐标将附加图片贴到底图之上) 并指定宽高
@@ -514,35 +514,35 @@ public class EasyImage {
      * @param height 覆盖的图片高
      * @throws IOException
      */
-    public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, int width, int height,
-            String toPath) throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, x, y, width, height, null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, int width, int height,
+//            String toPath) throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, x, y, width, height, null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将一组图片一次性附加合并到底图上
@@ -606,35 +606,35 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageTopleftcorner(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, 0, 0, null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageTopleftcorner(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, 0, 0, null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的右上角
@@ -644,35 +644,35 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageToprightcorner(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, image.getWidth() - image2.getWidth(), 0, null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageToprightcorner(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, image.getWidth() - image2.getWidth(), 0, null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的左下角
@@ -682,35 +682,35 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageLeftbottom(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, 0, image.getHeight() - image2.getHeight(), null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageLeftbottom(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, 0, image.getHeight() - image2.getHeight(), null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的左下角
@@ -720,35 +720,35 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageRightbottom(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, image.getWidth() - image2.getWidth(), image.getHeight() - image2.getHeight(), null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageRightbottom(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, image.getWidth() - image2.getWidth(), image.getHeight() - image2.getHeight(), null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的正中央
@@ -758,36 +758,36 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageCenter(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, image.getWidth() / 2 - image2.getWidth() / 2,
-                    image.getHeight() / 2 - image2.getHeight() / 2, null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageCenter(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, image.getWidth() / 2 - image2.getWidth() / 2,
+//                    image.getHeight() / 2 - image2.getHeight() / 2, null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的上边中央
@@ -797,35 +797,35 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageTopcenter(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, image.getWidth() / 2 - image2.getWidth() / 2, 0, null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageTopcenter(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, image.getWidth() / 2 - image2.getWidth() / 2, 0, null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的下边中央
@@ -835,36 +835,36 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageBottomcenter(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, image.getWidth() / 2 - image2.getWidth() / 2, image.getHeight() - image2.getHeight(),
-                    null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageBottomcenter(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, image.getWidth() / 2 - image2.getWidth() / 2, image.getHeight() - image2.getHeight(),
+//                    null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的左边中央
@@ -874,35 +874,35 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageLeftcenter(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, 0, image.getHeight() / 2 - image2.getHeight() / 2, null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageLeftcenter(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, 0, image.getHeight() / 2 - image2.getHeight() / 2, null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 将附加图片合并到底图的右边中央
@@ -912,36 +912,36 @@ public class EasyImage {
      * @param toPath 合成图片写入路径
      * @throws IOException
      */
-    public void mergeBothImageRightcenter(String negativeImagePath, String additionImagePath, String toPath)
-            throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
-        try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics g = image.getGraphics();
-            g.drawImage(image2, image.getWidth() - image2.getWidth(), image.getHeight() / 2 - image2.getHeight() / 2,
-                    null);
-            os = new FileOutputStream(toPath);
-            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
-            enc.encode(image);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
-        }
-    }
+//    public void mergeBothImageRightcenter(String negativeImagePath, String additionImagePath, String toPath)
+//            throws IOException {
+//        InputStream is = null;
+//        InputStream is2 = null;
+//        OutputStream os = null;
+//        try {
+//            is = new FileInputStream(negativeImagePath);
+//            is2 = new FileInputStream(additionImagePath);
+//            BufferedImage image = ImageIO.read(is);
+//            BufferedImage image2 = ImageIO.read(is2);
+//            Graphics g = image.getGraphics();
+//            g.drawImage(image2, image.getWidth() - image2.getWidth(), image.getHeight() / 2 - image2.getHeight() / 2,
+//                    null);
+//            os = new FileOutputStream(toPath);
+//            JPEGImageEncoder enc = JPEGCodec.createJPEGEncoder(os);
+//            enc.encode(image);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (os != null) {
+//                os.close();
+//            }
+//            if (is2 != null) {
+//                is2.close();
+//            }
+//            if (is != null) {
+//                is.close();
+//            }
+//        }
+//    }
 
     /**
      * 图片灰化操作

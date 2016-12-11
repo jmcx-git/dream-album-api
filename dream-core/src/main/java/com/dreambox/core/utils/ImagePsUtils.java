@@ -1,6 +1,5 @@
 package com.dreambox.core.utils;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -15,7 +14,6 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -25,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2016年12月7日
  */
 public class ImagePsUtils {
-    private static final Logger log = Logger.getLogger(ImagePsUtils.class);
+    // private static final Logger log = Logger.getLogger(ImagePsUtils.class);
     private Font font = new Font("宋体", Font.BOLD, 14);// 添加字体的属性设置
 
     private Graphics2D g = null;
