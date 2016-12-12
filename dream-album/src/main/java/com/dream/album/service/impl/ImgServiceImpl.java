@@ -70,23 +70,14 @@ public class ImgServiceImpl implements ImgService {
 
     @Override
     public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
-            AlbumEditImgInfoModel model, Integer bgImgWidth, Integer bgImgHeight) throws ServiceException {
-        bgImgWidth = bgImgWidth == null ? 0 : bgImgWidth;
-        bgImgHeight = bgImgHeight == null ? 0 : bgImgHeight;
-
-        // 宽高转换
-        float xTimes = albumItemInfo.getImgWidth() / bgImgWidth;
-        float yTimes = albumItemInfo.getImgHeight() / bgImgHeight;
-        Integer cssMoveX = Math.round((float) (model.getCssMoveX() * xTimes + 0.5));
-        Integer cssMoveY = Math.round((float) (model.getCssMoveY() * yTimes + 0.5));
-        Integer cssRotate = model.getCssRotate();
-        Integer cssImgWidth = Math.round((float) (model.getCssImgWidth() * xTimes + 0.5));
-        Integer cssImgHeight = Math.round((float) (model.getCssImgHeight() * yTimes + 0.5));
+            AlbumEditImgInfoModel model) throws ServiceException {
+        // Integer cssImgHeight = Math.round((float) (model.getCssImgHeight() *
+        // yTimes + 0.5));
         ImagePsUtils img = new ImagePsUtils();
-
         String picName = "album_item_pre_" + new Date().getTime() + ".png";
         try {
-            img.mergeBothImage(editImePath, localPath, cssMoveX, cssMoveY, cssImgWidth, cssImgHeight, cssRotate,
+            img.mergeBothImage(editImePath, localPath, model.getCssElmMoveX(), model.getCssElmMoveY(),
+                    model.getCssElmWidth(), model.getCssElmHeight(), model.getCssElmRotate(),
                     userAlbumItemPreviewImgLocalDir + picName);
         } catch (IOException e) {
             log.info(e.getMessage());
@@ -104,7 +95,8 @@ public class ImgServiceImpl implements ImgService {
                 fileName);
         // 纵向拼接成品相册预览图
         e.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png", productPreImg);
-        return new JoinImgFileResp(productPreImg, productPreImg.replace(userAlbumPriviewImgLocalPath, userAlbumPriviewImgPrefixUrl));
+        return new JoinImgFileResp(productPreImg, productPreImg.replace(userAlbumPriviewImgLocalPath,
+                userAlbumPriviewImgPrefixUrl));
     }
 
     @Override

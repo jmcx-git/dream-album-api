@@ -6,63 +6,63 @@ package com.dream.album.model;
  */
 public class AlbumEditImgInfoModel {
 
-    private Integer cssMoveX;
-    private Integer cssMoveY;
-    private Integer cssRotate;
-    private Integer cssImgWidth;
-    private Integer cssImgHeight;
+    private Integer cssElmMoveX;
+    private Integer cssElmMoveY;
+    private Integer cssElmRotate;
+    private Integer cssElmWidth;
+    private Integer cssElmHeight;
 
     public AlbumEditImgInfoModel() {
         super();
     }
 
-    public AlbumEditImgInfoModel(Integer cssMoveX, Integer cssMoveY, Integer cssRotate, Integer cssImgWidth,
-            Integer cssImgHeight) {
+    public AlbumEditImgInfoModel(Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth,
+            Integer cssElmHeight) {
         super();
-        this.cssMoveX = cssMoveX == null ? 0 : cssMoveX;
-        this.cssMoveY = cssMoveY == null ? 0 : cssMoveY;
-        this.cssRotate = cssRotate == null ? 0 : cssRotate;
-        this.cssImgWidth = cssImgWidth == null ? 0 : cssImgWidth;
-        this.cssImgHeight = cssImgHeight == null ? 0 : cssImgHeight;
+        this.cssElmMoveX = cssElmMoveX == null ? 0 : cssElmMoveX;
+        this.cssElmMoveY = cssElmMoveY == null ? 0 : cssElmMoveY;
+        this.cssElmRotate = cssElmRotate == null ? 0 : cssElmRotate;
+        this.cssElmWidth = cssElmWidth == null ? 0 : cssElmWidth;
+        this.cssElmHeight = cssElmHeight == null ? 0 : cssElmHeight;
     }
 
-    public Integer getCssMoveX() {
-        return cssMoveX;
+    public Integer getCssElmMoveX() {
+        return cssElmMoveX;
     }
 
-    public void setCssMoveX(Integer cssMoveX) {
-        this.cssMoveX = cssMoveX;
+    public void setCssElmMoveX(Integer cssElmMoveX) {
+        this.cssElmMoveX = cssElmMoveX;
     }
 
-    public Integer getCssMoveY() {
-        return cssMoveY;
+    public Integer getCssElmMoveY() {
+        return cssElmMoveY;
     }
 
-    public void setCssMoveY(Integer cssMoveY) {
-        this.cssMoveY = cssMoveY;
+    public void setCssElmMoveY(Integer cssElmMoveY) {
+        this.cssElmMoveY = cssElmMoveY;
     }
 
-    public Integer getCssRotate() {
-        return cssRotate;
+    public Integer getCssElmRotate() {
+        return cssElmRotate;
     }
 
-    public void setCssRotate(Integer cssRotate) {
-        this.cssRotate = cssRotate;
+    public void setCssElmRotate(Integer cssElmRotate) {
+        this.cssElmRotate = cssElmRotate;
     }
 
-    public Integer getCssImgWidth() {
-        return cssImgWidth;
+    public Integer getCssElmWidth() {
+        return cssElmWidth;
     }
 
-    public void setCssImgWidth(Integer cssImgWidth) {
-        this.cssImgWidth = cssImgWidth;
+    public void setCssElmWidth(Integer cssElmWidth) {
+        this.cssElmWidth = cssElmWidth;
     }
 
-    public Integer getCssImgHeight() {
-        return cssImgHeight;
+    public Integer getCssElmHeight() {
+        return cssElmHeight;
     }
 
-    public void setCssImgHeight(Integer cssImgHeight) {
-        this.cssImgHeight = cssImgHeight;
+    public void setCssElmHeight(Integer cssElmHeight) {
+        this.cssElmHeight = cssElmHeight;
     }
 }

@@ -163,8 +163,7 @@ public class AlbumCommonAction extends IosBaseAction {
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
     public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
-            Integer cssMoveX, Integer cssMoveY, Integer cssRotate, Integer cssImgWidth, Integer cssImgHeight,
-            Integer bgImgWidth, Integer bgImgHeight) {
+            Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth, Integer cssElmHeight) {
         if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
         }
@@ -181,8 +180,8 @@ public class AlbumCommonAction extends IosBaseAction {
         if (albumItemInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumItemId + "项的模版相关记录!");
         }
-        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssMoveX, cssMoveY, cssRotate, cssImgWidth,
-                cssImgHeight);
+        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssElmRotate, cssElmWidth,
+                cssElmHeight);
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
         ua.setUserAlbumId(userAlbumInfo.getId());
         ua.setAlbumId(userAlbumInfo.getAlbumId());
@@ -197,7 +196,7 @@ public class AlbumCommonAction extends IosBaseAction {
         // 根据已上传数据生成该页的预览图
         MergeImgFileResp mergeImgFileResp = imgService.mergeToPreviewImg(
                 albumItemInfoService.getEditImePath(albumItemInfo), uploadFileSaveResp.getLocalPath(), albumItemInfo,
-                model, bgImgWidth, bgImgHeight);
+                model);
         ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
         userAlbumItemInfoService.addData(ua);// 保存操作数据至数据库
         // 更新该用户相册操作到第几步

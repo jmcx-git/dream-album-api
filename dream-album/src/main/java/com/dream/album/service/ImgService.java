@@ -30,7 +30,7 @@ public interface ImgService {
     public UploadFileSaveResp handleUserUploadImg(MultipartFile image) throws ServiceException;
 
     public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
-            AlbumEditImgInfoModel model, Integer bgImgWidth, Integer bgImgHeight) throws ServiceException;
+            AlbumEditImgInfoModel model) throws ServiceException;
 
     public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList, String type);
 
