@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -168,8 +169,9 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
-            String imgCssInfo) {
+    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image,
+            @RequestParam(required = false) Integer userAlbumId, @RequestParam(required = false) Integer albumItemId,
+            @RequestParam(required = false) String imgCssInfo) {
         // Integer positionX, Integer positionY, Integer rotate, Integer
         // width, Integer height,
         // Integer bgWidth, Integer bgHeight,
