@@ -13,4 +13,6 @@ import com.dreambox.web.exception.ServiceException;
 public abstract class AlbumItemInfoService extends AbstractSortedListCacheService<AlbumItemInfo> {
 
     public abstract AlbumItemInfo getAlbumItemInfoByUk(AlbumItemInfo info) throws ServiceException;
+
+    public abstract String getEditImePath(AlbumItemInfo info);
 }

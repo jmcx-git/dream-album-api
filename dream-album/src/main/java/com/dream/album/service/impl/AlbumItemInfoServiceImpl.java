@@ -14,6 +14,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ShardedJedisPool;
 
 import com.dream.album.dao.AlbumItemInfoDao;
+import com.dream.album.service.ImgService;
 import com.dreambox.core.cache.CacheFilter.IdStartSizeCacheFilter;
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
@@ -32,12 +33,15 @@ public class AlbumItemInfoServiceImpl extends AlbumItemInfoService {
     private static final Logger log = Logger.getLogger(AlbumItemInfoServiceImpl.class);
     @Autowired
     private AlbumItemInfoDao albumItemInfoDao;
+    @Autowired
+    private ImgService imgService;
     @Resource(name = "jmcx-wx-redisdbpool")
     private JedisPool jedisDbPool;
     @Resource(name = "jmcx-wx-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
     private String infoKey = "album:item:info";
     private String listKey = "album:info:item:ids";
+
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
@@ -94,6 +98,11 @@ public class AlbumItemInfoServiceImpl extends AlbumItemInfoService {
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
+    }
+
+    @Override
+    public String getEditImePath(AlbumItemInfo info) {
+        return imgService.getAlbumItemEditImgPath(info);
     }
 
 }

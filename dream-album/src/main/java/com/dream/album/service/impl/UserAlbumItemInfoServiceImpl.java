@@ -10,6 +10,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.ShardedJedisPool;
 
 import com.dream.album.dao.UserAlbumItemInfoDao;
+import com.dream.album.service.ImgService;
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
@@ -26,12 +27,15 @@ public class UserAlbumItemInfoServiceImpl extends UserAlbumItemInfoService {
     private static final Logger log = Logger.getLogger(UserAlbumItemInfoServiceImpl.class);
     @Autowired
     private UserAlbumItemInfoDao userAlbumItemInfoDao;
+    @Autowired
+    private ImgService imgService;
     @Resource(name = "jmcx-wx-redisdbpool")
     private JedisPool jedisDbPool;
     @Resource(name = "jmcx-wx-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
     private String infoKey = "user:album:item:info";
-    private String listKey = "user:album:info:item:ids";
+
+    // private String listKey = "user:album:info:item:ids";
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
@@ -72,6 +76,16 @@ public class UserAlbumItemInfoServiceImpl extends UserAlbumItemInfoService {
     @Override
     public CommonDao<UserAlbumItemInfo> getCommonDao() {
         return userAlbumItemInfoDao;
+    }
+
+    @Override
+    public String getPreviewImgPath(UserAlbumItemInfo g) {
+        return imgService.getUserAlbumItemPreviewImgPath(g);
+    }
+
+    @Override
+    protected Logger getLogger() {
+        return log;
     }
 
 }

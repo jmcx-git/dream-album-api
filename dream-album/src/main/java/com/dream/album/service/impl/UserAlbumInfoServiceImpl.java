@@ -36,12 +36,18 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
     @Resource(name = "jmcx-wx-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
     private String infoKey = "user:album:info";
-    private String listKey = "user:album:info:ids";
+
+    // private String listKey = "user:album:info:ids";
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    protected Logger getLogger() {
+        return log;
     }
 
     @Override
@@ -101,6 +107,15 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
     public void modifyUserAlbumInfoCompleteAndPreImg(UserAlbumInfo info) throws ServiceException {
         try {
             userAlbumInfoDao.updateUserAlbumInfoCompleteAndPreImg(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+    }
+
+    @Override
+    public UserAlbumInfo findLatestUncompleteUserAlbum(UserAlbumInfo info) throws ServiceException {
+        try {
+            return userAlbumInfoDao.queryLatestByUserAlbumAndComplete(info);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }

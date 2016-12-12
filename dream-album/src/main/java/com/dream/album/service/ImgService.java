@@ -1,0 +1,40 @@
+// Copyright 2016 https://mokous.com Inc. All Rights Reserved.
+
+package com.dream.album.service;
+
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.dream.album.model.JoinImgFileResp;
+import com.dream.album.model.MergeImgFileResp;
+import com.dream.album.model.UploadFileSaveResp;
+import com.dreambox.core.dto.album.AlbumItemInfo;
+import com.dreambox.core.dto.album.UserAlbumItemInfo;
+import com.dreambox.web.exception.ServiceException;
+
+/**
+ * @author mokous86@gmail.com create date: Dec 12, 2016
+ *
+ */
+public interface ImgService {
+    /**
+     * 保存用户上传图片
+     * 
+     * @param image
+     * 
+     * @return
+     * @throws ServiceException
+     */
+    public UploadFileSaveResp handleUserUploadImg(MultipartFile image) throws ServiceException;
+
+    public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo item,
+            String imgCssInfo) throws ServiceException;
+
+    public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList, String type);
+
+    public String getAlbumItemEditImgPath(AlbumItemInfo info);
+
+    public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g);
+
+}
