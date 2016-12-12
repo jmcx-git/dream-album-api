@@ -168,22 +168,22 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer id, Integer albumItemId,
+    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
             String imgCssInfo) {
         // Integer positionX, Integer positionY, Integer rotate, Integer
         // width, Integer height,
         // Integer bgWidth, Integer bgHeight,
         // Integer isMadeStatus)
-        if (id == null || id.intValue() <= 0) {
+        if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
         }
         // isMadeStatus = isMadeStatus == null ? 0 : isMadeStatus;
 
         // UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
-        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getData(id.intValue());
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getData(userAlbumId.intValue());
         if (userAlbumInfo == null) {
-            return new ApiRespWrapper<String>(-1, "未找到Id:" + id + "的相关记录!");
+            return new ApiRespWrapper<String>(-1, "未找到Id:" + userAlbumId + "的相关记录!");
         }
 
         AlbumInfo albumInfo = albumInfoService.getData(userAlbumInfo.getAlbumId());
