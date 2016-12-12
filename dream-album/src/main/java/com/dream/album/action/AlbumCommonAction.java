@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,8 +38,7 @@ import com.dreambox.web.model.ApiRespWrapper;
 @Controller
 @RequestMapping("/dream/album/common/*")
 public class AlbumCommonAction extends IosBaseAction {
-    // private static final Logger log =
-    // Logger.getLogger(AlbumCommonAction.class);
+    private static final Logger log = Logger.getLogger(AlbumCommonAction.class);
     // private static final String ALBUM_PRE_IMAGE_LOCAL =
     // "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/made/";
     // private static final String ALBUM_PRE_IMAGE_INTERNET =
@@ -174,6 +174,7 @@ public class AlbumCommonAction extends IosBaseAction {
         // width, Integer height,
         // Integer bgWidth, Integer bgHeight,
         // Integer isMadeStatus)
+        log.info("The reqeust data userAlbumId:" + userAlbumId + ", albumItemId:" + albumItemId + ", css:" + imgCssInfo);
         if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
         }
