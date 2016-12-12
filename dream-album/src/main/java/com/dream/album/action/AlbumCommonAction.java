@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,14 +40,7 @@ import com.dreambox.web.utils.GsonUtils;
 @Controller
 @RequestMapping("/dream/album/common/*")
 public class AlbumCommonAction extends IosBaseAction {
-    // private static final String ALBUM_PRE_IMAGE_LOCAL =
-    // "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/made/";
-    // private static final String ALBUM_PRE_IMAGE_INTERNET =
-    // "http://10.1.1.197:8080/dream-album/images/made/";
-    // private static final String ALBUM_IMAGE_LOCAL =
-    // "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/";
-    // private static final String ALBUM_IMAGE_INTERNET =
-    // "http://10.1.1.197:8080/dream-album/images/";
+    private static final Logger log = Logger.getLogger(AlbumCommonAction.class);
 
     @Autowired
     private AlbumInfoService albumInfoService;
@@ -168,16 +162,16 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer id, Integer albumItemId,
+    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
             Integer cssMoveX, Integer cssMoveY, Integer cssRotate, Integer cssImgWidth, Integer cssImgHeight,
             Integer bgImgWidth, Integer bgImgHeight) {
-        if (id == null || id.intValue() <= 0) {
+        if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
         }
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
-        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getData(id.intValue());
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getData(userAlbumId.intValue());
         if (userAlbumInfo == null) {
-            return new ApiRespWrapper<String>(-1, "未找到Id:" + id + "的相关记录!");
+            return new ApiRespWrapper<String>(-1, "未找到Id:" + userAlbumId + "的相关记录!");
         }
         AlbumInfo albumInfo = albumInfoService.getData(userAlbumInfo.getAlbumId());
         if (albumInfo == null) {
