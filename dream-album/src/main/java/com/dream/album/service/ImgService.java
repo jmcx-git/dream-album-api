@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
@@ -28,8 +29,8 @@ public interface ImgService {
      */
     public UploadFileSaveResp handleUserUploadImg(MultipartFile image) throws ServiceException;
 
-    public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo item,
-            String imgCssInfo) throws ServiceException;
+    public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
+            AlbumEditImgInfoModel model, Integer bgImgWidth, Integer bgImgHeight) throws ServiceException;
 
     public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList, String type);
 

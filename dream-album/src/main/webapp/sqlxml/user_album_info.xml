@@ -13,7 +13,7 @@
 </RECORD>
 <RECORD>
 	<id>2</id>
-	<user_id>abc</user_id>
+	<user_id>2</user_id>
 	<album_id>1</album_id>
 	<step>4</step>
 	<complete>1</complete>

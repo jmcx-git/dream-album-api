@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
@@ -22,6 +23,7 @@ import com.dream.album.service.ImgService;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.utils.EasyImage;
+import com.dreambox.core.utils.ImagePsUtils;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.utils.IOUtils;
 
@@ -55,13 +57,11 @@ public class ImgServiceImpl implements ImgService {
     @Override
     public UploadFileSaveResp handleUserUploadImg(MultipartFile image) throws ServiceException {
         // 保存用户自己上传的图片
-        long cttime = new Date().getTime();
-        String picName = "album_" + cttime + ".png";
+        String picName = "album_user_" + new Date().getTime() + ".png";
         File outputfile = new File(userAlbumItemUploadImgLocalPath + picName);
         try {
             ImageIO.write(ImageIO.read(image.getInputStream()), "png", outputfile);
         } catch (IOException e) {
-            // TODO
             log.info(e.getMessage());
         }
         String picUrl = userAlbumItemUploadImgPrefixUrl + picName;
@@ -69,38 +69,30 @@ public class ImgServiceImpl implements ImgService {
     }
 
     @Override
-    public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo item,
-            String imgCssInfo) throws ServiceException {
+    public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
+            AlbumEditImgInfoModel model, Integer bgImgWidth, Integer bgImgHeight) throws ServiceException {
+        bgImgWidth = bgImgWidth == null ? 0 : bgImgWidth;
+        bgImgHeight = bgImgHeight == null ? 0 : bgImgHeight;
 
-        // // 在宽高转换之前保存用户上传图片的位置信息json
-        // AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(positionX,
-        // positionY, rotate, width, height);
-        // bgWidth = bgWidth == null ? 0 : bgWidth;// 750
-        // bgHeight = bgHeight == null ? 0 : bgHeight;// 1330
-        // // 宽高转换
-        // float xPercent = 750f / bgWidth;
-        // float yPercent = 1330f / bgHeight;
-        // positionX = positionX == null ? 0 : Math.round((float) (positionX *
-        // xPercent + 0.5));
-        // positionY = positionY == null ? 0 : Math.round((float) (positionY *
-        // yPercent + 0.5));
-        // rotate = rotate == null ? 0 : rotate;
-        // width = width == null ? 0 : Math.round((float) (width * xPercent +
-        // 0.5));
-        // height = height == null ? 0 : Math.round((float) (height * yPercent +
-        // 0.5));
-        // TODO
-        // ImagePsUtils img = new ImagePsUtils();
+        // 宽高转换
+        float xTimes = albumItemInfo.getImgWidth() / bgImgWidth;
+        float yTimes = albumItemInfo.getImgHeight() / bgImgHeight;
+        Integer cssMoveX = Math.round((float) (model.getCssMoveX() * xTimes + 0.5));
+        Integer cssMoveY = Math.round((float) (model.getCssMoveY() * yTimes + 0.5));
+        Integer cssRotate = model.getCssRotate();
+        Integer cssImgWidth = Math.round((float) (model.getCssImgWidth() * xTimes + 0.5));
+        Integer cssImgHeight = Math.round((float) (model.getCssImgHeight() * yTimes + 0.5));
+        ImagePsUtils img = new ImagePsUtils();
 
-        // try {
-        // img.mergeBothImage(editImePath, localPath, positionX, positionY,
-        // width, height, rotate,
-        // ALBUM_PRE_IMAGE_LOCAL + picPreName);
-        // } catch (IOException e) {
-        // log.info(e.getMessage());
-        // }
-        // String picPreUrl = ALBUM_PRE_IMAGE_INTERNET + picPreName;
-        return new MergeImgFileResp(localPath, localPath);
+        String picName = "album_item_pre_" + new Date().getTime() + ".png";
+        try {
+            img.mergeBothImage(editImePath, localPath, cssMoveX, cssMoveY, cssImgWidth, cssImgHeight, cssRotate,
+                    userAlbumItemPreviewImgLocalDir + picName);
+        } catch (IOException e) {
+            log.info(e.getMessage());
+        }
+        return new MergeImgFileResp(userAlbumItemPreviewImgLocalDir + picName, userAlbumItemPreviewImgUrlPrefix
+                + picName);
     }
 
     @Override
@@ -112,7 +104,7 @@ public class ImgServiceImpl implements ImgService {
                 fileName);
         // 纵向拼接成品相册预览图
         e.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png", productPreImg);
-        return new JoinImgFileResp(userAlbumPriviewImgLocalPath, userAlbumPriviewImgPrefixUrl);
+        return new JoinImgFileResp(productPreImg, productPreImg.replace(userAlbumPriviewImgLocalPath, userAlbumPriviewImgPrefixUrl));
     }
 
     @Override

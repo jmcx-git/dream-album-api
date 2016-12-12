@@ -15,7 +15,7 @@ public class UserAlbumInfo extends DbStatus {
      */
     private static final long serialVersionUID = -1929636011391406410L;
     private int id;
-    private String userId;// 用户id
+    private int userId;// 用户id
     private int albumId;// 选用的相册模板
     private int step;// 当前操作到第几步
     @SELECT_ALL_KEY
@@ -27,7 +27,7 @@ public class UserAlbumInfo extends DbStatus {
         super();
     }
 
-    public UserAlbumInfo(String userId, int albumId, int complete) {
+    public UserAlbumInfo(int userId, int albumId, int complete) {
         super();
         this.userId = userId;
         this.albumId = albumId;
@@ -42,11 +42,11 @@ public class UserAlbumInfo extends DbStatus {
         this.id = id;
     }
 
-    public String getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

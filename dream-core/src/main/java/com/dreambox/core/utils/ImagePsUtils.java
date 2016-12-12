@@ -269,7 +269,7 @@ public class ImagePsUtils {
         try {
             img.mergeBothImage(
                     "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
-                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 108, 248, 561, 435, 30,
+                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 10, 100, 700, 300, 0,
                     "/Users/liuxinglong/Desktop/test.png");
         } catch (IOException e) {
             e.printStackTrace();

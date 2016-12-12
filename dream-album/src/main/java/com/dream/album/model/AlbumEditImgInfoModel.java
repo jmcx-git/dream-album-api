@@ -6,64 +6,63 @@ package com.dream.album.model;
  */
 public class AlbumEditImgInfoModel {
 
-    private int positionX;
-    private int positionY;
-    private int rotate;
-    private int width;
-    private int height;
+    private Integer cssMoveX;
+    private Integer cssMoveY;
+    private Integer cssRotate;
+    private Integer cssImgWidth;
+    private Integer cssImgHeight;
 
     public AlbumEditImgInfoModel() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-    public AlbumEditImgInfoModel(int positionX, int positionY, int rotate, int width, int height) {
+    public AlbumEditImgInfoModel(Integer cssMoveX, Integer cssMoveY, Integer cssRotate, Integer cssImgWidth,
+            Integer cssImgHeight) {
         super();
-        this.positionX = positionX;
-        this.positionY = positionY;
-        this.rotate = rotate;
-        this.width = width;
-        this.height = height;
+        this.cssMoveX = cssMoveX == null ? 0 : cssMoveX;
+        this.cssMoveY = cssMoveY == null ? 0 : cssMoveY;
+        this.cssRotate = cssRotate == null ? 0 : cssRotate;
+        this.cssImgWidth = cssImgWidth == null ? 0 : cssImgWidth;
+        this.cssImgHeight = cssImgHeight == null ? 0 : cssImgHeight;
     }
 
-
-    public int getPositionX() {
-        return positionX;
+    public Integer getCssMoveX() {
+        return cssMoveX;
     }
 
-    public void setPositionX(int positionX) {
-        this.positionX = positionX;
+    public void setCssMoveX(Integer cssMoveX) {
+        this.cssMoveX = cssMoveX;
     }
 
-    public int getPositionY() {
-        return positionY;
+    public Integer getCssMoveY() {
+        return cssMoveY;
     }
 
-    public void setPositionY(int positionY) {
-        this.positionY = positionY;
+    public void setCssMoveY(Integer cssMoveY) {
+        this.cssMoveY = cssMoveY;
     }
 
-    public int getRotate() {
-        return rotate;
+    public Integer getCssRotate() {
+        return cssRotate;
     }
 
-    public void setRotate(int rotate) {
-        this.rotate = rotate;
+    public void setCssRotate(Integer cssRotate) {
+        this.cssRotate = cssRotate;
     }
 
-    public int getWidth() {
-        return width;
+    public Integer getCssImgWidth() {
+        return cssImgWidth;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    public void setCssImgWidth(Integer cssImgWidth) {
+        this.cssImgWidth = cssImgWidth;
     }
 
-    public int getHeight() {
-        return height;
+    public Integer getCssImgHeight() {
+        return cssImgHeight;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
+    public void setCssImgHeight(Integer cssImgHeight) {
+        this.cssImgHeight = cssImgHeight;
     }
 }

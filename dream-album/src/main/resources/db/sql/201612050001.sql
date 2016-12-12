@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `user_album_info`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
-	`user_id` varchar(255) DEFAULT NULL,
+	`user_id` int(11) DEFAULT '0',
 	`album_id` int(11) DEFAULT '0',
     `step` int(11) DEFAULT '0',
     `complete` int(11) DEFAULT '0',
@@ -46,6 +46,8 @@ CREATE TABLE IF NOT EXISTS `album_item_info`(
 	`album_id` int(11) NOT NULL DEFAULT '0',
 	`edit_img_url` varchar(255) DEFAULT NULL,
 	`preview_img_url` varchar(255) DEFAULT NULL,
+	`img_width` int(11) DEFAULT '0',
+	`img_height` int(11) DEFAULT '0',
 	`rank` int(11) NOT NULL DEFAULT '0',
 	`edit_count` int(11) DEFAULT '0',
 	`edit_img_infos` varchar(255) DEFAULT NULL,

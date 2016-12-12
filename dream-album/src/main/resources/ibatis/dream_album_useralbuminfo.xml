@@ -3,7 +3,7 @@
 <sqlMap namespace="rfq">
 	<resultMap id="useralbuminfo" class="com.dreambox.core.dto.album.UserAlbumInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
 		<result column="album_id" property="albumId" jdbcType="INTEGER" />
 		<result column="step" property="step" jdbcType="INTEGER" />
 		<result column="complete" property="complete" jdbcType="INTEGER" />

@@ -139,7 +139,7 @@ public class WxLoginAction {
         List<Integer> albumId = userAlbumCollectInfoService.getCollectAlbumInfoId(userId);
         List<AlbumInfo> gg = albumInfoService.getDirectFromDb(albumId);
         UserAlbumInfo info = new UserAlbumInfo();
-        info.setUserId(String.valueOf(userId));
+        info.setUserId(userId);
         // 获取该userId已完成和制作中的的相册
         info.setComplete(UserAlbumInfo.STATUS_ALL);
         long count = userAlbumInfoService.countDirectFromDb(info);

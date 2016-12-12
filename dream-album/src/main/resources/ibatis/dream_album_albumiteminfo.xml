@@ -7,6 +7,10 @@
 		<result column="edit_img_url" property="editImgUrl" jdbcType="VARCHAR" />
 		<result column="preview_img_url" property="previewImgUrl"
 		jdbcType="VARCHAR" />
+		<result column="img_width" property="imgWidth"
+		jdbcType="INTEGER" />
+		<result column="img_height" property="imgHeight"
+		jdbcType="INTEGER" />
 		<result column="rank" property="rank" jdbcType="INTEGER" />
 		<result column="edit_count" property="editCount" jdbcType="INTEGER" />
 		<result column="edit_img_infos" property="editImgInfos"
@@ -19,16 +23,16 @@
 	</resultMap>
 	<insert id="insertOrUpdateAlbumItemInfo" parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
 		<![CDATA[
-		INSERT IGNORE INTO album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`rank`,`edit_count`,`edit_img_infos`,
+		INSERT IGNORE INTO album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`img_width`,`img_height`,`rank`,`edit_count`,`edit_img_infos`,
 		`edit_text_infos`,`status`,`update_time`,`create_time`)
-		VALUES(null, #albumId#,#editImgUrl#,#previewImgUrl#,#rank#,#editCount#,#editImgInfos#,#editTextInfos#,0, now(),now())
+		VALUES(null, #albumId#,#editImgUrl#,#previewImgUrl#,#imgWidth#,#imgHeight#,#rank#,#editCount#,#editImgInfos#,#editTextInfos#,0, now(),now())
 		]]>
 	</insert>
 	<insert id="insertOrIgnoreAlbumItemInfo" parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
 		<![CDATA[
-		INSERT IGNORE INTO album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`rank`,`edit_count`,`edit_img_infos`,
+		INSERT IGNORE INTO album_item_info (`id`,`album_id`,`edit_img_url`,`preview_img_url`,`img_width`,`img_height`,`rank`,`edit_count`,`edit_img_infos`,
 		`edit_text_infos`,`status`,`update_time`,`create_time`)
-		VALUES(null, #albumId#,#editImgUrl#,#previewImgUrl#,#rank#,#editCount#,#editImgInfos#,#editTextInfos#,0, now(),now())
+		VALUES(null, #albumId#,#editImgUrl#,#previewImgUrl#,#imgWidth#,#imgHeight#,#rank#,#editCount#,#editImgInfos#,#editTextInfos#,0, now(),now())
 		]]>
 	</insert>
 	<update id="updateAlbumItemInfoStatus" parameterClass="com.dreambox.core.dto.album.AlbumItemInfo">
