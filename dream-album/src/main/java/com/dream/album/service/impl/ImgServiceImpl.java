@@ -193,6 +193,7 @@ public class ImgServiceImpl implements ImgService {
         gNew.drawImage(image, 0, 0, w, h, null);
         gNew.drawImage(bgImage, 0, 0, w, h, null);
         File outFile = new File(toPath);
+        outFile.mkdirs();
         ImageIO.write(imageNew, "png", outFile);
 
     }
@@ -220,6 +221,7 @@ public class ImgServiceImpl implements ImgService {
         // gNew.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
         gNew.drawImage(image, startX, startY, image.getWidth(null), image.getHeight(null), null);
         File outFile = new File(toPath);
+        outFile.mkdirs();
         ImageIO.write(imageNew, "png", outFile);
 
     }
@@ -271,6 +273,7 @@ public class ImgServiceImpl implements ImgService {
         // gNew.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
         gNew.drawImage(image, 0, 0, w, h, null);
         File outFile = new File(toPath);
+        outFile.mkdirs();
         ImageIO.write(imageNew, "png", outFile);
     }
 
@@ -297,6 +300,7 @@ public class ImgServiceImpl implements ImgService {
         // gNew.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
         gNew.drawImage(image, 0, 0, w, h, null);
         File outFile = new File(toPath);
+        outFile.mkdirs();
         ImageIO.write(imageNew, "png", outFile);
     }
 
