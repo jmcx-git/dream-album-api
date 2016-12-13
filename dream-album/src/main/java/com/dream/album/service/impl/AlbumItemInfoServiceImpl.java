@@ -101,7 +101,7 @@ public class AlbumItemInfoServiceImpl extends AlbumItemInfoService {
     }
 
     @Override
-    public String getEditImePath(AlbumItemInfo info) {
+    public String getEditImgPath(AlbumItemInfo info) {
         return imgService.getAlbumItemEditImgPath(info);
     }
 

@@ -3,7 +3,11 @@ package com.dreambox.core.utils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.Transparency;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +19,8 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import com.dreambox.web.utils.IOUtils;
 
 
 /**
@@ -203,6 +209,11 @@ public class ImagePsUtils {
         return d;
     }
 
+    // 'cssElmMoveX': "" + this.translatex,
+    // 'cssElmMoveY': "" + this.translatey,
+    // 'cssElmUserScaleX': "" + this.data.userScaleX,
+    // 'cssElmUserScaleY': "" + this.data.userScaleY,)
+
     /**
      * 合并图片(按指定初始x、y坐标将附加图片贴到底图之上) 并指定宽高
      * 
@@ -269,11 +280,9 @@ public class ImagePsUtils {
         try {
             img.mergeBothImage(
                     "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
-                    "/Users/liuxinglong/Desktop/1.jpg", 100, 200, 600, 800, 0,
-                    "/Users/liuxinglong/Desktop/test.png");
+                    "/Users/liuxinglong/Desktop/1.jpg", 100, 200, 600, 800, 0, "/Users/liuxinglong/Desktop/test.png");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("success!");
     }
 }

@@ -5,25 +5,26 @@ package com.dream.album.model;
  * @date 2016年12月7日
  */
 public class AlbumEditImgInfoModel {
-
     private Integer cssElmMoveX;
     private Integer cssElmMoveY;
-    private Integer cssElmRotate;
-    private Integer cssElmWidth;
-    private Integer cssElmHeight;
+    private Integer cssUploadImgInDeviceWidth;
+    private Integer cssUploadImgInDeviceHeight;
+    private Integer cssElmUserScaleX;
+    private Integer cssElmUserScaleY;
 
     public AlbumEditImgInfoModel() {
         super();
     }
 
-    public AlbumEditImgInfoModel(Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth,
-            Integer cssElmHeight) {
+    public AlbumEditImgInfoModel(Integer cssElmMoveX, Integer cssElmMoveY, Integer cssUploadImgInDeviceWidth,
+            Integer cssUploadImgInDeviceHeight, Integer cssElmUserScaleX, Integer cssElmUserScaleY) {
         super();
-        this.cssElmMoveX = cssElmMoveX == null ? 0 : cssElmMoveX;
-        this.cssElmMoveY = cssElmMoveY == null ? 0 : cssElmMoveY;
-        this.cssElmRotate = cssElmRotate == null ? 0 : cssElmRotate;
-        this.cssElmWidth = cssElmWidth == null ? 0 : cssElmWidth;
-        this.cssElmHeight = cssElmHeight == null ? 0 : cssElmHeight;
+        this.cssElmMoveX = cssElmMoveX;
+        this.cssElmMoveY = cssElmMoveY;
+        this.cssUploadImgInDeviceWidth = cssUploadImgInDeviceWidth;
+        this.cssUploadImgInDeviceHeight = cssUploadImgInDeviceHeight;
+        this.cssElmUserScaleX = cssElmUserScaleX;
+        this.cssElmUserScaleY = cssElmUserScaleY;
     }
 
     public Integer getCssElmMoveX() {
@@ -42,27 +43,35 @@ public class AlbumEditImgInfoModel {
         this.cssElmMoveY = cssElmMoveY;
     }
 
-    public Integer getCssElmRotate() {
-        return cssElmRotate;
+    public Integer getCssUploadImgInDeviceWidth() {
+        return cssUploadImgInDeviceWidth;
     }
 
-    public void setCssElmRotate(Integer cssElmRotate) {
-        this.cssElmRotate = cssElmRotate;
+    public void setCssUploadImgInDeviceWidth(Integer cssUploadImgInDeviceWidth) {
+        this.cssUploadImgInDeviceWidth = cssUploadImgInDeviceWidth;
     }
 
-    public Integer getCssElmWidth() {
-        return cssElmWidth;
+    public Integer getCssUploadImgInDeviceHeight() {
+        return cssUploadImgInDeviceHeight;
     }
 
-    public void setCssElmWidth(Integer cssElmWidth) {
-        this.cssElmWidth = cssElmWidth;
+    public void setCssUploadImgInDeviceHeight(Integer cssUploadImgInDeviceHeight) {
+        this.cssUploadImgInDeviceHeight = cssUploadImgInDeviceHeight;
     }
 
-    public Integer getCssElmHeight() {
-        return cssElmHeight;
+    public Integer getCssElmUserScaleX() {
+        return cssElmUserScaleX;
     }
 
-    public void setCssElmHeight(Integer cssElmHeight) {
-        this.cssElmHeight = cssElmHeight;
+    public void setCssElmUserScaleX(Integer cssElmUserScaleX) {
+        this.cssElmUserScaleX = cssElmUserScaleX;
+    }
+
+    public Integer getCssElmUserScaleY() {
+        return cssElmUserScaleY;
+    }
+
+    public void setCssElmUserScaleY(Integer cssElmUserScaleY) {
+        this.cssElmUserScaleY = cssElmUserScaleY;
     }
 }

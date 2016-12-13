@@ -1,5 +1,6 @@
 package com.dream.album.action;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,7 +164,10 @@ public class AlbumCommonAction extends IosBaseAction {
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
     public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
-            Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth, Integer cssElmHeight) {
+            Integer cssElmMoveX, Integer cssElmMoveY, Integer cssUploadImgInDeviceWidth,
+            Integer cssUploadImgInDeviceHeight,
+            // Integer cssElmRotate, Integer cssElmWidth, Integer cssElmHeight,
+            Integer cssElmUserScaleX, Integer cssElmUserScaleY) {
         if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
         }
@@ -180,8 +184,8 @@ public class AlbumCommonAction extends IosBaseAction {
         if (albumItemInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumItemId + "项的模版相关记录!");
         }
-        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssElmRotate, cssElmWidth,
-                cssElmHeight);
+        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssUploadImgInDeviceWidth,
+                cssUploadImgInDeviceHeight, cssElmUserScaleX, cssElmUserScaleY);
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
         ua.setUserAlbumId(userAlbumInfo.getId());
         ua.setAlbumId(userAlbumInfo.getAlbumId());
@@ -193,10 +197,16 @@ public class AlbumCommonAction extends IosBaseAction {
         UploadFileSaveResp uploadFileSaveResp = imgService.handleUserUploadImg(image);
         ua.setUserOriginImgUrl(uploadFileSaveResp.getUrlPath());
 
-        // 根据已上传数据生成该页的预览图
-        MergeImgFileResp mergeImgFileResp = imgService.mergeToPreviewImg(
-                albumItemInfoService.getEditImePath(albumItemInfo), uploadFileSaveResp.getLocalPath(), albumItemInfo,
-                model);
+        MergeImgFileResp mergeImgFileResp;
+        try {
+            mergeImgFileResp = // 根据已上传数据生成该页的预览图
+            imgService.mergeToPreviewImg(userAlbumInfo.getUserId(), albumItemInfoService.getEditImgPath(albumItemInfo),
+                    uploadFileSaveResp.getLocalPath(), cssUploadImgInDeviceWidth, cssUploadImgInDeviceHeight,
+                    cssElmUserScaleX, cssElmUserScaleY, cssElmMoveX, cssElmMoveY);
+        } catch (IOException e) {
+            log.error("Merge user upload file to preview img failed. Errmsg:" + e.getMessage(), e);
+            return new ApiRespWrapper<String>(-1, "制图失败.");
+        }
         ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
         userAlbumItemInfoService.addData(ua);// 保存操作数据至数据库
         // 更新该用户相册操作到第几步
