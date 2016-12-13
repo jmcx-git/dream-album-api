@@ -164,10 +164,10 @@ public class AlbumCommonAction extends IosBaseAction {
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
     public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
-            Integer cssElmMoveX, Integer cssElmMoveY, Integer cssUploadImgInDeviceWidth,
-            Integer cssUploadImgInDeviceHeight,
+            String cssElmMoveX, String cssElmMoveY, String cssUploadImgInDeviceWidth,
+            String cssUploadImgInDeviceHeight,
             // Integer cssElmRotate, Integer cssElmWidth, Integer cssElmHeight,
-            Integer cssElmUserScaleX, Integer cssElmUserScaleY) {
+            String cssElmUserScaleX, String cssElmUserScaleY) {
         if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
         }
@@ -201,8 +201,9 @@ public class AlbumCommonAction extends IosBaseAction {
         try {
             mergeImgFileResp = // 根据已上传数据生成该页的预览图
             imgService.mergeToPreviewImg(userAlbumInfo.getUserId(), albumItemInfoService.getEditImgPath(albumItemInfo),
-                    uploadFileSaveResp.getLocalPath(), cssUploadImgInDeviceWidth, cssUploadImgInDeviceHeight,
-                    cssElmUserScaleX, cssElmUserScaleY, cssElmMoveX, cssElmMoveY);
+                    uploadFileSaveResp.getLocalPath(), model);
+            // , cssUploadImgInDeviceWidth, cssUploadImgInDeviceHeight,
+            // cssElmUserScaleX, cssElmUserScaleY, cssElmMoveX, cssElmMoveY);
         } catch (IOException e) {
             log.error("Merge user upload file to preview img failed. Errmsg:" + e.getMessage(), e);
             return new ApiRespWrapper<String>(-1, "制图失败.");

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
@@ -39,8 +40,15 @@ public interface ImgService {
 
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g);
 
-    public MergeImgFileResp mergeToPreviewImg(int userId, String originBgImgPath, String userUploadOrginImgPath,
-            int uploadImgInDeviceWidth, int uploadImgInDeviceHeight, float userScaleImageX, float userScaleImageY,
-            int imgInDeviceLeft, int imgInDeviceTop) throws IOException;
+    //
+    // public MergeImgFileResp mergeToPreviewImg(int userId, String
+    // originBgImgPath, String userUploadOrginImgPath,
+    // AlbumEditImgInfoModel model, int uploadImgInDeviceWidth, int
+    // uploadImgInDeviceHeight,
+    // float userScaleImageX, float userScaleImageY, int imgInDeviceLeft, int
+    // imgInDeviceTop) throws IOException;
+
+    MergeImgFileResp mergeToPreviewImg(int userId, String originBgImgPath, String userUploadOrginImgPath,
+            AlbumEditImgInfoModel model) throws IOException;
 
 }

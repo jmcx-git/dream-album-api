@@ -9,22 +9,24 @@ public class AlbumEditImgInfoModel {
     private Integer cssElmMoveY;
     private Integer cssUploadImgInDeviceWidth;
     private Integer cssUploadImgInDeviceHeight;
-    private Integer cssElmUserScaleX;
-    private Integer cssElmUserScaleY;
+    private Float cssElmUserScaleX;
+    private Float cssElmUserScaleY;
 
     public AlbumEditImgInfoModel() {
         super();
     }
 
-    public AlbumEditImgInfoModel(Integer cssElmMoveX, Integer cssElmMoveY, Integer cssUploadImgInDeviceWidth,
-            Integer cssUploadImgInDeviceHeight, Integer cssElmUserScaleX, Integer cssElmUserScaleY) {
+    public AlbumEditImgInfoModel(String cssElmMoveX, String cssElmMoveY, String cssUploadImgInDeviceWidth,
+            String cssUploadImgInDeviceHeight, String cssElmUserScaleX, String cssElmUserScaleY) {
         super();
-        this.cssElmMoveX = cssElmMoveX;
-        this.cssElmMoveY = cssElmMoveY;
-        this.cssUploadImgInDeviceWidth = cssUploadImgInDeviceWidth;
-        this.cssUploadImgInDeviceHeight = cssUploadImgInDeviceHeight;
-        this.cssElmUserScaleX = cssElmUserScaleX;
-        this.cssElmUserScaleY = cssElmUserScaleY;
+        this.cssElmMoveX = cssElmMoveX == null ? 0 : Float.valueOf(cssElmMoveX).intValue();
+        this.cssElmMoveY = cssElmMoveY == null ? 0 : Float.valueOf(cssElmMoveY).intValue();
+        this.cssUploadImgInDeviceWidth = cssUploadImgInDeviceWidth == null ? 0 : Float.valueOf(
+                cssUploadImgInDeviceWidth).intValue();
+        this.cssUploadImgInDeviceHeight = cssUploadImgInDeviceHeight == null ? 0 : Float.valueOf(
+                cssUploadImgInDeviceHeight).intValue();
+        this.cssElmUserScaleX = cssElmUserScaleX == null ? 1 : Float.valueOf(cssElmUserScaleX);
+        this.cssElmUserScaleY = cssElmUserScaleY == null ? 1 : Float.valueOf(cssElmUserScaleY);
     }
 
     public Integer getCssElmMoveX() {
@@ -59,19 +61,19 @@ public class AlbumEditImgInfoModel {
         this.cssUploadImgInDeviceHeight = cssUploadImgInDeviceHeight;
     }
 
-    public Integer getCssElmUserScaleX() {
+    public Float getCssElmUserScaleX() {
         return cssElmUserScaleX;
     }
 
-    public void setCssElmUserScaleX(Integer cssElmUserScaleX) {
+    public void setCssElmUserScaleX(Float cssElmUserScaleX) {
         this.cssElmUserScaleX = cssElmUserScaleX;
     }
 
-    public Integer getCssElmUserScaleY() {
+    public Float getCssElmUserScaleY() {
         return cssElmUserScaleY;
     }
 
-    public void setCssElmUserScaleY(Integer cssElmUserScaleY) {
+    public void setCssElmUserScaleY(Float cssElmUserScaleY) {
         this.cssElmUserScaleY = cssElmUserScaleY;
     }
 }

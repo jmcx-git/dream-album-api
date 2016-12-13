@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
@@ -129,30 +130,33 @@ public class ImgServiceImpl implements ImgService {
     // userScaleImageX= 0.913/userScaleImageY=0.337 scalex/scaley
     // uploadImgInDeviceWidth=261.96 uploadImgInDeviceHeight= 195.92
     @Override
-    public MergeImgFileResp mergeToPreviewImg(int userId, String originBgImgPath,
-            String userUploadOrginImgPath, int uploadImgInDeviceWidth, int uploadImgInDeviceHeight,
-            float userScaleImageX, float userScaleImageY, int imgInDeviceLeft, int imgInDeviceTop) throws IOException {
+    public MergeImgFileResp mergeToPreviewImg(int userId, String originBgImgPath, String userUploadOrginImgPath,
+            AlbumEditImgInfoModel model
+    // int uploadImgInDeviceWidth, int uploadImgInDeviceHeight,
+    // float userScaleImageX, float userScaleImageY,
+    // int imgInDeviceLeft, int imgInDeviceTop
+    ) throws IOException {
         String ct = System.nanoTime() + ".png";
         String outPutImagePath = IOUtils.spliceFileName(IOUtils.spliceDirPath(this.imgHandleTmpPath, "bgDevice"), ct);
         String outPutFillImagePath = IOUtils.spliceFileName(
                 IOUtils.spliceDirPath(this.imgHandleTmpPath, "userImgDevice"), ct);
         String outPutFilledImagePath = IOUtils.spliceFileName(
                 IOUtils.spliceDirPath(this.imgHandleTmpPath, "userImgDeviceFilled"), ct);
-        Point p = fitDeviceImgWH(originBgImgPath, userUploadOrginImgPath, uploadImgInDeviceWidth,
-                uploadImgInDeviceHeight);
+        Point p = fitDeviceImgWH(originBgImgPath, userUploadOrginImgPath, model.getCssUploadImgInDeviceWidth(),
+                model.getCssUploadImgInDeviceHeight());
         // 将背景图按设备scale
         scaleImg(originBgImgPath, outPutImagePath, (int) p.getX(), (int) p.getY());
         // scale to filt the device shadow
-        scaleImg(userUploadOrginImgPath, outPutFillImagePath, userScaleImageX, userScaleImageY);
+        scaleImg(userUploadOrginImgPath, outPutFillImagePath, model.getCssElmUserScaleX(), model.getCssElmUserScaleY());
         // fill find the fill image at the bg image x y //
-        fillImg(outPutFillImagePath, outPutFilledImagePath, (int) p.getX(), (int) p.getY(), imgInDeviceLeft,
-                imgInDeviceTop);
+        fillImg(outPutFillImagePath, outPutFilledImagePath, (int) p.getX(), (int) p.getY(), model.getCssElmMoveX(),
+                model.getCssElmMoveY());
         String outPutFile = IOUtils.spliceFileName(IOUtils.spliceDirPath(this.imgHandleTmpPath, "filledBeforeScale"),
                 ct);
         fillBgImg(outPutFilledImagePath, outPutImagePath, outPutFile);
         String picName = "album_item_pre_" + new Date().getTime() + ".png";
-        String userFile = IOUtils.spliceFileName(
-                IOUtils.spliceDirPath(userAlbumItemPreviewImgLocalDir, "" + userId), picName);
+        String userFile = IOUtils.spliceFileName(IOUtils.spliceDirPath(userAlbumItemPreviewImgLocalDir, "" + userId),
+                picName);
         Image image = ImageIO.read(new File(originBgImgPath));
         int originImageWidth = image.getWidth(null);
         int originImageHeight = image.getHeight(null);
