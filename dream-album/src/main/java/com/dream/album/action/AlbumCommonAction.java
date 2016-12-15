@@ -322,8 +322,8 @@ public class AlbumCommonAction extends IosBaseAction {
         }
         UserAlbumInfo info = new UserAlbumInfo();
         info.setUserId(userId);
-        // 获取该userId已完成和制作中的的相册
-        info.setComplete(UserAlbumInfo.STATUS_ALL);
+        // 获取该userId已完成的相册
+        info.setComplete(1);
         List<UserAlbumInfo> listDirectFromDb = userAlbumInfoService.listDirectFromDb(info);
         List<MyAlbumModel> resultData = new ArrayList<MyAlbumModel>();
         // 拼装数据
@@ -354,7 +354,7 @@ public class AlbumCommonAction extends IosBaseAction {
             return null;
         }
         UserAlbumItemInfo g = new UserAlbumItemInfo();
-        g.setAlbumId(userAlbumId);
+        g.setUserAlbumId(userAlbumId);
         List<UserAlbumItemInfo> listDirectFromDb = userAlbumItemInfoService.listDirectFromDb(g);
         List<String> list = new ArrayList<String>();
         for (UserAlbumItemInfo userAlbumItemInfo : listDirectFromDb) {
