@@ -70,7 +70,7 @@ public class ImgServiceImpl implements ImgService {
 
     @Override
     public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
-            AlbumEditImgInfoModel model) throws ServiceException {
+            AlbumEditImgInfoModel model) throws Exception {
         // Integer cssImgHeight = Math.round((float) (model.getCssImgHeight() *
         // yTimes + 0.5));
         ImagePsUtils img = new ImagePsUtils();
@@ -81,6 +81,7 @@ public class ImgServiceImpl implements ImgService {
                     userAlbumItemPreviewImgLocalDir + picName);
         } catch (IOException e) {
             log.info(e.getMessage());
+            throw e;
         }
         return new MergeImgFileResp(userAlbumItemPreviewImgLocalDir + picName, userAlbumItemPreviewImgUrlPrefix
                 + picName);
@@ -94,9 +95,10 @@ public class ImgServiceImpl implements ImgService {
         String productPreImg = IOUtils.spliceFileName(IOUtils.spliceDirPath(userAlbumPriviewImgLocalPath, subDir),
                 fileName);
         // 纵向拼接成品相册预览图
-        e.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png", productPreImg);
+        boolean isSuccess = e.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png",
+                productPreImg);
         return new JoinImgFileResp(productPreImg, productPreImg.replace(userAlbumPriviewImgLocalPath,
-                userAlbumPriviewImgPrefixUrl));
+                userAlbumPriviewImgPrefixUrl), isSuccess);
     }
 
     @Override
@@ -105,8 +107,20 @@ public class ImgServiceImpl implements ImgService {
     }
 
     @Override
+    public String getAlbumItemDefaultPreImgPath(AlbumItemInfo info) {
+        return StringUtils.replace(info.getPreviewImgUrl(), this.albumItemEditImgUrlPrefix,
+                this.albumItemEditImgLocalDir);
+    }
+
+    @Override
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g) {
         String previewImgUrl = g.getPreviewImgUrl();
         return previewImgUrl.replace(userAlbumItemPreviewImgUrlPrefix, userAlbumItemPreviewImgLocalDir);
+    }
+
+    @Override
+    public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g) {
+        String userOriginImgUrl = g.getUserOriginImgUrl();
+        return userOriginImgUrl.replace(userAlbumItemUploadImgPrefixUrl, userAlbumItemUploadImgLocalPath);
     }
 }

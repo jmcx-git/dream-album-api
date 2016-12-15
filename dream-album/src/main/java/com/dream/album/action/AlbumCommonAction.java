@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dream.album.dto.AlbumHomePageModel;
 import com.dream.album.dto.MyAlbumModel;
+import com.dream.album.dto.PreviewWrapModel;
 import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
@@ -95,25 +96,6 @@ public class AlbumCommonAction extends IosBaseAction {
     }
 
     /**
-     * 根据相册id返回相册模版子列表接口
-     * 
-     * @param id
-     * @return
-     */
-    @RequestMapping("/getalbum.json")
-    @ResponseBody
-    public List<AlbumItemInfo> editAlbum(int id) {
-        if (id == 0) {
-            return null;
-        }
-        AlbumItemInfo info = new AlbumItemInfo();
-        info.setStatus(AlbumItemInfo.STATUS_OK);
-        info.setAlbumId(id);
-        List<AlbumItemInfo> list = albumItemInfoService.listDirectFromDb(info);
-        return list;
-    }
-
-    /**
      * 用户点击开始制作创建的用户相册信息数据
      * 
      * 若第一次制作则添加制作信息
@@ -168,15 +150,15 @@ public class AlbumCommonAction extends IosBaseAction {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
         }
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
-        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getData(userAlbumId.intValue());
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId.intValue());// getData(userAlbumId.intValue());
         if (userAlbumInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到Id:" + userAlbumId + "的相关记录!");
         }
-        AlbumInfo albumInfo = albumInfoService.getData(userAlbumInfo.getAlbumId());
+        AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
         if (albumInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + userAlbumInfo.getAlbumId() + "项的模版相关记录!");
         }
-        AlbumItemInfo albumItemInfo = albumItemInfoService.getData(albumItemId);
+        AlbumItemInfo albumItemInfo = albumItemInfoService.getDirectFromDb(albumItemId);
         if (albumItemInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumItemId + "项的模版相关记录!");
         }
@@ -194,10 +176,16 @@ public class AlbumCommonAction extends IosBaseAction {
         ua.setUserOriginImgUrl(uploadFileSaveResp.getUrlPath());
 
         // 根据已上传数据生成该页的预览图
-        MergeImgFileResp mergeImgFileResp = imgService.mergeToPreviewImg(
-                albumItemInfoService.getEditImePath(albumItemInfo), uploadFileSaveResp.getLocalPath(), albumItemInfo,
-                model);
-        ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
+        MergeImgFileResp mergeImgFileResp;
+        try {
+            AlbumEditImgInfoModel albumItemModel = GsonUtils.fromJsonStr(albumItemInfo.getEditImgInfos(),
+                    AlbumEditImgInfoModel.class);
+            mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImePath(albumItemInfo),
+                    uploadFileSaveResp.getLocalPath(), albumItemInfo, albumItemModel);
+            ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
+        } catch (Exception e) {
+            return new ApiRespWrapper<String>(-1, "合成预览图出错! errMsg:" + e.getMessage());
+        }
         userAlbumItemInfoService.addData(ua);// 保存操作数据至数据库
         // 更新该用户相册操作到第几步
         userAlbumInfo.setStep(albumItemInfo.getRank());
@@ -210,6 +198,11 @@ public class AlbumCommonAction extends IosBaseAction {
             List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
             // 获取用户相册所有的单页预览图
             List<String> prwImgList = new ArrayList<String>();
+            AlbumItemInfo g = new AlbumItemInfo();
+            g.setAlbumId(albumInfo.getId());
+            g.setRank(0);
+            AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
+            prwImgList.add(albumItemInfoService.getEditImePath(uk));
             for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
                 prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(userAlbumItemInfo));
             }
@@ -227,35 +220,91 @@ public class AlbumCommonAction extends IosBaseAction {
 
     /**
      * 
-     * 点击完成制作，生成最终成品预览图
+     * 用户相册模版未上传图片，添加一条用户相册模版空记录
      * 
-     * @param userId
-     * @param albumId
+     * @param userAlbumId
+     * @param albumItemId
+     * @param cssElmMoveX
+     * @param cssElmMoveY
+     * @param cssElmRotate
+     * @param cssElmWidth
+     * @param cssElmHeight
      * @return
      */
-    @RequestMapping("/madeuseralbum.json")
+    @RequestMapping("/uploademptypage.json")
     @ResponseBody
-    public String madeUserAlbum(Integer userId, int albumId) {
-        UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
+    public ApiRespWrapper<String> addUserAlbumItemPageEmptyInfo(Integer userAlbumId, Integer albumItemId,
+            Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth, Integer cssElmHeight) {
+        if (userAlbumId == null || userAlbumId.intValue() <= 0) {
+            return new ApiRespWrapper<String>(-1, "userId不能为空!");
+        }
         // 查看数据库中该用户该相册未制作完成的数据(理论上该条件下是唯一记录)
-        UserAlbumInfo userAlbum = userAlbumInfoService.getUserAlbumInfoByUk(info);
-
-        // 根据查到的记录获取用户相册信息id
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId.intValue());// getData(userAlbumId.intValue());
+        if (userAlbumInfo == null) {
+            return new ApiRespWrapper<String>(-1, "未找到Id:" + userAlbumId + "的相关记录!");
+        }
+        AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
+        if (albumInfo == null) {
+            return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + userAlbumInfo.getAlbumId() + "项的模版相关记录!");
+        }
+        AlbumItemInfo albumItemInfo = albumItemInfoService.getDirectFromDb(albumItemId);
+        if (albumItemInfo == null) {
+            return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumItemId + "项的模版相关记录!");
+        }
+        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssElmRotate, cssElmWidth,
+                cssElmHeight);
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
-        ua.setUserAlbumId(userAlbum.getId());
-        // 根据用户信息id拉取用户相册的操作记录历史
-        List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(ua);
-        List<String> prwImgList = new ArrayList<String>();
-        for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
-            prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(userAlbumItemInfo));
+        ua.setUserAlbumId(userAlbumInfo.getId());
+        ua.setAlbumId(userAlbumInfo.getAlbumId());
+        ua.setRank(albumItemInfo.getRank());// 在album中所有图片的第几张
+
+        UserAlbumItemInfo userAlbumItemInfo = userAlbumItemInfoService.getUserAlbumItemInfoByUk(ua);
+        if (userAlbumItemInfo == null) {
+            String imgCssInfo = GsonUtils.toJson(model);
+            ua.setEditImgInfos(imgCssInfo);
+
+            // 根据模版数据生成该页的预览图
+            MergeImgFileResp mergeImgFileResp;
+            try {
+                AlbumEditImgInfoModel albumItemModel = GsonUtils.fromJsonStr(albumItemInfo.getEditImgInfos(),
+                        AlbumEditImgInfoModel.class);
+                mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImePath(albumItemInfo),
+                        albumItemInfoService.getDefaultPreImgPath(albumItemInfo), albumItemInfo, albumItemModel);
+                ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
+            } catch (Exception e) {
+                return new ApiRespWrapper<String>(-1, "合成预览图出错! errMsg:" + e.getMessage());
+            }
+            userAlbumItemInfoService.addData(ua);
+            // 更新该用户相册操作到第几步
+            userAlbumInfo.setStep(albumItemInfo.getRank());
+            userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
         }
-        JoinImgFileResp joinImgFileResp = imgService.joinPreviewImg(userAlbum.getId(), prwImgList, "png");
-        if (joinImgFileResp.isJoined()) {
-            userAlbum.setComplete(1);
-            userAlbum.setPriviewImg(joinImgFileResp.getUrlPath());
-            userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbum);
+
+        if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
+            UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
+            uaNew.setUserAlbumId(userAlbumInfo.getId());
+            // 根据用户信息id拉取用户相册最新的操作记录历史
+            List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
+            // 获取用户相册所有的单页预览图
+            List<String> prwImgList = new ArrayList<String>();
+            AlbumItemInfo g = new AlbumItemInfo();
+            g.setAlbumId(albumInfo.getId());
+            g.setRank(0);
+            AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
+            prwImgList.add(albumItemInfoService.getEditImePath(uk));
+            for (UserAlbumItemInfo info : uaItems) {
+                prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(info));
+            }
+            JoinImgFileResp joinImgFileResp = imgService.joinPreviewImg(userAlbumInfo.getId(), prwImgList, "png");
+            // 完成相册制作
+            if (joinImgFileResp.isJoined()) {
+                userAlbumInfo.setComplete(1);
+                userAlbumInfo.setPriviewImg(joinImgFileResp.getUrlPath());
+                userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbumInfo);
+                return new ApiRespWrapper<String>(0, "相册生成成功!", joinImgFileResp.getUrlPath());
+            }
         }
-        return joinImgFileResp.getUrlPath();
+        return new ApiRespWrapper<String>(0, "数据添加成功!");
     }
 
     /**
@@ -292,5 +341,28 @@ public class AlbumCommonAction extends IosBaseAction {
             resultData.add(model);
         }
         return resultData;
+    }
+
+    @RequestMapping("/getpreview.json")
+    @ResponseBody
+    public PreviewWrapModel getProductPre(Integer userAlbumId) {
+        if (userAlbumId == null) {
+            return null;
+        }
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
+        if (userAlbumInfo == null) {
+            return null;
+        }
+        UserAlbumItemInfo g = new UserAlbumItemInfo();
+        g.setAlbumId(userAlbumId);
+        List<UserAlbumItemInfo> listDirectFromDb = userAlbumItemInfoService.listDirectFromDb(g);
+        List<String> list = new ArrayList<String>();
+        for (UserAlbumItemInfo userAlbumItemInfo : listDirectFromDb) {
+            list.add(userAlbumItemInfo.getPreviewImgUrl());
+        }
+        PreviewWrapModel model = new PreviewWrapModel();
+        model.setLoopPreImgs(list);
+        model.setBigPreImg(userAlbumInfo.getPriviewImg());
+        return model;
     }
 }

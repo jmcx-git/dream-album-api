@@ -1,5 +1,7 @@
 package com.dream.album.service.impl;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -17,6 +19,7 @@ import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.service.album.UserAlbumItemInfoService;
 import com.dreambox.core.utils.RedisCacheUtils;
+import com.dreambox.web.exception.ServiceException;
 
 /**
  * @author liuxinglong
@@ -84,8 +87,22 @@ public class UserAlbumItemInfoServiceImpl extends UserAlbumItemInfoService {
     }
 
     @Override
+    public String getUserOriginImgPath(UserAlbumItemInfo g) {
+        return imgService.getUserAlbumItemUserOriginImgPath(g);
+    }
+
+    @Override
     protected Logger getLogger() {
         return log;
+    }
+
+    @Override
+    public UserAlbumItemInfo getUserAlbumItemInfoByUk(UserAlbumItemInfo info) throws ServiceException {
+        try {
+            return userAlbumItemInfoDao.queryUserAlbumItemInfoByUk(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
     }
 
 }

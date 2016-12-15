@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -265,13 +267,16 @@ public class ImagePsUtils {
     }
 
     public static void main(String[] args) {
-        ImagePsUtils img = new ImagePsUtils();
+        EasyImage img = new EasyImage();
+        String[] pics = {
+                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/page.png",
+                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
+                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png",
+                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/3.png",
+                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/4.png" };
         try {
-            img.mergeBothImage(
-                    "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
-                    "/Users/liuxinglong/Desktop/1.jpg", 100, 200, 600, 800, 0,
-                    "/Users/liuxinglong/Desktop/test.png");
-        } catch (IOException e) {
+            img.joinImageListFourImg(pics, "png", "/Users/liuxinglong/Desktop/test.png");
+        } catch (Exception e) {
             e.printStackTrace();
         }
         System.out.println("success!");
