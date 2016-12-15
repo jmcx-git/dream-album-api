@@ -4,9 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Transparency;
-import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -279,6 +277,5 @@ public class ImagePsUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("success!");
     }
 }

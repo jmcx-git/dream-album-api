@@ -5,25 +5,24 @@ package com.dream.album.model;
  * @date 2016年12月7日
  */
 public class AlbumEditImgInfoModel {
-
     private Integer cssElmMoveX;
     private Integer cssElmMoveY;
-    private Integer cssElmRotate;
     private Integer cssElmWidth;
     private Integer cssElmHeight;
+    private Integer cssElmRotate;
 
     public AlbumEditImgInfoModel() {
         super();
     }
 
-    public AlbumEditImgInfoModel(Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth,
-            Integer cssElmHeight) {
+    public AlbumEditImgInfoModel(Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmWidth, Integer cssElmHeight,
+            Integer cssElmRotate) {
         super();
         this.cssElmMoveX = cssElmMoveX == null ? 0 : cssElmMoveX;
         this.cssElmMoveY = cssElmMoveY == null ? 0 : cssElmMoveY;
-        this.cssElmRotate = cssElmRotate == null ? 0 : cssElmRotate;
         this.cssElmWidth = cssElmWidth == null ? 0 : cssElmWidth;
         this.cssElmHeight = cssElmHeight == null ? 0 : cssElmHeight;
+        this.cssElmRotate = cssElmRotate == null ? 0 : cssElmRotate;
     }
 
     public Integer getCssElmMoveX() {
@@ -42,14 +41,6 @@ public class AlbumEditImgInfoModel {
         this.cssElmMoveY = cssElmMoveY;
     }
 
-    public Integer getCssElmRotate() {
-        return cssElmRotate;
-    }
-
-    public void setCssElmRotate(Integer cssElmRotate) {
-        this.cssElmRotate = cssElmRotate;
-    }
-
     public Integer getCssElmWidth() {
         return cssElmWidth;
     }
@@ -64,5 +55,13 @@ public class AlbumEditImgInfoModel {
 
     public void setCssElmHeight(Integer cssElmHeight) {
         this.cssElmHeight = cssElmHeight;
+    }
+
+    public Integer getCssElmRotate() {
+        return cssElmRotate;
+    }
+
+    public void setCssElmRotate(Integer cssElmRotate) {
+        this.cssElmRotate = cssElmRotate;
     }
 }

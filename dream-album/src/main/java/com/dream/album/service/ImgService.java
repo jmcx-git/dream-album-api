@@ -35,7 +35,7 @@ public interface ImgService {
     public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList, String type);
 
     public String getAlbumItemEditImgPath(AlbumItemInfo info);
-    
+
     public String getAlbumItemDefaultPreImgPath(AlbumItemInfo info);
 
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g);

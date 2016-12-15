@@ -162,8 +162,8 @@ public class AlbumCommonAction extends IosBaseAction {
         if (albumItemInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumItemId + "项的模版相关记录!");
         }
-        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssElmRotate, cssElmWidth,
-                cssElmHeight);
+        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssElmWidth, cssElmHeight,
+                cssElmRotate);
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
         ua.setUserAlbumId(userAlbumInfo.getId());
         ua.setAlbumId(userAlbumInfo.getAlbumId());
@@ -180,7 +180,7 @@ public class AlbumCommonAction extends IosBaseAction {
         try {
             AlbumEditImgInfoModel albumItemModel = GsonUtils.fromJsonStr(albumItemInfo.getEditImgInfos(),
                     AlbumEditImgInfoModel.class);
-            mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImePath(albumItemInfo),
+            mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImgPath(albumItemInfo),
                     uploadFileSaveResp.getLocalPath(), albumItemInfo, albumItemModel);
             ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
         } catch (Exception e) {
@@ -202,7 +202,7 @@ public class AlbumCommonAction extends IosBaseAction {
             g.setAlbumId(albumInfo.getId());
             g.setRank(0);
             AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
-            prwImgList.add(albumItemInfoService.getEditImePath(uk));
+            prwImgList.add(albumItemInfoService.getEditImgPath(uk));
             for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
                 prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(userAlbumItemInfo));
             }
@@ -251,8 +251,8 @@ public class AlbumCommonAction extends IosBaseAction {
         if (albumItemInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumItemId + "项的模版相关记录!");
         }
-        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssElmRotate, cssElmWidth,
-                cssElmHeight);
+        AlbumEditImgInfoModel model = new AlbumEditImgInfoModel(cssElmMoveX, cssElmMoveY, cssElmWidth, cssElmHeight,
+                cssElmRotate);
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
         ua.setUserAlbumId(userAlbumInfo.getId());
         ua.setAlbumId(userAlbumInfo.getAlbumId());
@@ -268,7 +268,7 @@ public class AlbumCommonAction extends IosBaseAction {
             try {
                 AlbumEditImgInfoModel albumItemModel = GsonUtils.fromJsonStr(albumItemInfo.getEditImgInfos(),
                         AlbumEditImgInfoModel.class);
-                mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImePath(albumItemInfo),
+                mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImgPath(albumItemInfo),
                         albumItemInfoService.getDefaultPreImgPath(albumItemInfo), albumItemInfo, albumItemModel);
                 ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
             } catch (Exception e) {
@@ -291,7 +291,7 @@ public class AlbumCommonAction extends IosBaseAction {
             g.setAlbumId(albumInfo.getId());
             g.setRank(0);
             AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
-            prwImgList.add(albumItemInfoService.getEditImePath(uk));
+            prwImgList.add(albumItemInfoService.getEditImgPath(uk));
             for (UserAlbumItemInfo info : uaItems) {
                 prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(info));
             }

@@ -53,6 +53,9 @@ public class ImgServiceImpl implements ImgService {
     @Value("${dream.album.albumitemeditimglocaldir}")
     private String albumItemEditImgLocalDir = "";
 
+    @Value("${dream.album.imghandletmppath}")
+    private String imgHandleTmpPath = "";
+
 
     @Override
     public UploadFileSaveResp handleUserUploadImg(MultipartFile image) throws ServiceException {
