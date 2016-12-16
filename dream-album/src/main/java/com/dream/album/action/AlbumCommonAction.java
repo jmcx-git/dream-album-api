@@ -6,8 +6,10 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -145,7 +147,8 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
+    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image,
+            @RequestParam(required = true) Integer userAlbumId, @RequestParam(required = true) Integer albumItemId,
             Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth, Integer cssElmHeight) {
         if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
