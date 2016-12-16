@@ -7,26 +7,22 @@ package com.dream.album.model;
 public class AlbumEditImgInfoModel {
     private Integer cssElmMoveX;
     private Integer cssElmMoveY;
-    private Integer cssUploadImgInDeviceWidth;
-    private Integer cssUploadImgInDeviceHeight;
-    private Float cssElmUserScaleX;
-    private Float cssElmUserScaleY;
+    private Integer cssElmWidth;
+    private Integer cssElmHeight;
+    private Integer cssElmRotate;
 
     public AlbumEditImgInfoModel() {
         super();
     }
 
-    public AlbumEditImgInfoModel(String cssElmMoveX, String cssElmMoveY, String cssUploadImgInDeviceWidth,
-            String cssUploadImgInDeviceHeight, String cssElmUserScaleX, String cssElmUserScaleY) {
+    public AlbumEditImgInfoModel(Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmWidth, Integer cssElmHeight,
+            Integer cssElmRotate) {
         super();
-        this.cssElmMoveX = cssElmMoveX == null ? 0 : Float.valueOf(cssElmMoveX).intValue();
-        this.cssElmMoveY = cssElmMoveY == null ? 0 : Float.valueOf(cssElmMoveY).intValue();
-        this.cssUploadImgInDeviceWidth = cssUploadImgInDeviceWidth == null ? 0 : Float.valueOf(
-                cssUploadImgInDeviceWidth).intValue();
-        this.cssUploadImgInDeviceHeight = cssUploadImgInDeviceHeight == null ? 0 : Float.valueOf(
-                cssUploadImgInDeviceHeight).intValue();
-        this.cssElmUserScaleX = cssElmUserScaleX == null ? 1 : Float.valueOf(cssElmUserScaleX);
-        this.cssElmUserScaleY = cssElmUserScaleY == null ? 1 : Float.valueOf(cssElmUserScaleY);
+        this.cssElmMoveX = cssElmMoveX == null ? 0 : cssElmMoveX;
+        this.cssElmMoveY = cssElmMoveY == null ? 0 : cssElmMoveY;
+        this.cssElmWidth = cssElmWidth == null ? 0 : cssElmWidth;
+        this.cssElmHeight = cssElmHeight == null ? 0 : cssElmHeight;
+        this.cssElmRotate = cssElmRotate == null ? 0 : cssElmRotate;
     }
 
     public Integer getCssElmMoveX() {
@@ -45,35 +41,27 @@ public class AlbumEditImgInfoModel {
         this.cssElmMoveY = cssElmMoveY;
     }
 
-    public Integer getCssUploadImgInDeviceWidth() {
-        return cssUploadImgInDeviceWidth;
+    public Integer getCssElmWidth() {
+        return cssElmWidth;
     }
 
-    public void setCssUploadImgInDeviceWidth(Integer cssUploadImgInDeviceWidth) {
-        this.cssUploadImgInDeviceWidth = cssUploadImgInDeviceWidth;
+    public void setCssElmWidth(Integer cssElmWidth) {
+        this.cssElmWidth = cssElmWidth;
     }
 
-    public Integer getCssUploadImgInDeviceHeight() {
-        return cssUploadImgInDeviceHeight;
+    public Integer getCssElmHeight() {
+        return cssElmHeight;
     }
 
-    public void setCssUploadImgInDeviceHeight(Integer cssUploadImgInDeviceHeight) {
-        this.cssUploadImgInDeviceHeight = cssUploadImgInDeviceHeight;
+    public void setCssElmHeight(Integer cssElmHeight) {
+        this.cssElmHeight = cssElmHeight;
     }
 
-    public Float getCssElmUserScaleX() {
-        return cssElmUserScaleX;
+    public Integer getCssElmRotate() {
+        return cssElmRotate;
     }
 
-    public void setCssElmUserScaleX(Float cssElmUserScaleX) {
-        this.cssElmUserScaleX = cssElmUserScaleX;
-    }
-
-    public Float getCssElmUserScaleY() {
-        return cssElmUserScaleY;
-    }
-
-    public void setCssElmUserScaleY(Float cssElmUserScaleY) {
-        this.cssElmUserScaleY = cssElmUserScaleY;
+    public void setCssElmRotate(Integer cssElmRotate) {
+        this.cssElmRotate = cssElmRotate;
     }
 }

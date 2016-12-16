@@ -4,12 +4,12 @@
 	<id>1</id>
 	<album_id>1</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/page.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/page.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>0</rank>
 	<edit_count>0</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:13</update_time>
@@ -19,7 +19,7 @@
 	<id>2</id>
 	<album_id>1</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/1.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/1.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>1</rank>
@@ -34,12 +34,12 @@
 	<id>3</id>
 	<album_id>1</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/2.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/2.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>2</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:16</update_time>
@@ -49,12 +49,12 @@
 	<id>4</id>
 	<album_id>1</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/3.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/3.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>3</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:18</update_time>
@@ -64,12 +64,12 @@
 	<id>5</id>
 	<album_id>1</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/4.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/4.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/1/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>4</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:20</update_time>
@@ -79,12 +79,12 @@
 	<id>6</id>
 	<album_id>2</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/page.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/page.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>0</rank>
 	<edit_count>0</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:21</update_time>
@@ -94,12 +94,12 @@
 	<id>7</id>
 	<album_id>2</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/1.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/1.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>1</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:23</update_time>
@@ -109,12 +109,12 @@
 	<id>8</id>
 	<album_id>2</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/2.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/2.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>2</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:25</update_time>
@@ -124,12 +124,12 @@
 	<id>9</id>
 	<album_id>2</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/3.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/3.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>3</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:27</update_time>
@@ -139,12 +139,12 @@
 	<id>10</id>
 	<album_id>2</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/4.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/4.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/2/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>4</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:29</update_time>
@@ -154,12 +154,12 @@
 	<id>11</id>
 	<album_id>3</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/page.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/page.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>0</rank>
 	<edit_count>0</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:31</update_time>
@@ -169,12 +169,12 @@
 	<id>12</id>
 	<album_id>3</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/1.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/1.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>1</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:33</update_time>
@@ -184,12 +184,12 @@
 	<id>13</id>
 	<album_id>3</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/2.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/2.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>2</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:35</update_time>
@@ -199,12 +199,12 @@
 	<id>14</id>
 	<album_id>3</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/3.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/3.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>3</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:37</update_time>
@@ -214,12 +214,12 @@
 	<id>15</id>
 	<album_id>3</album_id>
 	<edit_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/4.png</edit_img_url>
-	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/4.png</preview_img_url>
+	<preview_img_url>http://10.1.0.121:8080/dream-album/images/3/detail/beautiful.png</preview_img_url>
 	<img_width>750</img_width>
 	<img_height>1334</img_height>
 	<rank>4</rank>
 	<edit_count>1</edit_count>
-	<edit_img_infos>{"cssElmWidth":240, "cssElmHeight": 200,"cssElmRotate": 0, "cssElmMoveX": 42, "cssElmMoveY": 100}</edit_img_infos>
+	<edit_img_infos>{"cssElmWidth":560, "cssElmHeight": 434,"cssElmRotate": 0, "cssElmMoveX": 110, "cssElmMoveY": 250}</edit_img_infos>
 	<edit_text_infos>{}</edit_text_infos>
 	<status>0</status>
 	<update_time>12/09/2016 18:02:39</update_time>

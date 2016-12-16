@@ -44,6 +44,12 @@
 		UPDATE `user_album_item_info` SET `status` = #status# WHERE `id=#id# ;
 		]]>
 	</update>
+	<select id="queryUserAlbumItemInfoByUk" parameterClass="com.dreambox.core.dto.album.UserAlbumItemInfo"
+	resultMap="useralbumiteminfo">
+		<![CDATA[
+		SELECT * FROM `user_album_item_info` WHERE `album_id` = #albumId# AND `user_album_id` = #userAlbumId# AND `rank` = #rank#;
+		]]>
+	</select>
 	<select id="queryUserAlbumItemInfoById" parameterClass="java.lang.Integer"
 	resultMap="useralbumiteminfo">
 		<![CDATA[

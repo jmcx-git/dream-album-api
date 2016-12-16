@@ -2,7 +2,6 @@
 
 package com.dream.album.service;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -30,25 +29,16 @@ public interface ImgService {
      */
     public UploadFileSaveResp handleUserUploadImg(MultipartFile image) throws ServiceException;
 
-    // public MergeImgFileResp mergeToPreviewImg(String editImePath, String
-    // localPath, AlbumItemInfo albumItemInfo,
-    // AlbumEditImgInfoModel model) throws ServiceException;
+    public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
+            AlbumEditImgInfoModel model) throws Exception;
 
     public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList, String type);
 
     public String getAlbumItemEditImgPath(AlbumItemInfo info);
 
+    public String getAlbumItemDefaultPreImgPath(AlbumItemInfo info);
+
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g);
 
-    //
-    // public MergeImgFileResp mergeToPreviewImg(int userId, String
-    // originBgImgPath, String userUploadOrginImgPath,
-    // AlbumEditImgInfoModel model, int uploadImgInDeviceWidth, int
-    // uploadImgInDeviceHeight,
-    // float userScaleImageX, float userScaleImageY, int imgInDeviceLeft, int
-    // imgInDeviceTop) throws IOException;
-
-    MergeImgFileResp mergeToPreviewImg(int userId, String originBgImgPath, String userUploadOrginImgPath,
-            AlbumEditImgInfoModel model) throws IOException;
-
+    public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g);
 }
