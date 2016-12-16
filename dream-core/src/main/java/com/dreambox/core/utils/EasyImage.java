@@ -463,7 +463,8 @@ public class EasyImage {
             g.dispose();
             int height_i = 0;
             for (int i = 0; i < images.length; i++) {
-                ImageNew.setRGB(0, height_i, dst_width, images[i].getHeight(), imageArrays[i], 0, dst_width);
+                ImageNew.setRGB(0, height_i, images[i].getWidth(), images[i].getHeight(), imageArrays[i], 0,
+                        images[i].getWidth());
                 height_i += images[i].getHeight();
             }
             File outFile = new File(dst_pic);
@@ -533,9 +534,11 @@ public class EasyImage {
                     width_i = max_width + 40 - max_width / 2;
                 }
                 if (i % 2 == 0) {
-                    ImageNew.setRGB(width_i, height_i, max_width, max_height, imageArrays[i], 0, max_width);
+                    ImageNew.setRGB(width_i, height_i, images[i].getWidth(), images[i].getHeight(), imageArrays[i], 0,
+                            images[i].getWidth());
                 } else {
-                    ImageNew.setRGB(width_i2, height_i, max_width, max_height, imageArrays[i], 0, max_width);
+                    ImageNew.setRGB(width_i2, height_i, images[i].getWidth(), images[i].getHeight(), imageArrays[i], 0,
+                            images[i].getWidth());
                     height_i += max_height + 40;
                 }
             }

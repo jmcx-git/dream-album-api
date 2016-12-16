@@ -116,6 +116,11 @@ public class ImgServiceImpl implements ImgService {
     }
 
     @Override
+    public String getAlbumItemDefaultPreImgPath(String url) {
+        return StringUtils.replace(url, this.albumItemEditImgUrlPrefix, this.albumItemEditImgLocalDir);
+    }
+
+    @Override
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g) {
         String previewImgUrl = g.getPreviewImgUrl();
         return previewImgUrl.replace(userAlbumItemPreviewImgUrlPrefix, userAlbumItemPreviewImgLocalDir);
@@ -125,5 +130,10 @@ public class ImgServiceImpl implements ImgService {
     public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g) {
         String userOriginImgUrl = g.getUserOriginImgUrl();
         return userOriginImgUrl.replace(userAlbumItemUploadImgPrefixUrl, userAlbumItemUploadImgLocalPath);
+    }
+
+    @Override
+    public boolean isTemplatePreviewImg(UserAlbumItemInfo g) {
+        return g.getPreviewImgUrl().startsWith(albumItemEditImgUrlPrefix);
     }
 }

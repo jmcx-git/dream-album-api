@@ -110,4 +110,9 @@ public class AlbumItemInfoServiceImpl extends AlbumItemInfoService {
         return imgService.getAlbumItemDefaultPreImgPath(info);
     }
 
+    @Override
+    public String getDefaultPreImgPath(String url) {
+        return imgService.getAlbumItemDefaultPreImgPath(url);
+    }
+
 }

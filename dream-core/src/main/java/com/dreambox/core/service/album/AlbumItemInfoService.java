@@ -17,4 +17,6 @@ public abstract class AlbumItemInfoService extends AbstractSortedListCacheServic
     public abstract String getEditImgPath(AlbumItemInfo info);
 
     public abstract String getDefaultPreImgPath(AlbumItemInfo info);
+
+    public abstract String getDefaultPreImgPath(String url);
 }

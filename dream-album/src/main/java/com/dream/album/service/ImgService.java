@@ -38,7 +38,11 @@ public interface ImgService {
 
     public String getAlbumItemDefaultPreImgPath(AlbumItemInfo info);
 
+    public String getAlbumItemDefaultPreImgPath(String url);
+
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g);
 
     public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g);
+
+    public boolean isTemplatePreviewImg(UserAlbumItemInfo g);
 }
