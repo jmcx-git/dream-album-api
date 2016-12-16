@@ -12,11 +12,11 @@ public class JoinImgFileResp {
     private boolean joined;
     private String errmsg;
 
-    public JoinImgFileResp(String localPath, String urlPath) {
+    public JoinImgFileResp(String localPath, String urlPath, boolean joined) {
         super();
         this.localPath = localPath;
         this.urlPath = urlPath;
-        this.joined = true;
+        this.joined = joined;
     }
 
     public String getLocalPath() {
