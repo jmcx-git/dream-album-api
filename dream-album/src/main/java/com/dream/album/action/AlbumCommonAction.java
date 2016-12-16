@@ -345,24 +345,42 @@ public class AlbumCommonAction extends IosBaseAction {
 
     @RequestMapping("/getpreview.json")
     @ResponseBody
-    public PreviewWrapModel getProductPre(Integer userAlbumId) {
-        if (userAlbumId == null) {
+    public PreviewWrapModel getProductPre(Integer userAlbumId, Integer albumId) {
+        if (albumId == null && userAlbumId == null) {
             return null;
-        }
-        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
-        if (userAlbumInfo == null) {
-            return null;
-        }
-        UserAlbumItemInfo g = new UserAlbumItemInfo();
-        g.setUserAlbumId(userAlbumId);
-        List<UserAlbumItemInfo> listDirectFromDb = userAlbumItemInfoService.listDirectFromDb(g);
-        List<String> list = new ArrayList<String>();
-        for (UserAlbumItemInfo userAlbumItemInfo : listDirectFromDb) {
-            list.add(userAlbumItemInfo.getPreviewImgUrl());
         }
         PreviewWrapModel model = new PreviewWrapModel();
-        model.setLoopPreImgs(list);
-        model.setBigPreImg(userAlbumInfo.getPriviewImg());
+        if (albumId != null) {
+            AlbumInfo album = albumInfoService.getDirectFromDb(albumId);
+            if (album == null) {
+                return null;
+            }
+            AlbumItemInfo g = new AlbumItemInfo();
+            g.setAlbumId(albumId);
+            g.setStatus(AlbumItemInfo.STATUS_OK);
+            List<AlbumItemInfo> itemInfos = albumItemInfoService.listDirectFromDb(g);
+            List<String> list = new ArrayList<String>();
+            for (AlbumItemInfo itemInfo : itemInfos) {
+                list.add(itemInfo.getEditImgUrl());
+            }
+            model.setLoopPreImgs(list);
+            model.setBigPreImg(album.getPriviewImg());
+        } else {
+            UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
+            if (userAlbumInfo == null) {
+                return null;
+            }
+            UserAlbumItemInfo g = new UserAlbumItemInfo();
+            g.setUserAlbumId(userAlbumId);
+            List<UserAlbumItemInfo> listDirectFromDb = userAlbumItemInfoService.listDirectFromDb(g);
+            List<String> list = new ArrayList<String>();
+            for (UserAlbumItemInfo userAlbumItemInfo : listDirectFromDb) {
+                list.add(userAlbumItemInfo.getPreviewImgUrl());
+            }
+            model.setLoopPreImgs(list);
+            model.setBigPreImg(userAlbumInfo.getPriviewImg());
+        }
+
         return model;
     }
 }
