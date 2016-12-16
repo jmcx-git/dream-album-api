@@ -316,12 +316,13 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/myalbum.json")
     @ResponseBody
-    public List<MyAlbumModel> getMyAlbumList(Integer userId) {
-        if (userId == null || userId <= 0) {
+    public List<MyAlbumModel> getMyAlbumList(String userId) {
+        if (StringUtils.isBlank(userId)) {
             return null;
         }
+        Integer uid = Integer.valueOf(userId);
         UserAlbumInfo info = new UserAlbumInfo();
-        info.setUserId(userId);
+        info.setUserId(uid);
         // 获取该userId已完成的相册
         info.setComplete(1);
         List<UserAlbumInfo> listDirectFromDb = userAlbumInfoService.listDirectFromDb(info);
