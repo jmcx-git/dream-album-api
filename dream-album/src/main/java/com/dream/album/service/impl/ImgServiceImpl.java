@@ -52,6 +52,12 @@ public class ImgServiceImpl implements ImgService {
     private String albumItemEditImgUrlPrefix = "";
     @Value("${dream.album.albumitemeditimglocaldir}")
     private String albumItemEditImgLocalDir = "";
+    
+    // @Value("${dream.album.albumitempreiviewmgurlprefix}")
+    // private String albumItemPreviewImgUrlPrefix = "";
+    // @Value("${dream.album.albumitempreviewimglocaldir}")
+    // private String albumItemPreviewImgLocalDir = "";
+    
 
     @Value("${dream.album.imghandletmppath}")
     private String imgHandleTmpPath = "";
