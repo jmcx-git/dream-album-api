@@ -81,16 +81,17 @@ public class AlbumCommonAction extends IosBaseAction {
             info.setKeyword("%" + keyword + "%");
             infos = albumInfoService.listDirectFromDb(info, start, size);
         }
-        List<Integer> albumId = userAlbumCollectInfoService.getCollectAlbumInfoId(userId);
-        if (albumId != null && albumId.size() > 0) {
-            for (AlbumInfo g : infos) {
-                if (albumId.contains(g.getId())) {
-                    g.setCollect(1);
-                } else {
-                    g.setCollect(0);
-                }
-            }
-        }
+        // List<Integer> albumId =
+        // userAlbumCollectInfoService.getCollectAlbumInfoId(userId);
+        // if (albumId != null && albumId.size() > 0) {
+        // for (AlbumInfo g : infos) {
+        // if (albumId.contains(g.getId())) {
+        // g.setCollect(1);
+        // } else {
+        // g.setCollect(0);
+        // }
+        // }
+        // }
         model.setAlbumList(infos);
         return model;
     }
