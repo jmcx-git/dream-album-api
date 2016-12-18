@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Required;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +23,7 @@ import com.dream.album.model.UserMakeAlbumInfo;
 import com.dream.album.service.ImgService;
 import com.dreambox.core.dto.album.AlbumInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
+import com.dreambox.core.dto.album.CompleteEnum;
 import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.service.album.AlbumInfoService;
@@ -121,6 +121,7 @@ public class AlbumCommonAction extends IosBaseAction {
         if (userAlbumInfo == null) {
             // 新建记录
             userAlbumInfoService.addData(info);
+            info.setComplete(CompleteEnum.INIT.getStatus());
             userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
         } else {
             // 根据查到的记录获取用户相册信息id

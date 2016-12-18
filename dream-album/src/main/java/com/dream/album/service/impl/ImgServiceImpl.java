@@ -52,12 +52,12 @@ public class ImgServiceImpl implements ImgService {
     private String albumItemEditImgUrlPrefix = "";
     @Value("${dream.album.albumitemeditimglocaldir}")
     private String albumItemEditImgLocalDir = "";
-    
+
     // @Value("${dream.album.albumitempreiviewmgurlprefix}")
     // private String albumItemPreviewImgUrlPrefix = "";
     // @Value("${dream.album.albumitempreviewimglocaldir}")
     // private String albumItemPreviewImgLocalDir = "";
-    
+
 
     @Value("${dream.album.imghandletmppath}")
     private String imgHandleTmpPath = "";
@@ -86,8 +86,9 @@ public class ImgServiceImpl implements ImgService {
         String picName = "album_item_pre_" + new Date().getTime() + ".png";
         try {
             img.mergeBothImage(editImePath, localPath, model.getCssElmMoveX(), model.getCssElmMoveY(),
-                    model.getCssElmWidth(), model.getCssElmHeight(), model.getCssElmRotate(),
-                    userAlbumItemPreviewImgLocalDir + picName);
+                    model.getCssElmWidth(), model.getCssElmHeight(),
+                    model.getCssElmRotate() == null ? 0 : model.getCssElmRotate(), userAlbumItemPreviewImgLocalDir
+                            + picName);
         } catch (IOException e) {
             log.info(e.getMessage());
             throw e;
