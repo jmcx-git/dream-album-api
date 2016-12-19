@@ -21,7 +21,7 @@ public class UserAlbumInfo extends DbStatus {
     @SELECT_ALL_KEY
     @ZERO_ENABLE
     private int complete;// 是否生成了相册
-    private String priviewImg;// 在用户户生成完相册后根据信息生成预览图
+    private String previewImg;// 在用户户生成完相册后根据信息生成预览图
 
     public UserAlbumInfo() {
         super();
@@ -74,12 +74,12 @@ public class UserAlbumInfo extends DbStatus {
         this.complete = complete;
     }
 
-    public String getPriviewImg() {
-        return priviewImg;
+    public String getPreviewImg() {
+        return previewImg;
     }
 
-    public void setPriviewImg(String priviewImg) {
-        this.priviewImg = priviewImg;
+    public void setPreviewImg(String previewImg) {
+        this.previewImg = previewImg;
     }
 
 }

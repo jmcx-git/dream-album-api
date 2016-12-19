@@ -18,7 +18,7 @@ public class AlbumInfo extends DbStatus {
     private String keyword;
     private int totalItems;
     private String cover;// 封面图
-    private String priviewImg;// 预览图
+    private String previewImg;// 预览图
 
     private int collect;
 
@@ -62,20 +62,20 @@ public class AlbumInfo extends DbStatus {
         this.cover = cover;
     }
 
-    public String getPriviewImg() {
-        return priviewImg;
-    }
-
-    public void setPriviewImg(String priviewImg) {
-        this.priviewImg = priviewImg;
-    }
-
     public int getCollect() {
         return collect;
     }
 
     public void setCollect(int collect) {
         this.collect = collect;
+    }
+
+    public String getPreviewImg() {
+        return previewImg;
+    }
+
+    public void setPreviewImg(String previewImg) {
+        this.previewImg = previewImg;
     }
 
 

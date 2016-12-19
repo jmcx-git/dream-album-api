@@ -9,7 +9,7 @@ public class MyAlbumModel {
     private int albumId;// 相册
     private String title;
     private String cover;// 封面图
-    private String priviewImg;// 预览图
+    private String previewImg;// 预览图
 
     private int userAlbumId;// 用户相册Id
     private int step;
@@ -39,14 +39,6 @@ public class MyAlbumModel {
 
     public void setCover(String cover) {
         this.cover = cover;
-    }
-
-    public String getPriviewImg() {
-        return priviewImg;
-    }
-
-    public void setPriviewImg(String priviewImg) {
-        this.priviewImg = priviewImg;
     }
 
     public int getUserAlbumId() {
@@ -79,5 +71,13 @@ public class MyAlbumModel {
 
     public void setProductImg(String productImg) {
         this.productImg = productImg;
+    }
+
+    public String getPreviewImg() {
+        return previewImg;
+    }
+
+    public void setPreviewImg(String previewImg) {
+        this.previewImg = previewImg;
     }
 }

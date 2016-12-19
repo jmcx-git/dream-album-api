@@ -220,7 +220,7 @@ public class AlbumCommonAction extends IosBaseAction {
             // 完成相册制作
             if (joinImgFileResp.isJoined()) {
                 userAlbumInfo.setComplete(1);
-                userAlbumInfo.setPriviewImg(joinImgFileResp.getUrlPath());
+                userAlbumInfo.setPreviewImg(joinImgFileResp.getUrlPath());
                 userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbumInfo);
                 return new ApiRespWrapper<String>(0, "相册生成成功!", joinImgFileResp.getUrlPath());
             }
@@ -305,7 +305,7 @@ public class AlbumCommonAction extends IosBaseAction {
             // 完成相册制作
             if (joinImgFileResp.isJoined()) {
                 userAlbumInfo.setComplete(1);
-                userAlbumInfo.setPriviewImg(joinImgFileResp.getUrlPath());
+                userAlbumInfo.setPreviewImg(joinImgFileResp.getUrlPath());
                 userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbumInfo);
                 return new ApiRespWrapper<String>(0, "相册生成成功!", joinImgFileResp.getUrlPath());
             }
@@ -345,11 +345,11 @@ public class AlbumCommonAction extends IosBaseAction {
             model.setAlbumId(albumInfo.getId());
             model.setTitle(albumInfo.getTitle());
             model.setCover(item != null ? item.getPreviewImgUrl() : albumInfo.getCover());
-            model.setPriviewImg(albumInfo.getPriviewImg());
+            model.setPreviewImg(albumInfo.getPreviewImg());
             model.setUserAlbumId(userAlbumInfo.getId());
             model.setStep(userAlbumInfo.getStep());
             model.setComplete(userAlbumInfo.getComplete());
-            model.setProductImg(userAlbumInfo.getPriviewImg());
+            model.setProductImg(userAlbumInfo.getPreviewImg());
             resultData.add(model);
         }
         return resultData;
@@ -376,7 +376,7 @@ public class AlbumCommonAction extends IosBaseAction {
                 list.add(itemInfo.getPreviewImgUrl());
             }
             model.setLoopPreImgs(list);
-            model.setBigPreImg(album.getPriviewImg());
+            model.setBigPreImg(album.getPreviewImg());
         } else {
             UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
             if (userAlbumInfo == null) {
@@ -390,7 +390,7 @@ public class AlbumCommonAction extends IosBaseAction {
                 list.add(userAlbumItemInfo.getPreviewImgUrl());
             }
             model.setLoopPreImgs(list);
-            model.setBigPreImg(userAlbumInfo.getPriviewImg());
+            model.setBigPreImg(userAlbumInfo.getPreviewImg());
         }
 
         return model;
