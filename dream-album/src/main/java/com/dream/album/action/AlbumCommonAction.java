@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ import com.dream.album.model.UserMakeAlbumInfo;
 import com.dream.album.service.ImgService;
 import com.dreambox.core.dto.album.AlbumInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
+import com.dreambox.core.dto.album.CompleteEnum;
 import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.service.album.AlbumInfoService;
@@ -119,6 +121,7 @@ public class AlbumCommonAction extends IosBaseAction {
         if (userAlbumInfo == null) {
             // 新建记录
             userAlbumInfoService.addData(info);
+            info.setComplete(CompleteEnum.INIT.getStatus());
             userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
         } else {
             // 根据查到的记录获取用户相册信息id
@@ -145,7 +148,8 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadalbumpage.json")
     @ResponseBody
-    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image, Integer userAlbumId, Integer albumItemId,
+    public ApiRespWrapper<String> uploadUserAlbumItem(MultipartFile image,
+            @RequestParam(required = true) Integer userAlbumId, @RequestParam(required = true) Integer albumItemId,
             Integer cssElmMoveX, Integer cssElmMoveY, Integer cssElmRotate, Integer cssElmWidth, Integer cssElmHeight) {
         if (userAlbumId == null || userAlbumId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "userId不能为空!");
@@ -205,9 +209,14 @@ public class AlbumCommonAction extends IosBaseAction {
             AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
             prwImgList.add(albumItemInfoService.getEditImgPath(uk));
             for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
-                prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(userAlbumItemInfo));
+                if (imgService.isTemplatePreviewImg(userAlbumItemInfo)) {
+                    prwImgList.add(albumItemInfoService.getDefaultPreImgPath(userAlbumItemInfo.getPreviewImgUrl()));
+                } else {
+                    prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(userAlbumItemInfo));
+                }
             }
-            JoinImgFileResp joinImgFileResp = imgService.joinPreviewImg(userAlbumInfo.getId(), prwImgList, "png");
+            JoinImgFileResp joinImgFileResp = imgService.joinPreviewImg(userAlbumInfo.getUserId(), prwImgList, "png");
+
             // 完成相册制作
             if (joinImgFileResp.isJoined()) {
                 userAlbumInfo.setComplete(1);
@@ -264,17 +273,9 @@ public class AlbumCommonAction extends IosBaseAction {
             String imgCssInfo = GsonUtils.toJson(model);
             ua.setEditImgInfos(imgCssInfo);
 
-            // 根据模版数据生成该页的预览图
-            MergeImgFileResp mergeImgFileResp;
-            try {
-                AlbumEditImgInfoModel albumItemModel = GsonUtils.fromJsonStr(albumItemInfo.getEditImgInfos(),
-                        AlbumEditImgInfoModel.class);
-                mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImgPath(albumItemInfo),
-                        albumItemInfoService.getDefaultPreImgPath(albumItemInfo), albumItemInfo, albumItemModel);
-                ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
-            } catch (Exception e) {
-                return new ApiRespWrapper<String>(-1, "合成预览图出错! errMsg:" + e.getMessage());
-            }
+            // 将模版默认预览图赋值进去
+            ua.setPreviewImgUrl(albumItemInfo.getPreviewImgUrl());
+
             userAlbumItemInfoService.addData(ua);
             // 更新该用户相册操作到第几步
             userAlbumInfo.setStep(albumItemInfo.getRank());
@@ -293,10 +294,14 @@ public class AlbumCommonAction extends IosBaseAction {
             g.setRank(0);
             AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
             prwImgList.add(albumItemInfoService.getEditImgPath(uk));
-            for (UserAlbumItemInfo info : uaItems) {
-                prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(info));
+            for (UserAlbumItemInfo uaii : uaItems) {
+                if (imgService.isTemplatePreviewImg(uaii)) {
+                    prwImgList.add(albumItemInfoService.getDefaultPreImgPath(uaii.getPreviewImgUrl()));
+                } else {
+                    prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(uaii));
+                }
             }
-            JoinImgFileResp joinImgFileResp = imgService.joinPreviewImg(userAlbumInfo.getId(), prwImgList, "png");
+            JoinImgFileResp joinImgFileResp = imgService.joinPreviewImg(userAlbumInfo.getUserId(), prwImgList, "png");
             // 完成相册制作
             if (joinImgFileResp.isJoined()) {
                 userAlbumInfo.setComplete(1);
@@ -329,12 +334,17 @@ public class AlbumCommonAction extends IosBaseAction {
         List<UserAlbumInfo> listDirectFromDb = userAlbumInfoService.listDirectFromDb(info);
         List<MyAlbumModel> resultData = new ArrayList<MyAlbumModel>();
         // 拼装数据
+        UserAlbumItemInfo g = new UserAlbumItemInfo();
         for (UserAlbumInfo userAlbumInfo : listDirectFromDb) {
             MyAlbumModel model = new MyAlbumModel();
             AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
+            g.setUserAlbumId(userAlbumInfo.getId());
+            g.setAlbumId(userAlbumInfo.getAlbumId());
+            g.setRank(1);
+            UserAlbumItemInfo item = userAlbumItemInfoService.getUserAlbumItemInfoByUk(g);
             model.setAlbumId(albumInfo.getId());
             model.setTitle(albumInfo.getTitle());
-            model.setCover(albumInfo.getCover());
+            model.setCover(item != null ? item.getPreviewImgUrl() : albumInfo.getCover());
             model.setPriviewImg(albumInfo.getPriviewImg());
             model.setUserAlbumId(userAlbumInfo.getId());
             model.setStep(userAlbumInfo.getStep());
@@ -363,7 +373,7 @@ public class AlbumCommonAction extends IosBaseAction {
             List<AlbumItemInfo> itemInfos = albumItemInfoService.listDirectFromDb(g);
             List<String> list = new ArrayList<String>();
             for (AlbumItemInfo itemInfo : itemInfos) {
-                list.add(itemInfo.getEditImgUrl());
+                list.add(itemInfo.getPreviewImgUrl());
             }
             model.setLoopPreImgs(list);
             model.setBigPreImg(album.getPriviewImg());

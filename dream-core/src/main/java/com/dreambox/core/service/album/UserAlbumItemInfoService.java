@@ -12,7 +12,7 @@ import com.dreambox.web.exception.ServiceException;
  */
 public abstract class UserAlbumItemInfoService extends AbstractSortedListCacheService<UserAlbumItemInfo> {
     public abstract String getPreviewImgPath(UserAlbumItemInfo g);
-    
+
     public abstract String getUserOriginImgPath(UserAlbumItemInfo g);
 
     public abstract UserAlbumItemInfo getUserAlbumItemInfoByUk(UserAlbumItemInfo info) throws ServiceException;
