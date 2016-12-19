@@ -2,6 +2,8 @@
 
 package com.dreambox.core.dto.album;
 
+import com.dreambox.core.DbField.SELECT_ALL_KEY;
+import com.dreambox.core.DbField.ZERO_ENABLE;
 import com.dreambox.core.DbStatus;
 
 /**
@@ -19,6 +21,8 @@ public class UserAlbumItemInfo extends DbStatus {
     private int albumItemId;
     private String userOriginImgUrl;// 用户上传的原始图片的地址
     private String previewImgUrl;// 用户编辑完后生成的预览图片地址
+    @ZERO_ENABLE
+    @SELECT_ALL_KEY
     private int rank; // 在album中所有图片的第几张
     private String editImgInfos;// json 【css arrtibute json object】
     private String editTextInfos;// json【css arrtibute json object】

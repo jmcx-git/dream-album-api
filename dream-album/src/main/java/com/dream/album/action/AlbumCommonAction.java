@@ -203,11 +203,11 @@ public class AlbumCommonAction extends IosBaseAction {
             List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
             // 获取用户相册所有的单页预览图
             List<String> prwImgList = new ArrayList<String>();
-            AlbumItemInfo g = new AlbumItemInfo();
-            g.setAlbumId(albumInfo.getId());
-            g.setRank(0);
-            AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
-            prwImgList.add(albumItemInfoService.getEditImgPath(uk));
+            // AlbumItemInfo g = new AlbumItemInfo();
+            // g.setAlbumId(albumInfo.getId());
+            // g.setRank(0);
+            // AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
+            // prwImgList.add(albumItemInfoService.getEditImgPath(uk));
             for (UserAlbumItemInfo userAlbumItemInfo : uaItems) {
                 if (imgService.isTemplatePreviewImg(userAlbumItemInfo)) {
                     prwImgList.add(albumItemInfoService.getDefaultPreImgPath(userAlbumItemInfo.getPreviewImgUrl()));
@@ -289,11 +289,11 @@ public class AlbumCommonAction extends IosBaseAction {
             List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
             // 获取用户相册所有的单页预览图
             List<String> prwImgList = new ArrayList<String>();
-            AlbumItemInfo g = new AlbumItemInfo();
-            g.setAlbumId(albumInfo.getId());
-            g.setRank(0);
-            AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
-            prwImgList.add(albumItemInfoService.getEditImgPath(uk));
+            // AlbumItemInfo g = new AlbumItemInfo();
+            // g.setAlbumId(albumInfo.getId());
+            // g.setRank(0);
+            // AlbumItemInfo uk = albumItemInfoService.getAlbumItemInfoByUk(g);
+            // prwImgList.add(albumItemInfoService.getEditImgPath(uk));
             for (UserAlbumItemInfo uaii : uaItems) {
                 if (imgService.isTemplatePreviewImg(uaii)) {
                     prwImgList.add(albumItemInfoService.getDefaultPreImgPath(uaii.getPreviewImgUrl()));
@@ -340,7 +340,7 @@ public class AlbumCommonAction extends IosBaseAction {
             AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
             g.setUserAlbumId(userAlbumInfo.getId());
             g.setAlbumId(userAlbumInfo.getAlbumId());
-            g.setRank(1);
+            g.setRank(0);
             UserAlbumItemInfo item = userAlbumItemInfoService.getUserAlbumItemInfoByUk(g);
             model.setAlbumId(albumInfo.getId());
             model.setTitle(albumInfo.getTitle());

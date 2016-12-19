@@ -445,8 +445,6 @@ public class EasyImage {
                 dst_width = dst_width > images[i].getWidth() ? dst_width : images[i].getWidth();
                 dst_height += images[i].getHeight();
             }
-            // System.out.println(dst_width);
-            // System.out.println(dst_height);
             if (dst_height < 1) {
                 System.out.println("dst_height < 1");
                 return false;
@@ -454,13 +452,8 @@ public class EasyImage {
             /*
              * 生成新图片
              */
-            BufferedImage ImageNew = new BufferedImage(dst_width, dst_height, BufferedImage.TYPE_INT_RGB);
+            BufferedImage ImageNew = new BufferedImage(dst_width, dst_height, BufferedImage.TYPE_INT_ARGB);
 
-            // 设置背景色透明
-            Graphics2D g = (Graphics2D) ImageNew.getGraphics();
-            ImageNew = g.getDeviceConfiguration()
-                    .createCompatibleImage(dst_width, dst_height, Transparency.TRANSLUCENT);
-            g.dispose();
             int height_i = 0;
             for (int i = 0; i < images.length; i++) {
                 ImageNew.setRGB(0, height_i, images[i].getWidth(), images[i].getHeight(), imageArrays[i], 0,
@@ -471,12 +464,12 @@ public class EasyImage {
             if (!outFile.exists()) {
                 outFile.mkdirs();
             }
-            ImageIO.write(ImageNew, type, outFile);// 写图片
+            boolean write = ImageIO.write(ImageNew, type, outFile);// 写图片
+            return write;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
     }
 
     /**

@@ -3,10 +3,13 @@ package com.dreambox.core.utils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Transparency;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,6 +18,10 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 
 /**
@@ -216,6 +223,7 @@ public class ImagePsUtils {
      * @param height 覆盖的图片高
      * @throws IOException
      */
+    @SuppressWarnings("restriction")
     public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, int width, int height,
             int degree, String toPath) throws IOException {
         InputStream is = null;
@@ -228,16 +236,10 @@ public class ImagePsUtils {
             int w = image.getWidth();// 图片宽度
             int h = image.getHeight();// 图片高度
             // 从图片中读取RGB
-            BufferedImage imageNew = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+            BufferedImage imageNew = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
             imageNew.setRGB(0, 0, w, h, new int[w * h], 0, w);
-
             BufferedImage image2 = ImageIO.read(is2);
             Graphics2D gNew = (Graphics2D) imageNew.getGraphics();
-            // 设置背景透明
-            imageNew = gNew.getDeviceConfiguration().createCompatibleImage(w, h, Transparency.TRANSLUCENT);
-            gNew.dispose();
-
-            gNew = (Graphics2D) imageNew.getGraphics();
             // 旋转
             gNew.rotate(Math.toRadians(degree), x + width / 2, y + height / 2);
             gNew.drawImage(image2, x, y, width, height, null);
@@ -247,6 +249,31 @@ public class ImagePsUtils {
             // 1.0f));
             gNew.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
             gNew.drawImage(image, 0, 0, w, h, null);
+            // FileOutputStream out = new FileOutputStream(toPath);
+            // JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+            // JPEGEncodeParam jep =
+            // JPEGCodec.getDefaultJPEGEncodeParam(imageNew);
+            // jep.setQuality(0.8f, true);
+            // encoder.encode(imageNew, jep);
+            // out.close();
+
+            // BufferedImage sourceImage = ImageIO.read(new
+            // ByteArrayInputStream(imageNew));
+            // Image thumbnail =
+            // sourceImage.getScaledInstance(sourceImage.getWidth(),
+            // sourceImage.getHeight(),
+            // Image.SCALE_SMOOTH);
+            // BufferedImage bufferedThumbnail = new
+            // BufferedImage(thumbnail.getWidth(null),
+            // thumbnail.getHeight(null),
+            // sourceImage.getColorModel().hasAlpha() ?
+            // BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+            // bufferedThumbnail.getGraphics().drawImage(thumbnail, 0, 0, null);
+            // FileOutputStream output = new FileOutputStream(optFile);
+            // ImageIO.write(bufferedThumbnail, suffix, output);
+            // output.close();
+            // files.add(optFile);
+
             File outFile = new File(toPath);
             ImageIO.write(imageNew, "png", outFile);
         } catch (Exception e) {
@@ -265,16 +292,13 @@ public class ImagePsUtils {
     }
 
     public static void main(String[] args) {
-        EasyImage img = new EasyImage();
-        String[] pics = {
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/page.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/3.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/4.png" };
+        ImagePsUtils img = new ImagePsUtils();
         try {
-            img.joinImageListFourImg(pics, "png", "/Users/liuxinglong/Desktop/test.png");
-        } catch (Exception e) {
+            img.mergeBothImage(
+                    "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png",
+                    "/Users/liuxinglong/Desktop/证书/images/handsome.jpg", 110, 250, 560, 434, 0,
+                    "/Users/liuxinglong/Desktop/ss.png");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
