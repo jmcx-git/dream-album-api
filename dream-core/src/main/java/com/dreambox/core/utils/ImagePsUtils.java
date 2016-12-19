@@ -3,13 +3,9 @@ package com.dreambox.core.utils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -18,10 +14,6 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 
 import org.springframework.web.multipart.MultipartFile;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 
 /**
@@ -223,7 +215,6 @@ public class ImagePsUtils {
      * @param height 覆盖的图片高
      * @throws IOException
      */
-    @SuppressWarnings("restriction")
     public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, int width, int height,
             int degree, String toPath) throws IOException {
         InputStream is = null;
