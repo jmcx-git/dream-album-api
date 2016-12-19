@@ -1,0 +1,1 @@
+ alter table album_item_info add column `shadow_img_url` varchar(255) not null default '' after `preview_img_url`;

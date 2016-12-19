@@ -17,6 +17,7 @@ public class AlbumItemInfo extends DbStatus {
     private int albumId;
     private String editImgUrl;// 可编辑图片区域为透明区域人图片
     private String previewImgUrl;// 预览图
+    private String shadowImgUrl;// 阴影图
     private int imgWidth;// 模版图宽
     private int imgHeight;// 模版图高
     private int rank; // 在album中所有图片的第几张
@@ -102,5 +103,13 @@ public class AlbumItemInfo extends DbStatus {
 
     public void setImgHeight(int imgHeight) {
         this.imgHeight = imgHeight;
+    }
+
+    public String getShadowImgUrl() {
+        return shadowImgUrl;
+    }
+
+    public void setShadowImgUrl(String shadowImgUrl) {
+        this.shadowImgUrl = shadowImgUrl;
     }
 }
