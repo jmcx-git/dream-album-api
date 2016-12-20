@@ -195,7 +195,7 @@ public class AlbumCommonAction extends IosBaseAction {
         // 更新该用户相册操作到第几步
         userAlbumInfo.setStep(albumItemInfo.getRank());
         userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
-        if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
+        if (albumItemInfo.getRank() == albumInfo.getTotalItems()) {
             UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
             uaNew.setUserAlbumId(userAlbumInfo.getId());
             List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
@@ -267,7 +267,7 @@ public class AlbumCommonAction extends IosBaseAction {
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
         }
 
-        if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
+        if (albumItemInfo.getRank() == albumInfo.getTotalItems()) {
             UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
             uaNew.setUserAlbumId(userAlbumInfo.getId());
             // 根据用户信息id拉取用户相册最新的操作记录历史
@@ -284,6 +284,118 @@ public class AlbumCommonAction extends IosBaseAction {
                 userAlbumInfo.setPreviewImg(joinImgFileResp.getUrlPath());
                 userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbumInfo);
                 return new ApiRespWrapper<String>(0, "相册生成成功!", joinImgFileResp.getUrlPath());
+            }
+        }
+        return new ApiRespWrapper<String>(0, "数据添加成功!");
+    }
+
+    /**
+     * 
+     * 用户上传多张图片一次性生成相册
+     * 
+     * @param image
+     * @param userId
+     * @param albumId
+     * @param rank
+     * @param complete
+     * @return
+     */
+    @RequestMapping("/uploaduserimg.json")
+    @ResponseBody
+    public ApiRespWrapper<String> uploadAllImg(MultipartFile image, Integer userId, Integer albumId, Integer rank,
+            Integer complete) {
+        if (userId == null || userId.intValue() <= 0) {
+            return new ApiRespWrapper<String>(-1, "userId不能为空!");
+        }
+        if (albumId == null || albumId.intValue() <= 0) {
+            return new ApiRespWrapper<String>(-1, "albumId不能为空!");
+        }
+        if (rank == null || rank.intValue() < 0) {
+            return new ApiRespWrapper<String>(-1, "rank不能为空!");
+        }
+        UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
+        if (userAlbumInfo == null) {
+            // 新建记录
+            userAlbumInfoService.addData(info);
+            info.setComplete(CompleteEnum.INIT.getStatus());
+            userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
+        }
+        AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
+        if (albumInfo == null) {
+            return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + userAlbumInfo.getAlbumId() + "项的模版相关记录!");
+        }
+        AlbumItemInfo g = new AlbumItemInfo();
+        g.setAlbumId(albumId);
+        g.setRank(rank);
+        AlbumItemInfo albumItemInfo = albumItemInfoService.getAlbumItemInfoByUk(g);
+        if (albumItemInfo == null) {
+            return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumId + "的" + rank + "项的模版相关记录!");
+        }
+
+        UserAlbumItemInfo ua = new UserAlbumItemInfo();
+        ua.setUserAlbumId(userAlbumInfo.getId());
+        ua.setAlbumId(userAlbumInfo.getAlbumId());
+        ua.setRank(rank);// 在album中所有图片的第几张
+
+        UploadFileSaveResp uploadFileSaveResp = imgService.handleUserUploadImg(image);
+        ua.setUserOriginImgUrl(uploadFileSaveResp.getUrlPath());
+
+        // 根据已上传数据生成该页的预览图
+        MergeImgFileResp mergeImgFileResp;
+        try {
+            AlbumEditImgInfoModel albumItemModel = GsonUtils.fromJsonStr(albumItemInfo.getEditImgInfos(),
+                    AlbumEditImgInfoModel.class);
+            mergeImgFileResp = imgService.mergeToPreviewImg(albumItemInfoService.getEditImgPath(albumItemInfo),
+                    uploadFileSaveResp.getLocalPath(), albumItemInfo, albumItemModel);
+            ua.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
+        } catch (Exception e) {
+            return new ApiRespWrapper<String>(-1, "合成预览图出错! errMsg:" + e.getMessage());
+        }
+        userAlbumItemInfoService.addData(ua);// 保存操作数据至数据库
+        // 更新该用户相册操作到第几步
+        userAlbumInfo.setStep(albumItemInfo.getRank());
+        userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
+
+        if (complete != null && complete == 1) {
+            UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
+            uaNew.setUserAlbumId(userAlbumInfo.getId());
+            // 根据用户信息id拉取用户相册最新的操作记录历史
+            List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
+            if (uaItems.size() < albumInfo.getTotalItems()) {
+                // 差几张图
+                for (int i = 0; i < albumInfo.getTotalItems() - uaItems.size(); i++) {
+                    AlbumItemInfo item = new AlbumItemInfo();
+                    item.setAlbumId(albumId);
+                    item.setRank(uaItems.size() + i);
+                    AlbumItemInfo ite = albumItemInfoService.getAlbumItemInfoByUk(item);
+
+                    UserAlbumItemInfo a = new UserAlbumItemInfo();
+                    a.setUserAlbumId(userAlbumInfo.getId());
+                    a.setAlbumId(userAlbumInfo.getAlbumId());
+                    a.setRank(uaItems.size() + i);// 在album中所有图片的第几张
+                    // 将模版默认预览图赋值进去
+                    a.setPreviewImgUrl(ite.getPreviewImgUrl());
+
+                    userAlbumItemInfoService.addData(a);
+                    // 更新该用户相册操作到第几步
+                    userAlbumInfo.setStep(ite.getRank());
+                    userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
+                }
+            }
+            List<UserAlbumItemInfo> newUaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
+            // 获取用户相册所有的单页预览图
+            List<String> prwImgList = new ArrayList<String>();
+            for (UserAlbumItemInfo uaii : newUaItems) {
+                prwImgList.add(userAlbumItemInfoService.getPreviewImgPath(uaii));
+            }
+            JoinImgFileResp joinImgFileResp = imgService.joinPreviewImg(userAlbumInfo.getUserId(), prwImgList);
+            // 完成相册制作
+            if (joinImgFileResp.isJoined()) {
+                userAlbumInfo.setComplete(1);
+                userAlbumInfo.setPreviewImg(joinImgFileResp.getUrlPath());
+                userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbumInfo);
+                return new ApiRespWrapper<String>(0, "相册生成成功!", userAlbumInfo.getId() + "");
             }
         }
         return new ApiRespWrapper<String>(0, "数据添加成功!");
@@ -316,7 +428,7 @@ public class AlbumCommonAction extends IosBaseAction {
             AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
             g.setUserAlbumId(userAlbumInfo.getId());
             g.setAlbumId(userAlbumInfo.getAlbumId());
-            g.setRank(0);
+            g.setRank(1);
             UserAlbumItemInfo item = userAlbumItemInfoService.getUserAlbumItemInfoByUk(g);
             model.setAlbumId(albumInfo.getId());
             model.setTitle(albumInfo.getTitle());
