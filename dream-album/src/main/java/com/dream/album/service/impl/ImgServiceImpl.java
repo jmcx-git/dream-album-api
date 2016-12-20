@@ -80,9 +80,9 @@ public class ImgServiceImpl implements ImgService {
         String dir = IOUtils.spliceDirPath(IOUtils.spliceDirPath(imgLocalDir, userAlbumItemPreviewImgLocalDir), subDir);
         String filePath = IOUtils.spliceFileName(dir, picName);
         try {
-            ImagePsUtils.mergeImagesToJpg(editImePath, albumItemInfo.getImgWidth(), albumItemInfo.getImgHeight(),
-                    localPath, model.getCssElmMoveX(), model.getCssElmMoveY(), model.getCssElmWidth(),
-                    model.getCssElmHeight(), filePath);
+            ImagePsUtils.gracefulMergeImagesToJpg(editImePath, albumItemInfo.getImgWidth(),
+                    albumItemInfo.getImgHeight(), localPath, model.getCssElmMoveX(), model.getCssElmMoveY(),
+                    model.getCssElmWidth(), model.getCssElmHeight(), filePath);
         } catch (IOException e) {
             log.error("Merge image file to preview file faied. Errmsg:" + e.getMessage(), e);
             throw ServiceException.getInternalException("Merge image files failed.");
