@@ -32,7 +32,7 @@ public interface ImgService {
     public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
             AlbumEditImgInfoModel model) throws Exception;
 
-    public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList, String type);
+    public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList);
 
     public String getAlbumItemEditImgPath(AlbumItemInfo info);
 
@@ -44,5 +44,5 @@ public interface ImgService {
 
     public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g);
 
-    public boolean isTemplatePreviewImg(UserAlbumItemInfo g);
+    // public boolean isTemplatePreviewImg(UserAlbumItemInfo g);
 }
