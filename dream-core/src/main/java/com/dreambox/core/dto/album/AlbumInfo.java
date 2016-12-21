@@ -2,6 +2,8 @@
 
 package com.dreambox.core.dto.album;
 
+import java.util.List;
+
 import com.dreambox.core.DbStatus;
 
 /**
@@ -21,6 +23,7 @@ public class AlbumInfo extends DbStatus {
     private String previewImg;// 预览图
 
     private int collect;
+    private List<AlbumItemInfo> albumItemList;
 
     public int getId() {
         return id;
@@ -78,5 +81,12 @@ public class AlbumInfo extends DbStatus {
         this.previewImg = previewImg;
     }
 
+    public List<AlbumItemInfo> getAlbumItemList() {
+        return albumItemList;
+    }
+
+    public void setAlbumItemList(List<AlbumItemInfo> albumItemList) {
+        this.albumItemList = albumItemList;
+    }
 
 }
