@@ -195,7 +195,7 @@ public class AlbumCommonAction extends IosBaseAction {
         // 更新该用户相册操作到第几步
         userAlbumInfo.setStep(albumItemInfo.getRank());
         userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
-        if (albumItemInfo.getRank() == albumInfo.getTotalItems()) {
+        if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
             UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
             uaNew.setUserAlbumId(userAlbumInfo.getId());
             List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
@@ -267,7 +267,7 @@ public class AlbumCommonAction extends IosBaseAction {
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
         }
 
-        if (albumItemInfo.getRank() == albumInfo.getTotalItems()) {
+        if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
             UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
             uaNew.setUserAlbumId(userAlbumInfo.getId());
             // 根据用户信息id拉取用户相册最新的操作记录历史
@@ -428,7 +428,7 @@ public class AlbumCommonAction extends IosBaseAction {
             AlbumInfo albumInfo = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
             g.setUserAlbumId(userAlbumInfo.getId());
             g.setAlbumId(userAlbumInfo.getAlbumId());
-            g.setRank(1);
+            g.setRank(0);
             UserAlbumItemInfo item = userAlbumItemInfoService.getUserAlbumItemInfoByUk(g);
             model.setAlbumId(albumInfo.getId());
             model.setTitle(albumInfo.getTitle());
