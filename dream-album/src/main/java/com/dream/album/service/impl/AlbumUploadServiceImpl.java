@@ -104,6 +104,7 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             uaNew.setUserAlbumId(userAlbumInfo.getId());
             // 根据用户信息id拉取用户相册最新的操作记录历史
             List<UserAlbumItemInfo> uaItems = new ArrayList<UserAlbumItemInfo>();
+            int times = 0;
             do {
                 /**
                  * 控制一次上传多图并发时，只允许所有图片记录都生成以后才 制作海报预览图
@@ -114,13 +115,20 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
                 } else {
                     try {
                         Thread.sleep(2000);
+                        times++;
                     } catch (InterruptedException e) {
                         log.warn("thread sleep catch a error : " + e.getMessage());
                     }
                 }
-            } while (true);
+            } while (times < 10);
+            if (times >= 10) {
+                return new ApiRespWrapper<String>(-1, "相册生成失败,时间超时!");
+            }
             boolean success = joinUserAlbumImg(userAlbumInfo, uaItems);
             if (success) {
+                // 并发多时，可能step记录不准，若预览大图制作成功，直接修改step为最后一步(step暂无特殊用处)
+                userAlbumInfo.setStep(albumItemInfo.getRank());
+                userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
                 return new ApiRespWrapper<String>(0, "相册生成成功!", String.valueOf(userAlbumId));
             } else {
                 return new ApiRespWrapper<String>(-1, "相册生成失败!");

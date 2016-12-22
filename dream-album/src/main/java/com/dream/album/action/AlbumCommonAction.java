@@ -15,7 +15,6 @@ import com.dream.album.dto.AlbumHomePageModel;
 import com.dream.album.dto.MyAlbumModel;
 import com.dream.album.dto.PreviewWrapModel;
 import com.dream.album.model.AlbumEditImgInfoModel;
-import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.UserMakeAlbumInfo;
 import com.dream.album.service.AlbumUploadService;
 import com.dream.album.service.ImgService;
@@ -206,13 +205,16 @@ public class AlbumCommonAction extends IosBaseAction {
                 || albumItemId == null || albumItemId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "参数不合法!");
         }
-        UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
-        UserAlbumInfo userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
-        if (userAlbumInfo == null) {
-            // 新建记录
-            userAlbumInfoService.addData(info);
-            info.setComplete(CompleteEnum.INIT.getStatus());
+        UserAlbumInfo userAlbumInfo = null;
+        synchronized (this) {
+            UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
             userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
+            if (userAlbumInfo == null) {
+                // 新建记录
+                userAlbumInfoService.addData(info);
+                info.setComplete(CompleteEnum.INIT.getStatus());
+                userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
+            }
         }
         return albumUploadService.albumUploadHandle(image, userAlbumInfo.getId(), albumItemId, null,
                 AlbumUploadImgEnum.UPLOAD_IMG.getStatus());
@@ -236,13 +238,16 @@ public class AlbumCommonAction extends IosBaseAction {
                 || albumItemId == null || albumItemId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "参数不合法!");
         }
-        UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
-        UserAlbumInfo userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
-        if (userAlbumInfo == null) {
-            // 新建记录
-            userAlbumInfoService.addData(info);
-            info.setComplete(CompleteEnum.INIT.getStatus());
+        UserAlbumInfo userAlbumInfo = null;
+        synchronized (this) {
+            UserAlbumInfo info = new UserAlbumInfo(userId, albumId, 0);
             userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
+            if (userAlbumInfo == null) {
+                // 新建记录
+                userAlbumInfoService.addData(info);
+                info.setComplete(CompleteEnum.INIT.getStatus());
+                userAlbumInfo = userAlbumInfoService.findLatestUncompleteUserAlbum(info);
+            }
         }
         return albumUploadService.albumUploadHandle(null, userAlbumInfo.getId(), albumItemId, null,
                 AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus());
