@@ -100,14 +100,33 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
         }
 
         if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
-            boolean success = joinUserAlbumImg(userAlbumInfo);
+            UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
+            uaNew.setUserAlbumId(userAlbumInfo.getId());
+            // 根据用户信息id拉取用户相册最新的操作记录历史
+            List<UserAlbumItemInfo> uaItems = new ArrayList<UserAlbumItemInfo>();
+            do {
+                /**
+                 * 控制一次上传多图并发时，只允许所有图片记录都生成以后才 制作海报预览图
+                 */
+                uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
+                if (uaItems != null && uaItems.size() == albumInfo.getTotalItems()) {
+                    break;
+                } else {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        log.warn("thread sleep catch a error : " + e.getMessage());
+                    }
+                }
+            } while (true);
+            boolean success = joinUserAlbumImg(userAlbumInfo, uaItems);
             if (success) {
-                return new ApiRespWrapper<String>(0, "相册生成成功!");
+                return new ApiRespWrapper<String>(0, "相册生成成功!", String.valueOf(userAlbumId));
             } else {
                 return new ApiRespWrapper<String>(-1, "相册生成失败!");
             }
         }
-        return new ApiRespWrapper<String>(0, "数据添加成功!");
+        return new ApiRespWrapper<String>(0, "数据添加成功!", String.valueOf(userAlbumId));
     }
 
     /**
@@ -135,11 +154,7 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
      * 制作预览大图
      */
     @Override
-    public boolean joinUserAlbumImg(UserAlbumInfo info) {
-        UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
-        uaNew.setUserAlbumId(info.getId());
-        // 根据用户信息id拉取用户相册最新的操作记录历史
-        List<UserAlbumItemInfo> uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
+    public boolean joinUserAlbumImg(UserAlbumInfo info, List<UserAlbumItemInfo> uaItems) {
         // 获取用户相册所有的单页预览图
         List<String> prwImgList = new ArrayList<String>();
         for (UserAlbumItemInfo uaii : uaItems) {

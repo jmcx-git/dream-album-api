@@ -334,7 +334,6 @@ public class AlbumCommonAction extends IosBaseAction {
             model.setLoopPreImgs(list);
             model.setBigPreImg(userAlbumInfo.getPreviewImg());
         }
-
         return model;
     }
 }

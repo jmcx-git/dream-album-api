@@ -1,5 +1,7 @@
 package com.dream.album.service;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dream.album.model.AlbumEditImgInfoModel;
@@ -18,5 +20,5 @@ public interface AlbumUploadService {
 
     public boolean uploadAndMergeImg(UserAlbumItemInfo info, AlbumItemInfo item, MultipartFile image);
 
-    public boolean joinUserAlbumImg(UserAlbumInfo info);
+    public boolean joinUserAlbumImg(UserAlbumInfo info, List<UserAlbumItemInfo> uaItems);
 }
