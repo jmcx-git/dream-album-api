@@ -5,6 +5,7 @@
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
 		<result column="album_id" property="albumId" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
 		<result column="step" property="step" jdbcType="INTEGER" />
 		<result column="complete" property="complete" jdbcType="INTEGER" />
 		<result column="preview_img" property="previewImg" jdbcType="VARCHAR" />
@@ -14,16 +15,16 @@
 	</resultMap>
 	<insert id="insertOrUpdateUserAlbumInfo" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[
-		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`step`,`complete`,`preview_img`,
+		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`title`,`step`,`complete`,`preview_img`,
 		`status`,`update_time`,`create_time`)
-		VALUES(null, #userId#,#albumId#,#step#,#complete#,#previewImg#,0, now(),now())
+		VALUES(null, #userId#,#albumId#,#title#,#step#,#complete#,#previewImg#,0, now(),now())
 		]]>
 	</insert>
 	<insert id="insertOrIgnoreUserAlbumInfo" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[
-		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`step`,`complete`,`preview_img`,
+		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`title`,`step`,`complete`,`preview_img`,
 		`status`,`update_time`,`create_time`)
-		VALUES(null, #userId#,#albumId#,#step#,#complete#,#previewImg#,0, now(),now())
+		VALUES(null, #userId#,#albumId#,#title#,#step#,#complete#,#previewImg#,0, now(),now())
 		]]>
 	</insert>
 	<update id="updateUserAlbumInfoStep" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">

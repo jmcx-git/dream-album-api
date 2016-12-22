@@ -312,6 +312,7 @@ public class AlbumCommonAction extends IosBaseAction {
             }
             model.setLoopPreImgs(list);
             model.setBigPreImg(album.getPreviewImg());
+            model.setMakeComplete(true);
         } else {
             UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
             if (userAlbumInfo == null) {
@@ -323,6 +324,12 @@ public class AlbumCommonAction extends IosBaseAction {
             List<String> list = new ArrayList<String>();
             for (UserAlbumItemInfo userAlbumItemInfo : listDirectFromDb) {
                 list.add(userAlbumItemInfo.getPreviewImgUrl());
+            }
+            AlbumInfo album = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
+            if (list.size() == album.getTotalItems() && StringUtils.isNotBlank(userAlbumInfo.getPreviewImg())) {
+                model.setMakeComplete(true);
+            } else {
+                model.setMakeComplete(false);
             }
             model.setLoopPreImgs(list);
             model.setBigPreImg(userAlbumInfo.getPreviewImg());

@@ -17,6 +17,7 @@ public class UserAlbumInfo extends DbStatus {
     private int id;
     private int userId;// 用户id
     private int albumId;// 选用的相册模板
+    private String title;// 用户相册标题
     private int step;// 当前操作到第几步
     @SELECT_ALL_KEY
     @ZERO_ENABLE
@@ -82,4 +83,11 @@ public class UserAlbumInfo extends DbStatus {
         this.previewImg = previewImg;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
