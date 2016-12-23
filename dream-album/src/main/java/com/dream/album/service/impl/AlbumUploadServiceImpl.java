@@ -95,9 +95,6 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             // 更新该用户相册操作到第几步
             userAlbumInfo.setStep(albumItemInfo.getRank());
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
-        } else {
-            return new ApiRespWrapper<String>(-1, "图片上传异常,未找到合适的处理途径!", "uploadStatus:" + uploadStatus
-                    + ",image status:" + (image != null) + ",userAlbumItemInfo:" + (userAlbumItemInfo == null));
         }
 
         if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
