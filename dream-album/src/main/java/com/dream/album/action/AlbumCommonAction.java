@@ -133,6 +133,13 @@ public class AlbumCommonAction extends IosBaseAction {
         return new UserMakeAlbumInfo(userAlbumInfo, albumItemInfos, userAlbumItemInfos);
     }
 
+    /**
+     * 相册Lite版选取模版列表接口
+     * 
+     * @param start
+     * @param size
+     * @return
+     */
     @RequestMapping("/listalbums.json")
     @ResponseBody
     public List<AlbumInfo> selectAlbum(Integer start, Integer size) {
