@@ -22,7 +22,7 @@ import com.dream.album.model.UploadFileSaveResp;
 import com.dream.album.service.ImgService;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
-import com.dreambox.core.utils.EasyImage;
+import com.dreambox.core.utils.DateUtils;
 import com.dreambox.core.utils.ImagePsUtils;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.utils.IOUtils;
@@ -34,115 +34,98 @@ import com.dreambox.web.utils.IOUtils;
 @Service("imgService")
 public class ImgServiceImpl implements ImgService {
     private static final Logger log = Logger.getLogger(ImgServiceImpl.class);
-    @Value("${dream.album.useralbumitemuploadimgprefixurl}")
-    private String userAlbumItemUploadImgPrefixUrl;
+    @Value("${dream.album.imgprefixurl}")
+    private String imgPrefixUrl;
+    @Value("${dream.album.imglocaldir}")
+    private String imgLocalDir;
+
     @Value("${dream.album.useralbumitemuploadimglocaldir}")
     private String userAlbumItemUploadImgLocalDir;
 
-    @Value("${dream.album.useralbumitempreviewimgurlprefix}")
-    private String userAlbumItemPreviewImgUrlPrefix = "";
     @Value("${dream.album.useralbumitempreviewimglocaldir}")
     private String userAlbumItemPreviewImgLocalDir = "";
-
-    @Value("${dream.album.useralbumpriviewimgprefixurl}")
-    private String userAlbumPriviewImgPrefixUrl;
-    @Value("${dream.album.useralbumpriviewimglocaldir}")
+    @Value("${dream.album.useralbumpreviewimglocaldir}")
     private String userAlbumPriviewImgLocalDir;
-
-    @Value("${dream.album.albumitemeditimgurlprefix}")
-    private String albumItemEditImgUrlPrefix = "";
     @Value("${dream.album.albumitemeditimglocaldir}")
     private String albumItemEditImgLocalDir = "";
-
-    @Value("${dream.album.albumitempreiviewmgurlprefix}")
-    private String albumItemPreviewImgUrlPrefix = "";
     @Value("${dream.album.albumitempreviewimglocaldir}")
     private String albumItemPreviewImgLocalDir = "";
-
-
-    @Value("${dream.album.imghandletmppath}")
-    private String imgHandleTmpPath = "";
-
 
     @Override
     public UploadFileSaveResp handleUserUploadImg(MultipartFile image) throws ServiceException {
         // 保存用户自己上传的图片
-        String picName = "album_user_" + new Date().getTime() + ".png";
-        File outputfile = new File(userAlbumItemUploadImgLocalDir + picName);
+        String suffix = IOUtils.getSuffix(image.getName());
+        suffix = StringUtils.isEmpty(suffix) ? ".png" : suffix;
+        String picName = "album_user_" + new Date().getTime() + suffix;
+        String subDir = DateUtils.getTodayYmd();
+        String dir = IOUtils.spliceDirPath(IOUtils.spliceDirPath(imgLocalDir, userAlbumItemUploadImgLocalDir), subDir);
+        String filePath = IOUtils.spliceFileName(dir, picName);
+        File outputfile = new File(filePath);
+        outputfile.mkdirs();
         try {
-            ImageIO.write(ImageIO.read(image.getInputStream()), "png", outputfile);
+            ImageIO.write(ImageIO.read(image.getInputStream()), suffix.substring(1), outputfile);
             outputfile.setReadable(true, false);
         } catch (IOException e) {
-            log.info(e.getMessage());
+            log.info("Save user upload file failed. Image path:" + filePath + ", Errmsg:" + e.getMessage(), e);
+            throw ServiceException.getInternalException("Save user upload file failed.");
         }
-        String picUrl = userAlbumItemUploadImgPrefixUrl + picName;
-        return new UploadFileSaveResp(outputfile.getPath(), picUrl);
+        return new UploadFileSaveResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
     }
 
     @Override
     public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
             AlbumEditImgInfoModel model) throws Exception {
-        // Integer cssImgHeight = Math.round((float) (model.getCssImgHeight() *
-        // yTimes + 0.5));
-        ImagePsUtils img = new ImagePsUtils();
-        String picName = "album_item_pre_" + new Date().getTime() + ".png";
+        String picName = "album_item_pre_" + new Date().getTime() + ".jpg";
+        String subDir = DateUtils.getTodayYmd();
+        String dir = IOUtils.spliceDirPath(IOUtils.spliceDirPath(imgLocalDir, userAlbumItemPreviewImgLocalDir), subDir);
+        String filePath = IOUtils.spliceFileName(dir, picName);
         try {
-            img.mergeBothImage(editImePath, localPath, model.getCssElmMoveX(), model.getCssElmMoveY(),
-                    model.getCssElmWidth(), model.getCssElmHeight(),
-                    model.getCssElmRotate() == null ? 0 : model.getCssElmRotate(), userAlbumItemPreviewImgLocalDir
-                            + picName);
+            ImagePsUtils.gracefulMergeImagesToJpg(editImePath, albumItemInfo.getImgWidth(),
+                    albumItemInfo.getImgHeight(), localPath, model.getCssElmMoveX(), model.getCssElmMoveY(),
+                    model.getCssElmWidth(), model.getCssElmHeight(), filePath);
         } catch (IOException e) {
-            log.info(e.getMessage());
-            throw e;
+            log.error("Merge image file to preview file faied. Errmsg:" + e.getMessage(), e);
+            throw ServiceException.getInternalException("Merge image files failed.");
         }
-        return new MergeImgFileResp(userAlbumItemPreviewImgLocalDir + picName, userAlbumItemPreviewImgUrlPrefix
-                + picName);
+        return new MergeImgFileResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
     }
 
     @Override
-    public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList, String type) {
-        EasyImage e = new EasyImage();
+    public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList) {
         String subDir = String.valueOf(userAlbumId);
-        String fileName = System.currentTimeMillis() + "." + type;
-        String productPreImg = IOUtils.spliceFileName(IOUtils.spliceDirPath(userAlbumPriviewImgLocalDir, subDir),
-                fileName);
+        String fileName = System.currentTimeMillis() + ".jpg";
+        String dir = IOUtils.spliceDirPath(IOUtils.spliceDirPath(imgLocalDir, userAlbumPriviewImgLocalDir), subDir);
+        String productPreImg = IOUtils.spliceFileName(dir, fileName);
         // 纵向拼接成品相册预览图
-        boolean isSuccess = e.joinImageListVertical(prwImgList.toArray(new String[prwImgList.size()]), "png",
-                productPreImg);
-        return new JoinImgFileResp(productPreImg, productPreImg.replace(userAlbumPriviewImgLocalDir,
-                userAlbumPriviewImgPrefixUrl), isSuccess);
+        ImagePsUtils.joinImageToJpg(prwImgList, productPreImg, true);
+        return new JoinImgFileResp(productPreImg, productPreImg.replace(imgLocalDir, imgPrefixUrl), true);
     }
 
     @Override
     public String getAlbumItemEditImgPath(AlbumItemInfo info) {
-        return StringUtils.replace(info.getEditImgUrl(), this.albumItemEditImgUrlPrefix, this.albumItemEditImgLocalDir);
+        return StringUtils.replace(info.getEditImgUrl(), this.imgPrefixUrl, this.imgLocalDir);
     }
 
     @Override
     public String getAlbumItemDefaultPreImgPath(AlbumItemInfo info) {
-        return StringUtils.replace(info.getPreviewImgUrl(), this.albumItemPreviewImgUrlPrefix,
-                this.albumItemPreviewImgLocalDir);
+        return StringUtils.replace(info.getPreviewImgUrl(), this.imgPrefixUrl, this.imgLocalDir);
     }
 
     @Override
     public String getAlbumItemDefaultPreImgPath(String url) {
-        return StringUtils.replace(url, this.albumItemPreviewImgUrlPrefix, this.albumItemPreviewImgLocalDir);
+        return StringUtils.replace(url, this.imgPrefixUrl, this.imgLocalDir);
     }
 
     @Override
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g) {
         String previewImgUrl = g.getPreviewImgUrl();
-        return previewImgUrl.replace(userAlbumItemPreviewImgUrlPrefix, userAlbumItemPreviewImgLocalDir);
+        return previewImgUrl.replace(imgPrefixUrl, imgLocalDir);
     }
 
     @Override
     public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g) {
         String userOriginImgUrl = g.getUserOriginImgUrl();
-        return userOriginImgUrl.replace(userAlbumItemUploadImgPrefixUrl, userAlbumItemUploadImgLocalDir);
+        return userOriginImgUrl.replace(imgPrefixUrl, imgLocalDir);
     }
 
-    @Override
-    public boolean isTemplatePreviewImg(UserAlbumItemInfo g) {
-        return g.getPreviewImgUrl().startsWith(albumItemEditImgUrlPrefix);
-    }
 }

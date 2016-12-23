@@ -1,20 +1,18 @@
 package com.dreambox.core.utils;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.web.multipart.MultipartFile;
+import org.apache.log4j.Logger;
+import org.imgscalr.Scalr;
+
+import com.dreambox.web.exception.ServiceException;
 
 
 /**
@@ -23,259 +21,169 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2016年12月7日
  */
 public class ImagePsUtils {
-    // private static final Logger log = Logger.getLogger(ImagePsUtils.class);
-    private Font font = new Font("宋体", Font.BOLD, 14);// 添加字体的属性设置
+    private static final Logger log = Logger.getLogger(ImagePsUtils.class);
 
-    private Graphics2D g = null;
-
-    private int fontsize = 0;
-
-    private int x = 0;
-
-    private int y = 0;
-
-    /**
-     * 导入本地图片到缓冲区
-     */
-    public BufferedImage loadImageLocal(String imgName) {
-        try {
-            return ImageIO.read(new File(imgName));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 导入图片到缓冲区
-     */
-    public BufferedImage loadImageLocal(MultipartFile file) {
-        try {
-            return ImageIO.read(file.getInputStream());
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 导入网络图片到缓冲区
-     */
-    public BufferedImage loadImageUrl(String imgName) {
-        try {
-            URL url = new URL(imgName);
-            return ImageIO.read(url);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    /**
-     * 生成新图片到本地
-     */
-    public void writeImageLocal(String newImage, BufferedImage img) {
-        if (newImage != null && img != null) {
+    public static void joinImageToJpg(List<String> images, String toPath, boolean vertical) throws ServiceException {
+        int heigth = 0;
+        int width = 0;
+        List<BufferedImage> bufferedImages = new ArrayList<BufferedImage>();
+        for (String image : images) {
+            BufferedImage bi;
             try {
-                File outputfile = new File(newImage);
-                ImageIO.write(img, "jpg", outputfile);
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    /**
-     * 设定文字的字体等
-     */
-    public void setFont(String fontStyle, int fontSize) {
-        this.fontsize = fontSize;
-        this.font = new Font(fontStyle, Font.PLAIN, fontSize);
-    }
-
-    /**
-     * 修改图片,返回修改后的图片缓冲区（只输出一行文本）
-     */
-    public BufferedImage modifyImage(BufferedImage img, Object content, int x, int y) {
-
-        try {
-            int w = img.getWidth();
-            int h = img.getHeight();
-            g = img.createGraphics();
-            g.setBackground(Color.WHITE);
-            g.setColor(Color.black);// 设置字体颜色
-            if (this.font != null)
-                g.setFont(this.font);
-            // 验证输出位置的纵坐标和横坐标
-            if (x >= w || y >= h) {
-                this.x = w - this.fontsize + 2;
-                this.y = h;
-            } else {
-                this.x = x;
-                this.y = y;
-            }
-            if (content != null) {
-                g.drawString(content.toString(), this.x, this.y);
-            }
-            g.dispose();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
-        return img;
-    }
-
-    /**
-     * 修改图片,返回修改后的图片缓冲区（输出多个文本段） xory：true表示将内容在一行中输出；false表示将内容多行输出
-     */
-    public BufferedImage modifyImage(BufferedImage img, Object[] contentArr, int x, int y, boolean xory) {
-        try {
-            int w = img.getWidth();
-            int h = img.getHeight();
-            g = img.createGraphics();
-            g.setBackground(Color.WHITE);
-            g.setColor(Color.RED);
-            if (this.font != null)
-                g.setFont(this.font);
-            // 验证输出位置的纵坐标和横坐标
-            if (x >= w || y >= h) {
-                this.x = h - this.fontsize + 2;
-                this.y = h;
-            } else {
-                this.x = x;
-                this.y = y;
-            }
-            if (contentArr != null) {
-                int arrlen = contentArr.length;
-                if (xory) {
-                    for (int i = 0; i < arrlen; i++) {
-                        g.drawString(contentArr[i].toString(), this.x, this.y);
-                        this.x += contentArr[i].toString().length() * this.fontsize / 2 + 5;// 重新计算文本输出位置
+                bi = ImageIO.read(new File(image));
+                if (vertical) {
+                    if (width == 0) {
+                        width = bi.getWidth();
+                    } else if (width < bi.getWidth()) {
+                        width = bi.getWidth();
                     }
+                    heigth += bi.getHeight();
                 } else {
-                    for (int i = 0; i < arrlen; i++) {
-                        g.drawString(contentArr[i].toString(), this.x, this.y);
-                        this.y += this.fontsize + 2;// 重新计算文本输出位置
+                    width += bi.getWidth();
+                    if (heigth == 0) {
+                        heigth = bi.getHeight();
+                    } else if (heigth < bi.getHeight()) {
+                        heigth = bi.getHeight();
                     }
                 }
+                bufferedImages.add(bi);
+            } catch (IOException e) {
+                log.error("Read image failed. Errmsg:" + e.getMessage() + ", File path:" + image, e);
+                throw ServiceException.getInternalException("Get image data failed.");
             }
-            g.dispose();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
-
-        return img;
-    }
-
-    /**
-     * 修改图片,返回修改后的图片缓冲区（只输出一行文本）
-     * 
-     * 时间:2007-10-8
-     * 
-     * @param img
-     * @return
-     */
-    public BufferedImage modifyImageYe(BufferedImage img) {
+        BufferedImage newBufferedImage = new BufferedImage(width, heigth, BufferedImage.TYPE_INT_RGB);
+        int startY = 0;
+        int startX = 0;
+        for (BufferedImage bufferedImage : bufferedImages) {
+            int drawWidth = bufferedImage.getWidth() > width ? width : bufferedImage.getWidth();
+            int drawHeight = bufferedImage.getHeight() > heigth ? heigth : bufferedImage.getHeight();
+            newBufferedImage.createGraphics().drawImage(bufferedImage, startX, startY, drawWidth, drawHeight,
+                    Color.RED, null);
+            if (vertical) {
+                startY += bufferedImage.getHeight();
+            } else {
+                startX += bufferedImage.getWidth();
+            }
+        }
+        File outputFile = new File(toPath);
+        outputFile.mkdirs();
         try {
-            int w = img.getWidth();
-            int h = img.getHeight();
-            g = img.createGraphics();
-            g.setBackground(Color.WHITE);
-            g.setColor(Color.blue);// 设置字体颜色
-            if (this.font != null)
-                g.setFont(this.font);
-            g.drawString("reyo.cn", w - 85, h - 5);
-            g.dispose();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+            ImageIO.write(newBufferedImage, "jpg", outputFile);
+            outputFile.setReadable(true, false);
+        } catch (IOException e) {
+            String errInfo = "Write image failed. Errmsg:" + e.getMessage() + ", File path:" + toPath;
+            log.error(errInfo, e);
+            throw ServiceException.getInternalException("Get image data failed.");
         }
-        return img;
-    }
-
-    public BufferedImage modifyImagetogeter(BufferedImage b, BufferedImage d, int x, int y, int width, int height) {
-        try {
-            g = d.createGraphics();
-            g.drawImage(b, x, y, width, height, null);
-            g.dispose();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return d;
     }
 
     /**
      * 合并图片(按指定初始x、y坐标将附加图片贴到底图之上) 并指定宽高
      * 
      * 
-     * @param negativeImagePath 背景图片路径
-     * @param additionImagePath 附加图片路径
+     * @param bgImagePath 背景图片路径
+     * @param bgWidth 背景图片的width
+     * @param bgHeight 背景图片的Height
+     * @param coverPath 附加图片路径
      * @param x 附加图片的起始点x坐标
      * @param y 附加图片的起始点y坐标
      * @param toPath 图片写入路径
      * @param width 覆盖的图片宽
      * @param height 覆盖的图片高
+     * @param toPath 输出文件地址
      * @throws IOException
      */
-    public void mergeBothImage(String negativeImagePath, String additionImagePath, int x, int y, int width, int height,
-            int degree, String toPath) throws IOException {
-        InputStream is = null;
-        InputStream is2 = null;
-        OutputStream os = null;
+    public static void mergeImagesToJpg(String bgImagePath, int bgWidth, int bgHeight, String coverPath, int x, int y,
+            int width, int height, String toPath) throws IOException {
         try {
-            is = new FileInputStream(negativeImagePath);
-            is2 = new FileInputStream(additionImagePath);
-            BufferedImage image = ImageIO.read(is);
-            int w = image.getWidth();// 图片宽度
-            int h = image.getHeight();// 图片高度
-            // 从图片中读取RGB
-            BufferedImage imageNew = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-            imageNew.setRGB(0, 0, w, h, new int[w * h], 0, w);
-
-            BufferedImage image2 = ImageIO.read(is2);
-            Graphics2D gNew = (Graphics2D) imageNew.getGraphics();
-            // 设置背景透明
-            imageNew = gNew.getDeviceConfiguration().createCompatibleImage(w, h, Transparency.TRANSLUCENT);
-            gNew.dispose();
-
-            gNew = (Graphics2D) imageNew.getGraphics();
-            // 旋转
-            gNew.rotate(Math.toRadians(degree), x + width / 2, y + height / 2);
-            gNew.drawImage(image2, x, y, width, height, null);
-
-            // 设置图片透明度alpha
-            // gNew.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP,
-            // 1.0f));
-            gNew.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
-            gNew.drawImage(image, 0, 0, w, h, null);
-            File outFile = new File(toPath);
-            ImageIO.write(imageNew, "png", outFile);
+            BufferedImage newBufferedImage = new BufferedImage(bgWidth, bgHeight, BufferedImage.TYPE_INT_RGB);
+            newBufferedImage.createGraphics().drawImage(ImageIO.read(new File(coverPath)), x, y, width, height, null);
+            newBufferedImage.createGraphics().drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
+            File outputFile = new File(toPath);
+            outputFile.mkdirs();
+            ImageIO.write(newBufferedImage, "jpg", outputFile);
+            outputFile.setReadable(true, false);
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (os != null) {
-                os.close();
-            }
-            if (is2 != null) {
-                is2.close();
-            }
-            if (is != null) {
-                is.close();
-            }
+            log.error("Merge image failed.Errmsg:" + e.getMessage(), e);
+            throw e;
         }
     }
 
-    public static void main(String[] args) {
-        EasyImage img = new EasyImage();
-        String[] pics = {
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/page.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/1.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/2.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/3.png",
-                "/Users/liuxinglong/git/dream-album-api/dream-album/src/main/webapp/images/1/detail/4.png" };
+    /**
+     * 优雅的合并图片(按指定初始x、y坐标将附加图片贴到底图之上) 并指定宽高
+     * 
+     * 
+     * @param bgImagePath 背景图片路径
+     * @param bgWidth 背景图片的width
+     * @param bgHeight 背景图片的Height
+     * @param coverPath 附加图片路径
+     * @param x 附加图片的起始点x坐标
+     * @param y 附加图片的起始点y坐标
+     * @param toPath 图片写入路径
+     * @param width 覆盖的图片宽
+     * @param height 覆盖的图片高
+     * @param toPath 输出文件地址
+     * @throws IOException
+     */
+    public static void gracefulMergeImagesToJpg(String bgImagePath, int bgWidth, int bgHeight, String coverPath, int x,
+            int y, int width, int height, String toPath) throws IOException {
         try {
-            img.joinImageListFourImg(pics, "png", "/Users/liuxinglong/Desktop/test.png");
+
+            BufferedImage newBufferedImage = new BufferedImage(bgWidth, bgHeight, BufferedImage.TYPE_INT_RGB);
+            ImageIO.read(new File(coverPath));
+            BufferedImage convertBufferedImage = converScale(ImageIO.read(new File(coverPath)), width, height);
+            int covertWidht = convertBufferedImage.getWidth();
+            int covertHeight = convertBufferedImage.getHeight();
+            int startX = covertWidht > width ? (covertWidht - width) / 2 : 0;
+            int startY = covertHeight > height ? (covertHeight - height) / 2 : 0;
+            int endX = covertWidht > width ? startX + width : width;
+            int endY = covertHeight > height ? startY + height : height;
+            newBufferedImage.createGraphics().drawImage(convertBufferedImage, x, y, width + x, height + y, startX,
+                    startY, endX, endY, null);
+            newBufferedImage.createGraphics().drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
+            File outputFile = new File(toPath);
+            outputFile.mkdirs();
+            ImageIO.write(newBufferedImage, "jpg", outputFile);
+            outputFile.setReadable(true, false);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Merge image failed.Errmsg:" + e.getMessage(), e);
+            throw e;
         }
+    }
+
+    /**
+     * 将图片原比例缩放到要求比例的合适比例
+     */
+    private static BufferedImage converScale(BufferedImage origin, int width, int height) throws IOException {
+        int originWidth = origin.getWidth();
+        int originHeight = origin.getHeight();
+        float widthRatio = ((float) originWidth) / width;
+        float heightRatio = ((float) originHeight) / height;
+        float chooseRatio = heightRatio > widthRatio ? widthRatio : heightRatio;
+        int resizeWidth = (int) (originWidth / chooseRatio);
+        int resizeHeight = (int) (originHeight / chooseRatio);
+        return Scalr.resize(origin, resizeWidth, resizeHeight);
+    }
+
+    public static void main(String[] args) throws IOException {
+        String toPath = "/Users/luofei/Desktop/v.jpg";
+        String bgPath = "/Users/luofei/Desktop/testbg.png";
+        String coverPath = "/Users/luofei/Desktop/cover.png";
+        // List<String> images = new ArrayList<String>();
+        // images.add("/Users/luofei/Desktop/5.png");
+        // images.add("/Users/luofei/Desktop/6.png");
+        // images.add("/Users/luofei/Desktop/7.png");
+        // images.add("/Users/luofei/Desktop/ft.png");
+        // joinImageToJpg(images, toPath, false);
+        // toPath = "/Users/luofei/Desktop/H.jpg";
+        // joinImageToJpg(images, toPath, true);
+        gracefulMergeImagesToJpg(bgPath, 750, 1180, coverPath, 28, 15, 695, 647, toPath);
+        BufferedImage newBufferedImage = null;
+
+        BufferedImage origin = ImageIO.read(new File(coverPath));
+        newBufferedImage = new BufferedImage(origin.getWidth(), origin.getHeight(), BufferedImage.TYPE_INT_RGB);
+        newBufferedImage.createGraphics().drawImage(origin, 0, 0, Color.WHITE, null);
+        ImageIO.write(converScale(newBufferedImage, 695, 647), "jpg", new File("/Users/luofei/Desktop/cover1.jpg"));
     }
 }

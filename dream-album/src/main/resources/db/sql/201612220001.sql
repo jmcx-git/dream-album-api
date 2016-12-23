@@ -1,0 +1,1 @@
+ alter table user_album_info add column `title` varchar(255) default '' after `album_id`;

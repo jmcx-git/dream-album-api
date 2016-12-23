@@ -17,11 +17,12 @@ public class UserAlbumInfo extends DbStatus {
     private int id;
     private int userId;// 用户id
     private int albumId;// 选用的相册模板
+    private String title;// 用户相册标题
     private int step;// 当前操作到第几步
     @SELECT_ALL_KEY
     @ZERO_ENABLE
     private int complete;// 是否生成了相册
-    private String priviewImg;// 在用户户生成完相册后根据信息生成预览图
+    private String previewImg;// 在用户户生成完相册后根据信息生成预览图
 
     public UserAlbumInfo() {
         super();
@@ -74,12 +75,19 @@ public class UserAlbumInfo extends DbStatus {
         this.complete = complete;
     }
 
-    public String getPriviewImg() {
-        return priviewImg;
+    public String getPreviewImg() {
+        return previewImg;
     }
 
-    public void setPriviewImg(String priviewImg) {
-        this.priviewImg = priviewImg;
+    public void setPreviewImg(String previewImg) {
+        this.previewImg = previewImg;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }

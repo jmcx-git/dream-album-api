@@ -9,6 +9,7 @@ import java.util.List;
 public class PreviewWrapModel {
     private List<String> loopPreImgs;
     private String bigPreImg;
+    private boolean makeComplete;
 
     public List<String> getLoopPreImgs() {
         return loopPreImgs;
@@ -24,5 +25,13 @@ public class PreviewWrapModel {
 
     public void setBigPreImg(String bigPreImg) {
         this.bigPreImg = bigPreImg;
+    }
+
+    public boolean isMakeComplete() {
+        return makeComplete;
+    }
+
+    public void setMakeComplete(boolean makeComplete) {
+        this.makeComplete = makeComplete;
     }
 }
