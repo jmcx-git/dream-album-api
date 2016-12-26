@@ -21,6 +21,7 @@ public class DateUtils {
     public static final String YYYYMMDDINTFORMAT = "yyyyMMdd";
     private static final String YYYYMMDDTHHMMSSZ_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final String MMDDYYYY_FORMAT = "MM/dd/yyyy";
+    public static final String YYYYMMDDHHMM_FORMAT="yyyyMMdd_HHmm";
 
     /**
      * 返回今日日期，时间全为0，即0点时候的日期

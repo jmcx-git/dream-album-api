@@ -45,4 +45,9 @@ public class UserAlbumInfoDaoImpl extends UserAlbumInfoDao {
         return SQLUtils.queryObject(sqlMapClient, "queryUserAlbumInfoLatestByUserAlbumAndComplete", info);
     }
 
+    @Override
+    public void updateUserAlbumInfoTitle(UserAlbumInfo info) throws SQLException {
+        SQLUtils.update(sqlMapClient, "updateUserAlbumInfoTitle", info);
+    }
+
 }
