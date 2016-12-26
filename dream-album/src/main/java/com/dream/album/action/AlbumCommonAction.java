@@ -290,7 +290,8 @@ public class AlbumCommonAction extends IosBaseAction {
             g.setRank(0);
             UserAlbumItemInfo item = userAlbumItemInfoService.getUserAlbumItemInfoByUk(g);
             model.setAlbumId(albumInfo.getId());
-            model.setTitle(userAlbumInfo.getTitle());
+            model.setTitle(StringUtils.isBlank(userAlbumInfo.getTitle()) ? albumInfo.getTitle() : userAlbumInfo
+                    .getTitle());
             model.setCover(item != null ? item.getPreviewImgUrl() : albumInfo.getCover());
             model.setPreviewImg(albumInfo.getPreviewImg());
             model.setUserAlbumId(userAlbumInfo.getId());
