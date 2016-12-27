@@ -5,7 +5,7 @@ package com.dreambox.core.dto.album;
  * @date 2016年12月21日
  */
 public enum AlbumUploadImgEnum {
-    UPLOAD_IMG(0, "图片上传"), UPLOAD_NO_IMG(1, "空图上传");
+    UPLOAD_IMG(0, "图片上传"), UPLOAD_NO_IMG(1, "空图上传"), UPLOAD_NO_IMG_DELSTATUS(2, "空图并删除历史上传");
 
     private int status;
     private String desc;

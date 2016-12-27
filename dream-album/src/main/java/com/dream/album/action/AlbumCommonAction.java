@@ -189,9 +189,12 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploademptypage.json")
     @ResponseBody
-    public ApiRespWrapper<String> addUserAlbumItemPageEmptyInfo(Integer userAlbumId, Integer albumItemId) {
-        return albumUploadService.albumUploadHandle(null, userAlbumId, albumItemId, null,
-                AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus());
+    public ApiRespWrapper<String> addUserAlbumItemPageEmptyInfo(Integer userAlbumId, Integer albumItemId,
+            boolean isDeleteInfo) {
+        return albumUploadService
+                .albumUploadHandle(null, userAlbumId, albumItemId, null,
+                        isDeleteInfo ? AlbumUploadImgEnum.UPLOAD_NO_IMG_DELSTATUS.getStatus()
+                                : AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus());
     }
 
     /**

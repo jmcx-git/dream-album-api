@@ -90,7 +90,8 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             // 更新该用户相册操作到第几步
             userAlbumInfo.setStep(albumItemInfo.getRank());
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
-        } else if (uploadStatus == AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus() && userAlbumItemInfo == null) {
+        } else if ((uploadStatus == AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus() && userAlbumItemInfo == null)
+                || uploadStatus == AlbumUploadImgEnum.UPLOAD_NO_IMG_DELSTATUS.getStatus()) {
             // 将模版默认预览图赋值进去
             ua.setPreviewImgUrl(albumItemInfo.getPreviewImgUrl());
             userAlbumItemInfoService.addData(ua);
