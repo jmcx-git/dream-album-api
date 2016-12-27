@@ -4,20 +4,9 @@
 	<resultMap id="smallappdeveloperinfo"
 		class="com.dreambox.core.dto.album.SmallAppDeveloperInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="album_id" property="albumId" jdbcType="INTEGER" />
-		<result column="edit_img_url" property="editImgUrl" jdbcType="VARCHAR" />
-		<result column="preview_img_url" property="previewImgUrl"
-			jdbcType="VARCHAR" />
-		<result column="shadow_img_url" property="shadowImgUrl"
-			jdbcType="VARCHAR" />
-		<result column="img_width" property="imgWidth" jdbcType="INTEGER" />
-		<result column="img_height" property="imgHeight" jdbcType="INTEGER" />
-		<result column="rank" property="rank" jdbcType="INTEGER" />
-		<result column="edit_count" property="editCount" jdbcType="INTEGER" />
-		<result column="edit_img_infos" property="editImgInfos"
-			jdbcType="VARCHAR" />
-		<result column="edit_text_infos" property="editTextInfos"
-			jdbcType="VARCHAR" />
+		<result column="app_id" property="appId" jdbcType="VARCHAR" />
+		<result column="secret" property="secret" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
