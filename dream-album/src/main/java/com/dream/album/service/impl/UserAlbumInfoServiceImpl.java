@@ -17,6 +17,7 @@ import com.dream.album.dao.UserAlbumInfoDao;
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
+import com.dreambox.core.dto.album.CompleteEnum;
 import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.utils.RedisCacheUtils;
@@ -112,9 +113,9 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
         }
     }
 
-    @Override
-    public UserAlbumInfo findLatestUncompleteUserAlbum(UserAlbumInfo info) throws ServiceException {
+    private UserAlbumInfo findLatestUncompleteUserAlbum(UserAlbumInfo info) throws ServiceException {
         try {
+            info.setComplete(CompleteEnum.INIT.getStatus());
             return userAlbumInfoDao.queryLatestByUserAlbumAndComplete(info);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
@@ -130,4 +131,33 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
         }
     }
 
+    private String userCreateAlbumLockKey = "album:doing:lock";
+
+    @Override
+    public UserAlbumInfo createAlbum(UserAlbumInfo userAlbumInfo) throws ServiceException {
+        String key = RedisCacheUtils.buildKey(userCreateAlbumLockKey, String.valueOf(userAlbumInfo.getUserId()));
+        do {
+            if (RedisCacheUtils.setNX(key, "1", jedisDbPool)) {
+                try {
+                    UserAlbumInfo dbInfo = findLatestUncompleteUserAlbum(userAlbumInfo);
+                    if (dbInfo == null) {
+                        // 新建记录
+                        userAlbumInfo.setComplete(CompleteEnum.INIT.getStatus());
+                        addData(userAlbumInfo);
+                    }
+                    return userAlbumInfo;
+                } catch (Exception e) {
+                    throw ServiceException.getInternalException(e.getMessage());
+                } finally {
+                    RedisCacheUtils.del(jedisDbPool, key);
+                }
+            } else {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    throw ServiceException.getInternalException(e.getMessage());
+                }
+            }
+        } while (true);
+    }
 }

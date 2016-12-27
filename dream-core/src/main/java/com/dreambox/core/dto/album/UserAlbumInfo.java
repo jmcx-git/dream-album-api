@@ -28,13 +28,6 @@ public class UserAlbumInfo extends DbStatus {
         super();
     }
 
-    public UserAlbumInfo(int userId, int albumId, int complete) {
-        super();
-        this.userId = userId;
-        this.albumId = albumId;
-        this.complete = complete;
-    }
-
     public int getId() {
         return id;
     }
