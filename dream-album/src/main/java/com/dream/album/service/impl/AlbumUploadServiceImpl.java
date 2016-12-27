@@ -1,6 +1,7 @@
 package com.dream.album.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,6 +25,7 @@ import com.dreambox.core.service.album.AlbumItemInfoService;
 import com.dreambox.core.service.album.UserAlbumCollectInfoService;
 import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.service.album.UserAlbumItemInfoService;
+import com.dreambox.core.utils.DateUtils;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.utils.GsonUtils;
 
@@ -88,15 +90,14 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             // 更新该用户相册操作到第几步
             userAlbumInfo.setStep(albumItemInfo.getRank());
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
-        } else if (uploadStatus == AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus() && userAlbumItemInfo == null) {
+        } else if ((uploadStatus == AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus() && userAlbumItemInfo == null)
+                || uploadStatus == AlbumUploadImgEnum.UPLOAD_NO_IMG_DELSTATUS.getStatus()) {
             // 将模版默认预览图赋值进去
             ua.setPreviewImgUrl(albumItemInfo.getPreviewImgUrl());
             userAlbumItemInfoService.addData(ua);
             // 更新该用户相册操作到第几步
             userAlbumInfo.setStep(albumItemInfo.getRank());
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
-        } else {
-            return new ApiRespWrapper<String>(-1, "图片上传异常,未找到合适的处理途径!");
         }
 
         if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()) {
@@ -126,6 +127,10 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             }
             boolean success = joinUserAlbumImg(userAlbumInfo, uaItems);
             if (success) {
+                // 生成相册标题
+                userAlbumInfo.setTitle(albumInfo.getTitle() + " "
+                        + DateUtils.formatStr(new Date(), DateUtils.YYYYMMDDHHMM_FORMAT));
+                userAlbumInfoService.modifyUserAlbumInfoTitle(userAlbumInfo);
                 // 并发多时，可能step记录不准，若预览大图制作成功，直接修改step为最后一步(step暂无特殊用处)
                 userAlbumInfo.setStep(albumItemInfo.getRank());
                 userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);

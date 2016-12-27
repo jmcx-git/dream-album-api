@@ -133,6 +133,13 @@ public class AlbumCommonAction extends IosBaseAction {
         return new UserMakeAlbumInfo(userAlbumInfo, albumItemInfos, userAlbumItemInfos);
     }
 
+    /**
+     * 相册Lite版选取模版列表接口
+     * 
+     * @param start
+     * @param size
+     * @return
+     */
     @RequestMapping("/listalbums.json")
     @ResponseBody
     public List<AlbumInfo> selectAlbum(Integer start, Integer size) {
@@ -182,9 +189,12 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploademptypage.json")
     @ResponseBody
-    public ApiRespWrapper<String> addUserAlbumItemPageEmptyInfo(Integer userAlbumId, Integer albumItemId) {
-        return albumUploadService.albumUploadHandle(null, userAlbumId, albumItemId, null,
-                AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus());
+    public ApiRespWrapper<String> addUserAlbumItemPageEmptyInfo(Integer userAlbumId, Integer albumItemId,
+            boolean isDeleteInfo) {
+        return albumUploadService
+                .albumUploadHandle(null, userAlbumId, albumItemId, null,
+                        isDeleteInfo ? AlbumUploadImgEnum.UPLOAD_NO_IMG_DELSTATUS.getStatus()
+                                : AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus());
     }
 
     /**
@@ -283,7 +293,8 @@ public class AlbumCommonAction extends IosBaseAction {
             g.setRank(0);
             UserAlbumItemInfo item = userAlbumItemInfoService.getUserAlbumItemInfoByUk(g);
             model.setAlbumId(albumInfo.getId());
-            model.setTitle(albumInfo.getTitle());
+            model.setTitle(StringUtils.isBlank(userAlbumInfo.getTitle()) ? albumInfo.getTitle() : userAlbumInfo
+                    .getTitle());
             model.setCover(item != null ? item.getPreviewImgUrl() : albumInfo.getCover());
             model.setPreviewImg(albumInfo.getPreviewImg());
             model.setUserAlbumId(userAlbumInfo.getId());
@@ -340,5 +351,18 @@ public class AlbumCommonAction extends IosBaseAction {
             model.setBigPreImg(userAlbumInfo.getPreviewImg());
         }
         return model;
+    }
+
+    @RequestMapping("/modifyuseralbuminfotitle.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> modifyUserAlbumInfoTitle(Integer userAlbumId, String title) {
+        if (userAlbumId == null || userAlbumId.intValue() <= 0) {
+            return new ApiRespWrapper<Boolean>(-1, "参数不合法!", false);
+        }
+        UserAlbumInfo g = new UserAlbumInfo();
+        g.setId(userAlbumId);
+        g.setTitle(title);
+        userAlbumInfoService.modifyUserAlbumInfoTitle(g);
+        return new ApiRespWrapper<Boolean>(-1, "modify title success", true);
     }
 }

@@ -41,7 +41,6 @@ import com.dreambox.web.utils.GsonUtils;
 @Controller
 @RequestMapping("/dream/user/login/*")
 public class WxLoginAction {
-
     public static Logger log = Logger.getLogger(WxLoginAction.class);
     @Autowired
     private UserInfoService userInfoService;
@@ -61,12 +60,11 @@ public class WxLoginAction {
 
     @RequestMapping("/getSession.json")
     @ResponseBody
-    public String getUser3rdSesseion(String code) {
-        UserOpenIdInfo info = userOpenIdInfoService.getUser3rdSesseion(code);
+    public String getUser3rdSesseion(String appId, String code) {
+        UserOpenIdInfo info = userOpenIdInfoService.getUser3rdSesseion(appId, code);
         // 放入缓存
         String sessionKey = UUID.randomUUID().toString().replace("-", "");
         RedisCacheUtils.set(sessionKey, info.getSession_key() + "#" + info.getOpenid(), jedisDbPool);
-        System.out.println(info.getSession_key() + "#" + info.getOpenid());
         return sessionKey;
     }
 

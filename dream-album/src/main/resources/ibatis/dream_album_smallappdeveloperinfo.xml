@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="smallappdeveloperinfo"
+		class="com.dreambox.core.dto.album.SmallAppDeveloperInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="album_id" property="albumId" jdbcType="INTEGER" />
+		<result column="edit_img_url" property="editImgUrl" jdbcType="VARCHAR" />
+		<result column="preview_img_url" property="previewImgUrl"
+			jdbcType="VARCHAR" />
+		<result column="shadow_img_url" property="shadowImgUrl"
+			jdbcType="VARCHAR" />
+		<result column="img_width" property="imgWidth" jdbcType="INTEGER" />
+		<result column="img_height" property="imgHeight" jdbcType="INTEGER" />
+		<result column="rank" property="rank" jdbcType="INTEGER" />
+		<result column="edit_count" property="editCount" jdbcType="INTEGER" />
+		<result column="edit_img_infos" property="editImgInfos"
+			jdbcType="VARCHAR" />
+		<result column="edit_text_infos" property="editTextInfos"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<insert id="insertOrUpdateSmallAppDeveloperInfo" parameterClass="com.dreambox.core.dto.album.SmallAppDeveloperInfo">
+		<![CDATA[
+		INSERT IGNORE INTO smallapp_developer_info (`id`,`app_id`,`secret`,`name`, `status`,`update_time`,`create_time`)
+		VALUES(null, #appId#,#secret#,#name#, 0, now(),now())
+		]]>
+	</insert>
+	<insert id="insertOrIgnoreSmallAppDeveloperInfo" parameterClass="com.dreambox.core.dto.album.SmallAppDeveloperInfo">
+		<![CDATA[
+		INSERT IGNORE INTO smallapp_developer_info (`id`,`app_id`,`secret`,`name`, `status`,`update_time`,`create_time`)
+		VALUES(null, #appId#,#secret#,#name#, 0, now(),now())
+		]]>
+	</insert>
+	<update id="updateSmallAppDeveloperInfoStatus" parameterClass="com.dreambox.core.dto.album.SmallAppDeveloperInfo">
+		<![CDATA[
+		UPDATE `smallapp_developer_info` SET `status` = #status# WHERE `id=#id# ;
+		]]>
+	</update>
+	<select id="querySmallAppDeveloperInfoById" parameterClass="java.lang.Integer"
+		resultMap="smallappdeveloperinfo">
+		<![CDATA[
+		SELECT * FROM `smallapp_developer_info` WHERE `id` = #startId#;
+		]]>
+	</select>
+	<select id="querySmallAppDeveloperInfoListByStartId"
+		parameterClass="java.util.Map" resultMap="smallappdeveloperinfo">
+		<![CDATA[
+		SELECT * FROM `smallapp_developer_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		]]>
+	</select>
+	<select id="querySmallAppDeveloperInfoByIds" parameterClass="java.util.Map"
+		resultMap="smallappdeveloperinfo">
+		SELECT * FROM `smallapp_developer_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#
+		</iterate>
+	</select>
+	<select id="querySmallAppDeveloperInfoListByFilter"
+		parameterClass="java.util.Map" resultMap="smallappdeveloperinfo">
+		SELECT * FROM `smallapp_developer_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY rank LIMIT #start#, #size#
+	</select>
+	<select id="countSmallAppDeveloperInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `smallapp_developer_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

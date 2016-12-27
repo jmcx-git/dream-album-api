@@ -21,4 +21,6 @@ public abstract class UserAlbumInfoService extends AbstractSortedListCacheServic
     public abstract UserAlbumInfo findLatestUncompleteUserAlbum(UserAlbumInfo info) throws ServiceException;
 
     public abstract void modifyUserAlbumInfoCompleteAndPreImg(UserAlbumInfo info) throws ServiceException;
+
+    public abstract void modifyUserAlbumInfoTitle(UserAlbumInfo info) throws ServiceException;
 }

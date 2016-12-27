@@ -1,8 +1,8 @@
 package com.dreambox.web.exception;
 
-import org.apache.log4j.Logger;
-
 import java.sql.SQLException;
+
+import org.apache.log4j.Logger;
 
 
 public class ServiceException extends RuntimeException {

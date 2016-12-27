@@ -121,4 +121,13 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
         }
     }
 
+    @Override
+    public void modifyUserAlbumInfoTitle(UserAlbumInfo info) throws ServiceException {
+        try {
+            userAlbumInfoDao.updateUserAlbumInfoTitle(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+    }
+
 }
