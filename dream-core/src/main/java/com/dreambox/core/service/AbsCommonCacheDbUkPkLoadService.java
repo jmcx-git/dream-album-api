@@ -37,7 +37,12 @@ public abstract class AbsCommonCacheDbUkPkLoadService<T extends StatusSerializab
         String key = buildUkReflectPkKey(g);
         String result = RedisCacheUtils.get(key, getJedisPool());
         if (StringUtils.isEmpty(result)) {
-            return -1;
+            Integer id = getIdByUkDriectFromDb(g);
+            if (id == null) {
+                return -1;
+            }
+            RedisCacheUtils.set(key, id.toString(), getJedisPool());
+            return id;
         }
         return Integer.parseInt(result);
     }
@@ -170,4 +175,6 @@ public abstract class AbsCommonCacheDbUkPkLoadService<T extends StatusSerializab
     }
 
     protected abstract JedisPool getJedisPool();
+
+    protected abstract Integer getIdByUkDriectFromDb(T t);
 }

@@ -2,6 +2,8 @@
 
 package com.dream.album.service.impl;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -17,6 +19,7 @@ import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.dto.album.SmallAppDeveloperInfo;
 import com.dreambox.core.service.album.SmallAppDeveloperInfoService;
 import com.dreambox.core.utils.RedisCacheUtils;
+import com.dreambox.web.exception.ServiceException;
 
 /**
  * @author mokous86@gmail.com create date: 2016年12月27日
@@ -72,6 +75,15 @@ public class SmallAppDeveloperInfoServiceImpl extends SmallAppDeveloperInfoServi
     @Override
     protected Logger getLogger() {
         return log;
+    }
+
+    @Override
+    protected Integer getIdByUkDriectFromDb(SmallAppDeveloperInfo t) throws ServiceException {
+        try {
+            return smallAppDeveloperInfoDao.queryIdByUk(t.getAppId());
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
     }
 
 }

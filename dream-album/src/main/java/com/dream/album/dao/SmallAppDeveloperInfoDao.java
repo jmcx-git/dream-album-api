@@ -2,6 +2,8 @@
 
 package com.dream.album.dao;
 
+import java.sql.SQLException;
+
 import com.dreambox.core.dao.AbsCommonDao;
 import com.dreambox.core.dto.album.SmallAppDeveloperInfo;
 
@@ -11,4 +13,5 @@ import com.dreambox.core.dto.album.SmallAppDeveloperInfo;
  */
 public abstract class SmallAppDeveloperInfoDao extends AbsCommonDao<SmallAppDeveloperInfo> {
 
+    public abstract Integer queryIdByUk(String appId) throws SQLException;
 }
