@@ -45,6 +45,12 @@
 		SELECT * FROM `smallapp_developer_info` WHERE `id` = #startId#;
 		]]>
 	</select>
+	<select id="querySmallAppDeveloperInfoIdByUk" parameterClass="java.lang.String"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+		SELECT id FROM `smallapp_developer_info` WHERE `app_id` = #appId#;
+		]]>
+	</select>
 	<select id="querySmallAppDeveloperInfoListByStartId"
 		parameterClass="java.util.Map" resultMap="smallappdeveloperinfo">
 		<![CDATA[
