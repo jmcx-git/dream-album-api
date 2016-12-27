@@ -1842,4 +1842,16 @@ public class RedisCacheUtils {
         }
     }
 
+    public static boolean setNX(String key, String value, JedisPool jedisPool) {
+        Jedis jedis = jedisPool.getResource();
+        try {
+            Long ret = jedis.setnx(key, value);
+            return ret != null && ret.longValue() == 1l;
+        } catch (Exception e) {
+            log.error("获取缓存消息失败,Key:" + key + ", Errmsg:" + e.getMessage(), e);
+            throw ServiceException.getCacheBusyException();
+        } finally {
+            jedis.close();
+        }
+    }
 }
