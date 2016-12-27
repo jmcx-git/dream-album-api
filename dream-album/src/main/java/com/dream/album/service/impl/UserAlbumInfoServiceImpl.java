@@ -144,9 +144,9 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
                         // 新建记录
                         userAlbumInfo.setComplete(CompleteEnum.INIT.getStatus());
                         addData(userAlbumInfo);
-                        userAlbumInfo = findLatestUncompleteUserAlbum(userAlbumInfo);
+                        dbInfo = findLatestUncompleteUserAlbum(userAlbumInfo);
                     }
-                    return userAlbumInfo;
+                    return dbInfo;
                 } catch (Exception e) {
                     throw ServiceException.getInternalException(e.getMessage());
                 } finally {
