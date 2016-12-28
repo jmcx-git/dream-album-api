@@ -119,6 +119,7 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
                         times++;
                     } catch (InterruptedException e) {
                         log.warn("thread sleep catch a error : " + e.getMessage());
+                        return new ApiRespWrapper<String>(-1, "相册生成失异常!errMsg:" + e.getMessage());
                     }
                 }
             } while (times < 10);
