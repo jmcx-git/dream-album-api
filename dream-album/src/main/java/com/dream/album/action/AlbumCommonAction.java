@@ -19,12 +19,14 @@ import com.dream.album.model.UserMakeAlbumInfo;
 import com.dream.album.service.AlbumUploadService;
 import com.dream.album.service.ImgService;
 import com.dreambox.core.dto.album.AlbumInfo;
+import com.dreambox.core.dto.album.AlbumItemEditInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.AlbumUploadImgEnum;
 import com.dreambox.core.dto.album.CompleteEnum;
 import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.service.album.AlbumInfoService;
+import com.dreambox.core.service.album.AlbumItemEditInfoService;
 import com.dreambox.core.service.album.AlbumItemInfoService;
 import com.dreambox.core.service.album.UserAlbumCollectInfoService;
 import com.dreambox.core.service.album.UserAlbumInfoService;
@@ -47,6 +49,8 @@ public class AlbumCommonAction extends IosBaseAction {
     private AlbumInfoService albumInfoService;
     @Autowired
     private AlbumItemInfoService albumItemInfoService;
+    @Autowired
+    private AlbumItemEditInfoService albumItemEditInfoService;
     @Autowired
     private UserAlbumInfoService userAlbumInfoService;
     @Autowired
@@ -131,6 +135,12 @@ public class AlbumCommonAction extends IosBaseAction {
             albumItemInfo.setStatus(AlbumItemInfo.STATUS_OK);
             albumItemInfo.setAlbumId(albumInfo.getId());
             List<AlbumItemInfo> albumItemInfos = albumItemInfoService.listDirectFromDb(albumItemInfo);
+            for (AlbumItemInfo info : albumItemInfos) {
+                AlbumItemEditInfo g = new AlbumItemEditInfo();
+                g.setAlbumItemId(info.getId());
+                List<AlbumItemEditInfo> edits = albumItemEditInfoService.listDirectFromDb(g);
+                info.setPhotoInfos(edits);
+            }
             albumInfo.setAlbumItemList(albumItemInfos);
         }
         return infos;

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="albumitemeditinfo"
+	class="com.dreambox.core.dto.album.AlbumItemEditInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="album_item_id" property="albumItemId" jdbcType="INTEGER" />
+		<result column="rank" property="rank" jdbcType="INTEGER" />
+		<result column="edit_img_url" property="editImgUrl" jdbcType="VARCHAR" />
+		<result column="css_elm_move_x" property="cssElmMoveX" jdbcType="INTEGER" />
+		<result column="css_elm_move_y" property="cssElmMoveY" jdbcType="INTEGER" />
+		<result column="css_elm_width" property="cssElmWidth" jdbcType="INTEGER" />
+		<result column="css_elm_height" property="cssElmHeight" jdbcType="INTEGER" />
+		<result column="css_elm_rotate" property="cssElmRotate" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<insert id="insertOrUpdateAlbumItemEditInfo"
+	parameterClass="com.dreambox.core.dto.album.AlbumItemEditInfo">
+		<![CDATA[
+		INSERT IGNORE INTO album_item_edit_info (`id`,`album_item_id`,`rank`,`edit_img_url`,`css_elm_move_x`,`css_elm_move_y`,
+		`css_elm_width`,`css_elm_height`,`css_elm_rotate`,`status`,`update_time`,`create_time`)
+		VALUES(null, #albumItemId#,#rank#,#editImgUrl#,#cssElmMoveX#,#cssElmMoveY#,#cssElmWidth#,#cssElmHeight#,#cssElmRotate#,
+		0, now(),now())
+		ON DUPLICATE KEY UPDATE `edit_img_url`=#editImgUrl#,`css_elm_move_x` = #cssElmMoveX# ,`css_elm_move_y` = #cssElmMoveY#,
+		`css_elm_width`=#cssElmWidth#,`css_elm_height`=#cssElmHeight#,`css_elm_rotate`=#cssElmRotate#;
+		]]>
+	</insert>
+	<insert id="insertOrIgnoreAlbumItemEditInfo"
+	parameterClass="com.dreambox.core.dto.album.AlbumItemEditInfo">
+		<![CDATA[
+		INSERT IGNORE INTO album_item_edit_info (`id`,`album_item_id`,`rank`,`edit_img_url`,`css_elm_move_x`,`css_elm_move_y`,
+		`css_elm_width`,`css_elm_height`,`css_elm_rotate`,`status`,`update_time`,`create_time`)
+		VALUES(null, #albumItemId#,#rank#,#editImgUrl#,#cssElmMoveX#,#cssElmMoveY#,#cssElmWidth#,#cssElmHeight#,#cssElmRotate#,
+		0, now(),now())
+		ON DUPLICATE KEY UPDATE `edit_img_url`=#editImgUrl#,`css_elm_move_x` = #cssElmMoveX# ,`css_elm_move_y` = #cssElmMoveY#,
+		`css_elm_width`=#cssElmWidth#,`css_elm_height`=#cssElmHeight#,`css_elm_rotate`=#cssElmRotate#;
+		]]>
+	</insert>
+	<update id="updateAlbumItemEditInfoStatus"
+	parameterClass="com.dreambox.core.dto.album.AlbumItemEditInfo">
+		<![CDATA[
+		UPDATE `album_item_edit_info` SET `status` = #status# WHERE `id=#id# ;
+		]]>
+	</update>
+	<select id="queryAlbumItemEditInfoByUk" parameterClass="com.dreambox.core.dto.album.AlbumItemEditInfo"
+	resultMap="albumitemeditinfo">
+		<![CDATA[
+		SELECT * FROM `album_item_edit_info` WHERE `album_item_id` = #albumItemId# AND `rank` = #rank#;
+		]]>
+	</select>
+	<select id="queryAlbumItemEditInfoById" parameterClass="java.lang.Integer"
+	resultMap="albumitemeditinfo">
+		<![CDATA[
+		SELECT * FROM `album_item_edit_info` WHERE `id` = #startId#;
+		]]>
+	</select>
+	<select id="queryAlbumItemEditInfoListByStartId"
+	parameterClass="java.util.Map" resultMap="albumitemeditinfo">
+		<![CDATA[
+		SELECT * FROM `album_item_edit_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		]]>
+	</select>
+	<select id="queryAlbumItemEditInfoByIds" parameterClass="java.util.Map"
+	resultMap="albumitemeditinfo">
+		SELECT * FROM `album_item_edit_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">#ids[]#</iterate>
+	</select>
+	<select id="queryAlbumItemEditInfoListByFilter"
+	parameterClass="java.util.Map" resultMap="albumitemeditinfo">
+		SELECT * FROM `album_item_edit_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">`status` =
+					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="albumItemId">
+				<isNotNull property="albumItemId" prepend=" and ">`album_item_id` =
+					#albumItemId#</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id LIMIT #start#, #size#
+	</select>
+	<select id="countAlbumItemEditInfoByFilter"
+	parameterClass="java.util.Map" resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `album_item_edit_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">`status` =
+					#status#</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="albumItemId">
+				<isNotNull property="albumItemId" prepend=" and ">`album_item_id` =
+					#albumItemId#</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

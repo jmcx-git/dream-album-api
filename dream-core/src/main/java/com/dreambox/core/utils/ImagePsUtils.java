@@ -1,6 +1,7 @@
 package com.dreambox.core.utils;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,8 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 import org.imgscalr.Scalr;
 
+import com.dreambox.core.dto.MergeImgWithMultipartModel;
+import com.dreambox.core.dto.album.UserAlbumItemEditInfo;
 import com.dreambox.web.exception.ServiceException;
 
 
@@ -153,6 +156,58 @@ public class ImagePsUtils {
     }
 
     /**
+     * 优雅的合并图片(按指定初始x、y坐标将附加图片贴到底图之上) 并指定宽高 支持多张图片
+     * 
+     * @param bgImagePath
+     * @param bgWidth
+     * @param bgHeight
+     * @param datas
+     * @param toPath
+     * @throws IOException
+     */
+    public static void gracefulMergeImagesToJpgWithMultipart(String bgImagePath, int bgWidth, int bgHeight,
+            List<MergeImgWithMultipartModel> datas, String toPath) throws IOException {
+        try {
+            BufferedImage newBufferedImage = new BufferedImage(bgWidth, bgHeight, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = newBufferedImage.createGraphics();
+            // g2d.getDeviceConfiguration().createCompatibleImage(bgWidth,
+            // bgHeight,Transparency.TRANSLUCENT);
+            for (MergeImgWithMultipartModel data : datas) {
+                int x = data.getUserAlbumItemEditInfo().getCssElmMoveX();
+                int y = data.getUserAlbumItemEditInfo().getCssElmMoveY();
+                int width = data.getUserAlbumItemEditInfo().getCssElmWidth();
+                int height = data.getUserAlbumItemEditInfo().getCssElmHeight();
+                int degree = data.getUserAlbumItemEditInfo().getCssElmRotate();
+                BufferedImage img;
+                if (data.isClipDefault()) {
+                    // 将预览图编辑区域未知的图片抠下来再画入合成图该编辑区域达到未上传图片区域显示默认图的效果
+                    img = ImageIO.read(new File(data.getPath())).getSubimage(x, y, width, height);
+                } else {
+                    img = ImageIO.read(new File(data.getPath()));
+                }
+                BufferedImage convertBufferedImage = converScale(img, width, height);
+                int covertWidht = convertBufferedImage.getWidth();
+                int covertHeight = convertBufferedImage.getHeight();
+                int startX = covertWidht > width ? (covertWidht - width) / 2 : 0;
+                int startY = covertHeight > height ? (covertHeight - height) / 2 : 0;
+                int endX = covertWidht > width ? startX + width : width;
+                int endY = covertHeight > height ? startY + height : height;
+                g2d.rotate(Math.toRadians(degree), x + width / 2, y + height / 2);
+                g2d.drawImage(convertBufferedImage, x, y, width + x, height + y, startX, startY, endX, endY, null);
+                g2d.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
+            }
+            g2d.drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
+            File outputFile = new File(toPath);
+            outputFile.mkdirs();
+            ImageIO.write(newBufferedImage, "jpg", outputFile);
+            outputFile.setReadable(true, false);
+        } catch (Exception e) {
+            log.error("Merge image failed.Errmsg:" + e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    /**
      * 将图片原比例缩放到要求比例的合适比例
      */
     private static BufferedImage converScale(BufferedImage origin, int width, int height) throws IOException {
@@ -167,23 +222,33 @@ public class ImagePsUtils {
     }
 
     public static void main(String[] args) throws IOException {
-        String toPath = "/Users/luofei/Desktop/v.jpg";
-        String bgPath = "/Users/luofei/Desktop/testbg.png";
-        String coverPath = "/Users/luofei/Desktop/cover.png";
-        // List<String> images = new ArrayList<String>();
-        // images.add("/Users/luofei/Desktop/5.png");
-        // images.add("/Users/luofei/Desktop/6.png");
-        // images.add("/Users/luofei/Desktop/7.png");
-        // images.add("/Users/luofei/Desktop/ft.png");
-        // joinImageToJpg(images, toPath, false);
-        // toPath = "/Users/luofei/Desktop/H.jpg";
-        // joinImageToJpg(images, toPath, true);
-        gracefulMergeImagesToJpg(bgPath, 750, 1180, coverPath, 28, 15, 695, 647, toPath);
-        BufferedImage newBufferedImage = null;
-
-        BufferedImage origin = ImageIO.read(new File(coverPath));
-        newBufferedImage = new BufferedImage(origin.getWidth(), origin.getHeight(), BufferedImage.TYPE_INT_RGB);
-        newBufferedImage.createGraphics().drawImage(origin, 0, 0, Color.WHITE, null);
-        ImageIO.write(converScale(newBufferedImage, 695, 647), "jpg", new File("/Users/luofei/Desktop/cover1.jpg"));
+        String toPath = "/Users/liuxinglong/Desktop/test.jpg";
+        String bgPath = "/Users/liuxinglong/Desktop/1.png";
+        String bgPath2 = "/Users/liuxinglong/Desktop/2.png";
+        String coverPath = "/Users/liuxinglong/Desktop/a.jpg";
+        List<MergeImgWithMultipartModel> datas = new ArrayList<MergeImgWithMultipartModel>();
+        MergeImgWithMultipartModel data = new MergeImgWithMultipartModel();
+        data.setPath(coverPath);
+        UserAlbumItemEditInfo g = new UserAlbumItemEditInfo();
+        g.setCssElmMoveX(100);
+        g.setCssElmMoveY(300);
+        g.setCssElmWidth(225);
+        g.setCssElmHeight(200);
+        g.setCssElmRotate(30);
+        data.setUserAlbumItemEditInfo(g);
+        data.setClipDefault(false);
+        datas.add(data);
+        MergeImgWithMultipartModel data2 = new MergeImgWithMultipartModel();
+        data2.setPath(bgPath2);
+        UserAlbumItemEditInfo g2 = new UserAlbumItemEditInfo();
+        g2.setCssElmMoveX(440);
+        g2.setCssElmMoveY(600);
+        g2.setCssElmWidth(225);
+        g2.setCssElmHeight(200);
+        g2.setCssElmRotate(-30);
+        data2.setUserAlbumItemEditInfo(g2);
+        data2.setClipDefault(true);
+        datas.add(data2);
+        gracefulMergeImagesToJpgWithMultipart(bgPath, 750, 1206, datas, toPath);
     }
 }
