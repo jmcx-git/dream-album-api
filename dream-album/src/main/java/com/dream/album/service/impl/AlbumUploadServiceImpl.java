@@ -220,7 +220,6 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
         if (albumItemInfo == null) {
             return new ApiRespWrapper<String>(-1, "未找到相册模版ID为:" + albumItemId + "项的模版相关记录!");
         }
-
         UserAlbumItemInfo ua = new UserAlbumItemInfo();
         ua.setUserAlbumId(userAlbumInfo.getId());
         ua.setAlbumId(userAlbumInfo.getAlbumId());
@@ -228,7 +227,6 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
         ua.setAlbumItemId(albumItemId);
         // ua.setPreviewImgUrl(albumItemInfo.getPreviewImgUrl());
         userAlbumItemInfoService.addData(ua);
-
         UserAlbumItemInfo userAlbumItemInfo = userAlbumItemInfoService.getUserAlbumItemInfoByUk(ua);
         if (userAlbumItemInfo == null) {
             return new ApiRespWrapper<String>(-1, "发生未知错误,用户相册子项记录入库失败,未取到相关记录信息!");
@@ -250,6 +248,7 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             // 模版默认定位
             AlbumItemEditInfo x = new AlbumItemEditInfo();
             x.setAlbumItemId(albumItemId);
+            x.setRank(index);
             AlbumItemEditInfo template = albumItemEditInfoService.getAlbumItemEditInfoByUk(x);
             g.setCssElmMoveX(template.getCssElmMoveX());
             g.setCssElmMoveY(template.getCssElmMoveY());
@@ -294,10 +293,8 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
                 a.setUserAlbumItemId(info.getId());
                 // 获取对应子页的编辑信息数据
                 List<UserAlbumItemEditInfo> editInfos = userAlbumItemEditInfoService.listDirectFromDb(a);
-
                 // 获取对应子页的模版信息
                 AlbumItemInfo i = albumItemInfoService.getDirectFromDb(info.getAlbumItemId());
-
                 List<MergeImgWithMultipartModel> datas = new ArrayList<MergeImgWithMultipartModel>();
                 for (UserAlbumItemEditInfo userAlbumItemEditInfo : editInfos) {
                     MergeImgWithMultipartModel data = new MergeImgWithMultipartModel();
@@ -323,6 +320,7 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
                         userAlbumItemInfoService.addData(info);
                     } catch (Exception e) {
                         log.error("album lite make pre img fail!errMsg:" + e.getMessage());
+                        return new ApiRespWrapper<String>(-1, "相册生成失异常!errMsg:" + e.getMessage());
                     }
                 }
                 // else {
@@ -337,6 +335,8 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             // 并发多时，可能step记录不准，直接修改step为最后一步(step暂无特殊用处)
             userAlbumInfo.setStep(3);
             userAlbumInfoService.modifyUserAlbumInfoStep(userAlbumInfo);
+            userAlbumInfo.setComplete(1);
+            userAlbumInfoService.modifyUserAlbumInfoCompleteAndPreImg(userAlbumInfo);
             return new ApiRespWrapper<String>(0, "相册生成成功!", String.valueOf(userAlbumId));
         }
         return new ApiRespWrapper<String>(0, "数据添加成功!", String.valueOf(userAlbumId));

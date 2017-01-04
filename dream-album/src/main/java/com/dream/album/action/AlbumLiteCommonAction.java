@@ -1,17 +1,25 @@
 package com.dream.album.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dream.album.dto.PreviewWrapModel;
 import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dream.album.service.AlbumUploadService;
 import com.dream.album.service.ImgService;
+import com.dreambox.core.dto.album.AlbumInfo;
+import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.AlbumUploadImgEnum;
 import com.dreambox.core.dto.album.CompleteEnum;
 import com.dreambox.core.dto.album.UserAlbumInfo;
+import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.service.album.AlbumInfoService;
 import com.dreambox.core.service.album.AlbumItemInfoService;
 import com.dreambox.core.service.album.UserAlbumCollectInfoService;
@@ -97,7 +105,52 @@ public class AlbumLiteCommonAction extends IosBaseAction {
                 AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus(), index, isComplete);
     }
 
-
+    @RequestMapping("/getpreview.json")
+    @ResponseBody
+    public PreviewWrapModel getProductPre(Integer userAlbumId, Integer albumId) {
+        if (albumId == null && userAlbumId == null) {
+            return null;
+        }
+        PreviewWrapModel model = new PreviewWrapModel();
+        if (albumId != null) {
+            AlbumInfo album = albumInfoService.getDirectFromDb(albumId);
+            if (album == null) {
+                return null;
+            }
+            AlbumItemInfo g = new AlbumItemInfo();
+            g.setAlbumId(albumId);
+            g.setStatus(AlbumItemInfo.STATUS_OK);
+            List<AlbumItemInfo> itemInfos = albumItemInfoService.listDirectFromDb(g);
+            List<String> list = new ArrayList<String>();
+            for (AlbumItemInfo itemInfo : itemInfos) {
+                list.add(itemInfo.getPreviewImgUrl());
+            }
+            model.setLoopPreImgs(list);
+            model.setMakeComplete(true);
+        } else {
+            UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
+            if (userAlbumInfo == null) {
+                return null;
+            }
+            UserAlbumItemInfo g = new UserAlbumItemInfo();
+            g.setUserAlbumId(userAlbumId);
+            List<UserAlbumItemInfo> listDirectFromDb = userAlbumItemInfoService.listDirectFromDb(g);
+            List<String> list = new ArrayList<String>();
+            for (UserAlbumItemInfo userAlbumItemInfo : listDirectFromDb) {
+                if (StringUtils.isNotBlank(userAlbumItemInfo.getPreviewImgUrl())) {
+                    list.add(userAlbumItemInfo.getPreviewImgUrl());
+                }
+            }
+            AlbumInfo album = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
+            if (list.size() == album.getTotalItems()) {
+                model.setMakeComplete(true);
+            } else {
+                model.setMakeComplete(false);
+            }
+            model.setLoopPreImgs(list);
+        }
+        return model;
+    }
 
     private static UserAlbumInfo initUserAlbumInfoInit(int userId, int albumId) {
         UserAlbumInfo userAlbumInfo = new UserAlbumInfo();
