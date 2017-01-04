@@ -292,23 +292,7 @@ public class AlbumCommonAction extends IosBaseAction {
             return null;
         }
         PreviewWrapModel model = new PreviewWrapModel();
-        if (albumId != null) {
-            AlbumInfo album = albumInfoService.getDirectFromDb(albumId);
-            if (album == null) {
-                return null;
-            }
-            AlbumItemInfo g = new AlbumItemInfo();
-            g.setAlbumId(albumId);
-            g.setStatus(AlbumItemInfo.STATUS_OK);
-            List<AlbumItemInfo> itemInfos = albumItemInfoService.listDirectFromDb(g);
-            List<String> list = new ArrayList<String>();
-            for (AlbumItemInfo itemInfo : itemInfos) {
-                list.add(itemInfo.getPreviewImgUrl());
-            }
-            model.setLoopPreImgs(list);
-            model.setBigPreImg(album.getPreviewImg());
-            model.setMakeComplete(true);
-        } else {
+        if (userAlbumId != null) {
             UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
             if (userAlbumInfo == null) {
                 return null;
@@ -328,6 +312,22 @@ public class AlbumCommonAction extends IosBaseAction {
             }
             model.setLoopPreImgs(list);
             model.setBigPreImg(userAlbumInfo.getPreviewImg());
+        } else {
+            AlbumInfo album = albumInfoService.getDirectFromDb(albumId);
+            if (album == null) {
+                return null;
+            }
+            AlbumItemInfo g = new AlbumItemInfo();
+            g.setAlbumId(albumId);
+            g.setStatus(AlbumItemInfo.STATUS_OK);
+            List<AlbumItemInfo> itemInfos = albumItemInfoService.listDirectFromDb(g);
+            List<String> list = new ArrayList<String>();
+            for (AlbumItemInfo itemInfo : itemInfos) {
+                list.add(itemInfo.getPreviewImgUrl());
+            }
+            model.setLoopPreImgs(list);
+            model.setBigPreImg(album.getPreviewImg());
+            model.setMakeComplete(true);
         }
         return model;
     }
