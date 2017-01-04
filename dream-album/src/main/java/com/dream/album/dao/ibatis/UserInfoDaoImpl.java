@@ -32,4 +32,9 @@ public class UserInfoDaoImpl extends UserInfoDao {
         return SQLUtils.queryObject(sqlMapClient, "getUserInfoByOpenId", openId);
     }
 
+    @Override
+    public Integer queryIdByUk(String openId) throws SQLException {
+        return SQLUtils.queryObject(sqlMapClient, "queryUserInfoIdByUk", openId);
+    }
+
 }

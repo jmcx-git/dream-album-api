@@ -68,6 +68,13 @@
 		]]>
 	</select>
 
+	<select id="queryUserInfoIdByUk" parameterClass="java.lang.String"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT id FROM `user_info` WHERE `open_id` = #openId#;
+		]]>
+	</select>
+
 	<select id="queryUserInfoListByStartId" parameterClass="java.util.Map"
 		resultMap="userinfo">
 		<![CDATA[

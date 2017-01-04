@@ -87,15 +87,6 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
     }
 
     @Override
-    public void modifyUserAlbumInfoStep(UserAlbumInfo info) throws ServiceException {
-        try {
-            userAlbumInfoDao.updateUserAlbumInfoStep(info);
-        } catch (SQLException e) {
-            throw ServiceException.getSQLException(e);
-        }
-    }
-
-    @Override
     public UserAlbumInfo getUserAlbumInfoByUk(UserAlbumInfo info) throws ServiceException {
         try {
             return userAlbumInfoDao.queryUserAlbumInfoByUk(info);
@@ -123,9 +114,9 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
     }
 
     @Override
-    public void modifyUserAlbumInfoTitle(UserAlbumInfo info) throws ServiceException {
+    public boolean modifyUserAlbumInfoTitle(UserAlbumInfo info) throws ServiceException {
         try {
-            userAlbumInfoDao.updateUserAlbumInfoTitle(info);
+            return userAlbumInfoDao.updateUserAlbumInfoTitle(info);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }

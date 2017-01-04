@@ -10,6 +10,7 @@ import com.dream.album.model.AlbumEditImgInfoModel;
 import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
+import com.dreambox.core.dto.MergeImgWithMultipartModel;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.web.exception.ServiceException;
@@ -31,6 +32,9 @@ public interface ImgService {
 
     public MergeImgFileResp mergeToPreviewImg(String editImePath, String localPath, AlbumItemInfo albumItemInfo,
             AlbumEditImgInfoModel model) throws Exception;
+
+    public MergeImgFileResp mergeToPreviewImgWithMultipart(String editImePath, AlbumItemInfo albumItemInfo,
+            List<MergeImgWithMultipartModel> datas) throws Exception;
 
     public JoinImgFileResp joinPreviewImg(int userAlbumId, List<String> prwImgList);
 

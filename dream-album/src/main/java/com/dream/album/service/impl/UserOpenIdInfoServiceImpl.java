@@ -1,14 +1,19 @@
 package com.dream.album.service.impl;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import redis.clients.jedis.JedisPool;
+
 import com.dream.album.model.UserOpenIdInfo;
 import com.dream.album.service.UserOpenIdInfoService;
 import com.dreambox.core.dto.album.SmallAppDeveloperInfo;
 import com.dreambox.core.service.album.SmallAppDeveloperInfoService;
+import com.dreambox.core.utils.RedisCacheUtils;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.utils.GsonUtils;
 import com.dreambox.web.utils.RemoteDataUtil;
@@ -19,6 +24,10 @@ public class UserOpenIdInfoServiceImpl implements UserOpenIdInfoService {
     public static String GRANT_TYPE = "authorization_code";
     @Autowired
     private SmallAppDeveloperInfoService smallAppDeveloperInfoService;
+    @Autowired
+    @Resource(name = "jmcx-wx-redisdbpool")
+    private JedisPool jedisDbPool;
+    private String thirdWexinUserSessionKey = "wx:user:session";
 
     @Override
     public UserOpenIdInfo getUser3rdSesseion(String code) {
@@ -49,17 +58,27 @@ public class UserOpenIdInfoServiceImpl implements UserOpenIdInfoService {
             throw ServiceException.getInternalException("Get user session code failed. Network error.");
         }
         if (ret == null) {
-            return null;
+            throw ServiceException.getInternalException("Get user session code failed. Network error.");
         } else {
             try {
                 UserOpenIdInfo info = GsonUtils.convert(ret, UserOpenIdInfo.class);
                 if (info != null) {
+                    RedisCacheUtils.setObject(buildKey(info.getOpenid()), info, jedisDbPool);
                     return info;
                 }
             } catch (Exception e) {
                 throw ServiceException.getInternalException("Convert user session code failed. Convert error.");
             }
         }
-        return null;
+        throw ServiceException.getInternalException("Get user session code failed. Network error.");
+    }
+
+    @Override
+    public UserOpenIdInfo getInfo(String openId) throws ServiceException {
+        return RedisCacheUtils.getObject(buildKey(openId), jedisDbPool);
+    }
+
+    private String buildKey(String openId) {
+        return RedisCacheUtils.buildKey(this.thirdWexinUserSessionKey, openId);
     }
 }

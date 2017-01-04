@@ -68,14 +68,6 @@ public class WxLoginAction {
         return sessionKey;
     }
 
-    @RequestMapping("/addUser.json")
-    @ResponseBody
-    public String addUser(String code) {
-        UserInfo g = new UserInfo();
-        int id = userInfoService.addDataAndReturnId(g);
-        return String.valueOf(id);
-    }
-
     @RequestMapping("/getUserInfo.json")
     @ResponseBody
     public String getUserInfo(String threeSessionKey, String encryptedData, String iv) {
@@ -97,7 +89,9 @@ public class WxLoginAction {
         if (!StringUtils.isEmpty(userInfo)) {
             try {
                 UserFullInfo info = GsonUtils.convert(userInfo, UserFullInfo.class);
-                UserInfo g = userInfoService.getDirectFromDbByOpenId(info.getOpenId());
+                UserInfo g = new UserInfo();
+                g.setOpenId(info.getOpenId());
+                g = userInfoService.getInfoByUk(g);
                 if (g == null) {
                     g = new UserInfo();
                 }

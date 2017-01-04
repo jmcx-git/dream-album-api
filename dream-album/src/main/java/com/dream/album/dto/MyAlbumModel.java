@@ -5,14 +5,12 @@ package com.dream.album.dto;
  * @date 2016年12月9日
  */
 public class MyAlbumModel {
-
     private int albumId;// 相册
     private String title;
     private String cover;// 封面图
     private String previewImg;// 预览图
 
     private int userAlbumId;// 用户相册Id
-    private int step;
     private int complete;// 是否生成了相册
     private String productImg;// 在用户户生成完相册后根据信息生成预览图
 
@@ -47,14 +45,6 @@ public class MyAlbumModel {
 
     public void setUserAlbumId(int userAlbumId) {
         this.userAlbumId = userAlbumId;
-    }
-
-    public int getStep() {
-        return step;
-    }
-
-    public void setStep(int step) {
-        this.step = step;
     }
 
     public int getComplete() {
