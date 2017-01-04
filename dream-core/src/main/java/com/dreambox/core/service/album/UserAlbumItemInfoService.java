@@ -15,5 +15,7 @@ public abstract class UserAlbumItemInfoService extends AbstractSortedListCacheSe
 
     public abstract String getUserOriginImgPath(UserAlbumItemInfo g);
 
+    public abstract String getUserOriginImgPath(String url);
+
     public abstract UserAlbumItemInfo getUserAlbumItemInfoByUk(UserAlbumItemInfo info) throws ServiceException;
 }

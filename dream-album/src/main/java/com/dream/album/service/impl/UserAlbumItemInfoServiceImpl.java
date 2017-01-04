@@ -92,6 +92,13 @@ public class UserAlbumItemInfoServiceImpl extends UserAlbumItemInfoService {
     }
 
     @Override
+    public String getUserOriginImgPath(String url) {
+        UserAlbumItemInfo g = new UserAlbumItemInfo();
+        g.setUserOriginImgUrl(url);
+        return imgService.getUserAlbumItemUserOriginImgPath(g);
+    }
+
+    @Override
     protected Logger getLogger() {
         return log;
     }

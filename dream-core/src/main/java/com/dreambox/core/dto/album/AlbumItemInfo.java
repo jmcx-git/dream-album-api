@@ -2,6 +2,8 @@
 
 package com.dreambox.core.dto.album;
 
+import java.util.List;
+
 import com.dreambox.core.DbStatus;
 
 /**
@@ -24,6 +26,7 @@ public class AlbumItemInfo extends DbStatus {
     private int editCount;// 可编辑元素个数
     private String editImgInfos;// json 【css arrtibute json object】
     private String editTextInfos;// json【css arrtibute json object】
+    private List<AlbumItemEditInfo> photoInfos;
 
     public int getId() {
         return id;
@@ -111,5 +114,13 @@ public class AlbumItemInfo extends DbStatus {
 
     public void setShadowImgUrl(String shadowImgUrl) {
         this.shadowImgUrl = shadowImgUrl;
+    }
+
+    public List<AlbumItemEditInfo> getPhotoInfos() {
+        return photoInfos;
+    }
+
+    public void setPhotoInfos(List<AlbumItemEditInfo> photoInfos) {
+        this.photoInfos = photoInfos;
     }
 }

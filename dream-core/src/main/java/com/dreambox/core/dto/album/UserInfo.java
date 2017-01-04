@@ -2,13 +2,14 @@
 
 package com.dreambox.core.dto.album;
 
-import com.dreambox.core.DbStatus;
+import com.dreambox.core.dto.DbKey.UNIQUE_KEY;
+import com.dreambox.core.dto.StatusSerializable;
 
 /**
  * @author git@jmcxclub.com create date: Dec 6, 2016
  *
  */
-public class UserInfo extends DbStatus {
+public class UserInfo extends StatusSerializable {
     /**
      * 
      */
@@ -20,7 +21,7 @@ public class UserInfo extends DbStatus {
     private String province;
     private String country;
     private String avatarUrl;// refer from wx info.avatorUrl
-
+    @UNIQUE_KEY
     private String openId;// refer from wx info.openId[用户的标识，只对当前小程序唯一]
     private String unionId;// refer from wx info.unionId;[多平台唯一标识]
     private String appid;

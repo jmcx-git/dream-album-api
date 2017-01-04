@@ -19,18 +19,18 @@ import com.dream.album.model.UserMakeAlbumInfo;
 import com.dream.album.service.AlbumUploadService;
 import com.dream.album.service.ImgService;
 import com.dreambox.core.dto.album.AlbumInfo;
-import com.dreambox.core.dto.album.AlbumItemEditInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.AlbumUploadImgEnum;
 import com.dreambox.core.dto.album.CompleteEnum;
 import com.dreambox.core.dto.album.UserAlbumInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
+import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.service.album.AlbumInfoService;
-import com.dreambox.core.service.album.AlbumItemEditInfoService;
 import com.dreambox.core.service.album.AlbumItemInfoService;
 import com.dreambox.core.service.album.UserAlbumCollectInfoService;
 import com.dreambox.core.service.album.UserAlbumInfoService;
 import com.dreambox.core.service.album.UserAlbumItemInfoService;
+import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.model.ApiRespWrapper;
@@ -40,8 +40,8 @@ import com.dreambox.web.model.ApiRespWrapper;
  * @date 2016年12月6日
  */
 @Controller
-@RequestMapping("/dream/album/common/*")
-public class AlbumCommonAction extends IosBaseAction {
+@RequestMapping("/album/*")
+public class AlbumAction extends IosBaseAction {
     // private static final Logger log =
     // Logger.getLogger(AlbumCommonAction.class);
 
@@ -49,8 +49,6 @@ public class AlbumCommonAction extends IosBaseAction {
     private AlbumInfoService albumInfoService;
     @Autowired
     private AlbumItemInfoService albumItemInfoService;
-    @Autowired
-    private AlbumItemEditInfoService albumItemEditInfoService;
     @Autowired
     private UserAlbumInfoService userAlbumInfoService;
     @Autowired
@@ -61,6 +59,9 @@ public class AlbumCommonAction extends IosBaseAction {
     private ImgService imgService;
     @Autowired
     private AlbumUploadService albumUploadService;
+    @Autowired
+    private UserInfoService userInfoService;
+
 
     /**
      * 首页数据接口，获取关键字及相册列表
@@ -72,7 +73,7 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/homepage.json")
     @ResponseBody
-    public AlbumHomePageModel getHomepage(String keyword, Integer userId, Integer start, Integer size) {
+    public AlbumHomePageModel getHomepage(String keyword, String openId, Integer start, Integer size) {
         start = ParameterUtils.formatStart(start);
         size = ParameterUtils.formatSize(size);
         AlbumHomePageModel model = new AlbumHomePageModel();
@@ -135,12 +136,6 @@ public class AlbumCommonAction extends IosBaseAction {
             albumItemInfo.setStatus(AlbumItemInfo.STATUS_OK);
             albumItemInfo.setAlbumId(albumInfo.getId());
             List<AlbumItemInfo> albumItemInfos = albumItemInfoService.listDirectFromDb(albumItemInfo);
-            for (AlbumItemInfo info : albumItemInfos) {
-                AlbumItemEditInfo g = new AlbumItemEditInfo();
-                g.setAlbumItemId(info.getId());
-                List<AlbumItemEditInfo> edits = albumItemEditInfoService.listDirectFromDb(g);
-                info.setPhotoInfos(edits);
-            }
             albumInfo.setAlbumItemList(albumItemInfos);
         }
         return infos;
@@ -200,12 +195,18 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploaduserimg.json")
     @ResponseBody
-    public ApiRespWrapper<String> uploadAllImg(MultipartFile image, Integer userId, Integer albumId, Integer albumItemId) {
-        if (userId == null || userId.intValue() <= 0 || albumId == null || albumId.intValue() <= 0
-                || albumItemId == null || albumItemId.intValue() <= 0) {
+    public ApiRespWrapper<String> uploadUserImg(MultipartFile image, String openId, Integer albumId, Integer albumItemId) {
+        if (StringUtils.isEmpty(openId) || albumId == null || albumId.intValue() <= 0 || albumItemId == null
+                || albumItemId.intValue() <= 0) {
             return new ApiRespWrapper<String>(-1, "参数不合法!");
         }
-        UserAlbumInfo userAlbumInfo = initUserAlbumInfoInit(userId, albumId);
+        UserInfo g = new UserInfo();
+        g.setOpenId(openId);
+        g = userInfoService.getInfoByUk(g);
+        if (g == null) {
+            return new ApiRespWrapper<String>(-1, "无效的用户openId");
+        }
+        UserAlbumInfo userAlbumInfo = initUserAlbumInfoInit(g.getId(), albumId);
         userAlbumInfo = userAlbumInfoService.createAlbum(userAlbumInfo);
         return albumUploadService.albumUploadHandle(image, userAlbumInfo.getId(), albumItemId, null,
                 AlbumUploadImgEnum.UPLOAD_IMG.getStatus());
@@ -232,15 +233,8 @@ public class AlbumCommonAction extends IosBaseAction {
      */
     @RequestMapping("/uploadnotuserimg.json")
     @ResponseBody
-    public ApiRespWrapper<String> uploadAllImg(Integer userId, Integer albumId, Integer albumItemId) {
-        if (userId == null || userId.intValue() <= 0 || albumId == null || albumId.intValue() <= 0
-                || albumItemId == null || albumItemId.intValue() <= 0) {
-            return new ApiRespWrapper<String>(-1, "参数不合法!");
-        }
-        UserAlbumInfo userAlbumInfo = initUserAlbumInfoInit(userId, albumId);
-        userAlbumInfo = userAlbumInfoService.createAlbum(userAlbumInfo); //
-        return albumUploadService.albumUploadHandle(null, userAlbumInfo.getId(), albumItemId, null,
-                AlbumUploadImgEnum.UPLOAD_NO_IMG.getStatus());
+    public ApiRespWrapper<String> uploadNotUserImg(Integer userId, String openId, Integer albumId, Integer albumItemId) {
+        return uploadUserImg(null, openId, albumId, albumItemId);
     }
 
     /**
@@ -250,17 +244,25 @@ public class AlbumCommonAction extends IosBaseAction {
      * @param userId
      * @return
      */
-    @RequestMapping("/myalbum.json")
+    @RequestMapping("/getMyAlbum.json")
     @ResponseBody
-    public List<MyAlbumModel> getMyAlbumList(String userId) {
-        if (StringUtils.isBlank(userId)) {
+    public List<MyAlbumModel> getMyAlbum(String openId, String appId) {
+        if (StringUtils.isEmpty(openId)) {
+            // TODO
             return null;
         }
-        Integer uid = Integer.valueOf(userId);
+
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            // TODO
+        }
+        // Integer uid = Integer.valueOf(userId);
         UserAlbumInfo info = new UserAlbumInfo();
-        info.setUserId(uid);
+        info.setUserId(userInfo.getId());
         // 获取该userId已完成的相册
-        info.setComplete(1);
+        info.setComplete(CompleteEnum.COMPLETED.getStatus());
         List<UserAlbumInfo> listDirectFromDb = userAlbumInfoService.listDirectFromDb(info);
         List<MyAlbumModel> resultData = new ArrayList<MyAlbumModel>();
         // 拼装数据
@@ -287,32 +289,17 @@ public class AlbumCommonAction extends IosBaseAction {
 
     @RequestMapping("/getpreview.json")
     @ResponseBody
-    public PreviewWrapModel getProductPre(Integer userAlbumId, Integer albumId) {
-        if (albumId == null && userAlbumId == null) {
-            return null;
+    public ApiRespWrapper<PreviewWrapModel> getPreview(String appId, String openId, Integer userAlbumId) {
+        if (userAlbumId == null || userAlbumId.intValue() <= 0) {
+            return new ApiRespWrapper<PreviewWrapModel>(-1, "错误的参数.");
         }
         PreviewWrapModel model = new PreviewWrapModel();
-        if (albumId != null) {
-            AlbumInfo album = albumInfoService.getDirectFromDb(albumId);
-            if (album == null) {
-                return null;
-            }
-            AlbumItemInfo g = new AlbumItemInfo();
-            g.setAlbumId(albumId);
-            g.setStatus(AlbumItemInfo.STATUS_OK);
-            List<AlbumItemInfo> itemInfos = albumItemInfoService.listDirectFromDb(g);
-            List<String> list = new ArrayList<String>();
-            for (AlbumItemInfo itemInfo : itemInfos) {
-                list.add(itemInfo.getPreviewImgUrl());
-            }
-            model.setLoopPreImgs(list);
-            model.setBigPreImg(album.getPreviewImg());
-            model.setMakeComplete(true);
-        } else {
-            UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
-            if (userAlbumInfo == null) {
-                return null;
-            }
+        UserAlbumInfo userAlbumInfo = userAlbumInfoService.getDirectFromDb(userAlbumId);
+        if (userAlbumInfo == null) {
+            return new ApiRespWrapper<PreviewWrapModel>(-1, "错误的参数.");
+        }
+        model.setMakeComplete(userAlbumInfo.getComplete() == CompleteEnum.COMPLETED.getStatus());
+        if (model.isMakeComplete()) {
             UserAlbumItemInfo g = new UserAlbumItemInfo();
             g.setUserAlbumId(userAlbumId);
             List<UserAlbumItemInfo> listDirectFromDb = userAlbumItemInfoService.listDirectFromDb(g);
@@ -320,28 +307,33 @@ public class AlbumCommonAction extends IosBaseAction {
             for (UserAlbumItemInfo userAlbumItemInfo : listDirectFromDb) {
                 list.add(userAlbumItemInfo.getPreviewImgUrl());
             }
-            AlbumInfo album = albumInfoService.getDirectFromDb(userAlbumInfo.getAlbumId());
-            if (list.size() == album.getTotalItems() && StringUtils.isNotBlank(userAlbumInfo.getPreviewImg())) {
-                model.setMakeComplete(true);
-            } else {
-                model.setMakeComplete(false);
-            }
             model.setLoopPreImgs(list);
             model.setBigPreImg(userAlbumInfo.getPreviewImg());
         }
-        return model;
+        return new ApiRespWrapper<PreviewWrapModel>(model);
     }
 
     @RequestMapping("/modifyuseralbuminfotitle.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> modifyUserAlbumInfoTitle(Integer userAlbumId, String title) {
-        if (userAlbumId == null || userAlbumId.intValue() <= 0) {
+    public ApiRespWrapper<Boolean> modifyUserAlbumInfoTitle(String appId, String openId, Integer userAlbumId,
+            String title) {
+        if (userAlbumId == null || userAlbumId.intValue() <= 0 || StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "参数不合法!", false);
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
             return new ApiRespWrapper<Boolean>(-1, "参数不合法!", false);
         }
         UserAlbumInfo g = new UserAlbumInfo();
         g.setId(userAlbumId);
         g.setTitle(title);
-        userAlbumInfoService.modifyUserAlbumInfoTitle(g);
-        return new ApiRespWrapper<Boolean>(-1, "modify title success", true);
+        g.setUserId(userInfo.getId());
+        if (userAlbumInfoService.modifyUserAlbumInfoTitle(g)) {
+            return new ApiRespWrapper<Boolean>(true);
+        } else {
+            return new ApiRespWrapper<Boolean>(-1, "参数不合法!", false);
+        }
     }
 }

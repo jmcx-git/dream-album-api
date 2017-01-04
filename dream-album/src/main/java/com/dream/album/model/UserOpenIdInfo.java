@@ -1,6 +1,12 @@
 package com.dream.album.model;
 
-public class UserOpenIdInfo {
+import java.io.Serializable;
+
+public class UserOpenIdInfo implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3828508543814492647L;
     private String openid;
     private String session_key;
     private Integer expires_in;

@@ -18,7 +18,6 @@ public class UserAlbumInfo extends DbStatus {
     private int userId;// 用户id
     private int albumId;// 选用的相册模板
     private String title;// 用户相册标题
-    private int step;// 当前操作到第几步
     @SELECT_ALL_KEY
     @ZERO_ENABLE
     private int complete;// 是否生成了相册
@@ -50,14 +49,6 @@ public class UserAlbumInfo extends DbStatus {
 
     public void setAlbumId(int albumId) {
         this.albumId = albumId;
-    }
-
-    public int getStep() {
-        return step;
-    }
-
-    public void setStep(int step) {
-        this.step = step;
     }
 
     public int getComplete() {

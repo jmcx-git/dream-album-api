@@ -1,6 +1,7 @@
 package com.dreambox.core.utils;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 import org.imgscalr.Scalr;
 
+import com.dreambox.core.dto.MergeImgWithMultipartModel;
 import com.dreambox.web.exception.ServiceException;
 
 
@@ -142,6 +144,58 @@ public class ImagePsUtils {
             newBufferedImage.createGraphics().drawImage(convertBufferedImage, x, y, width + x, height + y, startX,
                     startY, endX, endY, null);
             newBufferedImage.createGraphics().drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
+            File outputFile = new File(toPath);
+            outputFile.mkdirs();
+            ImageIO.write(newBufferedImage, "jpg", outputFile);
+            outputFile.setReadable(true, false);
+        } catch (Exception e) {
+            log.error("Merge image failed.Errmsg:" + e.getMessage(), e);
+            throw e;
+        }
+    }
+
+    /**
+     * 优雅的合并图片(按指定初始x、y坐标将附加图片贴到底图之上) 并指定宽高 支持多张图片
+     * 
+     * @param bgImagePath
+     * @param bgWidth
+     * @param bgHeight
+     * @param datas
+     * @param toPath
+     * @throws IOException
+     */
+    public static void gracefulMergeImagesToJpgWithMultipart(String bgImagePath, int bgWidth, int bgHeight,
+            List<MergeImgWithMultipartModel> datas, String toPath) throws IOException {
+        try {
+            BufferedImage newBufferedImage = new BufferedImage(bgWidth, bgHeight, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = newBufferedImage.createGraphics();
+            // g2d.getDeviceConfiguration().createCompatibleImage(bgWidth,
+            // bgHeight,Transparency.TRANSLUCENT);
+            for (MergeImgWithMultipartModel data : datas) {
+                int x = data.getUserAlbumItemEditInfo().getCssElmMoveX();
+                int y = data.getUserAlbumItemEditInfo().getCssElmMoveY();
+                int width = data.getUserAlbumItemEditInfo().getCssElmWidth();
+                int height = data.getUserAlbumItemEditInfo().getCssElmHeight();
+                int degree = data.getUserAlbumItemEditInfo().getCssElmRotate();
+                BufferedImage img;
+                if (data.isClipDefault()) {
+                    // 将预览图编辑区域未知的图片抠下来再画入合成图该编辑区域达到未上传图片区域显示默认图的效果
+                    img = ImageIO.read(new File(data.getPath())).getSubimage(x, y, width, height);
+                } else {
+                    img = ImageIO.read(new File(data.getPath()));
+                }
+                BufferedImage convertBufferedImage = converScale(img, width, height);
+                int covertWidht = convertBufferedImage.getWidth();
+                int covertHeight = convertBufferedImage.getHeight();
+                int startX = covertWidht > width ? (covertWidht - width) / 2 : 0;
+                int startY = covertHeight > height ? (covertHeight - height) / 2 : 0;
+                int endX = covertWidht > width ? startX + width : width;
+                int endY = covertHeight > height ? startY + height : height;
+                g2d.rotate(Math.toRadians(degree), x + width / 2, y + height / 2);
+                g2d.drawImage(convertBufferedImage, x, y, width + x, height + y, startX, startY, endX, endY, null);
+                g2d.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
+            }
+            g2d.drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
             File outputFile = new File(toPath);
             outputFile.mkdirs();
             ImageIO.write(newBufferedImage, "jpg", outputFile);

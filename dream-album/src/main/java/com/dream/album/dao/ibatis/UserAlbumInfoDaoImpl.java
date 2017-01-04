@@ -25,6 +25,7 @@ public class UserAlbumInfoDaoImpl extends UserAlbumInfoDao {
         return sqlMapClient;
     }
 
+
     @Override
     public void updateUserAlbumInfoStep(UserAlbumInfo info) throws SQLException {
         SQLUtils.update(sqlMapClient, "updateUserAlbumInfoStep", info);
@@ -46,8 +47,8 @@ public class UserAlbumInfoDaoImpl extends UserAlbumInfoDao {
     }
 
     @Override
-    public void updateUserAlbumInfoTitle(UserAlbumInfo info) throws SQLException {
-        SQLUtils.update(sqlMapClient, "updateUserAlbumInfoTitle", info);
+    public boolean updateUserAlbumInfoTitle(UserAlbumInfo info) throws SQLException {
+        return SQLUtils.update(sqlMapClient, "updateUserAlbumInfoTitle", info) > 0;
     }
 
 }

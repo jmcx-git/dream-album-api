@@ -19,5 +19,5 @@ public abstract class UserAlbumInfoDao extends AbsCommonDao<UserAlbumInfo> {
 
     public abstract UserAlbumInfo queryLatestByUserAlbumAndComplete(UserAlbumInfo info) throws SQLException;
 
-    public abstract void updateUserAlbumInfoTitle(UserAlbumInfo info) throws SQLException;
+    public abstract boolean updateUserAlbumInfoTitle(UserAlbumInfo info) throws SQLException;
 }

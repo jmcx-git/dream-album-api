@@ -20,6 +20,7 @@ import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
 import com.dream.album.service.ImgService;
+import com.dreambox.core.dto.MergeImgWithMultipartModel;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.utils.DateUtils;
@@ -127,5 +128,23 @@ public class ImgServiceImpl implements ImgService {
         String userOriginImgUrl = g.getUserOriginImgUrl();
         return userOriginImgUrl.replace(imgPrefixUrl, imgLocalDir);
     }
+
+    @Override
+    public MergeImgFileResp mergeToPreviewImgWithMultipart(String editImePath, AlbumItemInfo albumItemInfo,
+            List<MergeImgWithMultipartModel> datas) throws Exception {
+        String picName = "album_item_pre_" + new Date().getTime() + ".jpg";
+        String subDir = DateUtils.getTodayYmd();
+        String dir = IOUtils.spliceDirPath(IOUtils.spliceDirPath(imgLocalDir, userAlbumItemPreviewImgLocalDir), subDir);
+        String filePath = IOUtils.spliceFileName(dir, picName);
+        try {
+            ImagePsUtils.gracefulMergeImagesToJpgWithMultipart(editImePath, albumItemInfo.getImgWidth(),
+                    albumItemInfo.getImgHeight(), datas, filePath);
+        } catch (IOException e) {
+            log.error("Merge image file to preview file faied. Errmsg:" + e.getMessage(), e);
+            throw ServiceException.getInternalException("Merge image files failed.");
+        }
+        return new MergeImgFileResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
+    }
+
 
 }
