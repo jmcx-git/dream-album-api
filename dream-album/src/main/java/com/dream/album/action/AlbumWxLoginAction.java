@@ -40,6 +40,21 @@ public class AlbumWxLoginAction {
         return info.getOpenid();
     }
 
+    @RequestMapping("/getShareUserInfo.json")
+    @ResponseBody
+    public ApiRespWrapper<UserInfoResp> getShareUserInfo(String openId, String appId) {
+        if (StringUtils.isAnyEmpty(openId, appId)) {
+            return new ApiRespWrapper<UserInfoResp>(-1, "Illegal parameter for get user info.");
+        }
+        UserInfo g = new UserInfo();
+        g.setOpenId(openId);
+        g = userInfoService.getInfoByUk(g);
+        if (g == null) {
+            return new ApiRespWrapper<UserInfoResp>(-1, "Illegal openid for weixin user.");
+        }
+        return new ApiRespWrapper<UserInfoResp>(new UserInfoResp(g));
+    }
+
     @RequestMapping("/getUserInfo.json")
     @ResponseBody
     public ApiRespWrapper<UserInfoResp> getUserInfo(String openId, String encryptedData, String iv, String appId) {
