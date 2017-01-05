@@ -169,6 +169,9 @@ public class ImagePsUtils {
         try {
             BufferedImage newBufferedImage = new BufferedImage(bgWidth, bgHeight, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = newBufferedImage.createGraphics();
+            // 背景色
+            g2d.setBackground(Color.white);
+            g2d.fillRect(0, 0, bgWidth, bgHeight);
             // g2d.getDeviceConfiguration().createCompatibleImage(bgWidth,
             // bgHeight,Transparency.TRANSLUCENT);
             for (MergeImgWithMultipartModel data : datas) {
