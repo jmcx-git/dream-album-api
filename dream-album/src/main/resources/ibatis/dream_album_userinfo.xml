@@ -21,13 +21,15 @@
 		<![CDATA[
 			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
 			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatar_url#
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreUserInfo" parameterClass="com.dreambox.core.dto.album.UserInfo">
 		<![CDATA[
-			INSERT IGNORE INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
+			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
 			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatar_url#
 		]]>
 	</insert>
 
@@ -35,6 +37,7 @@
 		<![CDATA[
 			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
 			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatar_url#
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -56,16 +59,22 @@
 
 	<select id="queryUserInfoById" parameterClass="java.lang.Integer"
 		resultMap="userinfo">
-		<![CDATA[
-			SELECT * FROM `user_info` WHERE `id` = #startId#;
-		]]>
+		SELECT `id`,CAST(nick_name AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`,
+		`open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`
+		FROM `user_info` WHERE `id` = #startId#;
 	</select>
 
 	<select id="getUserInfoByOpenId" parameterClass="java.lang.String"
 		resultMap="userinfo">
-		<![CDATA[
-			SELECT * FROM `user_info` WHERE `open_id` = #openId#;
-		]]>
+		SELECT `id`,CAST(nick_name AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`,
+		`open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`
+		FROM `user_info` WHERE `open_id` = #openId#;
 	</select>
 
 	<select id="queryUserInfoIdByUk" parameterClass="java.lang.String"
@@ -77,14 +86,22 @@
 
 	<select id="queryUserInfoListByStartId" parameterClass="java.util.Map"
 		resultMap="userinfo">
-		<![CDATA[
-			SELECT * FROM `user_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
-		]]>
+		SELECT `id`,CAST(nick_name AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`,
+		`open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`
+		FROM `user_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
 	</select>
 
 	<select id="queryUserInfoByIds" parameterClass="java.util.Map"
 		resultMap="userinfo">
-		SELECT * FROM `user_info`
+		SELECT `id`,CAST(nick_name AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`,
+		`open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`
+		FROM `user_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
 			#ids[]#
 		</iterate>
@@ -92,7 +109,12 @@
 
 	<select id="queryUserInfoListByFilter" parameterClass="java.util.Map"
 		resultMap="userinfo">
-		SELECT * FROM `user_info`
+		SELECT `id`,CAST(nick_name AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`,
+		`open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`
+		FROM `user_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">
