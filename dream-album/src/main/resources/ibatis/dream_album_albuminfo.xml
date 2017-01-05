@@ -8,6 +8,7 @@
 		<result column="total_items" property="totalItems" jdbcType="INTEGER" />
 		<result column="cover" property="cover" jdbcType="VARCHAR" />
 		<result column="preview_img" property="previewImg" jdbcType="VARCHAR" />
+		<result column="music" property="music" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -15,22 +16,22 @@
 
 	<insert id="insertOrUpdateAlbumInfo" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
 		<![CDATA[
-			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `preview_img`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #previewImg#, 0, now(),now())
+			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `preview_img`, `music`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #previewImg#, #music#, 0, now(),now())
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreAlbumInfo" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
 		<![CDATA[
-			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `preview_img`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #previewImg#, 0, now(),now())
+			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `preview_img`, `music`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #previewImg#, #music#, 0, now(),now())
 		]]>
 	</insert>
 
 	<insert id="insertAlbumInfoReturnId" parameterClass="com.dreambox.core.dto.album.AlbumInfo">
 		<![CDATA[
-			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `preview_img`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #previewImg#, 0, now(),now())
+			INSERT INTO album_info (`id`,`title`,`keyword`,`total_items`, `cover`, `preview_img`, `music`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#,#keyword#,#totalItems#, #cover#, #previewImg#, #music#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY

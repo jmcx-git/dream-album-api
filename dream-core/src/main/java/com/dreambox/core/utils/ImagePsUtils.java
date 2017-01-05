@@ -133,6 +133,9 @@ public class ImagePsUtils {
         try {
 
             BufferedImage newBufferedImage = new BufferedImage(bgWidth, bgHeight, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = newBufferedImage.createGraphics();
+            g2d.setColor(Color.white);
+            g2d.fillRect(0, 0, bgWidth, bgHeight);
             ImageIO.read(new File(coverPath));
             BufferedImage convertBufferedImage = converScale(ImageIO.read(new File(coverPath)), width, height);
             int covertWidht = convertBufferedImage.getWidth();
@@ -141,9 +144,8 @@ public class ImagePsUtils {
             int startY = covertHeight > height ? (covertHeight - height) / 2 : 0;
             int endX = covertWidht > width ? startX + width : width;
             int endY = covertHeight > height ? startY + height : height;
-            newBufferedImage.createGraphics().drawImage(convertBufferedImage, x, y, width + x, height + y, startX,
-                    startY, endX, endY, null);
-            newBufferedImage.createGraphics().drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
+            g2d.drawImage(convertBufferedImage, x, y, width + x, height + y, startX, startY, endX, endY, null);
+            g2d.drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
             File outputFile = new File(toPath);
             outputFile.mkdirs();
             ImageIO.write(newBufferedImage, "jpg", outputFile);
@@ -169,6 +171,9 @@ public class ImagePsUtils {
         try {
             BufferedImage newBufferedImage = new BufferedImage(bgWidth, bgHeight, BufferedImage.TYPE_INT_RGB);
             Graphics2D g2d = newBufferedImage.createGraphics();
+            // 背景色
+            g2d.setBackground(Color.white);
+            g2d.fillRect(0, 0, bgWidth, bgHeight);
             // g2d.getDeviceConfiguration().createCompatibleImage(bgWidth,
             // bgHeight,Transparency.TRANSLUCENT);
             for (MergeImgWithMultipartModel data : datas) {

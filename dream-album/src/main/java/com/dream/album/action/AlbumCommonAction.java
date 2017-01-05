@@ -310,6 +310,7 @@ public class AlbumCommonAction extends IosBaseAction {
             } else {
                 model.setMakeComplete(false);
             }
+            model.setMusic(album.getMusic());
             model.setLoopPreImgs(list);
             model.setBigPreImg(userAlbumInfo.getPreviewImg());
         } else {
@@ -325,6 +326,7 @@ public class AlbumCommonAction extends IosBaseAction {
             for (AlbumItemInfo itemInfo : itemInfos) {
                 list.add(itemInfo.getPreviewImgUrl());
             }
+            model.setMusic(album.getMusic());
             model.setLoopPreImgs(list);
             model.setBigPreImg(album.getPreviewImg());
             model.setMakeComplete(true);

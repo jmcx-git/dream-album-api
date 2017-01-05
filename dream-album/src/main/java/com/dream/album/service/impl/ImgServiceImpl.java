@@ -146,5 +146,4 @@ public class ImgServiceImpl implements ImgService {
         return new MergeImgFileResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
     }
 
-
 }

@@ -2,6 +2,7 @@ package com.dream.album.service.impl;
 
 import java.sql.SQLException;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -34,6 +35,11 @@ public class AlbumItemEditInfoServiceImpl extends AlbumItemEditInfoService {
     @Resource(name = "jmcx-wx-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
     private String infoKey = "album:item:edit:info";
+
+    @PostConstruct
+    public void initCache() {
+        this.cacheInitLoad();
+    }
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {

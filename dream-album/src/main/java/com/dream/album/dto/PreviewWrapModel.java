@@ -10,6 +10,7 @@ public class PreviewWrapModel {
     private List<String> loopPreImgs;
     private String bigPreImg;
     private boolean makeComplete;
+    private String music;
 
     public List<String> getLoopPreImgs() {
         return loopPreImgs;
@@ -33,5 +34,13 @@ public class PreviewWrapModel {
 
     public void setMakeComplete(boolean makeComplete) {
         this.makeComplete = makeComplete;
+    }
+
+    public String getMusic() {
+        return music;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
     }
 }

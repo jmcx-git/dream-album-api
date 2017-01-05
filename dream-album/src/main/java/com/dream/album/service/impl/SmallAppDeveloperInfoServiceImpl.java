@@ -4,6 +4,7 @@ package com.dream.album.service.impl;
 
 import java.sql.SQLException;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -36,6 +37,11 @@ public class SmallAppDeveloperInfoServiceImpl extends SmallAppDeveloperInfoServi
     private ShardedJedisPool shardedJedisPool;
     private String idInfoKey = "sa:dev:info:id";
     private String pkUkPrefixKey = "sa:dev:info:id:uk";
+
+    @PostConstruct
+    public void initCache() {
+        this.cacheInitLoad();
+    }
 
     @Override
     protected ShardedJedisPool getSharedJedisPool() {

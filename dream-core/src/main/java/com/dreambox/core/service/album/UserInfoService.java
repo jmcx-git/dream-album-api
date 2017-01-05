@@ -9,4 +9,6 @@ public abstract class UserInfoService extends AbsCommonCacheDbUkPkLoadService<Us
 
     public abstract void modifyUserInfo(UserInfo g) throws ServiceException;
 
+    public abstract int getIdByUnionIdAndAppId(String unionId, String appId) throws ServiceException;
+
 }

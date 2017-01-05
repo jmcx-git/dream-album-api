@@ -5,6 +5,7 @@ package com.dream.album.service.impl;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,6 +41,11 @@ public class AlbumInfoServiceImpl extends AlbumInfoService {
     private ShardedJedisPool shardedJedisPool;
     private String infoKey = "album:info";
     private String listKey = "album:info:ids";
+
+    @PostConstruct
+    public void initCache() {
+        this.cacheInitLoad();
+    }
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {

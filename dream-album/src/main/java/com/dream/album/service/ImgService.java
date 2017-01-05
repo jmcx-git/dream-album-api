@@ -48,5 +48,4 @@ public interface ImgService {
 
     public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g);
 
-    // public boolean isTemplatePreviewImg(UserAlbumItemInfo g);
 }
