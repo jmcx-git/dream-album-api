@@ -24,6 +24,4 @@ public abstract class UserAlbumInfoService extends AbstractSortedListCacheServic
     public abstract boolean modifyUserAlbumInfoTitle(UserAlbumInfo info) throws ServiceException;
 
     public abstract UserAlbumInfo createAlbum(UserAlbumInfo userAlbumInfo) throws ServiceException;
-
-    public abstract void modifyUserAlbumInfoCoverImg(UserAlbumInfo info) throws ServiceException;
 }

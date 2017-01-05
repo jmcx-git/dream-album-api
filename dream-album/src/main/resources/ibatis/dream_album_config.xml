@@ -19,6 +19,5 @@
 	<sqlMap resource="ibatis/dream_album_smallappdeveloperinfo.xml" />
 	<sqlMap resource="ibatis/dream_album_useralbumitemeditinfo.xml" />
 	<sqlMap resource="ibatis/dream_album_albumitemeditinfo.xml" />
-	
-	<sqlMap resource="ibatis/dream_album_albumcoveriteminfo.xml" />
+
 </sqlMapConfig>

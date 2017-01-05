@@ -8,23 +8,20 @@
 		<result column="title" property="title" jdbcType="VARCHAR" />
 		<result column="complete" property="complete" jdbcType="INTEGER" />
 		<result column="preview_img" property="previewImg" jdbcType="VARCHAR" />
-		<result column="cover_img" property="coverImg" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
 	</resultMap>
 	<insert id="insertOrUpdateUserAlbumInfo" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[
-		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`title`,`complete`,`preview_img`, `cover_img`,
-		`status`,`update_time`,`create_time`)
-		VALUES(null, #userId#,#albumId#,#title#,#complete#,#previewImg#, #coverImg#, 0, now(),now())
+		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`title`,`complete`,`preview_img`, `status`,`update_time`,`create_time`)
+		VALUES(null, #userId#,#albumId#,#title#,#complete#,#previewImg#, 0, now(),now())
 		]]>
 	</insert>
 	<insert id="insertOrIgnoreUserAlbumInfo" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[
-		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`title`,`complete`,`preview_img`, `cover_img`,
-		`status`,`update_time`,`create_time`)
-		VALUES(null, #userId#,#albumId#,#title#,#complete#,#previewImg#, #coverImg#, 0, now(),now())
+		INSERT IGNORE INTO user_album_info (`id`,`user_id`,`album_id`,`title`,`complete`,`preview_img`, `status`,`update_time`,`create_time`)
+		VALUES(null, #userId#,#albumId#,#title#,#complete#,#previewImg#, 0, now(),now())
 		]]>
 	</insert>
 	<update id="updateUserAlbumInfoTitle" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
@@ -35,12 +32,7 @@
 	<update id="updateUserAlbumInfoCompleteAndPreImg"
 		parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
 		<![CDATA[
-		UPDATE `user_album_info` SET `complete` = #complete#,`preview_img` = #previewImg#, `title` = #title#, `cover_img` = #coverImg# WHERE `id`=#id# ;
-		]]>
-	</update>
-	<update id="updateUserAlbumInfoCoverImg" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">
-		<![CDATA[
-		UPDATE `user_album_info` SET `cover_img` = #coverImg# WHERE `id`=#id# ;
+		UPDATE `user_album_info` SET `complete` = #complete#,`preview_img` = #previewImg#, `title` = #title# WHERE `id`=#id# ;
 		]]>
 	</update>
 	<update id="updateUserAlbumInfoStatus" parameterClass="com.dreambox.core.dto.album.UserAlbumInfo">

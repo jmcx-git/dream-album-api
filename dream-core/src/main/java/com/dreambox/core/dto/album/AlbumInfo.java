@@ -21,6 +21,7 @@ public class AlbumInfo extends DbStatus {
     private int totalItems;
     private String cover;// 封面图
     private String previewImg;// 预览图
+    private String music;// 背景音乐
 
     private int collect;
     private List<AlbumItemInfo> albumItemList;
@@ -87,6 +88,14 @@ public class AlbumInfo extends DbStatus {
 
     public void setAlbumItemList(List<AlbumItemInfo> albumItemList) {
         this.albumItemList = albumItemList;
+    }
+
+    public String getMusic() {
+        return music;
+    }
+
+    public void setMusic(String music) {
+        this.music = music;
     }
 
 }

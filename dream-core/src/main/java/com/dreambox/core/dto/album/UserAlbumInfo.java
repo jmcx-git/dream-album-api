@@ -22,7 +22,6 @@ public class UserAlbumInfo extends DbStatus {
     @ZERO_ENABLE
     private int complete;// 是否生成了相册
     private String previewImg;// 在用户户生成完相册后根据信息生成预览图
-    private String coverImg;// 在用户户生成完相册后根据封面信息生成的封面图
 
     public UserAlbumInfo() {
         super();
@@ -74,13 +73,5 @@ public class UserAlbumInfo extends DbStatus {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getCoverImg() {
-        return coverImg;
-    }
-
-    public void setCoverImg(String coverImg) {
-        this.coverImg = coverImg;
     }
 }

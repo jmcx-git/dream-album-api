@@ -1,0 +1,1 @@
+ALTER TABLE album_info ADD COLUMN `music` VARCHAR(255) DEFAULT '' AFTER `preview_img`;

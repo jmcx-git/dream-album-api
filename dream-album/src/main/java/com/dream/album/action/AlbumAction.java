@@ -309,6 +309,8 @@ public class AlbumAction extends IosBaseAction {
             }
             model.setLoopPreImgs(list);
             model.setBigPreImg(userAlbumInfo.getPreviewImg());
+            AlbumInfo albumInfo = albumInfoService.getData(userAlbumInfo.getAlbumId());
+            model.setMusic(albumInfo.getMusic());
         }
         return new ApiRespWrapper<PreviewWrapModel>(model);
     }

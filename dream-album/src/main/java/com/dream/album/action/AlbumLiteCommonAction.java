@@ -157,6 +157,7 @@ public class AlbumLiteCommonAction extends IosBaseAction {
         } else {
             model.setMakeComplete(false);
         }
+        model.setMusic(album.getMusic());
         model.setLoopPreImgs(list);
         return model;
     }

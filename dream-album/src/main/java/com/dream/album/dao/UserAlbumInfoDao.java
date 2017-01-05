@@ -21,5 +21,4 @@ public abstract class UserAlbumInfoDao extends AbsCommonDao<UserAlbumInfo> {
 
     public abstract boolean updateUserAlbumInfoTitle(UserAlbumInfo info) throws SQLException;
 
-    public abstract void updateUserAlbumInfoCoverImg(UserAlbumInfo info) throws SQLException;
 }
