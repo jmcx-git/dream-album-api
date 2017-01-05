@@ -2,6 +2,7 @@ package com.dream.album.service.impl;
 
 import java.sql.SQLException;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class UserInfoServiceImpl extends UserInfoService {
     private ShardedJedisPool shardedJedisPool;
     private String userInfoKey = "user:info";
     private String openIdReflectIdUkKey = "uk:openid:id";
+
+    @PostConstruct
+    public void initCache() {
+        this.cacheInitLoad();
+    }
 
     @Override
     public CommonDao<UserInfo> getCommonDao() {
@@ -91,6 +97,12 @@ public class UserInfoServiceImpl extends UserInfoService {
     @Override
     protected String buildDataInfoKey(int id) {
         return RedisCacheUtils.buildKey(userInfoKey, id);
+    }
+
+    @Override
+    public int getIdByUnionIdAndAppId(String unionId, String appId) throws ServiceException {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 

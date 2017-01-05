@@ -51,4 +51,9 @@ public class UserAlbumInfoDaoImpl extends UserAlbumInfoDao {
         return SQLUtils.update(sqlMapClient, "updateUserAlbumInfoTitle", info) > 0;
     }
 
+    @Override
+    public void updateUserAlbumInfoCoverImg(UserAlbumInfo info) throws SQLException {
+        SQLUtils.update(sqlMapClient, "updateUserAlbumInfoCoverImg", info);
+    }
+
 }

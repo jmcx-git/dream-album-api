@@ -21,6 +21,7 @@ import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
 import com.dream.album.service.ImgService;
 import com.dreambox.core.dto.MergeImgWithMultipartModel;
+import com.dreambox.core.dto.album.AlbumCoverItemInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.core.utils.DateUtils;
@@ -144,6 +145,16 @@ public class ImgServiceImpl implements ImgService {
             throw ServiceException.getInternalException("Merge image files failed.");
         }
         return new MergeImgFileResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
+    }
+
+    @Override
+    public String getAlbumCoverItemEditImgPath(AlbumCoverItemInfo info) {
+        return StringUtils.replace(info.getEditImgUrl(), this.imgPrefixUrl, this.imgLocalDir);
+    }
+
+    @Override
+    public String getAlbumCoverItemDefaultPreImgPath(AlbumCoverItemInfo info) {
+        return StringUtils.replace(info.getPreviewImgUrl(), this.imgPrefixUrl, this.imgLocalDir);
     }
 
 

@@ -11,6 +11,7 @@ import com.dream.album.model.JoinImgFileResp;
 import com.dream.album.model.MergeImgFileResp;
 import com.dream.album.model.UploadFileSaveResp;
 import com.dreambox.core.dto.MergeImgWithMultipartModel;
+import com.dreambox.core.dto.album.AlbumCoverItemInfo;
 import com.dreambox.core.dto.album.AlbumItemInfo;
 import com.dreambox.core.dto.album.UserAlbumItemInfo;
 import com.dreambox.web.exception.ServiceException;
@@ -47,6 +48,10 @@ public interface ImgService {
     public String getUserAlbumItemPreviewImgPath(UserAlbumItemInfo g);
 
     public String getUserAlbumItemUserOriginImgPath(UserAlbumItemInfo g);
+
+    public String getAlbumCoverItemEditImgPath(AlbumCoverItemInfo info);
+
+    public String getAlbumCoverItemDefaultPreImgPath(AlbumCoverItemInfo info);
 
     // public boolean isTemplatePreviewImg(UserAlbumItemInfo g);
 }

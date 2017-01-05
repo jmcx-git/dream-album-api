@@ -122,6 +122,15 @@ public class UserAlbumInfoServiceImpl extends UserAlbumInfoService {
         }
     }
 
+    @Override
+    public void modifyUserAlbumInfoCoverImg(UserAlbumInfo info) throws ServiceException {
+        try {
+            userAlbumInfoDao.updateUserAlbumInfoCoverImg(info);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+    }
+
     private String userCreateAlbumLockKey = "album:doing:lock";
 
     @Override
