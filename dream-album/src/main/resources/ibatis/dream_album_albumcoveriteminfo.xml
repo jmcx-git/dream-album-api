@@ -4,7 +4,7 @@
 	<resultMap id="albumcoveriteminfo"
 		class="com.dreambox.core.dto.album.AlbumCoverItemInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="album_id" property="albumItemId" jdbcType="INTEGER" />
+		<result column="album_id" property="albumId" jdbcType="INTEGER" />
 		<result column="cover_album_item_id" property="coverAlbumItemId"
 			jdbcType="INTEGER" />
 		<result column="edit_img_url" property="editImgUrl" jdbcType="VARCHAR" />
