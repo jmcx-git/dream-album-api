@@ -21,7 +21,7 @@
 		<![CDATA[
 			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
 			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatar_url#
+			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatarUrl#
 		]]>
 	</insert>
 
@@ -29,7 +29,7 @@
 		<![CDATA[
 			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
 			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatar_url#
+			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatarUrl#
 		]]>
 	</insert>
 
@@ -37,7 +37,7 @@
 		<![CDATA[
 			INSERT INTO user_info (`id`,`nick_name`,`gender`,`city`, `province`, `country`,`avatar_url`, `open_id`, `union_id`,`appid`, `status`,`update_time`,`create_time`)
 			VALUES(null, #nickName#,#gender#,#city#, #province#, #country#,#avatarUrl#,#openId#, #unionId#, #appid#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatar_url#
+			ON DUPLICATE KEY UPDATE `nick_name` = #nickName#, `gender` = #gender#, `city` = #city#, `province` = #province#, `avatar_url` = #avatarUrl#
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
