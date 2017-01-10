@@ -98,7 +98,6 @@ public abstract class AbsCommonDataService<G> implements CommonDataService<G> {
         }
     }
 
-
     @Override
     public void addData(G g) throws ServiceException {
         g = beforToDb(g);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" maxRequests="128" maxSessions="20"
+		maxTransactions="10" useStatementNamespaces="false"
+		defaultStatementTimeout="60" />
+
+	<sqlMap resource="ibatis/dream_family_userinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_smallappdeveloperinfo.xml" />
+	
+	<sqlMap resource="ibatis/dream_family_feedcommentinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_feedinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_feedlikeinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_feedstatinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_spaceinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_spacelikeinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_spacesecertinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_spacestatinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_userspacerelationshipinfo.xml" />
+	
+
+</sqlMapConfig>

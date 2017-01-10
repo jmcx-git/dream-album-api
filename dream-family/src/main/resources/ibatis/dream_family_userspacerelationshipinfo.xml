@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="spacestatinfo"
+		class="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="space_id" property="spaceId" jdbcType="INTEGER" />
+		<result column="relationship" property="relationship" jdbcType="INTEGER" />
+		<result column="top" property="top" jdbcType="INTEGER" />
+		<result column="views" property="views" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateUserSpaceRelationshipInfo"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
+		<![CDATA[
+			INSERT INTO user_space_relationship_info (`id`,`"user_id"`,`space_id`, `relationship`, `top`, `views`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, #views#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `views` = `views` + 1
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreUserSpaceRelationshipInfo"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
+		<![CDATA[
+			INSERT INTO user_space_relationship_info (`id`,`"user_id"`,`space_id`, `relationship`, `top`, `views`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, #views#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `views` = `views` + 1
+		]]>
+	</insert>
+
+	<update id="updateUserSpaceRelationshipInfoStatus"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
+        <![CDATA[
+        	UPDATE `user_space_relationship_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateUserSpaceRelationshipInfoViews"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
+        <![CDATA[
+        	UPDATE `user_space_relationship_info` SET `views` = `views` + 1 WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateUserSpaceRelationshipInfoTop"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
+        <![CDATA[
+        	UPDATE `user_space_relationship_info` SET `top` = #top# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryUserSpaceRelationshipInfoById" parameterClass="java.lang.Integer"
+		resultMap="spacestatinfo">
+		<![CDATA[
+			SELECT * FROM `user_space_relationship_info` WHERE `id` = #startId#;
+		 ]]>
+	</select>
+
+	<select id="queryUserSpaceRelationshipInfoListByStartId"
+		parameterClass="java.util.Map" resultMap="spacestatinfo">
+		<![CDATA[
+			SELECT * FROM `user_space_relationship_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		 ]]>
+	</select>
+
+	<select id="queryUserSpaceRelationshipInfoByIds" parameterClass="java.util.Map"
+		resultMap="spacestatinfo">
+		SELECT *
+		FROM `user_space_relationship_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryUserSpaceRelationshipInfoListByFilter"
+		parameterClass="java.util.Map" resultMap="spacestatinfo">
+		SELECT * FROM `user_space_relationship_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countUserSpaceRelationshipInfoByFilter"
+		parameterClass="java.util.Map" resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `user_space_relationship_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

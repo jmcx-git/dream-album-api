@@ -2,6 +2,7 @@
 
 package com.dreambox.web.utils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -491,4 +493,21 @@ public class CollectionUtils {
         }
         return result;
     }
+
+    public static <G> Map<Integer, G> transformToMap(List<G> gg) throws ServiceException {
+        Map<Integer, G> maps = new HashMap<Integer, G>();
+        for (G g : gg) {
+            maps.put(getId(g), g);
+        }
+        return maps;
+    }
+
+    private static <G> int getId(G g) {
+        try {
+            return Integer.parseInt(BeanUtils.getProperty(g, "id"));
+        } catch (Exception e) {
+            throw ServiceException.getInternalException(e.getMessage());
+        }
+    }
+
 }

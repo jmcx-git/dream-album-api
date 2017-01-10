@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="spaceinfo" class="com.jmcxclub.dream.family.dto.SpaceInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="darling_name" property="darlingName" jdbcType="VARCHAR" />
+		<result column="darling_born_date" property="darlingBornDate"
+			jdbcType="TIMESTAMP" />
+		<result column="darling_type" property="darlingType" jdbcType="INTEGER" />
+		<result column="icon" property="icon" jdbcType="VARCHAR" />
+		<result column="cover" property="cover" jdbcType="VARCHAR" />
+		<result column="info" property="info" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateSpaceInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+		<![CDATA[
+			INSERT INTO space_info (`id`,`user_id`,`title`, `darling_name`, `darling_born_date`,`darling_type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #title#, #darlingName#, #darlingBornDate#, #darlingType#, #icon#, #cover#, #info#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertSpaceInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+		<![CDATA[
+			INSERT INTO space_info (`id`,`user_id`,`title`, `darling_name`, `darling_born_date`,`darling_type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #title#, #darlingName#, #darlingBornDate#, #darlingType#, #icon#, #cover#, #info#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreSpaceInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+		<![CDATA[
+			INSERT INTO space_info (`id`,`user_id`,`title`, `darling_name`, `darling_born_date`,`darling_type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #title#, #darlingName#, #darlingBornDate#, #darlingType#, #icon#, #cover#, #info#, 0, now(),now())
+		]]>
+	</insert>
+
+	<update id="updateSpaceInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+        <![CDATA[
+        	UPDATE `space_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="querySpaceInfoById" parameterClass="java.lang.Integer"
+		resultMap="spaceinfo">
+		SELECT `id`, `user_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(darling_name AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`status`,`update_time`,`create_time`
+		FROM `space_info` WHERE
+		`id` =
+		#startId#;
+	</select>
+
+	<select id="querySpaceInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="spaceinfo">
+		SELECT `id`, `user_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(darling_name AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`status`,`update_time`,`create_time`
+		FROM `space_info` WHERE
+		`id` >
+		#startId# ORDER BY id LIMIT #size#;
+	</select>
+
+	<select id="querySpaceInfoByIds" parameterClass="java.util.Map"
+		resultMap="spaceinfo">
+		SELECT `id`, `user_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(darling_name AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`status`,`update_time`,`create_time`
+		FROM `space_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="querySpaceInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="spaceinfo">
+		SELECT `id`, `user_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(darling_name AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`status`,`update_time`,`create_time`
+		FROM `space_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countSpaceInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `space_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="feedcommentinfo" class="com.jmcxclub.dream.family.dto.FeedCommentInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="feed_id" property="feedId" jdbcType="INTEGER" />
+		<result column="comment" property="comment" jdbcType="VARCHAR" />
+		<result column="comment_ref_id" property="commentRefId"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateFeedCommentInfo" parameterClass="com.jmcxclub.dream.family.dto.FeedCommentInfo">
+		<![CDATA[
+			INSERT INTO feed_comment_info (`id`,`user_id`,`feed_id`,`comment`, `comment_ref_id`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #feedId#, #comment#, #commentRefId#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertOrUpdateFeedCommentInfoReturnId"
+		parameterClass="com.jmcxclub.dream.family.dto.FeedCommentInfo">
+		<![CDATA[
+			INSERT INTO feed_comment_info (`id`,`user_id`,`feed_id`,`comment`, `comment_ref_id`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #feedId#, #comment#, #commentRefId#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreFeedCommentInfo" parameterClass="com.jmcxclub.dream.family.dto.FeedCommentInfo">
+		<![CDATA[
+			INSERT INTO feed_comment_info (`id`,`user_id`,`feed_id`,`comment`, `comment_ref_id`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #feedId#, #comment#, #commentRefId#, 0, now(),now())
+		]]>
+	</insert>
+
+	<update id="updateFeedCommentInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.FeedCommentInfo">
+        <![CDATA[
+        	UPDATE `feed_comment_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryFeedCommentInfoById" parameterClass="java.lang.Integer"
+		resultMap="feedcommentinfo">
+		SELECT `id`, `user_id`, `feed_id`, CAST(comment AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`comment`,
+		`comment_ref_id`,
+		`status`,`update_time`,`create_time`
+		FROM `feed_comment_info` WHERE
+		`id` = #startId#;
+	</select>
+
+	<select id="queryFeedCommentInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="feedcommentinfo">
+		SELECT `id`, `user_id`, `feed_id`, CAST(comment AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`comment`,
+		`comment_ref_id`,
+		`status`,`update_time`,`create_time`
+		FROM `feed_comment_info`
+		WHERE
+		`id`
+		> #startId# ORDER BY id LIMIT #size#;
+	</select>
+
+	<select id="queryFeedCommentInfoByIds" parameterClass="java.util.Map"
+		resultMap="feedcommentinfo">
+		SELECT `id`, `user_id`, `feed_id`, CAST(comment AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`comment`,
+		`comment_ref_id`,
+		`status`,`update_time`,`create_time`
+		FROM `feed_comment_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryFeedCommentInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="feedcommentinfo">
+		SELECT `id`, `user_id`, `feed_id`, CAST(comment AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`comment`,
+		`comment_ref_id`,
+		`status`,`update_time`,`create_time`
+		FROM `feed_comment_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="feedId">
+				<isNotNull property="feedId" prepend=" and ">
+					`feed_id` =
+					#feedId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countFeedCommentInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `feed_comment_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="feedId">
+				<isNotNull property="feedId" prepend=" and ">
+					`feed_id` =
+					#feedId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

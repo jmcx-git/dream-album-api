@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="feedlikeinfo" class="com.jmcxclub.dream.family.dto.FeedLikeInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="feed_id" property="feedId" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateFeedLikeInfo" parameterClass="com.jmcxclub.dream.family.dto.FeedLikeInfo">
+		<![CDATA[
+			INSERT INTO feed_like_info (`id`,`user_id`,`feed_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #feedId#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreFeedLikeInfo" parameterClass="com.jmcxclub.dream.family.dto.FeedLikeInfo">
+		<![CDATA[
+			INSERT INTO feed_like_info (`id`,`user_id`,`feed_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #feedId#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+		]]>
+	</insert>
+
+	<update id="updateFeedLikeInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.FeedLikeInfo">
+        <![CDATA[
+        	UPDATE `feed_like_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryFeedLikeInfoById" parameterClass="java.lang.Integer"
+		resultMap="feedlikeinfo">
+		<![CDATA[
+			SELECT * FROM `feed_like_info` WHERE `id` = #startId#;
+		 ]]>
+	</select>
+
+	<select id="queryFeedLikeInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="feedlikeinfo">
+		<![CDATA[
+			SELECT * FROM `feed_like_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		 ]]>
+	</select>
+
+	<select id="queryFeedLikeInfoByIds" parameterClass="java.util.Map"
+		resultMap="feedlikeinfo">
+		SELECT *
+		FROM `feed_like_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryFeedLikeInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="feedlikeinfo">
+		SELECT * FROM `feed_like_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="feedId">
+				<isNotNull property="feedId" prepend=" and ">
+					`feed_id` =
+					#feedId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countFeedLikeInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `feed_like_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="feedId">
+				<isNotNull property="feedId" prepend=" and ">
+					`feed_id` =
+					#feedId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

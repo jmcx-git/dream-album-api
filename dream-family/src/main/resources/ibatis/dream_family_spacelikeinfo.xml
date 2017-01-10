@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="spacelikeinfo" class="com.jmcxclub.dream.family.dto.SpaceLikeInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="space_id" property="spaceId" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateSpaceLikeInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceLikeInfo">
+		<![CDATA[
+			INSERT INTO space_like_info (`id`,`user_id`,`space_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #spaceId#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreSpaceLikeInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceLikeInfo">
+		<![CDATA[
+			INSERT INTO space_like_info (`id`,`user_id`,`space_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #spaceId#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+		]]>
+	</insert>
+
+	<update id="updateSpaceLikeInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.SpaceLikeInfo">
+        <![CDATA[
+        	UPDATE `space_like_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="querySpaceLikeInfoById" parameterClass="java.lang.Integer"
+		resultMap="spacelikeinfo">
+		<![CDATA[
+			SELECT * FROM `space_like_info` WHERE `id` = #startId#;
+		 ]]>
+	</select>
+
+	<select id="querySpaceLikeInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="spacelikeinfo">
+		<![CDATA[
+			SELECT * FROM `space_like_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		 ]]>
+	</select>
+
+	<select id="querySpaceLikeInfoByIds" parameterClass="java.util.Map"
+		resultMap="spacelikeinfo">
+		SELECT *
+		FROM `space_like_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="querySpaceLikeInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="spacelikeinfo">
+		SELECT * FROM `space_like_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countSpaceLikeInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+	SELECT COUNT(*) FROM `space_like_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>
