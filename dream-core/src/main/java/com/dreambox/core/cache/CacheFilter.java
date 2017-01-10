@@ -23,8 +23,6 @@ public class CacheFilter {
 
     public static class StartSizeCacheFilter extends SizeCacheFilter {
         private int start;
-        private Double maxScore;
-        private Double minScore;
 
         public int getStart() {
             return start;
@@ -32,22 +30,6 @@ public class CacheFilter {
 
         public void setStart(int start) {
             this.start = start;
-        }
-
-        public Double getMaxScore() {
-            return maxScore;
-        }
-
-        public void setMaxScore(Double maxScore) {
-            this.maxScore = maxScore;
-        }
-
-        public Double getMinScore() {
-            return minScore;
-        }
-
-        public void setMinScore(Double minScore) {
-            this.minScore = minScore;
         }
     }
 

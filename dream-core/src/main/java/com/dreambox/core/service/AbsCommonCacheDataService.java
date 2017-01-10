@@ -110,7 +110,7 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
         }
     }
 
-    protected int getIdFromG(G g) {
+    protected static <G> int getIdFromG(G g) {
         try {
             return Integer.parseInt(BeanUtils.getProperty(g, "id"));
         } catch (Exception e) {

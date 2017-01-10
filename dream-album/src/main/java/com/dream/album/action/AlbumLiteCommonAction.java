@@ -92,7 +92,7 @@ public class AlbumLiteCommonAction extends IosBaseAction {
                 cssElmRotate);
         int userId = getUserId(openId, unionId, appId);
         if (userId <= 0) {
-            return new ApiRespWrapper<String>(-1, "参数不合法!");
+            return new ApiRespWrapper<String>(-1, "用户不存在!");
         }
         UserAlbumInfo userAlbumInfo = initUserAlbumInfoInit(userId, albumId);
         userAlbumInfo = userAlbumInfoService.createAlbum(userAlbumInfo);

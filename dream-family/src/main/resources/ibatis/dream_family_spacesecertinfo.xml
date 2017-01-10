@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="spacesecertinfo" class="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="space_id" property="spaceId" jdbcType="INTEGER" />
+		<result column="secert" property="secert" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateSpaceSecertInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
+		<![CDATA[
+			INSERT INTO space_like_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #secert#, #spaceId#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreSpaceSecertInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
+		<![CDATA[
+			INSERT INTO space_like_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
+			VALUES(null, #secert#, #spaceId#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+		]]>
+	</insert>
+
+	<update id="updateSpaceSecertInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
+        <![CDATA[
+        	UPDATE `space_like_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateSpaceSecertInfoStatusBySpaceId"
+		parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
+        <![CDATA[
+        	UPDATE `space_like_info` SET `status` = #status# WHERE `space_id`=#spaceId# ;
+        ]]>
+	</update>
+
+	<select id="querySpaceSecertInfoById" parameterClass="java.lang.Integer"
+		resultMap="spacesecertinfo">
+		<![CDATA[
+			SELECT * FROM `space_like_info` WHERE `id` = #startId#;
+		 ]]>
+	</select>
+
+	<select id="querySpaceSecertInfoIdByUk" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo"
+		resultMap="spacesecertinfo">
+		<![CDATA[
+			SELECT * FROM `space_like_info` WHERE `secert` = #secert#;
+		 ]]>
+	</select>
+
+	<select id="querySpaceSecertInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="spacesecertinfo">
+		<![CDATA[
+			SELECT * FROM `space_like_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		 ]]>
+	</select>
+
+	<select id="querySpaceSecertInfoByIds" parameterClass="java.util.Map"
+		resultMap="spacesecertinfo">
+		SELECT *
+		FROM `space_like_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="querySpaceSecertInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="spacesecertinfo">
+		SELECT * FROM `space_like_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="secert">
+				<isNotNull property="secert" prepend=" and ">
+					`secert` =
+					#secert#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countSpaceSecertInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `space_like_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="secert">
+				<isNotNull property="secert" prepend=" and ">
+					`secert` =
+					#secert#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

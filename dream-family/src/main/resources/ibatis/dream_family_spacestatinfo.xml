@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="spacestatinfo" class="com.jmcxclub.dream.family.dto.SpaceStatInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="views" property="views" jdbcType="INTEGER" />
+		<result column="occupants" property="occupants" jdbcType="INTEGER" />
+		<result column="records" property="records" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateSpaceStatInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceStatInfo">
+		<![CDATA[
+			INSERT INTO space_stat_info (`id`,`views`,`occupants`,`records`, `status`,`update_time`,`create_time`)
+			VALUES(#id#, #views#, #occupants#, #records#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `views` = views, `occupants` = occupants, `records` = records
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreSpaceStatInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceStatInfo">
+		<![CDATA[
+			INSERT INTO space_stat_info (`id`,`views`,`occupants`,`records`, `status`,`update_time`,`create_time`)
+			VALUES(#id#, #views#, #occupants#, #records#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `views` = views, `occupants` = occupants, `records` = records
+		]]>
+	</insert>
+
+	<update id="updateSpaceStatInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.SpaceStatInfo">
+        <![CDATA[
+        	UPDATE `space_stat_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateDecrSpaceStatInfoRecords" parameterClass="java.lang.Integer">
+        <![CDATA[
+        	UPDATE `feed_stat_info` SET `records` = IF(`records` > 0, `records` - 1, 0) WHERE `id`=#id# ;
+        ]]>
+	</update>
+	<update id="updateIncrSpaceStatInfoRecords" parameterClass="java.lang.Integer">
+        <![CDATA[
+        	UPDATE `feed_stat_info` SET `records` = `records` + 1 WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateDecrSpaceStatInfoOccupants" parameterClass="java.lang.Integer">
+        <![CDATA[
+        	UPDATE `feed_stat_info` SET `occupants` = IF(`occupants` > 0, `occupants` - 1, 0) WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateIncrSpaceStatInfoOccupants" parameterClass="java.lang.Integer">
+        <![CDATA[
+        	UPDATE `feed_stat_info` SET `occupants` = `occupants` + 1 WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateIncrSpaceStatInfoViews" parameterClass="java.lang.Integer">
+        <![CDATA[
+        	UPDATE `feed_stat_info` SET `views` = `views` + 1 WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="querySpaceStatInfoById" parameterClass="java.lang.Integer"
+		resultMap="spacestatinfo">
+		<![CDATA[
+			SELECT * FROM `space_stat_info` WHERE `id` = #startId#;
+		 ]]>
+	</select>
+
+	<select id="querySpaceStatInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="spacestatinfo">
+		<![CDATA[
+			SELECT * FROM `space_stat_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		 ]]>
+	</select>
+
+	<select id="querySpaceStatInfoByIds" parameterClass="java.util.Map"
+		resultMap="spacestatinfo">
+		SELECT *
+		FROM `space_stat_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="querySpaceStatInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="spacestatinfo">
+		SELECT * FROM `space_stat_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countSpaceStatInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `space_stat_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

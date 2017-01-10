@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="feedinfo" class="com.jmcxclub.dream.family.dto.FeedInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="space_id" property="spaceId" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="cover" property="cover" jdbcType="VARCHAR" />
+		<result column="illustration" property="illustration" jdbcType="VARCHAR" />
+		<result column="resource_url" property="resourceUrl" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateFeedInfo" parameterClass="com.jmcxclub.dream.family.dto.FeedInfo">
+		<![CDATA[
+			INSERT INTO feed_info (`id`,`user_id`,`space_id`,`title`, `content`, `cover`,`illustration`, `resource_url`, `duration`,`type`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#,#spaceId#,#title#, #content#, #cover#,#illustration#,#resourceUrl#, #duration#, #type#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertFeedInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.FeedInfo">
+		<![CDATA[
+			INSERT INTO feed_info (`id`,`user_id`,`space_id`,`title`, `content`, `cover`,`illustration`, `resource_url`, `duration`,`type`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#,#spaceId#,#title#, #content#, #cover#,#illustration#,#resourceUrl#, #duration#, #type#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreFeedInfo" parameterClass="com.jmcxclub.dream.family.dto.FeedInfo">
+		<![CDATA[
+			INSERT INTO feed_info (`id`,`user_id`,`space_id`,`title`, `content`, `cover`,`illustration`, `resource_url`, `duration`,`type`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#,#spaceId#,#title#, #content#, #cover#,#illustration#,#resourceUrl#, #duration#, #type#, 0, now(),now())
+		]]>
+	</insert>
+
+	<update id="updateFeedInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.FeedInfo">
+        <![CDATA[
+        	UPDATE `feed_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryFeedInfoById" parameterClass="java.lang.Integer"
+		resultMap="feedinfo">
+		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(content AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`, `cover`, `illustration`, `resource_url`, ``, `duration`,
+		`type`, `status`,`update_time`,`create_time`
+		FROM `feed_info` WHERE
+		`id` = #startId#;
+	</select>
+
+	<select id="queryFeedInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="feedinfo">
+		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(content AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`, `cover`, `illustration`, `resource_url`, ``, `duration`,
+		`type`, `status`,`update_time`,`create_time`
+		FROM `feed_info` WHERE
+		`id` > #startId# ORDER BY id LIMIT #size#;
+	</select>
+
+	<select id="queryFeedInfoByIds" parameterClass="java.util.Map"
+		resultMap="feedinfo">
+		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(content AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`,
+		`cover`, `illustration`, `resource_url`, ``, `duration`,
+		`type`,
+		`status`,`update_time`,`create_time`
+		FROM `feed_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryFeedInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="feedinfo">
+		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
+		CHARACTER SET
+		utf8) AS
+		`title`, `CAST(content AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`,
+		`cover`, `illustration`, `resource_url`, ``, `duration`,
+		`type`,
+		`status`,`update_time`,`create_time`
+		FROM `feed_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countFeedInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `feed_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>
