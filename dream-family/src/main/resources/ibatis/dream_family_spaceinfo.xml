@@ -61,7 +61,7 @@
 
 	<select id="querySpaceInfoById" parameterClass="java.lang.Integer"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, `CAST(name AS CHAR
+		SELECT `id`, `user_id`, CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
@@ -74,7 +74,7 @@
 
 	<select id="querySpaceInfoListByStartId" parameterClass="java.util.Map"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, `CAST(name AS CHAR
+		SELECT `id`, `user_id`, CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
@@ -87,7 +87,7 @@
 
 	<select id="querySpaceInfoByIds" parameterClass="java.util.Map"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, `CAST(name AS CHAR
+		SELECT `id`, `user_id`, CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
@@ -102,7 +102,7 @@
 
 	<select id="querySpaceInfoListByFilter" parameterClass="java.util.Map"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, `CAST(name AS CHAR
+		SELECT `id`, `user_id`, CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
