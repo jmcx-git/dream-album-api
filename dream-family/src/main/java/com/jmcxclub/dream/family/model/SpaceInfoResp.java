@@ -25,8 +25,10 @@ public class SpaceInfoResp {
 
     public SpaceInfoResp(SpaceInfo spaceInfo, SpaceStatInfo stat, List<UserInfo> userInfos) {
         this.id = spaceInfo.getId();
-        this.records = stat.getRecords();
-        this.occupants = stat.getOccupants();
+        if (stat != null) {
+            this.records = stat.getRecords();
+            this.occupants = stat.getOccupants();
+        }
         this.name = spaceInfo.getName();
         this.avatarUrl = spaceInfo.getIcon();
         if (CollectionUtils.notEmptyAndNull(userInfos)) {

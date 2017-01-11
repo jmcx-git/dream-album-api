@@ -451,6 +451,10 @@ public class SpaceServiceImpl implements SpaceService {
         userSpaceRelationshipInfo.setSpaceId(g.getId());
         userSpaceRelationshipInfo.setUserId(g.getUserId());
         userSpaceRelationshipInfoService.addData(userSpaceRelationshipInfo);
+        SpaceStatInfo spaceStatInfo = new SpaceStatInfo();
+        spaceStatInfo.setId(g.getId());
+        spaceStatInfo.setOccupants(1);
+        spaceStatInfoService.addData(spaceStatInfo );
     }
 
     @Override

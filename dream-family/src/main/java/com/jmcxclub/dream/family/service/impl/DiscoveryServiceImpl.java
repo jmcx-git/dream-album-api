@@ -30,7 +30,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     private ActivityInfoService activityInfoService;
     // @Autowired
     private ActivityPrizeInfoService activityPrizeInfoService;
-    // @Autowired
+    @Autowired
     private ActivityWorksInfoService activityWorksInfoService;
     @Autowired
     private ActivityWorksStatInfoService activityWorksStatInfoService;
