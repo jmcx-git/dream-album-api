@@ -60,7 +60,7 @@ public class FeedInfoServiceImpl extends FeedInfoService {
         }
         FeedInfoSortedListCacheFilter sortedListFilter = (FeedInfoSortedListCacheFilter) filter;
         if (sortedListFilter.getSpaceId() != null) {
-            return RedisCacheUtils.buildKey(spaceFeedIdsKey, sortedListFilter.getUserId().intValue());
+            return RedisCacheUtils.buildKey(spaceFeedIdsKey, sortedListFilter.getSpaceId().intValue());
         } else {
             throw ServiceException.getInternalException("Unknown filter value cache. Filter:" + filter);
         }
