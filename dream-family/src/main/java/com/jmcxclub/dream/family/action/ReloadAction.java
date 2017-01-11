@@ -20,7 +20,7 @@ import com.dreambox.web.utils.CollectionUtils;
  * @date 2016年12月6日
  */
 @Controller
-@RequestMapping("/reload/*")
+@RequestMapping("/space/reload/*")
 public class ReloadAction extends IosBaseAction {
     @Autowired
     private Collection<AbsCommonCacheDataLoadService<?>> loadServices;
