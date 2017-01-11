@@ -37,12 +37,13 @@ public class ReloadAction extends IosBaseAction {
      */
     @RequestMapping("/data.json")
     @ResponseBody
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public ApiRespWrapper<Boolean> reloadAlbumInfo() {
         if (CollectionUtils.notEmptyAndNull(loadServices)) {
-            List<AbsCommonCacheDataLoadService<?>> innerLoadServices = new ArrayList<AbsCommonCacheDataLoadService<?>>(
+            List<AbsCommonCacheDataLoadService> innerLoadServices = new ArrayList<AbsCommonCacheDataLoadService>(
                     loadServices);
             Collections.sort(innerLoadServices);
-            for (AbsCommonCacheDataLoadService<?> absCommonCacheDataLoadService : innerLoadServices) {
+            for (AbsCommonCacheDataLoadService absCommonCacheDataLoadService : innerLoadServices) {
                 absCommonCacheDataLoadService.cacheInitLoad();
             }
         }
