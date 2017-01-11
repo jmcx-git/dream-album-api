@@ -48,10 +48,10 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
-        if (!(filter instanceof RelationshipInfoSortedListCacheFilter)) {
+        if (!(filter instanceof UserSpaceRelationshipInfoSortedListCacheFilter)) {
             throw ServiceException.getInternalException("Unknown cache filter. Filter:" + filter);
         }
-        RelationshipInfoSortedListCacheFilter curFilter = (RelationshipInfoSortedListCacheFilter) filter;
+        UserSpaceRelationshipInfoSortedListCacheFilter curFilter = (UserSpaceRelationshipInfoSortedListCacheFilter) filter;
         if (curFilter.getSpaceId() != null) {
             return buildSpaceIdListKey(curFilter.getSpaceId());
         }
@@ -68,7 +68,7 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
 
     @Override
     protected StartSizeCacheFilter buildCacheFilter(UserSpaceRelationshipInfo value) {
-        return new RelationshipInfoSortedListCacheFilter(value.getSpaceId(), value.getUserId(), 0, 10);
+        return new UserSpaceRelationshipInfoSortedListCacheFilter(value.getSpaceId(), value.getUserId(), 0, 10);
     }
 
     @Override
@@ -106,10 +106,10 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
 
     @Override
     protected List<String> buildSortedSetKeys(StartSizeCacheFilter filter) {
-        if (!(filter instanceof RelationshipInfoSortedListCacheFilter)) {
+        if (!(filter instanceof UserSpaceRelationshipInfoSortedListCacheFilter)) {
             throw ServiceException.getInternalException("Unknown cache filter. Filter:" + filter);
         }
-        RelationshipInfoSortedListCacheFilter curFilter = (RelationshipInfoSortedListCacheFilter) filter;
+        UserSpaceRelationshipInfoSortedListCacheFilter curFilter = (UserSpaceRelationshipInfoSortedListCacheFilter) filter;
         List<String> keys = new ArrayList<String>();
         keys.add(buildUserIdListKey(curFilter.getUserId()));
         keys.add(buildSpaceIdListKey(curFilter.getSpaceId()));

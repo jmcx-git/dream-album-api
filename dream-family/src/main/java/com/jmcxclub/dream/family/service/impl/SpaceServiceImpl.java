@@ -37,7 +37,6 @@ import com.jmcxclub.dream.family.model.SpaceFeedResp;
 import com.jmcxclub.dream.family.model.SpaceInfoResp;
 import com.jmcxclub.dream.family.model.SpaceListResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
-import com.jmcxclub.dream.family.model.UserIdStartSizeCacheFilter;
 import com.jmcxclub.dream.family.model.UserInfoResp;
 import com.jmcxclub.dream.family.service.FeedCommentInfoService;
 import com.jmcxclub.dream.family.service.FeedCommentInfoService.CommentSortedSetCacheFilter;
@@ -51,6 +50,7 @@ import com.jmcxclub.dream.family.service.SpaceSecertInfoService;
 import com.jmcxclub.dream.family.service.SpaceService;
 import com.jmcxclub.dream.family.service.SpaceStatInfoService;
 import com.jmcxclub.dream.family.service.UserSpaceRelationshipInfoService;
+import com.jmcxclub.dream.family.service.UserSpaceRelationshipInfoService.UserSpaceRelationshipInfoSortedListCacheFilter;
 
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
@@ -88,7 +88,8 @@ public class SpaceServiceImpl implements SpaceService {
         if (userId <= 0) {
             return new ApiRespWrapper<ListWrapResp<SpaceListResp>>(-1, "未找到对应用户账号", null);
         }
-        UserIdStartSizeCacheFilter filter = new UserIdStartSizeCacheFilter(userId, start, size);
+        UserSpaceRelationshipInfoSortedListCacheFilter filter = new UserSpaceRelationshipInfoSortedListCacheFilter(
+                null, userId, start, size);
         ListWrapResp<UserSpaceRelationshipInfo> spaceInfosResp = userSpaceRelationshipInfoService.listInfo(filter);
         List<Integer> spaceIds = new ArrayList<Integer>();
         for (UserSpaceRelationshipInfo spaceInfo : spaceInfosResp.getResultList()) {
@@ -105,8 +106,8 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public ApiRespWrapper<ListWrapResp<OccupantFootprintResp>> listSpaceOccupantFootprint(String openId, int spaceId)
             throws ServiceException {
-        IdStartSizeCacheFilter filter = new IdStartSizeCacheFilter();
-        filter.setId(spaceId);
+        UserSpaceRelationshipInfoSortedListCacheFilter filter = new UserSpaceRelationshipInfoSortedListCacheFilter(
+                spaceId, null, 0, Integer.MAX_VALUE);
         ListWrapResp<UserSpaceRelationshipInfo> infos = userSpaceRelationshipInfoService.listInfo(filter);
         List<OccupantFootprintResp> resultList = new ArrayList<OccupantFootprintResp>();
         List<Integer> userIds = new ArrayList<Integer>();
@@ -134,10 +135,8 @@ public class SpaceServiceImpl implements SpaceService {
             return new ApiRespWrapper<SpaceInfoResp>(-1, "Illegal space id.");
         }
         SpaceStatInfo stat = spaceStatInfoService.getData(spaceId);
-
-        IdStartSizeCacheFilter filter = new IdStartSizeCacheFilter();
-        filter.setId(spaceId);
-        filter.setSize(5);
+        UserSpaceRelationshipInfoSortedListCacheFilter filter = new UserSpaceRelationshipInfoSortedListCacheFilter(
+                spaceId, null, 0, 5);
         ListWrapResp<UserSpaceRelationshipInfo> occupants = userSpaceRelationshipInfoService.listInfo(filter);
         List<Integer> userIds = new ArrayList<Integer>();
         for (UserSpaceRelationshipInfo userSpaceRelationshipInfo : occupants.getResultList()) {

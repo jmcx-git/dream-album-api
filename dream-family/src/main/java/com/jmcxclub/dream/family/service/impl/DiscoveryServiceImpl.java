@@ -12,6 +12,7 @@ import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
+import com.jmcxclub.dream.family.service.ActivityWorksInfoService;
 import com.jmcxclub.dream.family.service.DiscoveryService;
 
 /**
@@ -24,7 +25,9 @@ import com.jmcxclub.dream.family.service.DiscoveryService;
 public class DiscoveryServiceImpl implements DiscoveryService {
     @Autowired
     private ActivityInfoService activityInfoService;
-    
+    @Autowired
+    private ActivityWorksInfoService activityWorksInfoService;
+
 
     @Override
     public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size)

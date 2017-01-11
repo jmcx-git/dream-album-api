@@ -18,11 +18,11 @@ import com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo;
 public abstract class UserSpaceRelationshipInfoService extends
         AbstractSortedListCacheService<UserSpaceRelationshipInfo> {
 
-    public static class RelationshipInfoSortedListCacheFilter extends StartSizeCacheFilter {
+    public static class UserSpaceRelationshipInfoSortedListCacheFilter extends StartSizeCacheFilter {
         private Integer spaceId;
         private Integer userId;
 
-        public RelationshipInfoSortedListCacheFilter(Integer spaceId, Integer userId, int start, int size) {
+        public UserSpaceRelationshipInfoSortedListCacheFilter(Integer spaceId, Integer userId, int start, int size) {
             super();
             this.spaceId = spaceId;
             this.userId = userId;
