@@ -13,7 +13,9 @@ import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
 import com.jmcxclub.dream.family.service.ActivityPrizeInfoService;
+import com.jmcxclub.dream.family.service.ActivityVoteDetailInfoService;
 import com.jmcxclub.dream.family.service.ActivityWorksInfoService;
+import com.jmcxclub.dream.family.service.ActivityWorksStatInfoService;
 import com.jmcxclub.dream.family.service.DiscoveryService;
 
 /**
@@ -30,11 +32,10 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     private ActivityPrizeInfoService activityPrizeInfoService;
     // @Autowired
     private ActivityWorksInfoService activityWorksInfoService;
-
-    // @Autowired
-    // private ActivityWorksStatInfoService activityWorksStatInfoService;
-    // @Autowired
-    // private ActivityVoteDetailInfoService activityVoteDetailInfoService;
+    @Autowired
+    private ActivityWorksStatInfoService activityWorksStatInfoService;
+    @Autowired
+    private ActivityVoteDetailInfoService activityVoteDetailInfoService;
 
 
     @Override

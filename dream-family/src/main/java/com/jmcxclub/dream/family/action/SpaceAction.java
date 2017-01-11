@@ -160,7 +160,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/icon/edit.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId,
+    public ApiRespWrapper<Boolean> editSpaceIcon(String openId, Integer spaceId,
             @RequestParam(required = false) MultipartFile image, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
@@ -194,8 +194,8 @@ public class SpaceAction extends IosBaseAction {
      */
     @RequestMapping("/info/edit.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> editSpaceInfo(String openId, int spaceId, String name, String born, String version)
-            throws ServiceException {
+    public ApiRespWrapper<Boolean> editSpaceInfo(String openId, Integer spaceId, String name, String born,
+            String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
@@ -211,7 +211,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/delete.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> deleteSpace(String openId, int spaceId, String version) throws ServiceException {
+    public ApiRespWrapper<Boolean> deleteSpace(String openId, Integer spaceId, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
@@ -236,7 +236,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/detail.json")
     @ResponseBody
-    public ApiRespWrapper<SpaceInfoResp> detailSpace(String openId, int spaceId, String version)
+    public ApiRespWrapper<SpaceInfoResp> detailSpace(String openId, Integer spaceId, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的用户账号", null);
@@ -246,7 +246,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/feed/list.json")
     @ResponseBody
-    public ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> listSpaceFeed(String openId, int spaceId, Integer start,
+    public ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> listSpaceFeed(String openId, Integer spaceId, Integer start,
             Integer size, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(-1, "未知的用户账号", null);
@@ -280,7 +280,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/occupant/list.json")
     @ResponseBody
-    public ApiRespWrapper<ListWrapResp<OccupantFootprintResp>> listSpaceOccupant(String openId, int spaceId,
+    public ApiRespWrapper<ListWrapResp<OccupantFootprintResp>> listSpaceOccupant(String openId, Integer spaceId,
             String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<OccupantFootprintResp>>(-1, "未知的用户账号", null);
@@ -299,7 +299,7 @@ public class SpaceAction extends IosBaseAction {
      */
     @RequestMapping("/user/interaction/info.json")
     @ResponseBody
-    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, int spaceId,
+    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, Integer spaceId,
             String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的用户账号", null);
@@ -309,7 +309,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/feed/detail.json")
     @ResponseBody
-    public ApiRespWrapper<SpaceFeedResp> getFeedDetail(String openId, int feedId, String version)
+    public ApiRespWrapper<SpaceFeedResp> getFeedDetail(String openId, Integer feedId, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<SpaceFeedResp>(-1, "未知的用户账号", null);
@@ -319,7 +319,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/feed/like.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> likeFeed(String openId, int feedId, Integer status, String version)
+    public ApiRespWrapper<Boolean> likeFeed(String openId, Integer feedId, Integer status, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
@@ -334,7 +334,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/feed/comment/list.json")
     @ResponseBody
-    public ApiRespWrapper<ListWrapResp<SpaceFeedCommentListResp>> listFeedComment(String openId, int feedId,
+    public ApiRespWrapper<ListWrapResp<SpaceFeedCommentListResp>> listFeedComment(String openId, Integer feedId,
             Integer headCommentId, Integer start, Integer size, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedCommentListResp>>(-1, "未知的用户账号", null);
@@ -359,7 +359,7 @@ public class SpaceAction extends IosBaseAction {
      */
     @RequestMapping("/feed/add.json")
     @ResponseBody
-    public ApiRespWrapper<Integer> addFeed(String openId, int spaceId, String title, String content, int type,
+    public ApiRespWrapper<Integer> addFeed(String openId, Integer spaceId, String title, String content, Integer type,
             @RequestParam(required = false) MultipartFile file, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
@@ -396,11 +396,11 @@ public class SpaceAction extends IosBaseAction {
      */
     @RequestMapping("/feed/del.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> delFeed(String openId, int id, String version) throws ServiceException {
+    public ApiRespWrapper<Boolean> delFeed(String openId, Integer feedId, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "错误的用户账号", null);
         }
-        if (id <= 0) {
+        if (feedId <= 0) {
             return new ApiRespWrapper<Boolean>(-1, "未知的记录", null);
         }
         UserInfo userInfo = new UserInfo();
@@ -409,7 +409,7 @@ public class SpaceAction extends IosBaseAction {
         if (userInfo == null) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号");
         }
-        return spaceService.deleteFeed(userInfo.getId(), id);
+        return spaceService.deleteFeed(userInfo.getId(), feedId);
     }
 
     private UserInfo getUserInfo(String openId) throws ServiceException {
@@ -420,7 +420,7 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/feed/comment/add.json")
     @ResponseBody
-    public ApiRespWrapper<Integer> addFeedComment(String openId, int feedId, Integer commentRefId, String comment,
+    public ApiRespWrapper<Integer> addFeedComment(String openId, Integer feedId, Integer commentRefId, String comment,
             String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);

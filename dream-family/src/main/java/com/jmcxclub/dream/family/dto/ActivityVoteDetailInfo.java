@@ -2,21 +2,23 @@
 
 package com.jmcxclub.dream.family.dto;
 
+import java.util.Date;
+
 import com.dreambox.core.dto.StatusSerializable;
 
 /**
- * 
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-public class ActivityWorksStatInfo extends StatusSerializable {
+public class ActivityVoteDetailInfo extends StatusSerializable {
     /**
      * 
      */
-    private static final long serialVersionUID = -172768762311317947L;
-    private int id;// reference works id
-    private int activityId;// only for key
-    private int votes;
+    private static final long serialVersionUID = 4047580627451170277L;
+    private int id;
+    private int userId;
+    private int activityId;
+    private Date date;
 
     public int getId() {
         return id;
@@ -24,6 +26,14 @@ public class ActivityWorksStatInfo extends StatusSerializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getActivityId() {
@@ -34,12 +44,13 @@ public class ActivityWorksStatInfo extends StatusSerializable {
         this.activityId = activityId;
     }
 
-    public int getVotes() {
-        return votes;
+    public Date getDate() {
+        return date;
     }
 
-    public void setVotes(int votes) {
-        this.votes = votes;
+    public void setDate(Date date) {
+        this.date = date;
     }
+
 
 }

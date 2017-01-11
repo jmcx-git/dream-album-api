@@ -39,8 +39,6 @@ public class ActivityWorksInfoServiceImpl extends ActivityWorksInfoService {
     private String ukPkPrefixKey = "acti:works:pk:uk";
     private String infoPrefixKey = "acti:works:info";
 
-
-
     @Override
     protected int getPriority() {
         return 3;
