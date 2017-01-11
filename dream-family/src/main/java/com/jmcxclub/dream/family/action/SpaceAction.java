@@ -63,7 +63,7 @@ public class SpaceAction extends IosBaseAction {
      */
     @RequestMapping("/add.json")
     @ResponseBody
-    public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, String born, int type,
+    public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, String born, Integer type,
             MultipartFile image, String info, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
@@ -84,6 +84,7 @@ public class SpaceAction extends IosBaseAction {
             } catch (Exception e) {
             }
         }
+        type = type == null ? (image == null ? FeedTypeEnum.DIARY.getType() : FeedTypeEnum.PHOTO.getType()) : type;
         return spaceService.addSpace(openId, gender, name, bornDate, type, icon, icon, info);
     }
 

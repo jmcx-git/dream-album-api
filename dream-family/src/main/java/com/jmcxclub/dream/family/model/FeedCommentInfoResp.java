@@ -12,6 +12,7 @@ import com.jmcxclub.dream.family.dto.FeedCommentInfo;
 public class FeedCommentInfoResp {
     private int id;
     private String nickname;
+    private String openId;
     private String avatarUrl;
     private String comment;
 
@@ -19,6 +20,7 @@ public class FeedCommentInfoResp {
         this.id = feedCommentInfo.getId();
         this.comment = feedCommentInfo.getComment();
         if (commentUserInfo != null) {
+            this.openId = commentUserInfo.getOpenId();
             this.nickname = commentUserInfo.getNickName();
             this.avatarUrl = commentUserInfo.getAvatarUrl();
         }
@@ -54,5 +56,13 @@ public class FeedCommentInfoResp {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

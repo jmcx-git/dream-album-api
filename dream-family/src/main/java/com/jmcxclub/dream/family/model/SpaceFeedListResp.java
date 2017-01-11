@@ -26,7 +26,7 @@ public class SpaceFeedListResp {
     private String nickname;
     private String timeDesc;
     private String dateDesc;
-    private List<String> likeIcons;
+    private List<UserInfoResp> likeIcons;
     private List<FeedCommentInfoResp> comments;
 
 
@@ -62,7 +62,7 @@ public class SpaceFeedListResp {
         return minDesc;
     }
 
-    public SpaceFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo, List<String> likeIcons,
+    public SpaceFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo, List<UserInfoResp> likeIcons,
             List<FeedCommentInfoResp> comments) {
         this.id = feedInfo.getId();
         this.title = feedInfo.getTitle();
@@ -137,11 +137,11 @@ public class SpaceFeedListResp {
         this.duration = duration;
     }
 
-    public List<String> getLikeIcons() {
+    public List<UserInfoResp> getLikeIcons() {
         return likeIcons;
     }
 
-    public void setLikeIcons(List<String> likeIcons) {
+    public void setLikeIcons(List<UserInfoResp> likeIcons) {
         this.likeIcons = likeIcons;
     }
 

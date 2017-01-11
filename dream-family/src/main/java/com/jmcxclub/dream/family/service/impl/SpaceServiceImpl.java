@@ -37,6 +37,7 @@ import com.jmcxclub.dream.family.model.SpaceFeedResp;
 import com.jmcxclub.dream.family.model.SpaceInfoResp;
 import com.jmcxclub.dream.family.model.SpaceListResp;
 import com.jmcxclub.dream.family.model.UserIdStartSizeCacheFilter;
+import com.jmcxclub.dream.family.model.UserInfoResp;
 import com.jmcxclub.dream.family.service.FeedCommentInfoService;
 import com.jmcxclub.dream.family.service.FeedCommentInfoService.CommentSortedSetCacheFilter;
 import com.jmcxclub.dream.family.service.FeedInfoService;
@@ -254,14 +255,14 @@ public class SpaceServiceImpl implements SpaceService {
         List<SpaceFeedListResp> datas = new ArrayList<SpaceFeedListResp>();
         for (FeedInfo feedInfo : infos.getResultList()) {
             UserInfo authorUserInfo = userIdInfoMap.get(feedInfo.getUserId());
-            List<String> likeIcons = new ArrayList<String>();
+            List<UserInfoResp> likeIcons = new ArrayList<UserInfoResp>();
             List<Integer> likeUserIds = feedIdLikeInfoMap.get(feedInfo.getId());
             List<FeedCommentInfoResp> comments = new ArrayList<FeedCommentInfoResp>();
             if (likeUserIds != null) {
                 for (Integer userId : likeUserIds) {
                     UserInfo userInfo = userIdInfoMap.get(userId);
                     if (userInfo != null) {
-                        likeIcons.add(userInfo.getAvatarUrl());
+                        likeIcons.add(new UserInfoResp(userInfo));
                     }
                 }
             }
