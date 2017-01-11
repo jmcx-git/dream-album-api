@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `space_secert_info`(
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY(`space_id`),
+    UNIQUE KEY(`secert`),
     KEY(`space_id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8 COMMENT '空间密码表';
 
