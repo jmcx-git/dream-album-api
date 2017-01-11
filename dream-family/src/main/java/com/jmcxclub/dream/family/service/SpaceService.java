@@ -13,6 +13,7 @@ import com.jmcxclub.dream.family.model.SpaceListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedCommentListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
+import com.jmcxclub.dream.family.model.UserFeedListResp;
 
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
@@ -44,6 +45,8 @@ public interface SpaceService {
      */
     ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> listSpaceFeed(String openId, int spaceId, int start, int size)
             throws ServiceException;
+
+    ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(String openId, int start, int size);
 
     /**
      * 对空间feed添加评论,支持emoji,返回生成的评论的id

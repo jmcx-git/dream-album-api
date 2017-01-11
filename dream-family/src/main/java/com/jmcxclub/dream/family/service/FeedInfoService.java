@@ -12,11 +12,11 @@ import com.jmcxclub.dream.family.dto.FeedInfo;
  */
 public abstract class FeedInfoService extends AbstractSortedListCacheService<FeedInfo> {
 
-    public static class SortedListCacheFilter extends StartSizeCacheFilter {
+    public static class FeedInfoSortedListCacheFilter extends StartSizeCacheFilter {
         private Integer userId;
         private Integer spaceId;
 
-        public SortedListCacheFilter(Integer userId, Integer spaceId, int start, int size) {
+        public FeedInfoSortedListCacheFilter(Integer userId, Integer spaceId, int start, int size) {
             super();
             this.userId = userId;
             this.spaceId = spaceId;

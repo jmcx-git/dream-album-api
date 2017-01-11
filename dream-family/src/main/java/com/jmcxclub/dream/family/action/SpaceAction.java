@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,7 @@ import com.jmcxclub.dream.family.model.SpaceFeedResp;
 import com.jmcxclub.dream.family.model.SpaceInfoResp;
 import com.jmcxclub.dream.family.model.SpaceListResp;
 import com.jmcxclub.dream.family.model.UploadFileSaveResp;
+import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.service.ImgService;
 import com.jmcxclub.dream.family.service.SpaceService;
 
@@ -64,7 +66,7 @@ public class SpaceAction extends IosBaseAction {
     @RequestMapping("/add.json")
     @ResponseBody
     public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, String born, Integer type,
-            MultipartFile image, String info, String version) throws ServiceException {
+            @RequestParam(required = false) MultipartFile image, String info, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
         }
@@ -129,8 +131,8 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/icon/edit.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId, MultipartFile image, String version)
-            throws ServiceException {
+    public ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId,
+            @RequestParam(required = false) MultipartFile image, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
@@ -195,6 +197,7 @@ public class SpaceAction extends IosBaseAction {
             return new ApiRespWrapper<ListWrapResp<SpaceListResp>>(-1, "未知的用户账号", null);
         }
         start = ParameterUtils.formatStart(start);
+        size = ParameterUtils.formatStart(size);
         return spaceService.listSpace(openId, start, size);
     }
 
@@ -216,7 +219,30 @@ public class SpaceAction extends IosBaseAction {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(-1, "未知的用户账号", null);
         }
         start = ParameterUtils.formatStart(start);
+        size = ParameterUtils.formatStart(size);
         return spaceService.listSpaceFeed(openId, spaceId, start, size);
+    }
+
+    /**
+     * 列出用户所发的所有信息
+     * 
+     * @param openId
+     * @param start
+     * @param size
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping("/user/feed/list.json")
+    @ResponseBody
+    public ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(String openId, Integer start, Integer size,
+            String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<ListWrapResp<UserFeedListResp>>(-1, "未知的用户账号", null);
+        }
+        start = ParameterUtils.formatStart(start);
+        size = ParameterUtils.formatStart(size);
+        return spaceService.listUserFeed(openId, start, size);
     }
 
     @RequestMapping("/occupant/list.json")
@@ -261,6 +287,8 @@ public class SpaceAction extends IosBaseAction {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedCommentListResp>>(-1, "未知的用户账号", null);
         }
+        start = ParameterUtils.formatStart(start);
+        size = ParameterUtils.formatStart(size);
         return spaceService.listFeedComment(openId, feedId, headCommentId, start, size);
     }
 
@@ -280,7 +308,7 @@ public class SpaceAction extends IosBaseAction {
     @RequestMapping("/feed/add.json")
     @ResponseBody
     public ApiRespWrapper<Integer> addFeed(String openId, int spaceId, String title, String content, int type,
-            MultipartFile file, String version) throws ServiceException {
+            @RequestParam(required = false) MultipartFile file, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
         }

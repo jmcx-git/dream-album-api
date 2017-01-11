@@ -22,6 +22,7 @@ public class SpaceFeedListResp {
     private String content;
     private String resourceUrl;
     private long duration;// for video audio
+    private String authorOpenId;
     private String avatarUrl;
     private String nickname;
     private String timeDesc;
@@ -76,6 +77,7 @@ public class SpaceFeedListResp {
         if (authorUserInfo != null) {
             this.avatarUrl = authorUserInfo.getAvatarUrl();
             this.nickname = authorUserInfo.getNickName();
+            this.authorOpenId = authorUserInfo.getOpenId();
         }
         this.likeIcons = likeIcons;
         this.comments = comments;
@@ -183,5 +185,13 @@ public class SpaceFeedListResp {
 
     public void setDateDesc(String dateDesc) {
         this.dateDesc = dateDesc;
+    }
+
+    public String getAuthorOpenId() {
+        return authorOpenId;
+    }
+
+    public void setAuthorOpenId(String authorOpenId) {
+        this.authorOpenId = authorOpenId;
     }
 }

@@ -53,12 +53,12 @@ public class FeedInfoServiceImpl extends FeedInfoService {
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
-        if (!(filter instanceof SortedListCacheFilter)) {
+        if (!(filter instanceof FeedInfoSortedListCacheFilter)) {
             throw ServiceException
                     .getInternalException("Unknown filter for cache. Need sortedListCacheFilter but found "
                             + filter.getClass().getName());
         }
-        SortedListCacheFilter sortedListFilter = (SortedListCacheFilter) filter;
+        FeedInfoSortedListCacheFilter sortedListFilter = (FeedInfoSortedListCacheFilter) filter;
         if (sortedListFilter.getSpaceId() != null) {
             return RedisCacheUtils.buildKey(spaceFeedIdsKey, sortedListFilter.getUserId().intValue());
         } else {
@@ -73,7 +73,7 @@ public class FeedInfoServiceImpl extends FeedInfoService {
 
     @Override
     protected StartSizeCacheFilter buildCacheFilter(FeedInfo value) {
-        return new SortedListCacheFilter(null, value.getSpaceId(), 0, 10);
+        return new FeedInfoSortedListCacheFilter(null, value.getSpaceId(), 0, 10);
     }
 
     @Override

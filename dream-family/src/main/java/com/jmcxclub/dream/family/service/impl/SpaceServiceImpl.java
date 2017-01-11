@@ -36,11 +36,13 @@ import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
 import com.jmcxclub.dream.family.model.SpaceInfoResp;
 import com.jmcxclub.dream.family.model.SpaceListResp;
+import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.model.UserIdStartSizeCacheFilter;
 import com.jmcxclub.dream.family.model.UserInfoResp;
 import com.jmcxclub.dream.family.service.FeedCommentInfoService;
 import com.jmcxclub.dream.family.service.FeedCommentInfoService.CommentSortedSetCacheFilter;
 import com.jmcxclub.dream.family.service.FeedInfoService;
+import com.jmcxclub.dream.family.service.FeedInfoService.FeedInfoSortedListCacheFilter;
 import com.jmcxclub.dream.family.service.FeedLikeInfoService;
 import com.jmcxclub.dream.family.service.FeedLikeInfoService.LikeInfoIdSortedSetCacheFilter;
 import com.jmcxclub.dream.family.service.FeedStatInfoService;
@@ -181,6 +183,33 @@ public class SpaceServiceImpl implements SpaceService {
                     new ArrayList<SpaceFeedListResp>(0)));
         }
         return buildFeedListResp(spaceInfo, infos);
+    }
+
+    @Override
+    public ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(String openId, int start, int size)
+            throws ServiceException {
+        UserInfo userInfo = new UserInfo();
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<ListWrapResp<UserFeedListResp>>(-1, "Illegal user id", null);
+        }
+        FeedInfoSortedListCacheFilter filter = new FeedInfoSortedListCacheFilter(userInfo.getId(), null, start, size);
+        ListWrapResp<FeedInfo> infos = feedInfoService.listInfo(filter);
+        if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {
+            return new ApiRespWrapper<ListWrapResp<UserFeedListResp>>(new ListWrapResp<UserFeedListResp>(
+                    new ArrayList<UserFeedListResp>(0)));
+        }
+        return buildFeedListResp(infos, userInfo);
+    }
+
+    private ApiRespWrapper<ListWrapResp<UserFeedListResp>> buildFeedListResp(ListWrapResp<FeedInfo> infos,
+            UserInfo userInfo) {
+        List<UserFeedListResp> datas = new ArrayList<UserFeedListResp>();
+        for (FeedInfo feedInfo : infos.getResultList()) {
+            datas.add(new UserFeedListResp(feedInfo, userInfo));
+        }
+        return new ApiRespWrapper<ListWrapResp<UserFeedListResp>>(new ListWrapResp<>(infos.getTotalCount(), datas,
+                infos.isMore(), infos.getNext()));
     }
 
     private ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> buildFeedListResp(SpaceInfo spaceInfo,

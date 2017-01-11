@@ -21,7 +21,7 @@ public class SpaceInfoResp {
     private String name;// 空间名称
     private String info;// 空间的描述
     private String avatarUrl;
-    private List<String> occupantAvatarUrls;
+    private List<UserInfoResp> occupantInfos;
 
     public SpaceInfoResp(SpaceInfo spaceInfo, SpaceStatInfo stat, List<UserInfo> userInfos) {
         this.id = spaceInfo.getId();
@@ -30,11 +30,11 @@ public class SpaceInfoResp {
         this.name = spaceInfo.getName();
         this.avatarUrl = spaceInfo.getIcon();
         if (CollectionUtils.notEmptyAndNull(userInfos)) {
-            List<String> urls = new ArrayList<String>(userInfos.size());
+            List<UserInfoResp> occupantInfos = new ArrayList<UserInfoResp>(userInfos.size());
             for (UserInfo userInfo : userInfos) {
-                urls.add(userInfo.getAvatarUrl());
+                occupantInfos.add(new UserInfoResp(userInfo));
             }
-            this.occupantAvatarUrls = urls;
+            this.occupantInfos = occupantInfos;
         }
     }
 
@@ -70,14 +70,6 @@ public class SpaceInfoResp {
         this.avatarUrl = avatarUrl;
     }
 
-    public List<String> getOccupantAvatarUrls() {
-        return occupantAvatarUrls;
-    }
-
-    public void setOccupantAvatarUrls(List<String> occupantAvatarUrls) {
-        this.occupantAvatarUrls = occupantAvatarUrls;
-    }
-
     public String getName() {
         return name;
     }
@@ -92,5 +84,13 @@ public class SpaceInfoResp {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public List<UserInfoResp> getOccupantInfos() {
+        return occupantInfos;
+    }
+
+    public void setOccupantInfos(List<UserInfoResp> occupantInfos) {
+        this.occupantInfos = occupantInfos;
     }
 }
