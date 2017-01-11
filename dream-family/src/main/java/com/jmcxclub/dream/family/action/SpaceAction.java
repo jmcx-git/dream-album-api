@@ -357,7 +357,7 @@ public class SpaceAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
-    @RequestMapping("/feed/add.json")
+    @RequestMapping(value = "/feed/add.json", method = RequestMethod.POST)
     @ResponseBody
     public ApiRespWrapper<Integer> addFeed(String openId, Integer spaceId, String title, String content, Integer type,
             @RequestParam(required = false) MultipartFile file, String version) throws ServiceException {
@@ -384,6 +384,35 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         return spaceService.addFeed(userInfo.getId(), spaceId, title, content, type, cover, illustration);
+    }
+
+    /**
+     * 
+     * @param openId
+     * @param spaceId
+     * @param title
+     * @param content
+     * @param type DIARY(1, "日记"), AUDIO(2, "录音"), PHOTO(0, "照片"), VIDEO(3,
+     *        "视频");
+     * @param file 用户上传上来的图，现在只支持一张
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping(value = "/feed/add.json", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiRespWrapper<Integer> addTextFeed(String openId, Integer spaceId, String title, String content,
+            Integer type, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Integer>(-1, "Illegal open id.");
+        }
+        return spaceService.addFeed(userInfo.getId(), spaceId, title, content, type, null, null);
     }
 
     /**
