@@ -24,6 +24,7 @@ import com.jmcxclub.dream.family.service.DiscoveryService;
 public class DiscoveryServiceImpl implements DiscoveryService {
     @Autowired
     private ActivityInfoService activityInfoService;
+    
 
     @Override
     public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size)

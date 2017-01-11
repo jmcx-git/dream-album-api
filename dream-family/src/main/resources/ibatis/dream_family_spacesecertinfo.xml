@@ -12,17 +12,15 @@
 
 	<insert id="insertOrUpdateSpaceSecertInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
 		<![CDATA[
-			INSERT INTO space_secert_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
+			INSERT IGNORE INTO space_secert_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
 			VALUES(null, #secert#, #spaceId#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreSpaceSecertInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
 		<![CDATA[
-			INSERT INTO space_secert_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
+			INSERT IGNORE INTO space_secert_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
 			VALUES(null, #secert#, #spaceId#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
 		]]>
 	</insert>
 
