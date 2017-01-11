@@ -57,7 +57,7 @@
 		CHARACTER SET
 		utf8)
 		AS
-		`content`, `cover`, `illustration`, `resource_url`, ``, `duration`,
+		`content`, `cover`, `illustration`, `resource_url`, `duration`,
 		`type`, `status`,`update_time`,`create_time`
 		FROM `feed_info` WHERE
 		`id` = #startId#;
@@ -72,7 +72,7 @@
 		CHARACTER SET
 		utf8)
 		AS
-		`content`, `cover`, `illustration`, `resource_url`, ``, `duration`,
+		`content`, `cover`, `illustration`, `resource_url`, `duration`,
 		`type`, `status`,`update_time`,`create_time`
 		FROM `feed_info` WHERE
 		`id` > #startId# ORDER BY id LIMIT #size#;
@@ -88,7 +88,7 @@
 		utf8)
 		AS
 		`content`,
-		`cover`, `illustration`, `resource_url`, ``, `duration`,
+		`cover`, `illustration`, `resource_url`, `duration`,
 		`type`,
 		`status`,`update_time`,`create_time`
 		FROM `feed_info`
@@ -107,7 +107,7 @@
 		utf8)
 		AS
 		`content`,
-		`cover`, `illustration`, `resource_url`, ``, `duration`,
+		`cover`, `illustration`, `resource_url`, `duration`,
 		`type`,
 		`status`,`update_time`,`create_time`
 		FROM `feed_info`
