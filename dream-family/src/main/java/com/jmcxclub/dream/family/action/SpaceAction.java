@@ -215,7 +215,11 @@ public class SpaceAction extends IosBaseAction {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
-        return spaceService.deleteSpace(openId, spaceId);
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", false);
+        }
+        return spaceService.deleteSpace(userInfo.getId(), spaceId);
     }
 
     @RequestMapping("/list.json")
@@ -380,6 +384,32 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         return spaceService.addFeed(userInfo.getId(), spaceId, title, content, type, cover, illustration);
+    }
+
+    /**
+     * 
+     * @param openId
+     * @param id
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping("/feed/del.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> delFeed(String openId, int id, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "错误的用户账号", null);
+        }
+        if (id <= 0) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的记录", null);
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号");
+        }
+        return spaceService.deleteFeed(userInfo.getId(), id);
     }
 
     private UserInfo getUserInfo(String openId) throws ServiceException {

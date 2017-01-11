@@ -64,7 +64,6 @@ CREATE TABLE IF NOT EXISTS `user_space_relationship_info`(
 	`user_id` int unsigned not null comment 'reference user_info.id',
 	`relationship` int(11) NOT NULL DEFAULT '0' COMMENT 'REFERENCE SpaceRelationshipEnum 1 owner 0 occupant',
 	`top` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '1 MEANS IN THE SPACE LIST TOP EXCLUDE OWNER SPACE',
-	`view` int(11) unsigned NOT NULL  DEFAULT '1',
 	`status` int(11) NOT NULL DEFAULT '0',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
@@ -119,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `feed_comment_info`(
 	`id` int unsigned not null auto_increment,
 	`user_id` int unsigned not null comment 'reference user_info.id',
 	`feed_id` int unsigned not null comment 'reference feed_info.id',
+	`comment` blob;
 	`comment_ref_id` int DEFAULT NULL comment 'reference feed_comment_info.id if not null',
 	`status` int(11) NOT NULL DEFAULT '0',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

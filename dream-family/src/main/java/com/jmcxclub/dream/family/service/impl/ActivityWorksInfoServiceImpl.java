@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.JedisPool;
@@ -10,6 +11,7 @@ import redis.clients.jedis.ShardedJedisPool;
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
+import com.jmcxclub.dream.family.dao.ActivityWorksInfoDao;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.service.ActivityWorksInfoService;
 
@@ -17,8 +19,10 @@ import com.jmcxclub.dream.family.service.ActivityWorksInfoService;
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-// @Service("activityWorksInfoService")
+@Service("activityWorksInfoService")
 public class ActivityWorksInfoServiceImpl extends ActivityWorksInfoService {
+    @Autowired
+    private ActivityWorksInfoDao activityWorksInfoDao;
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {

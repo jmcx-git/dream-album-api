@@ -349,6 +349,21 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
+    public ApiRespWrapper<Boolean> deleteFeed(int userId, int id) throws ServiceException {
+        // permission
+        FeedInfo feedInfo = feedInfoService.getData(id);
+        if (feedInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的记录", false);
+        }
+        if (feedInfo.getUserId() != userId) {
+            return new ApiRespWrapper<>(-1, "你没有删除当前评论的权限.", false);
+        }
+        feedInfo.setStatus(FeedInfo.STATUS_DEL);
+        feedInfoService.modifyStatus(feedInfo);
+        return new ApiRespWrapper<Boolean>(true);
+    }
+
+    @Override
     public ApiRespWrapper<Integer> addFeedComment(String openId, int feedId, Integer commentRefId, String comment)
             throws ServiceException {
         UserInfo userInfo = new UserInfo();
@@ -437,11 +452,17 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<Boolean> deleteSpace(String openId, int spaceId) throws ServiceException {
-        SpaceInfo g = new SpaceInfo();
-        g.setId(spaceId);
-        g.setStatus(StatusType.STATUS_DEL.getStatus());
-        spaceInfoService.modifyStatus(g);
+    public ApiRespWrapper<Boolean> deleteSpace(int userId, int spaceId) throws ServiceException {
+        // permission
+        SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
+        if (spaceInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的数据", false);
+        }
+        if (spaceInfo.getUserId() != userId) {
+            return new ApiRespWrapper<>(-1, "你没有删除当前记录的权限", false);
+        }
+        spaceInfo.setStatus(StatusType.STATUS_DEL.getStatus());
+        spaceInfoService.modifyStatus(spaceInfo);
         return new ApiRespWrapper<Boolean>(true);
     }
 

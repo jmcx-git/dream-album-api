@@ -94,7 +94,7 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Boolean> deleteSpace(String openId, int spaceId) throws ServiceException;
+    ApiRespWrapper<Boolean> deleteSpace(int id, int spaceId) throws ServiceException;
 
     /**
      * 用户编辑空间
@@ -183,6 +183,8 @@ public interface SpaceService {
 
     ApiRespWrapper<Integer> addFeed(int userId, int spaceId, String title, String content, int type, String cover,
             String illustration) throws ServiceException;
+
+    ApiRespWrapper<Boolean> deleteFeed(int userId, int id) throws ServiceException;
 
     ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, int spaceId)
             throws ServiceException;
