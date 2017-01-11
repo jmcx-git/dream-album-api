@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.service;
 
+import java.util.Date;
+
 import com.dreambox.core.service.AbsCommonCacheDataService;
 import com.dreambox.web.exception.ServiceException;
 import com.jmcxclub.dream.family.dto.SpaceInfo;
@@ -14,6 +16,8 @@ import com.jmcxclub.dream.family.dto.SpaceInfo;
  */
 public abstract class SpaceInfoService extends AbsCommonCacheDataService<SpaceInfo> {
 
-    public abstract void modifyInfo(int id, String title) throws ServiceException;
+    public abstract void modifyInfo(int id, String title, Date born) throws ServiceException;
+
+    public abstract void modifyIcon(int spaceId, String icon) throws ServiceException;
 
 }

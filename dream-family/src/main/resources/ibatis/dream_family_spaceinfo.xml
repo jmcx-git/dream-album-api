@@ -4,11 +4,10 @@
 	<resultMap id="spaceinfo" class="com.jmcxclub.dream.family.dto.SpaceInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
-		<result column="title" property="title" jdbcType="VARCHAR" />
-		<result column="darling_name" property="darlingName" jdbcType="VARCHAR" />
-		<result column="darling_born_date" property="darlingBornDate"
-			jdbcType="TIMESTAMP" />
-		<result column="darling_type" property="darlingType" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="born_date" property="bornDate" jdbcType="TIMESTAMP" />
+		<result column="gender" property="gender" jdbcType="TIMESTAMP" />
+		<result column="type" property="type" jdbcType="INTEGER" />
 		<result column="icon" property="icon" jdbcType="VARCHAR" />
 		<result column="cover" property="cover" jdbcType="VARCHAR" />
 		<result column="info" property="info" jdbcType="VARCHAR" />
@@ -19,15 +18,15 @@
 
 	<insert id="insertOrUpdateSpaceInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
 		<![CDATA[
-			INSERT INTO space_info (`id`,`user_id`,`title`, `darling_name`, `darling_born_date`,`darling_type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #title#, #darlingName#, #darlingBornDate#, #darlingType#, #icon#, #cover#, #info#, 0, now(),now())
+			INSERT INTO space_info (`id`,`user_id`, `name`, `born_date`, `gender`, `type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #name#, #bornDate#, #gender#, #type#, #icon#, #cover#, #info#, 0, now(),now())
 		]]>
 	</insert>
 
 	<insert id="insertSpaceInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
 		<![CDATA[
-			INSERT INTO space_info (`id`,`user_id`,`title`, `darling_name`, `darling_born_date`,`darling_type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #title#, #darlingName#, #darlingBornDate#, #darlingType#, #icon#, #cover#, #info#, 0, now(),now())
+			INSERT INTO space_info (`id`,`user_id`, `name`, `born_date`, `gender`, `type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #name#, #bornDate#, #gender#, #type#, #icon#, #cover#, #info#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -37,8 +36,8 @@
 
 	<insert id="insertOrIgnoreSpaceInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
 		<![CDATA[
-			INSERT INTO space_info (`id`,`user_id`,`title`, `darling_name`, `darling_born_date`,`darling_type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #title#, #darlingName#, #darlingBornDate#, #darlingType#, #icon#, #cover#, #info#, 0, now(),now())
+			INSERT INTO space_info (`id`,`user_id`, `name`, `born_date`, `gender`, `type`, `icon`, `cover`,`info`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #name#, #bornDate#, #gender#, #type#, #icon#, #cover#, #info#, 0, now(),now())
 		]]>
 	</insert>
 
@@ -48,16 +47,25 @@
         ]]>
 	</update>
 
+	<update id="updateSpaceInfoNameAndBornDate" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+        <![CDATA[
+        	UPDATE `space_info` SET `name` = #name#, `born_date` = #bornDate# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateSpaceInfoIcon" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+        <![CDATA[
+        	UPDATE `space_info` SET `icon` = #icon# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
 	<select id="querySpaceInfoById" parameterClass="java.lang.Integer"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, CAST(title AS CHAR
-		CHARACTER SET
-		utf8) AS
-		`title`, `CAST(darling_name AS CHAR
+		SELECT `id`, `user_id`, `CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
-		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`name`, `born_date`, `gender`, `type`, `icon`, `cover`, `info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info` WHERE
 		`id` =
@@ -66,14 +74,11 @@
 
 	<select id="querySpaceInfoListByStartId" parameterClass="java.util.Map"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, CAST(title AS CHAR
-		CHARACTER SET
-		utf8) AS
-		`title`, `CAST(darling_name AS CHAR
+		SELECT `id`, `user_id`, `CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
-		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`name`, `born_date`, `gender`, `type`, `icon`, `cover`, `info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info` WHERE
 		`id` >
@@ -82,14 +87,12 @@
 
 	<select id="querySpaceInfoByIds" parameterClass="java.util.Map"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, CAST(title AS CHAR
-		CHARACTER SET
-		utf8) AS
-		`title`, `CAST(darling_name AS CHAR
+		SELECT `id`, `user_id`, `CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
-		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`name`,
+		`born_date`, `gender`, `type`, `icon`, `cover`, `info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
@@ -99,14 +102,12 @@
 
 	<select id="querySpaceInfoListByFilter" parameterClass="java.util.Map"
 		resultMap="spaceinfo">
-		SELECT `id`, `user_id`, CAST(title AS CHAR
-		CHARACTER SET
-		utf8) AS
-		`title`, `CAST(darling_name AS CHAR
+		SELECT `id`, `user_id`, `CAST(name AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
-		`darling_name`, `darling_born_date`, `icon`, `cover`, `info`,
+		`name`,
+		`born_date`, `gender`, `type`, `icon`, `cover`, `info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info`
 		<dynamic prepend=" WHERE ">

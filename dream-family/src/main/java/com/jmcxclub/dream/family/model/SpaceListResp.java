@@ -20,15 +20,15 @@ public class SpaceListResp {
 
     private int records;
     private int occupants;// 人气数
-    private String title;// 空间名称
-    private String desc;// 空间的描述
+    private String name;// 空间名称
+    private String info;// 空间的描述
 
     public SpaceListResp(SpaceInfo spaceInfo, SpaceStatInfo curStat) {
         this.id = spaceInfo.getId();
         this.cover = spaceInfo.getCover();
         this.notice = false;
-        this.title = spaceInfo.getTitle();
-        this.desc = spaceInfo.getTitle();// TODO
+        this.name = spaceInfo.getName();
+        this.info = spaceInfo.getInfo();// TODO
         if (curStat != null) {
             this.records = curStat.getRecords();
             this.occupants = curStat.getOccupants();
@@ -59,22 +59,6 @@ public class SpaceListResp {
         this.notice = notice;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public int getRecords() {
         return records;
     }
@@ -89,5 +73,21 @@ public class SpaceListResp {
 
     public void setOccupants(int occupants) {
         this.occupants = occupants;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 }

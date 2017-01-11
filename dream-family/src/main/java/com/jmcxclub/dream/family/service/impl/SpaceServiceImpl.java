@@ -29,6 +29,7 @@ import com.jmcxclub.dream.family.dto.SpaceRelationshipEnum;
 import com.jmcxclub.dream.family.dto.SpaceSecertInfo;
 import com.jmcxclub.dream.family.dto.SpaceStatInfo;
 import com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo;
+import com.jmcxclub.dream.family.model.FeedCommentInfoResp;
 import com.jmcxclub.dream.family.model.OccupantFootprintResp;
 import com.jmcxclub.dream.family.model.SpaceFeedCommentListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
@@ -174,6 +175,10 @@ public class SpaceServiceImpl implements SpaceService {
         filter.setSize(size);
         ListWrapResp<FeedInfo> infos = feedInfoService.listInfo(filter);
         spaceStatInfoService.incrViews(spaceId);
+        if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {
+            return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
+                    new ArrayList<SpaceFeedListResp>(0)));
+        }
         return buildFeedListResp(spaceInfo, infos);
     }
 
@@ -191,11 +196,15 @@ public class SpaceServiceImpl implements SpaceService {
             LikeInfoIdSortedSetCacheFilter likeInfoIdSortedSetCacheFilter = new LikeInfoIdSortedSetCacheFilter(null,
                     info.getId(), 0, 5);
             ListWrapResp<FeedLikeInfo> likes = this.feedLikeInfoService.listInfo(likeInfoIdSortedSetCacheFilter);
-            feedIdLikeInfoMap.put(info.getId(), likes);
+            if (likes != null && CollectionUtils.notEmptyAndNull(likes.getResultList())) {
+                feedIdLikeInfoMap.put(info.getId(), likes);
+            }
             CommentSortedSetCacheFilter commentSortedSetCacheFilter = new CommentSortedSetCacheFilter(null,
                     info.getId(), 0, Integer.MAX_VALUE);
             ListWrapResp<FeedCommentInfo> comments = this.feedCommentInfoService.listInfo(commentSortedSetCacheFilter);
-            feedIdCommenteInfoMap.put(info.getId(), comments);
+            if (comments != null && CollectionUtils.notEmptyAndNull(comments.getResultList())) {
+                feedIdCommenteInfoMap.put(info.getId(), comments);
+            }
 
         }
         for (Entry<Integer, ListWrapResp<FeedCommentInfo>> entry : feedIdCommenteInfoMap.entrySet()) {
@@ -205,17 +214,23 @@ public class SpaceServiceImpl implements SpaceService {
                 }
             }
         }
+        Map<Integer, List<Integer>> feedLikeUserIdMap = new HashMap<Integer, List<Integer>>();
         for (Entry<Integer, ListWrapResp<FeedLikeInfo>> entry : feedIdLikeInfoMap.entrySet()) {
             for (FeedLikeInfo likeInfo : entry.getValue().getResultList()) {
                 if (!userIds.contains(likeInfo.getUserId())) {
                     userIds.add(likeInfo.getUserId());
                 }
+                try {
+                    CollectionUtils.mapAddObject(entry.getKey(), feedLikeUserIdMap, likeInfo.getUserId());
+                } catch (IllegalAccessException e) {
+                }
             }
+
         }
         // GET user'info
         List<UserInfo> userInfos = this.userInfoService.getData(userIds);
         Map<Integer, UserInfo> userIdInfoMap = CollectionUtils.transformToMap(userInfos);
-        return buildFeedListResp(spaceInfo, infos, feedIdCommenteInfoMap, feedIdLikeInfoMap, userIdInfoMap);
+        return buildFeedListResp(infos, feedIdCommenteInfoMap, feedLikeUserIdMap, userIdInfoMap);
     }
 
     /**
@@ -229,11 +244,38 @@ public class SpaceServiceImpl implements SpaceService {
      * @param userIdInfoMap
      * @return
      */
-    private ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> buildFeedListResp(SpaceInfo spaceInfo,
-            ListWrapResp<FeedInfo> infos, Map<Integer, ListWrapResp<FeedCommentInfo>> feedIdCommenteInfoMap,
-            Map<Integer, ListWrapResp<FeedLikeInfo>> feedIdLikeInfoMap, Map<Integer, UserInfo> userIdInfoMap) {
-        // TODO
-        return null;
+    private ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> buildFeedListResp(ListWrapResp<FeedInfo> infos,
+            Map<Integer, ListWrapResp<FeedCommentInfo>> feedIdCommenteInfoMap,
+            Map<Integer, List<Integer>> feedIdLikeInfoMap, Map<Integer, UserInfo> userIdInfoMap) {
+        if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {
+            return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
+                    new ArrayList<SpaceFeedListResp>(0)));
+        }
+        List<SpaceFeedListResp> datas = new ArrayList<SpaceFeedListResp>();
+        for (FeedInfo feedInfo : infos.getResultList()) {
+            UserInfo authorUserInfo = userIdInfoMap.get(feedInfo.getUserId());
+            List<String> likeIcons = new ArrayList<String>();
+            List<Integer> likeUserIds = feedIdLikeInfoMap.get(feedInfo.getId());
+            List<FeedCommentInfoResp> comments = new ArrayList<FeedCommentInfoResp>();
+            if (likeUserIds != null) {
+                for (Integer userId : likeUserIds) {
+                    UserInfo userInfo = userIdInfoMap.get(userId);
+                    if (userInfo != null) {
+                        likeIcons.add(userInfo.getAvatarUrl());
+                    }
+                }
+            }
+            ListWrapResp<FeedCommentInfo> commentsResp = feedIdCommenteInfoMap.get(feedInfo.getId());
+            if (commentsResp != null && CollectionUtils.notEmptyAndNull(commentsResp.getResultList())) {
+                for (FeedCommentInfo feedCommentInfo : commentsResp.getResultList()) {
+                    UserInfo commentUserInfo = userIdInfoMap.get(feedCommentInfo.getUserId());
+                    comments.add(new FeedCommentInfoResp(feedCommentInfo, commentUserInfo));
+                }
+            }
+            datas.add(new SpaceFeedListResp(feedInfo, authorUserInfo, likeIcons, comments));
+        }
+        return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
+                infos.getTotalCount(), datas, infos.isMore(), infos.getNext()));
     }
 
     @Override
@@ -295,17 +337,19 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<Integer> addSpace(String openId, String title, String darlingName, Date darlingBornDate,
-            int darlingType, String icon, String cover, String info) throws ServiceException {
+    public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, Date bornDate, int type,
+            String icon, String cover, String info) throws ServiceException {
         SpaceInfo g = new SpaceInfo();
-        g.setTitle(title);
-        g.setDarlingName(darlingName);
-        g.setDarlingBornDate(darlingBornDate);
-        g.setDarlingType(darlingType);
+        g.setName(name);
+        g.setBornDate(bornDate);
+        g.setType(type);
+        g.setGender(gender);
         g.setIcon(icon);
         g.setCover(cover);
         g.setInfo(info);
         spaceInfoService.addData(g);
+        // 自动生成一条secert信息
+        spaceSecertInfoService.resetSecert(g.getId());
         return new ApiRespWrapper<Integer>(g.getId());
     }
 
@@ -319,14 +363,20 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String title) throws ServiceException {
-        spaceInfoService.modifyInfo(spaceId, title);
+    public ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String name, Date born)
+            throws ServiceException {
+        spaceInfoService.modifyInfo(spaceId, name, born);
         return new ApiRespWrapper<Boolean>(true);
     }
 
     @Override
-    public ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> joinSpace(String openId, String secert)
-            throws ServiceException {
+    public ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId, String icon) throws ServiceException {
+        spaceInfoService.modifyIcon(spaceId, icon);
+        return new ApiRespWrapper<Boolean>(true);
+    }
+
+    @Override
+    public ApiRespWrapper<Integer> joinSpace(String openId, String secert) throws ServiceException {
         SpaceSecertInfo g = new SpaceSecertInfo();
         g.setSecert(secert);
         g = spaceSecertInfoService.getInfoByUk(g);
@@ -344,7 +394,7 @@ public class SpaceServiceImpl implements SpaceService {
         userSpaceRelationshipInfo.setSpaceId(g.getSpaceId());
         userSpaceRelationshipInfo.setRelationship(SpaceRelationshipEnum.OCCUPANTS.getFlag());
         userSpaceRelationshipInfoService.addData(userSpaceRelationshipInfo);
-        return listSpaceFeed(openId, g.getSpaceId(), 0, 5);
+        return new ApiRespWrapper<Integer>(g.getSpaceId());
     }
 
     @Override

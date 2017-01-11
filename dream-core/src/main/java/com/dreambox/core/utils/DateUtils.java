@@ -21,7 +21,7 @@ public class DateUtils {
     public static final String YYYYMMDDINTFORMAT = "yyyyMMdd";
     private static final String YYYYMMDDTHHMMSSZ_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final String MMDDYYYY_FORMAT = "MM/dd/yyyy";
-    public static final String YYYYMMDDHHMM_FORMAT="yyyyMMdd_HHmm";
+    public static final String YYYYMMDDHHMM_FORMAT = "yyyyMMdd_HHmm";
 
     /**
      * 返回今日日期，时间全为0，即0点时候的日期
@@ -123,6 +123,9 @@ public class DateUtils {
         if (timeString.length() > 10) {
             return parseLongStr(timeString, defaultDate);
         } else {
+            if (timeString.length() == 8) {
+                return parseYMDStr(timeString, defaultDate);
+            }
             return parseShortStr(timeString, defaultDate);
         }
     }
@@ -145,6 +148,10 @@ public class DateUtils {
 
     public static Date parseShortStr(String timeString, Date defaultDate) {
         return parseDateStr(timeString, YYYYMMDD_FORMAT, defaultDate);
+    }
+
+    public static Date parseYMDStr(String timeString, Date defaultDate) {
+        return parseDateStr(timeString, YYYYMMDDINTFORMAT, defaultDate);
     }
 
 

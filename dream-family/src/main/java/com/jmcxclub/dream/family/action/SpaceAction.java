@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.dreambox.core.DbStatus;
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.service.album.UserInfoService;
+import com.dreambox.core.utils.DateUtils;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.exception.ServiceException;
@@ -50,15 +51,20 @@ public class SpaceAction extends IosBaseAction {
      * after add redirect to home page. Invoker will redirect space/list.json
      * 
      * @param openId
-     * @param title
+     * @param name
      * @param version
+     * @gender 0 其它 1:male 2 female
+     * @born 出生日期可为空 yyyy-MM-dd yyyymmdd两种格式
+     * @type 0:亲子空间 1恋爱空间
+     * @info 可为空
+     * @image 可为空
      * @return
      * @throws ServiceException
      */
     @RequestMapping("/add.json")
     @ResponseBody
-    public ApiRespWrapper<Integer> addSpace(String openId, String title, String darlingName, Date darlingBornDate,
-            int darlingType, MultipartFile image, String info, String version) throws ServiceException {
+    public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, String born, int type,
+            MultipartFile image, String info, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
         }
@@ -71,7 +77,14 @@ public class SpaceAction extends IosBaseAction {
                 icon = fileResp.getUrlPath();
             }
         }
-        return spaceService.addSpace(openId, title, darlingName, darlingBornDate, darlingType, icon, icon, info);
+        Date bornDate = null;
+        if (!StringUtils.isEmpty(born)) {
+            try {
+                bornDate = DateUtils.parseDateStr(born);
+            } catch (Exception e) {
+            }
+        }
+        return spaceService.addSpace(openId, gender, name, bornDate, type, icon, icon, info);
     }
 
     /**
@@ -83,10 +96,11 @@ public class SpaceAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
-    public ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> joinSpace(String openId, String secert, String version)
-            throws ServiceException {
+    @RequestMapping("/join.json")
+    @ResponseBody
+    public ApiRespWrapper<Integer> joinSpace(String openId, String secert, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
-            return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(-1, "未知的用户账号", null);
+            return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
         }
         return spaceService.joinSpace(openId, secert);
     }
@@ -100,6 +114,8 @@ public class SpaceAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
+    @RequestMapping("/secert/reset.json")
+    @ResponseBody
     public ApiRespWrapper<String> secertSpace(String openId, Integer spaceId, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<String>(-1, "未知的用户账号", null);
@@ -110,14 +126,55 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.secertSpace(openId, spaceId);
     }
 
-    @RequestMapping("/edit.json")
+    @RequestMapping("/icon/edit.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String title, String version)
+    public ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId, MultipartFile image, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
-        return spaceService.editSpace(openId, spaceId, title);
+        String icon = null;
+        if (image != null && !image.isEmpty()) {
+            UploadFileSaveResp fileResp = imgService.saveSpaceIcon(image, openId);
+            if (!fileResp.isSaved()) {
+                log.error("Save user icon failed. Errmsg:" + fileResp.getErrmsg());
+                return new ApiRespWrapper<Boolean>(false);
+            } else {
+                icon = fileResp.getUrlPath();
+            }
+        }
+        if (!StringUtils.isEmpty(icon)) {
+            return spaceService.editSpaceIcon(openId, spaceId, icon);
+        } else {
+            return new ApiRespWrapper<Boolean>(false);
+        }
+    }
+
+    /**
+     * 
+     * @param openId
+     * @param spaceId
+     * @param name
+     * @param version
+     * @born 出生日期可为空 yyyy-MM-dd yyyymmdd两种格式
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping("/info/edit.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> editSpaceInfo(String openId, int spaceId, String name, String born, String version)
+            throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
+        }
+        Date bornDate = null;
+        if (!StringUtils.isEmpty(born)) {
+            try {
+                bornDate = DateUtils.parseDateStr(born);
+            } catch (Exception e) {
+            }
+        }
+        return spaceService.editSpace(openId, spaceId, name, bornDate);
     }
 
     @RequestMapping("/delete.json")
@@ -150,7 +207,7 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.getSpaceInfo(openId, spaceId);
     }
 
-    @RequestMapping("/space/feed/list.json")
+    @RequestMapping("/feed/list.json")
     @ResponseBody
     public ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> listSpaceFeed(String openId, int spaceId, Integer start,
             Integer size, String version) throws ServiceException {
@@ -206,6 +263,19 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.listFeedComment(openId, feedId, headCommentId, start, size);
     }
 
+    /**
+     * 
+     * @param openId
+     * @param spaceId
+     * @param title
+     * @param content
+     * @param type DIARY(1, "日记"), AUDIO(2, "录音"), PHOTO(0, "照片"), VIDEO(3,
+     *        "视频");
+     * @param file 用户上传上来的图，现在只支持一张
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
     @RequestMapping("/feed/add.json")
     @ResponseBody
     public ApiRespWrapper<Integer> addFeed(String openId, int spaceId, String title, String content, int type,

@@ -27,6 +27,7 @@ import com.jmcxclub.dream.family.service.SpaceSecertInfoService;
  */
 @Service("SpaceSecertInfoService")
 public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
+    private static final int SECERT_LEN = 6;
     @Autowired
     private SpaceSecertInfoDao spaceSecertInfoDao;
     @Autowired
@@ -84,7 +85,7 @@ public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
 
     @Override
     public String resetSecert(int spaceId) throws ServiceException {
-        int randomLen = 6;
+        int randomLen = SECERT_LEN;
         try {
             spaceSecertInfoDao.updateStatusBySpaceId(spaceId);
         } catch (SQLException e) {
@@ -99,7 +100,7 @@ public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
             if (success) {
                 return secert;
             }
-            randomLen += 2;
+            randomLen += 1;
         } while (true);
     }
 }

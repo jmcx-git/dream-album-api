@@ -79,8 +79,8 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Integer> addSpace(String openId, String title, String darlingName, Date darlingBornDate,
-            int darlingType, String icon, String cover, String info) throws ServiceException;
+    ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, Date bornDate, int type, String icon,
+            String cover, String info) throws ServiceException;
 
     /**
      * 用户删除空间
@@ -97,11 +97,24 @@ public interface SpaceService {
      * 
      * @param openId
      * @param spaceId
-     * @param title
+     * @param name
+     * @param born
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String title) throws ServiceException;
+    ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String name, Date born) throws ServiceException;
+
+    /**
+     * 用户编辑空间
+     * 
+     * @param openId
+     * @param spaceId
+     * @param name
+     * @param born
+     * @return
+     * @throws ServiceException
+     */
+    ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId, String icon) throws ServiceException;
 
     /**
      * 用户加入空间
@@ -111,7 +124,7 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> joinSpace(String openId, String secert) throws ServiceException;
+    ApiRespWrapper<Integer> joinSpace(String openId, String secert) throws ServiceException;
 
     /**
      * 用户生成空间加密码

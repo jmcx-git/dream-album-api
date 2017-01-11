@@ -13,8 +13,10 @@ import com.jmcxclub.dream.family.dto.SpaceInfo;
  */
 public abstract class SpaceInfoDao extends AbsCommonDao<SpaceInfo> {
 
-    public abstract void updateTitle(SpaceInfo g) throws SQLException;
+    public abstract void updateNameAndBornDate(SpaceInfo g) throws SQLException;
 
     public abstract int insertReturnId(SpaceInfo g) throws SQLException;
+
+    public abstract void updateIcon(SpaceInfo g) throws SQLException;
 
 }

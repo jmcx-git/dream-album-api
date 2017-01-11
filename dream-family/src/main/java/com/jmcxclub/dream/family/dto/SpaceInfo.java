@@ -19,10 +19,10 @@ public class SpaceInfo extends StatusSerializable {
     private int id;
     // ownerId
     private int userId;
-    private String title;
-    private String darlingName;
-    private Date darlingBornDate;
-    private int darlingType;
+    private String name;
+    private Date bornDate;
+    private Integer gender;
+    private int type;
     private String icon;
     private String cover;
     private String info;
@@ -35,36 +35,12 @@ public class SpaceInfo extends StatusSerializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDarlingName() {
-        return darlingName;
-    }
-
-    public void setDarlingName(String darlingName) {
-        this.darlingName = darlingName;
-    }
-
-    public Date getDarlingBornDate() {
-        return darlingBornDate;
-    }
-
-    public void setDarlingBornDate(Date darlingBornDate) {
-        this.darlingBornDate = darlingBornDate;
-    }
-
     public int getDarlingType() {
-        return darlingType;
+        return type;
     }
 
     public void setDarlingType(int darlingType) {
-        this.darlingType = darlingType;
+        this.type = darlingType;
     }
 
     public String getInfo() {
@@ -97,5 +73,37 @@ public class SpaceInfo extends StatusSerializable {
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Date getBornDate() {
+        return bornDate;
+    }
+
+    public void setBornDate(Date bornDate) {
+        this.bornDate = bornDate;
+    }
+
+    public Integer getGender() {
+        return gender;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

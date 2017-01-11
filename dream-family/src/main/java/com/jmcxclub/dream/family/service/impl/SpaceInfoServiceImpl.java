@@ -3,6 +3,7 @@
 package com.jmcxclub.dream.family.service.impl;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -44,23 +45,47 @@ public class SpaceInfoServiceImpl extends SpaceInfoService {
     }
 
     @Override
-    public void modifyInfo(int id, String title) throws ServiceException {
+    public void modifyInfo(int id, String name, Date bornDate) throws ServiceException {
         SpaceInfo g = getData(id);
         if (g == null) {
             throw ServiceException.getParameterException("Invaild space id.");
         }
-        if (StringUtils.equalsIgnoreCase(g.getTitle(), title)) {
+        if (StringUtils.equalsIgnoreCase(g.getName(), name)
+                && org.apache.commons.lang3.time.DateUtils.isSameDay(bornDate, g.getBornDate())) {
             return;
         }
-        g.setTitle(title);
+        if (!StringUtils.isEmpty(name)) {
+            g.setName(name);
+        }
+        if (bornDate != null) {
+            g.setBornDate(bornDate);
+        }
         try {
-            spaceInfoDao.updateTitle(g);
+            spaceInfoDao.updateNameAndBornDate(g);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
         afterModifyData(g);
-
     }
+
+    @Override
+    public void modifyIcon(int id, String icon) throws ServiceException {
+        SpaceInfo g = getData(id);
+        if (g == null) {
+            throw ServiceException.getParameterException("Invaild space id.");
+        }
+        if (StringUtils.equalsIgnoreCase(g.getIcon(), icon)) {
+            return;
+        }
+        g.setIcon(icon);
+        try {
+            spaceInfoDao.updateIcon(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        afterModifyData(g);
+    }
+
 
     @Override
     protected ShardedJedisPool getSharedJedisPool() {

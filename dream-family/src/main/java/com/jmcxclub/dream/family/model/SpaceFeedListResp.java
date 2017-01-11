@@ -4,6 +4,9 @@ package com.jmcxclub.dream.family.model;
 
 import java.util.List;
 
+import com.dreambox.core.dto.album.UserInfo;
+import com.jmcxclub.dream.family.dto.FeedInfo;
+
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
  *
@@ -16,11 +19,28 @@ public class SpaceFeedListResp {
     private int type;
     private String content;
     private String resourceUrl;
-    private Integer duration;// for video audio
-    private String avatar;
+    private long duration;// for video audio
+    private String avatarUrl;
     private String nickname;
     private List<String> likeIcons;
     private List<FeedCommentInfoResp> comments;
+
+    public SpaceFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo, List<String> likeIcons,
+            List<FeedCommentInfoResp> comments) {
+        this.id = feedInfo.getId();
+        this.title = feedInfo.getTitle();
+        this.cover = feedInfo.getCover();
+        this.type = feedInfo.getType();
+        this.content = feedInfo.getContent();
+        this.resourceUrl = feedInfo.getResourceUrl();
+        this.duration = feedInfo.getDuration();
+        if (authorUserInfo != null) {
+            this.avatarUrl = authorUserInfo.getAvatarUrl();
+            this.nickname = authorUserInfo.getNickName();
+        }
+        this.likeIcons = likeIcons;
+        this.comments = comments;
+    }
 
     public int getId() {
         return id;
@@ -70,11 +90,11 @@ public class SpaceFeedListResp {
         this.resourceUrl = resourceUrl;
     }
 
-    public Integer getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(Integer duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 
@@ -94,19 +114,19 @@ public class SpaceFeedListResp {
         this.comments = comments;
     }
 
-    public String getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(String avatar) {
-        this.avatar = avatar;
-    }
-
     public String getNickname() {
         return nickname;
     }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 }
