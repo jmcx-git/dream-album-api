@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import redis.clients.jedis.ShardedJedisPool;
 
@@ -21,6 +22,7 @@ import com.jmcxclub.dream.family.service.FeedStatInfoService;
  * @author mokous86@gmail.com create date: Jan 10, 2017
  *
  */
+@Service("feedStatInfoService")
 public class FeedStatInfoServiceImpl extends FeedStatInfoService {
     @Autowired
     private FeedStatInfoDao feedStatInfoDao;
