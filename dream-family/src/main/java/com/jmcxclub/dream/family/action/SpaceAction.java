@@ -55,7 +55,7 @@ public class SpaceAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
-    @RequestMapping("/space/add.json")
+    @RequestMapping("/add.json")
     @ResponseBody
     public ApiRespWrapper<Integer> addSpace(String openId, String title, String darlingName, Date darlingBornDate,
             int darlingType, MultipartFile image, String info, String version) throws ServiceException {
@@ -64,7 +64,7 @@ public class SpaceAction extends IosBaseAction {
         }
         String icon = null;
         if (image != null && !image.isEmpty()) {
-            UploadFileSaveResp fileResp = imgService.saveSpaceIcon(image);
+            UploadFileSaveResp fileResp = imgService.saveSpaceIcon(image, openId);
             if (!fileResp.isSaved()) {
                 log.error("Save user icon failed. Errmsg:" + fileResp.getErrmsg());
             } else {
@@ -110,7 +110,7 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.secertSpace(openId, spaceId);
     }
 
-    @RequestMapping("/space/edit.json")
+    @RequestMapping("/edit.json")
     @ResponseBody
     public ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String title, String version)
             throws ServiceException {
@@ -120,7 +120,7 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.editSpace(openId, spaceId, title);
     }
 
-    @RequestMapping("/space/delete.json")
+    @RequestMapping("/delete.json")
     @ResponseBody
     public ApiRespWrapper<Boolean> deleteSpace(String openId, int spaceId, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
@@ -129,7 +129,7 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.deleteSpace(openId, spaceId);
     }
 
-    @RequestMapping("/space/list.json")
+    @RequestMapping("/list.json")
     @ResponseBody
     public ApiRespWrapper<ListWrapResp<SpaceListResp>> listSpace(String openId, Integer start, Integer size,
             String version) throws ServiceException {
@@ -140,7 +140,7 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.listSpace(openId, start, size);
     }
 
-    @RequestMapping("/space/detail.json")
+    @RequestMapping("/detail.json")
     @ResponseBody
     public ApiRespWrapper<SpaceInfoResp> detailSpace(String openId, int spaceId, String version)
             throws ServiceException {
@@ -161,7 +161,7 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.listSpaceFeed(openId, spaceId, start, size);
     }
 
-    @RequestMapping("/space/occupant/list.json")
+    @RequestMapping("/occupant/list.json")
     @ResponseBody
     public ApiRespWrapper<ListWrapResp<OccupantFootprintResp>> listSpaceOccupant(String openId, int spaceId,
             String version) throws ServiceException {
@@ -225,7 +225,7 @@ public class SpaceAction extends IosBaseAction {
         String illustration = null;
         if (file != null && !file.isEmpty()) {
             if (type == FeedTypeEnum.PHOTO.getType()) {
-                UploadFileSaveResp uploadFileSaveResp = imgService.saveFeedImg(file);
+                UploadFileSaveResp uploadFileSaveResp = imgService.saveFeedImg(file, openId);
                 if (uploadFileSaveResp.isSaved()) {
                     cover = uploadFileSaveResp.getUrlPath();
                     illustration = uploadFileSaveResp.getUrlPath();
