@@ -54,7 +54,7 @@ public class DiscoveryAction extends IosBaseAction {
     }
 
     /**
-     * 如果发现列表中某项数据的type为0则调用 进入活动详情
+     * 如果发现列表中某项数据的type为0则在进入详情时调用进入活动详情
      * 
      * @param openId
      * @param id

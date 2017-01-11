@@ -11,6 +11,4 @@ import com.jmcxclub.dream.family.dto.ActivityInfo;
  *
  
  */
-public abstract class ActivityInfoService extends AbstractSortedListCacheService<ActivityInfo> {
-
-}
+public abstract class ActivityInfoService extends AbstractSortedListCacheService<ActivityInfo> {}

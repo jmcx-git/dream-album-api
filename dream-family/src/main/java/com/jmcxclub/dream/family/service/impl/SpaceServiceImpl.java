@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dreambox.core.StatusType;
-import com.dreambox.core.cache.CacheFilter.IdStartSizeCacheFilter;
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.web.exception.ServiceException;
@@ -191,10 +190,7 @@ public class SpaceServiceImpl implements SpaceService {
         if (spaceInfo == null) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(-1, "Illegal space id", null);
         }
-        IdStartSizeCacheFilter filter = new IdStartSizeCacheFilter();
-        filter.setId(spaceId);
-        filter.setStart(start);
-        filter.setSize(size);
+        FeedInfoSortedListCacheFilter filter = new FeedInfoSortedListCacheFilter(null, spaceId, start, size);
         ListWrapResp<FeedInfo> infos = feedInfoService.listInfo(filter);
         spaceStatInfoService.incrViews(spaceId);
         userSpaceInteractionInfoService.incrViews(userInfo.getId(), spaceId);
@@ -454,7 +450,7 @@ public class SpaceServiceImpl implements SpaceService {
         SpaceStatInfo spaceStatInfo = new SpaceStatInfo();
         spaceStatInfo.setId(g.getId());
         spaceStatInfo.setOccupants(1);
-        spaceStatInfoService.addData(spaceStatInfo );
+        spaceStatInfoService.addData(spaceStatInfo);
     }
 
     @Override
