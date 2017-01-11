@@ -2,9 +2,11 @@
 
 package com.jmcxclub.dream.family.model;
 
+import java.util.Date;
 import java.util.List;
 
 import com.dreambox.core.dto.album.UserInfo;
+import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 
 /**
@@ -22,8 +24,43 @@ public class SpaceFeedListResp {
     private long duration;// for video audio
     private String avatarUrl;
     private String nickname;
+    private String timeDesc;
+    private String dateDesc;
     private List<String> likeIcons;
     private List<FeedCommentInfoResp> comments;
+
+
+    private static String buildDateDesc(FeedInfo feedInfo) {
+        Date ct = feedInfo.getCreateTime();
+        return DateUtils.getDateMDStringValue(ct);
+    }
+
+    private static String buildTimeDesc(FeedInfo feedInfo) {
+        long curTimeMillis = System.currentTimeMillis();
+        long preVisiMillis = feedInfo.getCreateTime().getTime();
+        long minutes = (curTimeMillis - preVisiMillis) / 6000;
+        String minDesc = "";
+        if (minutes < 1) {
+            minDesc = "刚刚发布";
+        } else {
+            long hours = minutes / 60;
+            if (hours <= 0) {
+                minDesc = minutes + "分钟前";
+            } else {
+                long days = hours / 24;
+                if (days <= 0) {
+                    minDesc = hours + "小时前";
+                } else {
+                    if (days <= 355) {
+                        minDesc = days + "天前";
+                    } else {
+                        minDesc = "1年前";
+                    }
+                }
+            }
+        }
+        return minDesc;
+    }
 
     public SpaceFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo, List<String> likeIcons,
             List<FeedCommentInfoResp> comments) {
@@ -34,6 +71,8 @@ public class SpaceFeedListResp {
         this.content = feedInfo.getContent();
         this.resourceUrl = feedInfo.getResourceUrl();
         this.duration = feedInfo.getDuration();
+        this.timeDesc = buildTimeDesc(feedInfo);
+        this.dateDesc = buildDateDesc(feedInfo);
         if (authorUserInfo != null) {
             this.avatarUrl = authorUserInfo.getAvatarUrl();
             this.nickname = authorUserInfo.getNickName();
@@ -128,5 +167,21 @@ public class SpaceFeedListResp {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
+    }
+
+    public String getTimeDesc() {
+        return timeDesc;
+    }
+
+    public void setTimeDesc(String timeDesc) {
+        this.timeDesc = timeDesc;
+    }
+
+    public String getDateDesc() {
+        return dateDesc;
+    }
+
+    public void setDateDesc(String dateDesc) {
+        this.dateDesc = dateDesc;
     }
 }

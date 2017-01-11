@@ -19,6 +19,7 @@ public class DateUtils {
     private static final String YYYYMMDD_FORMAT = "yyyy-MM-dd";
     private static final String YYYYMMINTFORMAT = "yyyyMM";
     public static final String YYYYMMDDINTFORMAT = "yyyyMMdd";
+    public static final String MMDDINTFORMAT = "MM-dd";
     private static final String YYYYMMDDTHHMMSSZ_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private static final String MMDDYYYY_FORMAT = "MM/dd/yyyy";
     public static final String YYYYMMDDHHMM_FORMAT = "yyyyMMdd_HHmm";
@@ -182,6 +183,10 @@ public class DateUtils {
         return formatStr(parseDate, YYYYMMINTFORMAT);
     }
 
+    public static String getDateMDStringValue(Date ct) {
+        return formatStr(ct, MMDDINTFORMAT);
+    }
+
     public static String formatStr(Date date, String dateFormat) {
         return new SimpleDateFormat(dateFormat).format(date).toString();
     }
@@ -259,5 +264,4 @@ public class DateUtils {
     public static Date getTomorrow() {
         return addDays(new Date(), 1);
     }
-
 }
