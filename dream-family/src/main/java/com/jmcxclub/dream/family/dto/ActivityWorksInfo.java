@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.dto;
 
+import com.dreambox.core.dto.DbKey.UNIQUE_KEY;
 import com.dreambox.core.dto.StatusSerializable;
 
 /**
@@ -14,7 +15,9 @@ public class ActivityWorksInfo extends StatusSerializable {
      */
     private static final long serialVersionUID = -7238929182382417883L;
     private int id;
+    @UNIQUE_KEY
     private int userId;// 参赛用户
+    @UNIQUE_KEY
     private int activityId;// 活动id
     private int type;// 作品类型 0：非视频 1:视频 2:音频
     private String cover;// 如果是以type==0参赛,则此处和resourceUrl一样,否则此值为对应的资源封面

@@ -5,6 +5,7 @@ package com.jmcxclub.dream.family.model;
 import java.util.Date;
 import java.util.List;
 
+import com.dreambox.core.DbStatus;
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.FeedInfo;
@@ -80,7 +81,7 @@ public class SpaceFeedListResp {
             this.nickname = authorUserInfo.getNickName();
             this.authorOpenId = authorUserInfo.getOpenId();
         }
-        this.ilike = ilike ? 1 : 0;
+        this.ilike = ilike ? DbStatus.STATUS_OK : DbStatus.STATUS_DEL;
         this.likeIcons = likeIcons;
         this.comments = comments;
     }

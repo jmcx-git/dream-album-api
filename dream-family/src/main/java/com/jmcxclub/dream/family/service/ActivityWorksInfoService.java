@@ -2,7 +2,7 @@
 
 package com.jmcxclub.dream.family.service;
 
-import com.dreambox.core.service.AbstractSortedListCacheService;
+import com.dreambox.core.service.AbsCommonCacheDbUkPkLoadService;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 
 /**
@@ -11,6 +11,6 @@ import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-public abstract class ActivityWorksInfoService extends AbstractSortedListCacheService<ActivityWorksInfo> {
+public abstract class ActivityWorksInfoService extends AbsCommonCacheDbUkPkLoadService<ActivityWorksInfo> {
 
 }
