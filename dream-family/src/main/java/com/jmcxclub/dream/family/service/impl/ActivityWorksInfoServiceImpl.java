@@ -68,4 +68,8 @@ public class ActivityWorksInfoServiceImpl extends ActivityWorksInfoService {
         return null;
     }
 
+    @Override
+    protected int getPriority() {
+        return 3;
+    }
 }

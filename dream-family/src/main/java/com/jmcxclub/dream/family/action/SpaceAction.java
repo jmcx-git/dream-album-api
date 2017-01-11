@@ -30,6 +30,7 @@ import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
 import com.jmcxclub.dream.family.model.SpaceInfoResp;
 import com.jmcxclub.dream.family.model.SpaceListResp;
+import com.jmcxclub.dream.family.model.SpaceUserInteractionInfoResp;
 import com.jmcxclub.dream.family.model.UploadFileSaveResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.service.ImgService;
@@ -71,6 +72,10 @@ public class SpaceAction extends IosBaseAction {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
         }
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Integer>(-1, "Illegal open id.");
+        }
         String icon = null;
         if (image != null && !image.isEmpty()) {
             UploadFileSaveResp fileResp = imgService.saveSpaceIcon(image, openId);
@@ -88,7 +93,7 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         type = type == null ? (image == null ? FeedTypeEnum.DIARY.getType() : FeedTypeEnum.PHOTO.getType()) : type;
-        return spaceService.addSpace(openId, gender, name, bornDate, type, icon, icon, info);
+        return spaceService.addSpace(userInfo.getId(), gender, name, bornDate, type, icon, icon, info);
     }
 
     @RequestMapping(value = "/add.json", method = RequestMethod.GET)
@@ -96,7 +101,11 @@ public class SpaceAction extends IosBaseAction {
     public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, String born, Integer type,
             String info, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
-            return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
+            return new ApiRespWrapper<Integer>(-1, "错误的用户账号.", null);
+        }
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Integer>(-1, "未知的用户账号.");
         }
         String icon = null;
         Date bornDate = null;
@@ -107,7 +116,7 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         type = type == null ? FeedTypeEnum.DIARY.getType() : type;
-        return spaceService.addSpace(openId, gender, name, bornDate, type, icon, icon, info);
+        return spaceService.addSpace(userInfo.getId(), gender, name, bornDate, type, icon, icon, info);
     }
 
     /**
@@ -275,6 +284,25 @@ public class SpaceAction extends IosBaseAction {
         return spaceService.listSpaceOccupantFootprint(openId, spaceId);
     }
 
+    /**
+     * 返回此用户在此空间的互动信息
+     * 
+     * @param openId
+     * @param spaceId
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping("/user/interaction/info.json")
+    @ResponseBody
+    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, int spaceId,
+            String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的用户账号", null);
+        }
+        return spaceService.getSpaceUserInteractionInfo(openId, spaceId);
+    }
+
     @RequestMapping("/feed/detail.json")
     @ResponseBody
     public ApiRespWrapper<SpaceFeedResp> getFeedDetail(String openId, int feedId, String version)
@@ -352,6 +380,12 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         return spaceService.addFeed(userInfo.getId(), spaceId, title, content, type, cover, illustration);
+    }
+
+    private UserInfo getUserInfo(String openId) throws ServiceException {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        return userInfoService.getInfoByUk(userInfo);
     }
 
     @RequestMapping("/feed/comment/add.json")

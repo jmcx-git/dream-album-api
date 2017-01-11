@@ -13,6 +13,7 @@ import com.jmcxclub.dream.family.model.SpaceListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedCommentListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
+import com.jmcxclub.dream.family.model.SpaceUserInteractionInfoResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
 
 /**
@@ -82,7 +83,7 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, Date bornDate, int type, String icon,
+    ApiRespWrapper<Integer> addSpace(int userId, Integer gender, String name, Date bornDate, int type, String icon,
             String cover, String info) throws ServiceException;
 
     /**
@@ -182,4 +183,7 @@ public interface SpaceService {
 
     ApiRespWrapper<Integer> addFeed(int userId, int spaceId, String title, String content, int type, String cover,
             String illustration) throws ServiceException;
+
+    ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, int spaceId)
+            throws ServiceException;
 }

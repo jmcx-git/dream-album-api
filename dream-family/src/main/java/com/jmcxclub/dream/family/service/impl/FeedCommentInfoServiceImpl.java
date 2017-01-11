@@ -52,6 +52,11 @@ public class FeedCommentInfoServiceImpl extends FeedCommentInfoService {
     }
 
     @Override
+    protected int getPriority() {
+        return 4;
+    }
+
+    @Override
     protected JedisPool getJedisPool() {
         return jedisDbPool;
     }

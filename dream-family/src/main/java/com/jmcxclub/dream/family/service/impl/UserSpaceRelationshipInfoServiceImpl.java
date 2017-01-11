@@ -146,4 +146,9 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
     protected Logger getLogger() {
         return log;
     }
+
+    @Override
+    protected int getPriority() {
+        return 3;
+    }
 }

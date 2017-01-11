@@ -104,5 +104,10 @@ public class UserInfoServiceImpl extends UserInfoService {
         return 0;
     }
 
+    @Override
+    protected int getPriority() {
+        return 1;
+    }
+
 
 }

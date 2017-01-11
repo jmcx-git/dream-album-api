@@ -103,4 +103,9 @@ public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
             randomLen += 1;
         } while (true);
     }
+
+    @Override
+    protected int getPriority() {
+        return 3;
+    }
 }

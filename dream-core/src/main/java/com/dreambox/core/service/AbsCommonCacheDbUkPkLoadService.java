@@ -177,4 +177,5 @@ public abstract class AbsCommonCacheDbUkPkLoadService<T extends StatusSerializab
     protected abstract JedisPool getJedisPool();
 
     protected abstract Integer getIdByUkDriectFromDb(T t);
+
 }

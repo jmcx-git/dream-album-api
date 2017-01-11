@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.dto;
 
+import com.dreambox.core.dto.DbKey.UNIQUE_KEY;
 import com.dreambox.core.dto.StatusSerializable;
 
 /**
@@ -10,18 +11,20 @@ import com.dreambox.core.dto.StatusSerializable;
  * @author mokous86@gmail.com create date: Jan 9, 2017
  *
  */
-public class UserSpaceRelationshipInfo extends StatusSerializable {
+public class UserSpaceInteractionInfo extends StatusSerializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = 1080323054319910939L;
     private int id;
+    @UNIQUE_KEY
     private int userId;
+    @UNIQUE_KEY
     private int spaceId;
-    // 邀请过来的 或者用户自己创建的 排序第一因子
-    private int relationship;
-    private int top;// 置顶 排序第二因子
+    private int views;
+    private int likes;
+    private int comments;
 
     public int getId() {
         return id;
@@ -47,20 +50,29 @@ public class UserSpaceRelationshipInfo extends StatusSerializable {
         this.spaceId = spaceId;
     }
 
-    public int getTop() {
-        return top;
+    public int getViews() {
+        return views;
     }
 
-    public void setTop(int top) {
-        this.top = top;
+    public void setViews(int views) {
+        this.views = views;
     }
 
-    public int getRelationship() {
-        return relationship;
+    public int getLikes() {
+        return likes;
     }
 
-    public void setRelationship(int relationship) {
-        this.relationship = relationship;
+    public void setLikes(int likes) {
+        this.likes = likes;
     }
+
+    public int getComments() {
+        return comments;
+    }
+
+    public void setComments(int comments) {
+        this.comments = comments;
+    }
+
 
 }

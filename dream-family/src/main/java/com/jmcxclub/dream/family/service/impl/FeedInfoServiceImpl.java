@@ -106,4 +106,9 @@ public class FeedInfoServiceImpl extends FeedInfoService {
         return log;
     }
 
+    @Override
+    protected int getPriority() {
+        return 3;
+    }
+
 }

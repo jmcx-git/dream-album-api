@@ -86,4 +86,9 @@ public class FeedLikeInfoServiceImpl extends FeedLikeInfoService {
         return feedLikeInfoDao;
     }
 
+    @Override
+    protected int getPriority() {
+        return 4;
+    }
+
 }

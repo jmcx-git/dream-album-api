@@ -10,7 +10,7 @@
 
 	<sqlMap resource="ibatis/dream_family_userinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_smallappdeveloperinfo.xml" />
-	
+
 	<sqlMap resource="ibatis/dream_family_feedcommentinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_feedinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_feedlikeinfo.xml" />
@@ -20,6 +20,8 @@
 	<sqlMap resource="ibatis/dream_family_spacesecertinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_spacestatinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_userspacerelationshipinfo.xml" />
-	
+
+	<sqlMap resource="ibatis/dream_family_userspaceinteractioninfo.xml" />
+
 
 </sqlMapConfig>

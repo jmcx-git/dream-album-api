@@ -28,6 +28,7 @@ import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceRelationshipEnum;
 import com.jmcxclub.dream.family.dto.SpaceSecertInfo;
 import com.jmcxclub.dream.family.dto.SpaceStatInfo;
+import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
 import com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo;
 import com.jmcxclub.dream.family.model.FeedCommentInfoResp;
 import com.jmcxclub.dream.family.model.OccupantFootprintResp;
@@ -36,6 +37,7 @@ import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
 import com.jmcxclub.dream.family.model.SpaceInfoResp;
 import com.jmcxclub.dream.family.model.SpaceListResp;
+import com.jmcxclub.dream.family.model.SpaceUserInteractionInfoResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.model.UserInfoResp;
 import com.jmcxclub.dream.family.service.FeedCommentInfoService;
@@ -49,6 +51,7 @@ import com.jmcxclub.dream.family.service.SpaceInfoService;
 import com.jmcxclub.dream.family.service.SpaceSecertInfoService;
 import com.jmcxclub.dream.family.service.SpaceService;
 import com.jmcxclub.dream.family.service.SpaceStatInfoService;
+import com.jmcxclub.dream.family.service.UserSpaceInteractionInfoService;
 import com.jmcxclub.dream.family.service.UserSpaceRelationshipInfoService;
 import com.jmcxclub.dream.family.service.UserSpaceRelationshipInfoService.UserSpaceRelationshipInfoSortedListCacheFilter;
 
@@ -77,6 +80,8 @@ public class SpaceServiceImpl implements SpaceService {
     private FeedCommentInfoService feedCommentInfoService;
     @Autowired
     private UserSpaceRelationshipInfoService userSpaceRelationshipInfoService;
+    @Autowired
+    private UserSpaceInteractionInfoService userSpaceInteractionInfoService;
 
     @Override
     public ApiRespWrapper<ListWrapResp<SpaceListResp>> listSpace(String openId, int start, int size)
@@ -109,6 +114,7 @@ public class SpaceServiceImpl implements SpaceService {
         UserSpaceRelationshipInfoSortedListCacheFilter filter = new UserSpaceRelationshipInfoSortedListCacheFilter(
                 spaceId, null, 0, Integer.MAX_VALUE);
         ListWrapResp<UserSpaceRelationshipInfo> infos = userSpaceRelationshipInfoService.listInfo(filter);
+
         List<OccupantFootprintResp> resultList = new ArrayList<OccupantFootprintResp>();
         List<Integer> userIds = new ArrayList<Integer>();
         for (UserSpaceRelationshipInfo info : infos.getResultList()) {
@@ -117,12 +123,20 @@ public class SpaceServiceImpl implements SpaceService {
         List<UserInfo> userInfos = userInfoService.getData(userIds);
         for (UserSpaceRelationshipInfo info : infos.getResultList()) {
             UserInfo curUser = null;
+            UserSpaceInteractionInfo userSpaceInteractionInfo = null;
             for (UserInfo userInfo : userInfos) {
                 if (userInfo.getId() == info.getUserId()) {
                     curUser = userInfo;
                 }
             }
-            resultList.add(new OccupantFootprintResp(info, curUser));
+            if (curUser != null) {
+                userSpaceInteractionInfo = new UserSpaceInteractionInfo();
+                userSpaceInteractionInfo.setUserId(curUser.getId());
+                userSpaceInteractionInfo.setSpaceId(spaceId);
+                userSpaceInteractionInfo = userSpaceInteractionInfoService.getInfoByUk(userSpaceInteractionInfo);
+            }
+
+            resultList.add(new OccupantFootprintResp(userSpaceInteractionInfo, curUser));
         }
         ListWrapResp<OccupantFootprintResp> datas = new ListWrapResp<OccupantFootprintResp>(resultList);
         return new ApiRespWrapper<ListWrapResp<OccupantFootprintResp>>(datas);
@@ -167,6 +181,12 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> listSpaceFeed(String openId, int spaceId, int start, int size)
             throws ServiceException {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(-1, "未知的用户.", null);
+        }
         SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
         if (spaceInfo == null) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(-1, "Illegal space id", null);
@@ -177,6 +197,7 @@ public class SpaceServiceImpl implements SpaceService {
         filter.setSize(size);
         ListWrapResp<FeedInfo> infos = feedInfoService.listInfo(filter);
         spaceStatInfoService.incrViews(spaceId);
+        userSpaceInteractionInfoService.incrViews(userInfo.getId(), spaceId);
         if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
                     new ArrayList<SpaceFeedListResp>(0)));
@@ -330,6 +351,16 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public ApiRespWrapper<Integer> addFeedComment(String openId, int feedId, Integer commentRefId, String comment)
             throws ServiceException {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的用户账号.");
+        }
+        FeedInfo feedInfo = feedInfoService.getData(feedId);
+        if (feedInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的用户记录.");
+        }
         FeedCommentInfo g = new FeedCommentInfo();
         g.setComment(comment);
         g.setFeedId(feedId);
@@ -337,6 +368,7 @@ public class SpaceServiceImpl implements SpaceService {
         g.setCommentRefId(commentRefId);
         feedCommentInfoService.addData(g);
         feedStatInfoService.incrComments(feedId);
+        userSpaceInteractionInfoService.incrComments(userInfo.getId(), feedInfo.getSpaceId());
         return new ApiRespWrapper<Integer>(g.getId());
     }
 
@@ -352,6 +384,16 @@ public class SpaceServiceImpl implements SpaceService {
 
     @Override
     public ApiRespWrapper<Boolean> likeFeed(String openId, int feedId, int status) throws ServiceException {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的用户账号.");
+        }
+        FeedInfo feedInfo = feedInfoService.getData(feedId);
+        if (feedInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的用户记录.");
+        }
         FeedLikeInfo g = new FeedLikeInfo();
         g.setFeedId(feedId);
         g.setUserId(getUserId(openId));
@@ -359,14 +401,16 @@ public class SpaceServiceImpl implements SpaceService {
         feedLikeInfoService.addData(g);
         if (status == FeedInfo.STATUS_OK) {
             feedStatInfoService.incrLikes(feedId);
+            userSpaceInteractionInfoService.incrLikes(userInfo.getId(), feedInfo.getSpaceId());
         } else {
             feedStatInfoService.decrLikes(feedId);
+            userSpaceInteractionInfoService.decrLikes(userInfo.getId(), feedInfo.getSpaceId());
         }
         return new ApiRespWrapper<Boolean>(true);
     }
 
     @Override
-    public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, Date bornDate, int type,
+    public ApiRespWrapper<Integer> addSpace(int userId, Integer gender, String name, Date bornDate, int type,
             String icon, String cover, String info) throws ServiceException {
         SpaceInfo g = new SpaceInfo();
         g.setName(name);
@@ -376,6 +420,7 @@ public class SpaceServiceImpl implements SpaceService {
         g.setIcon(icon);
         g.setCover(cover);
         g.setInfo(info);
+        g.setUserId(userId);
         spaceInfoService.addData(g);
         // 自动生成一条secert信息
         spaceSecertInfoService.resetSecert(g.getId());
@@ -458,5 +503,22 @@ public class SpaceServiceImpl implements SpaceService {
     public ApiRespWrapper<Boolean> deleteFeedComment(String openId, int feedId, int commentId) throws ServiceException {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, int spaceId)
+            throws ServiceException {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的用户账号.");
+        }
+        UserSpaceInteractionInfo userSpaceInteractionInfo = new UserSpaceInteractionInfo();
+        userSpaceInteractionInfo.setUserId(userInfo.getId());
+        userSpaceInteractionInfo.setSpaceId(spaceId);
+        userSpaceInteractionInfo = userSpaceInteractionInfoService.getInfoByUk(userSpaceInteractionInfo);
+        return new ApiRespWrapper<SpaceUserInteractionInfoResp>(new SpaceUserInteractionInfoResp(userInfo,
+                userSpaceInteractionInfo));
     }
 }
