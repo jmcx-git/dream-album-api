@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,7 +64,7 @@ public class SpaceAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
-    @RequestMapping("/add.json")
+    @RequestMapping(value = "/add.json", method = RequestMethod.POST)
     @ResponseBody
     public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, String born, Integer type,
             @RequestParam(required = false) MultipartFile image, String info, String version) throws ServiceException {
@@ -87,6 +88,25 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         type = type == null ? (image == null ? FeedTypeEnum.DIARY.getType() : FeedTypeEnum.PHOTO.getType()) : type;
+        return spaceService.addSpace(openId, gender, name, bornDate, type, icon, icon, info);
+    }
+
+    @RequestMapping(value = "/add.json", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiRespWrapper<Integer> addSpace(String openId, Integer gender, String name, String born, Integer type,
+            String info, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
+        }
+        String icon = null;
+        Date bornDate = null;
+        if (!StringUtils.isEmpty(born)) {
+            try {
+                bornDate = DateUtils.parseDateStr(born);
+            } catch (Exception e) {
+            }
+        }
+        type = type == null ? FeedTypeEnum.DIARY.getType() : type;
         return spaceService.addSpace(openId, gender, name, bornDate, type, icon, icon, info);
     }
 

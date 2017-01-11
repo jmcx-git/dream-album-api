@@ -15,14 +15,14 @@ import com.jmcxclub.dream.family.service.ActivityInfoService;
 import com.jmcxclub.dream.family.service.DiscoveryService;
 
 /**
- * 发现tab页数据
+ * 发现tab页数据服务类
  * 
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
 @Service("discoveryService")
 public class DiscoveryServiceImpl implements DiscoveryService {
-     @Autowired
+    @Autowired
     private ActivityInfoService activityInfoService;
 
     @Override
