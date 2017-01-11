@@ -16,7 +16,7 @@
 	<insert id="insertOrUpdateUserSpaceRelationshipInfo"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
 		<![CDATA[
-			INSERT INTO user_space_relationship_info (`id`,`"user_id"`,`space_id`, `relationship`, `top`, `status`,`update_time`,`create_time`)
+			INSERT INTO user_space_relationship_info (`id`,`user_id`,`space_id`, `relationship`, `top`, `status`,`update_time`,`create_time`)
 			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, 0, now(),now())
 		]]>
 	</insert>
@@ -24,7 +24,7 @@
 	<insert id="insertOrIgnoreUserSpaceRelationshipInfo"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
 		<![CDATA[
-			INSERT INTO user_space_relationship_info (`id`,`"user_id"`,`space_id`, `relationship`, `top`, `status`,`update_time`,`create_time`)
+			INSERT INTO user_space_relationship_info (`id`,`user_id`,`space_id`, `relationship`, `top`, `status`,`update_time`,`create_time`)
 			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, 0, now(),now())
 		]]>
 	</insert>
