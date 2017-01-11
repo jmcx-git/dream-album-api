@@ -202,7 +202,7 @@ public class SpaceServiceImpl implements SpaceService {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
                     new ArrayList<SpaceFeedListResp>(0)));
         }
-        return buildFeedListResp(spaceInfo, infos);
+        return buildFeedListResp(spaceInfo, infos, userInfo.getId());
     }
 
     @Override
@@ -233,7 +233,7 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     private ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> buildFeedListResp(SpaceInfo spaceInfo,
-            ListWrapResp<FeedInfo> infos) {
+            ListWrapResp<FeedInfo> infos, int accessUserId) {
         List<Integer> userIds = new ArrayList<Integer>();
         Map<Integer, ListWrapResp<FeedLikeInfo>> feedIdLikeInfoMap = new HashMap<Integer, ListWrapResp<FeedLikeInfo>>(
                 infos.getResultList().size());
@@ -280,7 +280,7 @@ public class SpaceServiceImpl implements SpaceService {
         // GET user'info
         List<UserInfo> userInfos = this.userInfoService.getData(userIds);
         Map<Integer, UserInfo> userIdInfoMap = CollectionUtils.transformToMap(userInfos);
-        return buildFeedListResp(infos, feedIdCommenteInfoMap, feedLikeUserIdMap, userIdInfoMap);
+        return buildFeedListResp(infos, feedIdCommenteInfoMap, feedLikeUserIdMap, userIdInfoMap, accessUserId);
     }
 
     /**
@@ -296,7 +296,7 @@ public class SpaceServiceImpl implements SpaceService {
      */
     private ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> buildFeedListResp(ListWrapResp<FeedInfo> infos,
             Map<Integer, ListWrapResp<FeedCommentInfo>> feedIdCommenteInfoMap,
-            Map<Integer, List<Integer>> feedIdLikeInfoMap, Map<Integer, UserInfo> userIdInfoMap) {
+            Map<Integer, List<Integer>> feedIdLikeInfoMap, Map<Integer, UserInfo> userIdInfoMap, int accessUserId) {
         if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
                     new ArrayList<SpaceFeedListResp>(0)));
@@ -307,11 +307,13 @@ public class SpaceServiceImpl implements SpaceService {
             List<UserInfoResp> likeIcons = new ArrayList<UserInfoResp>();
             List<Integer> likeUserIds = feedIdLikeInfoMap.get(feedInfo.getId());
             List<FeedCommentInfoResp> comments = new ArrayList<FeedCommentInfoResp>();
+            boolean ilike = false;
             if (likeUserIds != null) {
                 for (Integer userId : likeUserIds) {
                     UserInfo userInfo = userIdInfoMap.get(userId);
                     if (userInfo != null) {
                         likeIcons.add(new UserInfoResp(userInfo));
+                        ilike = ilike || userInfo.getId() == accessUserId;
                     }
                 }
             }
@@ -322,7 +324,7 @@ public class SpaceServiceImpl implements SpaceService {
                     comments.add(new FeedCommentInfoResp(feedCommentInfo, commentUserInfo));
                 }
             }
-            datas.add(new SpaceFeedListResp(feedInfo, authorUserInfo, likeIcons, comments));
+            datas.add(new SpaceFeedListResp(feedInfo, authorUserInfo, likeIcons, comments, ilike));
         }
         return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
                 infos.getTotalCount(), datas, infos.isMore(), infos.getNext()));

@@ -27,6 +27,7 @@ public class SpaceFeedListResp {
     private String nickname;
     private String timeDesc;
     private String dateDesc;
+    private int ilike;
     private List<UserInfoResp> likeIcons;
     private List<FeedCommentInfoResp> comments;
 
@@ -64,7 +65,7 @@ public class SpaceFeedListResp {
     }
 
     public SpaceFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo, List<UserInfoResp> likeIcons,
-            List<FeedCommentInfoResp> comments) {
+            List<FeedCommentInfoResp> comments, boolean ilike) {
         this.id = feedInfo.getId();
         this.title = feedInfo.getTitle();
         this.cover = feedInfo.getCover();
@@ -79,6 +80,7 @@ public class SpaceFeedListResp {
             this.nickname = authorUserInfo.getNickName();
             this.authorOpenId = authorUserInfo.getOpenId();
         }
+        this.ilike = ilike ? 1 : 0;
         this.likeIcons = likeIcons;
         this.comments = comments;
     }
@@ -193,5 +195,13 @@ public class SpaceFeedListResp {
 
     public void setAuthorOpenId(String authorOpenId) {
         this.authorOpenId = authorOpenId;
+    }
+
+    public int getIlike() {
+        return ilike;
+    }
+
+    public void setIlike(int ilike) {
+        this.ilike = ilike;
     }
 }
