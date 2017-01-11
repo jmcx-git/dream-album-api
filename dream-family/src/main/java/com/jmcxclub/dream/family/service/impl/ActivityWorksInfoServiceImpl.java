@@ -17,7 +17,7 @@ import com.jmcxclub.dream.family.service.ActivityWorksInfoService;
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-@Service("activityWorksInfoService")
+// @Service("activityWorksInfoService")
 public class ActivityWorksInfoServiceImpl extends ActivityWorksInfoService {
 
     @Override

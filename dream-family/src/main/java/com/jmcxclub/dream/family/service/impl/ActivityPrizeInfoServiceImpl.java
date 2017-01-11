@@ -14,12 +14,10 @@ import com.jmcxclub.dream.family.dto.ActivityWorksStatInfo;
 import com.jmcxclub.dream.family.service.ActivityPrizeInfoService;
 
 /**
- * @author mokous86@gmail.com
- * create date: Jan 11, 2017
+ * @author mokous86@gmail.com create date: Jan 11, 2017
  *
- 
  */
-@Service("activityPrizeInfoService")
+// @Service("activityPrizeInfoService")
 public class ActivityPrizeInfoServiceImpl extends ActivityPrizeInfoService {
 
     @Override

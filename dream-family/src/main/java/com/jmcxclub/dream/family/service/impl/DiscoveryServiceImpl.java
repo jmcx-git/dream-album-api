@@ -24,16 +24,17 @@ import com.jmcxclub.dream.family.service.DiscoveryService;
  */
 @Service("discoveryService")
 public class DiscoveryServiceImpl implements DiscoveryService {
-    @Autowired
+    // @Autowired
     private ActivityInfoService activityInfoService;
-    @Autowired
+    // @Autowired
     private ActivityPrizeInfoService activityPrizeInfoService;
-    @Autowired
+    // @Autowired
     private ActivityWorksInfoService activityWorksInfoService;
-//    @Autowired
-//    private ActivityWorksStatInfoService activityWorksStatInfoService;
-//    @Autowired
-//    private ActivityVoteDetailInfoService activityVoteDetailInfoService;
+
+    // @Autowired
+    // private ActivityWorksStatInfoService activityWorksStatInfoService;
+    // @Autowired
+    // private ActivityVoteDetailInfoService activityVoteDetailInfoService;
 
 
     @Override

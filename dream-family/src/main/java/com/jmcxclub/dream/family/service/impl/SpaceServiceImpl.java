@@ -422,9 +422,18 @@ public class SpaceServiceImpl implements SpaceService {
         g.setInfo(info);
         g.setUserId(userId);
         spaceInfoService.addData(g);
+        afterAddSpace(g);
+        return new ApiRespWrapper<Integer>(g.getId());
+    }
+
+    private void afterAddSpace(SpaceInfo g) {
         // 自动生成一条secert信息
         spaceSecertInfoService.resetSecert(g.getId());
-        return new ApiRespWrapper<Integer>(g.getId());
+        UserSpaceRelationshipInfo userSpaceRelationshipInfo = new UserSpaceRelationshipInfo();
+        userSpaceRelationshipInfo.setRelationship(SpaceRelationshipEnum.OWNER.getFlag());
+        userSpaceRelationshipInfo.setSpaceId(g.getId());
+        userSpaceRelationshipInfo.setUserId(g.getUserId());
+        userSpaceRelationshipInfoService.addData(userSpaceRelationshipInfo);
     }
 
     @Override
