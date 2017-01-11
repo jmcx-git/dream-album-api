@@ -49,6 +49,7 @@ public class FeedInfoServiceImpl extends FeedInfoService {
             throw ServiceException.getSQLException(e);
         }
         g.setId(id);
+        afterAddData(g);
     }
 
     @Override
