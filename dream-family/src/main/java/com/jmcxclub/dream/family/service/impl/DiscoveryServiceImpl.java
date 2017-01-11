@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dreambox.web.exception.ServiceException;
@@ -21,7 +22,7 @@ import com.jmcxclub.dream.family.service.DiscoveryService;
  */
 @Service("discoveryService")
 public class DiscoveryServiceImpl implements DiscoveryService {
-    // @Autowired
+     @Autowired
     private ActivityInfoService activityInfoService;
 
     @Override
