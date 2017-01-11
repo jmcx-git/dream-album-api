@@ -5,9 +5,11 @@ package com.jmcxclub.dream.family.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
+import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
@@ -41,7 +43,10 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     @Override
     public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size)
             throws ServiceException {
-        // TODO Auto-generated method stub
+        StartSizeCacheFilter filter = new StartSizeCacheFilter();
+        filter.setStart(start);
+        filter.setSize(size);
+        ListWrapResp<ActivityInfo> infos = activityInfoService.listInfo(filter);
         return null;
     }
 

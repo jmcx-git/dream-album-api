@@ -35,30 +35,30 @@
 
 	<update id="updateDecrSpaceStatInfoRecords" parameterClass="java.lang.Integer">
         <![CDATA[
-        	UPDATE `feed_stat_info` SET `records` = IF(`records` > 0, `records` - 1, 0) WHERE `id`=#id# ;
+        	UPDATE `space_stat_info` SET `records` = IF(`records` > 0, `records` - 1, 0) WHERE `id`=#id# ;
         ]]>
 	</update>
 	<update id="updateIncrSpaceStatInfoRecords" parameterClass="java.lang.Integer">
         <![CDATA[
-        	UPDATE `feed_stat_info` SET `records` = `records` + 1 WHERE `id`=#id# ;
+        	UPDATE `space_stat_info` SET `records` = `records` + 1 WHERE `id`=#id# ;
         ]]>
 	</update>
 
 	<update id="updateDecrSpaceStatInfoOccupants" parameterClass="java.lang.Integer">
         <![CDATA[
-        	UPDATE `feed_stat_info` SET `occupants` = IF(`occupants` > 0, `occupants` - 1, 0) WHERE `id`=#id# ;
+        	UPDATE `space_stat_info` SET `occupants` = IF(`occupants` > 0, `occupants` - 1, 0) WHERE `id`=#id# ;
         ]]>
 	</update>
 
 	<update id="updateIncrSpaceStatInfoOccupants" parameterClass="java.lang.Integer">
         <![CDATA[
-        	UPDATE `feed_stat_info` SET `occupants` = `occupants` + 1 WHERE `id`=#id# ;
+        	UPDATE `space_stat_info` SET `occupants` = `occupants` + 1 WHERE `id`=#id# ;
         ]]>
 	</update>
 
 	<update id="updateIncrSpaceStatInfoViews" parameterClass="java.lang.Integer">
         <![CDATA[
-        	UPDATE `feed_stat_info` SET `views` = `views` + 1 WHERE `id`=#id# ;
+        	UPDATE `space_stat_info` SET `views` = `views` + 1 WHERE `id`=#id# ;
         ]]>
 	</update>
 
