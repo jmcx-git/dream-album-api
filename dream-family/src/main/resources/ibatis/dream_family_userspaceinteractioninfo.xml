@@ -81,6 +81,13 @@
 		 ]]>
 	</select>
 
+	<select id="queryUserSpaceInteractionInfoIdByUk" parameterClass="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo"
+		resultMap="feedstatinfo">
+		<![CDATA[
+			SELECT * FROM `user_space_interaction_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId#;
+		 ]]>
+	</select>
+
 	<select id="queryUserSpaceInteractionInfoListByStartId"
 		parameterClass="java.util.Map" resultMap="feedstatinfo">
 		<![CDATA[

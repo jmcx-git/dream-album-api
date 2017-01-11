@@ -83,7 +83,7 @@
 
 	<select id="countSpaceLikeInfoByFilter" parameterClass="java.util.Map"
 		resultClass="java.lang.Long">
-	SELECT COUNT(*) FROM `space_like_info`
+		SELECT COUNT(*) FROM `space_like_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">
