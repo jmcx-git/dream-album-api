@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.service;
 
 import java.util.Date;
 
+import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
@@ -32,7 +33,7 @@ public interface SpaceService {
      */
     ApiRespWrapper<ListWrapResp<SpaceListResp>> listSpace(String openId, int start, int size) throws ServiceException;
 
-    ApiRespWrapper<SpaceInfoResp> getSpaceInfo(String openId, int spaceId) throws ServiceException;
+    ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException;
 
     /**
      * 返回具体空间的feed列表
@@ -47,7 +48,7 @@ public interface SpaceService {
     ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> listSpaceFeed(String openId, int spaceId, int start, int size)
             throws ServiceException;
 
-    ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(String openId, int start, int size);
+    ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(UserInfo userInfo, int start, int size);
 
     /**
      * 对空间feed添加评论,支持emoji,返回生成的评论的id

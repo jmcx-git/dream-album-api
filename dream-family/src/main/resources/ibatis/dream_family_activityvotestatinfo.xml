@@ -14,7 +14,7 @@
 	<insert id="insertOrUpdateActivityVoteStatInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteStatInfo">
 		<![CDATA[
 			INSERT INTO activity_vote_stat_info (`id`, `activity_id`, `votes`, `status`, `update_time`, `create_time`)
-			VALUES(null, #activityId#, #votes#, 0, now(),now())
+			VALUES(#id#, #activityId#, #votes#, 0, now(),now())
 			ON DUPLICATE KEY UPDATE `votes` = `votes` + 1
 		]]>
 	</insert>
@@ -22,7 +22,7 @@
 	<insert id="insertOrIgnoreActivityVoteStatInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteStatInfo">
 		<![CDATA[
 			INSERT INTO activity_vote_stat_info (`id`, `activity_id`, `votes`, `status`, `update_time`, `create_time`)
-			VALUES(null, #activityId#, #votes#, 0, now(),now())
+			VALUES(#id#, #activityId#, #votes#, 0, now(),now())
 			ON DUPLICATE KEY UPDATE `votes` = `votes` + 1
 		]]>
 	</insert>

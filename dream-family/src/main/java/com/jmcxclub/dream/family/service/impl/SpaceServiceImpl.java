@@ -142,16 +142,18 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<SpaceInfoResp> getSpaceInfo(String openId, int spaceId) throws ServiceException {
-        UserInfo userInfo = new UserInfo();
-        userInfo.setOpenId(openId);
-        userInfo = userInfoService.getInfoByUk(userInfo);
-        if (userInfo == null) {
-            return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的用户.", null);
-        }
+    public ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException {
         SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
         if (spaceInfo == null) {
             return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的空间.");
+        }
+        String secert = null;
+        UserInfo owner = null;
+        if (spaceInfo.getUserId() == userInfo.getId()) {
+            secert = this.spaceSecertInfoService.getSecert(spaceId);
+            owner = userInfo;
+        } else {
+            owner = userInfoService.getData(spaceInfo.getUserId());
         }
         SpaceStatInfo stat = spaceStatInfoService.getData(spaceId);
         UserSpaceRelationshipInfoSortedListCacheFilter filter = new UserSpaceRelationshipInfoSortedListCacheFilter(
@@ -162,11 +164,7 @@ public class SpaceServiceImpl implements SpaceService {
             userIds.add(userSpaceRelationshipInfo.getUserId());
         }
         List<UserInfo> userInfos = userInfoService.getData(userIds);
-        String secert = null;
-        if (spaceInfo.getUserId() == userInfo.getId()) {
-            secert = this.spaceSecertInfoService.getSecert(spaceId);
-        }
-        return new ApiRespWrapper<SpaceInfoResp>(new SpaceInfoResp(spaceInfo, stat, userInfos, secert));
+        return new ApiRespWrapper<SpaceInfoResp>(new SpaceInfoResp(spaceInfo, owner, stat, userInfos, secert));
     }
 
     private List<SpaceListResp> buildSpaceListResps(List<SpaceInfo> infos, List<SpaceStatInfo> stats) {
@@ -208,13 +206,8 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(String openId, int start, int size)
+    public ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(UserInfo userInfo, int start, int size)
             throws ServiceException {
-        UserInfo userInfo = new UserInfo();
-        userInfo = userInfoService.getInfoByUk(userInfo);
-        if (userInfo == null) {
-            return new ApiRespWrapper<ListWrapResp<UserFeedListResp>>(-1, "Illegal user id", null);
-        }
         FeedInfoSortedListCacheFilter filter = new FeedInfoSortedListCacheFilter(userInfo.getId(), null, start, size);
         ListWrapResp<FeedInfo> infos = feedInfoService.listInfo(filter);
         if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {

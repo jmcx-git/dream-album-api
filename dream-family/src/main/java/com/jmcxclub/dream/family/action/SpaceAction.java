@@ -241,7 +241,11 @@ public class SpaceAction extends IosBaseAction {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的用户账号", null);
         }
-        return spaceService.getSpaceInfo(openId, spaceId);
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的用户账号");
+        }
+        return spaceService.getSpaceInfo(userInfo, spaceId);
     }
 
     @RequestMapping("/feed/list.json")
@@ -275,7 +279,11 @@ public class SpaceAction extends IosBaseAction {
         }
         start = ParameterUtils.formatStart(start);
         size = ParameterUtils.formatStart(size);
-        return spaceService.listUserFeed(openId, start, size);
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<ListWrapResp<UserFeedListResp>>(-1, "未知的用户账号");
+        }
+        return spaceService.listUserFeed(userInfo, start, size);
     }
 
     @RequestMapping("/occupant/list.json")

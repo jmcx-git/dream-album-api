@@ -114,7 +114,7 @@ public class DiscoveryAction extends IosBaseAction {
     }
 
     /**
-     * 参与活动,调用成功后客户端调用activity/result.json
+     * 参与活动,调用成功后客户端
      * 
      * @param openId
      * @param id
