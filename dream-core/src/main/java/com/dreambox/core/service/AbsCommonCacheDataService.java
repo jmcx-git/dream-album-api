@@ -169,6 +169,11 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
 
     @Override
     protected void afterModifyStatus(List<G> gg) {
+        this.afterModifyData(gg);
+    }
+
+    @Override
+    protected void afterModifyData(List<G> gg) {
         List<String> keys = new ArrayList<String>();
         for (G g : gg) {
             String key = buildDataInfoKey(getIdFromG(g));
