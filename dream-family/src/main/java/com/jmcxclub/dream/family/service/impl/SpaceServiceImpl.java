@@ -380,9 +380,19 @@ public class SpaceServiceImpl implements SpaceService {
         g.setUserId(getUserId(openId));
         g.setCommentRefId(commentRefId);
         feedCommentInfoService.addData(g);
-        feedStatInfoService.incrComments(feedId);
-        userSpaceInteractionInfoService.incrComments(userInfo.getId(), feedInfo.getSpaceId());
+        afterModifyComment(true, userInfo.getId(), feedInfo.getSpaceId(), feedId);
         return new ApiRespWrapper<Integer>(g.getId());
+    }
+
+    private void afterModifyComment(boolean add, int userId, int spaceId, int feedId) {
+        if (add) {
+            feedStatInfoService.incrComments(feedId);
+            userSpaceInteractionInfoService.incrComments(userId, spaceId);
+        } else {
+            feedStatInfoService.decrComments(feedId);
+            userSpaceInteractionInfoService.decrComments(userId, spaceId);
+        }
+
     }
 
     private int getUserId(String openId) throws ServiceException {
@@ -514,27 +524,35 @@ public class SpaceServiceImpl implements SpaceService {
         return new ApiRespWrapper<String>(spaceSecertInfoService.resetSecert(spaceId));
     }
 
-    // //////////以下方法暂时不需要实现
-    // ////////以下方法暂时不需要实现
-    // ////////以下方法暂时不需要实现
-
-    @Override
-    public ApiRespWrapper<SpaceFeedResp> getFeedDetail(String openId, int feedId) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ApiRespWrapper<ListWrapResp<SpaceFeedCommentListResp>> listFeedComment(String openId, int feedId,
-            Integer headCommentId, Integer start, Integer size) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
+    // 只有评论者和owner才有权限删除
     @Override
     public ApiRespWrapper<Boolean> deleteFeedComment(String openId, int feedId, int commentId) throws ServiceException {
-        // TODO Auto-generated method stub
-        return null;
+        UserInfo userInfo = new UserInfo();
+        // permission
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的用户");
+        }
+        FeedCommentInfo feedCommentInfo = feedCommentInfoService.getData(commentId);
+        if (feedCommentInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的评论记录", false);
+        }
+        if (feedCommentInfo.getFeedId() != feedId) {
+            return new ApiRespWrapper<>(-1, "评论不属于当前Feed", false);
+        }
+        FeedInfo feedInfo = feedInfoService.getData(feedId);
+        if (feedInfo == null) {
+            return new ApiRespWrapper<>(-1, "未知的记录", false);
+        }
+        // self or feed owner
+        if (feedCommentInfo.getUserId() == userInfo.getId() || feedInfo.getUserId() == userInfo.getId()) {
+            log.warn("Feed comment :" + commentId + " delete by:" + userInfo.getId());
+            feedCommentInfo.setStatus(FeedCommentInfo.STATUS_DEL);
+            this.feedCommentInfoService.modifyStatus(feedCommentInfo);
+            afterModifyComment(false, userInfo.getId(), feedInfo.getSpaceId(), feedId);
+            return new ApiRespWrapper<Boolean>(true);
+        }
+        return new ApiRespWrapper<>(-1, "你没有删除当前评论的权限.", false);
     }
 
     @Override
@@ -552,5 +570,22 @@ public class SpaceServiceImpl implements SpaceService {
         userSpaceInteractionInfo = userSpaceInteractionInfoService.getInfoByUk(userSpaceInteractionInfo);
         return new ApiRespWrapper<SpaceUserInteractionInfoResp>(new SpaceUserInteractionInfoResp(userInfo,
                 userSpaceInteractionInfo));
+    }
+
+    // //////////以下方法暂时不需要实现
+    // ////////以下方法暂时不需要实现
+    // ////////以下方法暂时不需要实现
+
+    @Override
+    public ApiRespWrapper<SpaceFeedResp> getFeedDetail(String openId, int feedId) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public ApiRespWrapper<ListWrapResp<SpaceFeedCommentListResp>> listFeedComment(String openId, int feedId,
+            Integer headCommentId, Integer start, Integer size) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

@@ -39,7 +39,6 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     @Autowired
     private ActivityVoteDetailInfoService activityVoteDetailInfoService;
 
-
     @Override
     public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size)
             throws ServiceException {
@@ -47,6 +46,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         filter.setStart(start);
         filter.setSize(size);
         ListWrapResp<ActivityInfo> infos = activityInfoService.listInfo(filter);
+        
         return null;
     }
 
