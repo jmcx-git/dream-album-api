@@ -69,7 +69,7 @@
 		AS `content`, CAST(`content_css` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
 		FROM `activity_info` WHERE
 		`id` = #startId#;
 	</select>
@@ -88,7 +88,7 @@
 		AS `content`, CAST(`content_css` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
 		FROM `activity_info` WHERE
 		`id` > #startId# ORDER BY id LIMIT #size#;
 	</select>
@@ -107,7 +107,7 @@
 		AS `content`, CAST(`content_css` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
 		FROM `activity_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
 			#ids[]#
@@ -128,7 +128,7 @@
 		AS `content`, CAST(`content_css` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
 		FROM `activity_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
