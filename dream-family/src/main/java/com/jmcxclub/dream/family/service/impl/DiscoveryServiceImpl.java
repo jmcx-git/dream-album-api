@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
+import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
@@ -24,6 +26,7 @@ import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.FeedTypeEnum;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
+import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.model.UploadFileSaveResp;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
@@ -192,4 +195,65 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         return null;
     }
 
+    @Override
+    public ApiRespWrapper<ListWrapResp<ActivityWorksResp>> listActivityWorks(UserInfo userInfo, Integer activityId,
+            String findKey, Integer start, Integer size) throws ServiceException {
+        ListWrapResp<ActivityVoteStatInfo> datas = activityVoteStatInfoService
+                .listInfo(new ActivityVoteStatInfoSortedListCacheFilter(activityId, start, size));
+        ActivityWorksInfo curUserActiviteWorksInfo = null;
+        ActivityVoteStatInfo curUserActivityVoteStatInfo = null;
+        int curUserActiviteWorksRank = 0;
+        if (start == 0) {
+            ActivityWorksInfo activiteWorksInfo = new ActivityWorksInfo();
+            activiteWorksInfo.setUserId(userInfo.getId());
+            activiteWorksInfo.setActivityId(activityId);
+            curUserActiviteWorksInfo = activityWorksInfoService.getInfoByUk(activiteWorksInfo);
+            if (curUserActiviteWorksInfo != null) {
+                curUserActivityVoteStatInfo = activityVoteStatInfoService.getData(curUserActiviteWorksInfo.getId());
+                curUserActiviteWorksRank = activityVoteStatInfoService.rank(curUserActiviteWorksInfo.getId());
+            }
+        }
+        ActivityWorksInfo curFindActiviteWorksInfo = null;
+        ActivityVoteStatInfo curFindActivityVoteStatInfo = null;
+        int curFindActiviteWorksRank = 0;
+        if (!StringUtils.isEmpty(findKey)) {
+            try {
+                int findWorksId = Integer.parseInt(findKey);
+                curFindActiviteWorksInfo = activityWorksInfoService.getData(findWorksId);
+                if (curFindActiviteWorksInfo != null) {
+                    curFindActivityVoteStatInfo = activityVoteStatInfoService.getData(findWorksId);
+                    curFindActiviteWorksRank = activityVoteStatInfoService.rank(findWorksId);
+                }
+            } catch (Exception e) {
+            }
+        }
+        List<Integer> worksIds = new ArrayList<Integer>();
+        for (ActivityVoteStatInfo activityVoteStatInfo : datas.getResultList()) {
+            worksIds.add(activityVoteStatInfo.getId());
+        }
+        List<ActivityWorksInfo> activityWorksInfos = activityWorksInfoService.getData(worksIds);
+        List<ActivityWorksResp> values = new ArrayList<ActivityWorksResp>();
+        int addtional = 0;
+        if (curUserActivityVoteStatInfo != null && curUserActiviteWorksInfo != null) {
+            values.add(new ActivityWorksResp(curUserActiviteWorksInfo, curUserActiviteWorksRank,
+                    curUserActivityVoteStatInfo.getVotes()));
+            addtional++;
+        }
+        if (curFindActiviteWorksInfo != null && curFindActivityVoteStatInfo != null) {
+            values.add(new ActivityWorksResp(curFindActiviteWorksInfo, curFindActiviteWorksRank,
+                    curFindActivityVoteStatInfo.getVotes()));
+            addtional++;
+        }
+        int rank = start + 1;
+        for (ActivityVoteStatInfo activityVoteStatInfo : datas.getResultList()) {
+            for (ActivityWorksInfo activityWorksInfo : activityWorksInfos) {
+                if (activityVoteStatInfo.getId() == activityWorksInfo.getId()) {
+                    values.add(new ActivityWorksResp(activityWorksInfo, rank++, activityVoteStatInfo.getVotes()));
+                }
+            }
+        }
+        boolean more = datas.isMore() && datas.getTotalCount() > start + size + addtional;
+        return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(new ListWrapResp<ActivityWorksResp>(
+                datas.getTotalCount(), values, more, datas.getNext()));
+    }
 }

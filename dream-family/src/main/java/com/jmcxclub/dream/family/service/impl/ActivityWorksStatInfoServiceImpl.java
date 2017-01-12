@@ -103,4 +103,19 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityVoteStatInfoServic
         }
     }
 
+    @Override
+    public int rank(int id) throws ServiceException {
+        Long rank = RedisCacheUtils.zrank(buildSortedSetKey(new ActivityVoteStatInfoSortedListCacheFilter(id, 0, 0)),
+                String.valueOf(id), getJedisPool());
+        if (rank == null) {
+            return -1;
+        }
+        return rank.intValue() + 1;
+    }
+
+    @Override
+    protected String buildSortedSetMember(ActivityVoteStatInfo t) {
+        return String.valueOf(t.getId());
+    }
+
 }

@@ -36,4 +36,6 @@ public abstract class ActivityVoteStatInfoService extends AbstractSortedListCach
 
     public abstract void incr(int worksId, int activityId) throws ServiceException;
 
+    public abstract int rank(int id) throws ServiceException;
+
 }

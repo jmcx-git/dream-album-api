@@ -25,6 +25,7 @@ import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.dto.FeedTypeEnum;
 import com.jmcxclub.dream.family.model.OccupantFootprintResp;
+import com.jmcxclub.dream.family.model.SpaceDetailResp;
 import com.jmcxclub.dream.family.model.SpaceFeedCommentListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
@@ -236,7 +237,21 @@ public class SpaceAction extends IosBaseAction {
 
     @RequestMapping("/detail.json")
     @ResponseBody
-    public ApiRespWrapper<SpaceInfoResp> detailSpace(String openId, Integer spaceId, String version)
+    public ApiRespWrapper<SpaceDetailResp> detailSpace(String openId, Integer spaceId, String version)
+            throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<SpaceDetailResp>(-1, "未知的用户账号", null);
+        }
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<SpaceDetailResp>(-1, "未知的用户账号");
+        }
+        return spaceService.getSpaceDetail(userInfo, spaceId);
+    }
+
+    @RequestMapping("/info.json")
+    @ResponseBody
+    public ApiRespWrapper<SpaceInfoResp> getSpaceInfo(String openId, Integer spaceId, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的用户账号", null);

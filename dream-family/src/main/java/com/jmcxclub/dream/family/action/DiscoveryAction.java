@@ -24,6 +24,7 @@ import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfoEnum;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
+import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.service.DiscoveryService;
 import com.jmcxclub.dream.family.service.ImgService;
@@ -87,6 +88,31 @@ public class DiscoveryAction extends IosBaseAction {
             return new ApiRespWrapper<ActivityInfoResp>(-1, "未知的用户账号", null);
         }
         return discoveryService.getActivity(openId, id);
+    }
+
+    /**
+     * 参赛作品列表
+     * 
+     * @param openId
+     * @param id
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping("/activity/works/list.json")
+    @ResponseBody
+    public ApiRespWrapper<ListWrapResp<ActivityWorksResp>> listActivityWorks(String openId, Integer id, String findKey,
+            Integer start, Integer size, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(-1, "未知的用户账号", null);
+        }
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(-1, "未找到对应用户账号");
+        }
+        start = ParameterUtils.formatStart(start);
+        size = ParameterUtils.formatStart(size);
+        return discoveryService.listActivityWorks(userInfo, id, findKey, start, size);
     }
 
     /**

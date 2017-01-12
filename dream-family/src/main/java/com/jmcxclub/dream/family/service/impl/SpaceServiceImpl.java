@@ -31,6 +31,7 @@ import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
 import com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo;
 import com.jmcxclub.dream.family.model.FeedCommentInfoResp;
 import com.jmcxclub.dream.family.model.OccupantFootprintResp;
+import com.jmcxclub.dream.family.model.SpaceDetailResp;
 import com.jmcxclub.dream.family.model.SpaceFeedCommentListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
@@ -142,10 +143,10 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException {
+    public ApiRespWrapper<SpaceDetailResp> getSpaceDetail(UserInfo userInfo, int spaceId) throws ServiceException {
         SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
         if (spaceInfo == null) {
-            return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的空间.");
+            return new ApiRespWrapper<SpaceDetailResp>(-1, "未知的空间.");
         }
         String secert = null;
         UserInfo owner = null;
@@ -164,7 +165,22 @@ public class SpaceServiceImpl implements SpaceService {
             userIds.add(userSpaceRelationshipInfo.getUserId());
         }
         List<UserInfo> userInfos = userInfoService.getData(userIds);
-        return new ApiRespWrapper<SpaceInfoResp>(new SpaceInfoResp(spaceInfo, owner, stat, userInfos, secert));
+        return new ApiRespWrapper<SpaceDetailResp>(new SpaceDetailResp(spaceInfo, owner, stat, userInfos, secert));
+    }
+
+    @Override
+    public ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException {
+        SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
+        if (spaceInfo == null) {
+            return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的空间.");
+        }
+        UserInfo owner = null;
+        if (spaceInfo.getUserId() == userInfo.getId()) {
+            owner = userInfo;
+        } else {
+            owner = userInfoService.getData(spaceInfo.getUserId());
+        }
+        return new ApiRespWrapper<SpaceInfoResp>(new SpaceInfoResp(spaceInfo, owner));
     }
 
     private List<SpaceListResp> buildSpaceListResps(List<SpaceInfo> infos, List<SpaceStatInfo> stats) {

@@ -9,11 +9,12 @@ import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.model.OccupantFootprintResp;
-import com.jmcxclub.dream.family.model.SpaceInfoResp;
-import com.jmcxclub.dream.family.model.SpaceListResp;
+import com.jmcxclub.dream.family.model.SpaceDetailResp;
 import com.jmcxclub.dream.family.model.SpaceFeedCommentListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
+import com.jmcxclub.dream.family.model.SpaceInfoResp;
+import com.jmcxclub.dream.family.model.SpaceListResp;
 import com.jmcxclub.dream.family.model.SpaceUserInteractionInfoResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
 
@@ -33,7 +34,7 @@ public interface SpaceService {
      */
     ApiRespWrapper<ListWrapResp<SpaceListResp>> listSpace(String openId, int start, int size) throws ServiceException;
 
-    ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException;
+    ApiRespWrapper<SpaceDetailResp> getSpaceDetail(UserInfo userInfo, int spaceId) throws ServiceException;
 
     /**
      * 返回具体空间的feed列表
@@ -189,4 +190,6 @@ public interface SpaceService {
 
     ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, int spaceId)
             throws ServiceException;
+
+    ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException;
 }
