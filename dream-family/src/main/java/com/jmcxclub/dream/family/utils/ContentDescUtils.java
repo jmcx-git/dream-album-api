@@ -2,8 +2,6 @@
 
 package com.jmcxclub.dream.family.utils;
 
-import java.util.Date;
-
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
@@ -92,7 +90,7 @@ public class ContentDescUtils {
                     if (day == 0) {
                         stepDesc = hour + "小时后盛大开启，敬请期待";
                     } else {
-                        stepDesc = hour + "天后盛大开启，敬请期待";
+                        stepDesc = day + "天后盛大开启，敬请期待";
                     }
                 }
             } else {
@@ -104,9 +102,9 @@ public class ContentDescUtils {
                     } else {
                         long day = hour / 60;
                         if (day == 0) {
-                            stepDesc = "距结束仅剩" + leftMinutes + "小时";
+                            stepDesc = "距结束仅剩" + hour + "小时";
                         } else {
-                            stepDesc = "距结束" + leftMinutes + "天";
+                            stepDesc = "距结束" + day + "天";
                         }
                     }
                 } else {
