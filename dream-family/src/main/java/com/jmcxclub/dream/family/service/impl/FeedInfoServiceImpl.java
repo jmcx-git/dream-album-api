@@ -3,6 +3,8 @@
 package com.jmcxclub.dream.family.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -38,6 +40,7 @@ public class FeedInfoServiceImpl extends FeedInfoService {
     private JedisPool jedisDbPool;
 
     private String spaceFeedIdsKey = "space:feed:ids";
+    private String userFeedIdsKey = "user:feed:ids";
     private String infoKey = "feed:info";
 
     @Override
@@ -61,10 +64,11 @@ public class FeedInfoServiceImpl extends FeedInfoService {
         }
         FeedInfoSortedListCacheFilter sortedListFilter = (FeedInfoSortedListCacheFilter) filter;
         if (sortedListFilter.getSpaceId() != null) {
-            return RedisCacheUtils.buildKey(spaceFeedIdsKey, sortedListFilter.getSpaceId().intValue());
-        } else {
-            throw ServiceException.getInternalException("Unknown filter value cache. Filter:" + filter);
+            return buildSpaceSortedSetKey(sortedListFilter.getSpaceId());
+        } else if (sortedListFilter.getUserId() != null) {
+            return buildUserSortedSetKey(sortedListFilter.getUserId());
         }
+        throw ServiceException.getInternalException("Unknown filter value cache. Filter:" + filter);
     }
 
     @Override
@@ -74,7 +78,7 @@ public class FeedInfoServiceImpl extends FeedInfoService {
 
     @Override
     protected StartSizeCacheFilter buildCacheFilter(FeedInfo value) {
-        return new FeedInfoSortedListCacheFilter(null, value.getSpaceId(), 0, 10);
+        return new FeedInfoSortedListCacheFilter(value.getUserId(), value.getSpaceId(), 0, 10);
     }
 
     @Override
@@ -110,6 +114,39 @@ public class FeedInfoServiceImpl extends FeedInfoService {
     @Override
     protected int getPriority() {
         return 3;
+    }
+
+    @Override
+    protected List<String> buildSortedSetKeys(StartSizeCacheFilter filter) {
+        FeedInfoSortedListCacheFilter curFilter = (FeedInfoSortedListCacheFilter) filter;
+        List<String> keys = new ArrayList<String>();
+        keys.add(buildUserSortedSetKey(curFilter.getUserId()));
+        keys.add(buildSpaceSortedSetKey(curFilter.getSpaceId()));
+        return keys;
+    }
+
+    private String buildSpaceSortedSetKey(Integer spaceId) {
+        return RedisCacheUtils.buildKey(spaceFeedIdsKey, spaceId.intValue());
+    }
+
+    private String buildUserSortedSetKey(Integer userId) {
+        return RedisCacheUtils.buildKey(userFeedIdsKey, userId.intValue());
+    }
+
+    @Override
+    protected List<String> buildSortedSetMembers(FeedInfo t) {
+        List<String> members = new ArrayList<String>();
+        members.add(String.valueOf(t.getId()));
+        members.add(String.valueOf(t.getId()));
+        return members;
+    }
+
+    @Override
+    protected List<Double> buildSortedSetScores(FeedInfo t) {
+        List<Double> scores = new ArrayList<Double>();
+        scores.add(Long.valueOf(t.getUpdateTime().getTime()).doubleValue());
+        scores.add(Long.valueOf(t.getUpdateTime().getTime()).doubleValue());
+        return scores;
     }
 
 }
