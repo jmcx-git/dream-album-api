@@ -94,7 +94,7 @@ public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
             throw ServiceException.getSQLException(e);
         }
         do {
-            String secert = RandomStringUtils.random(randomLen);
+            String secert = RandomStringUtils.random(randomLen, true, true).toLowerCase();
             SpaceSecertInfo g = new SpaceSecertInfo();
             g.setSpaceId(spaceId);
             g.setSecert(secert);

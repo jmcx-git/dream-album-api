@@ -143,7 +143,8 @@ public class SpaceServiceImpl implements SpaceService {
 
     @Override
     public ApiRespWrapper<SpaceInfoResp> getSpaceInfo(String openId, int spaceId) throws ServiceException {
-        UserInfo userInfo = null;
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
         userInfo = userInfoService.getInfoByUk(userInfo);
         if (userInfo == null) {
             return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的用户.", null);

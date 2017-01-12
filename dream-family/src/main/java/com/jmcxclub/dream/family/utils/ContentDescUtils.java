@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.utils;
 
+import com.dreambox.core.utils.DateUtils;
+import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
@@ -74,7 +76,11 @@ public class ContentDescUtils {
         String startTimeDesc = "";
         String endTimeDesc = "";// 最后结束时间
         String stepDesc = "";
+        String format = DateUtils.formatStr(activityInfo.getStartDate(), "");
         long curTimeMillis = System.currentTimeMillis();
+        if (activityInfo.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
+            
+        }
         if (activityInfo.getStartDate().getTime() > curTimeMillis) {
 
         } else if (activityInfo.getEndDate().getTime() > curTimeMillis) {
