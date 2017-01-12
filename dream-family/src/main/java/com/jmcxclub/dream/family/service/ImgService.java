@@ -17,4 +17,6 @@ public interface ImgService {
 
     UploadFileSaveResp saveFeedImg(MultipartFile image, String openId) throws ServiceException;
 
+    UploadFileSaveResp saveActivityWorksImg(MultipartFile image, int userId) throws ServiceException;
+
 }

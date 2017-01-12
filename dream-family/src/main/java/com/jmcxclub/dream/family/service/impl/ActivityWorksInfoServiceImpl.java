@@ -92,4 +92,16 @@ public class ActivityWorksInfoServiceImpl extends ActivityWorksInfoService {
     protected Logger getLogger() {
         return log;
     }
+
+    @Override
+    public void addData(ActivityWorksInfo g) throws ServiceException {
+        int id;
+        try {
+            id = activityWorksInfoDao.insertReturnId(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        g.setId(id);
+        afterAddData(g);
+    }
 }

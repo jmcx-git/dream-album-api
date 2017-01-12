@@ -31,4 +31,9 @@ public class ActivityWorksInfoDaoImpl extends ActivityWorksInfoDao {
     public Integer queryIdByUk(ActivityWorksInfo t) throws SQLException {
         return SQLUtils.queryObject(getSqlMapClient(), "queryActivityWorksInfoIdByUk", t);
     }
+
+    @Override
+    public int insertReturnId(ActivityWorksInfo g) throws SQLException {
+        return SQLUtils.insertReturnId(sqlMapClient, "insertActivityWorksInfoReturnId", g);
+    }
 }

@@ -2,6 +2,7 @@ package com.dreambox.web.exception;
 
 import java.sql.SQLException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 
@@ -23,6 +24,7 @@ public class ServiceException extends RuntimeException {
     private static final int ERR_CODE_SQL_DATA_ILLEGAL = 7002;
     private static final int ERR_CODE_CACHE_BUSY_ILLEGAL = 7003;
     private static final int ERR_CODE_CACHE_DATA_ILLEGAL = 7004;
+    public static final int ERR_CODE_SQL_DATA_DUPLICATE = 7005;
     public static final int ERR_CODE_ACCOUNT_NOTFOUND = 8404;
     public static final int ERR_CODE_ACCOUNT_UNAUTHORIZED = 8401;
     public static final int ERR_CODE_ACCOUNT_ABERRANT = 8402;
@@ -53,6 +55,9 @@ public class ServiceException extends RuntimeException {
 
     public static ServiceException getSQLException(SQLException e) {
         log.error("操作数据库失败.Errmsg:" + e.getMessage(), e);
+        if (StringUtils.equals(e.getSQLState(), "23000") && StringUtils.containsIgnoreCase(e.getMessage(), "Duplicate")) {
+            return new ServiceException(ERR_CODE_SQL_DATA_DUPLICATE, "数据操作失败.");
+        }
         return new ServiceException(ERR_CODE_SQL_ILLEGAL, "数据操作失败.");
     }
 

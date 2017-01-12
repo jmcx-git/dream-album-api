@@ -8,13 +8,12 @@ import com.dreambox.core.dao.AbsCommonDao;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 
 /**
- * @author mokous86@gmail.com
- * create date: Jan 11, 2017
+ * @author mokous86@gmail.com create date: Jan 11, 2017
  *
- 
  */
 public abstract class ActivityWorksInfoDao extends AbsCommonDao<ActivityWorksInfo> {
 
     public abstract Integer queryIdByUk(ActivityWorksInfo t) throws SQLException;
 
+    public abstract int insertReturnId(ActivityWorksInfo g) throws SQLException;
 }

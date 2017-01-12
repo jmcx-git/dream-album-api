@@ -32,10 +32,12 @@ public class ImgServiceImpl implements ImgService {
     @Value("${dream.family.imglocaldir}")
     private String imgLocalDir;
 
-    @Value("${dream.album.userspaceiconuploadimglocaldir}")
+    @Value("${dream.family.userspaceiconuploadimglocaldir}")
     private String userSpaceIconUploadImgLocalDir;
-    @Value("${dream.album.userfeedimguploadimglocaldir}")
+    @Value("${dream.family.userfeedimguploadimglocaldir}")
     private String userFeedImgUploadImgLocalDir;
+    @Value("${dream.family.useractivityworksuploadimglocaldir}")
+    private String userActivityWorksUploadImgLocalDir;
 
     @Override
     public UploadFileSaveResp saveSpaceIcon(MultipartFile image, String openId) throws ServiceException {
@@ -51,6 +53,7 @@ public class ImgServiceImpl implements ImgService {
         // 保存用户自己上传的图片
         log.info("Image name:" + image.getOriginalFilename());
         log.info("Image name:" + image.getName());
+        log.info("Image size:" + image.getSize());
         String suffix = IOUtils.getSuffix(image.getOriginalFilename());
         suffix = StringUtils.isEmpty(suffix) ? ".jpg" : suffix;
         String picName = filePrefix + new Date().getTime() + suffix;
@@ -67,5 +70,10 @@ public class ImgServiceImpl implements ImgService {
             throw ServiceException.getInternalException("Save user upload file failed.");
         }
         return new UploadFileSaveResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
+    }
+
+    @Override
+    public UploadFileSaveResp saveActivityWorksImg(MultipartFile image, int userId) throws ServiceException {
+        return saveImg(image, "works_" + userId + "_", userActivityWorksUploadImgLocalDir);
     }
 }

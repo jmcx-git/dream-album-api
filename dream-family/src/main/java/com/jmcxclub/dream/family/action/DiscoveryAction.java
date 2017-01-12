@@ -3,7 +3,6 @@
 package com.jmcxclub.dream.family.action;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.asm.commons.Method;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,16 +11,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
+import com.jmcxclub.dream.family.dto.ActivityWorksInfoEnum;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.service.DiscoveryService;
+import com.jmcxclub.dream.family.service.ImgService;
 
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
@@ -34,6 +36,14 @@ public class DiscoveryAction extends IosBaseAction {
     private DiscoveryService discoveryService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private ImgService imgService;
+
+    private UserInfo getUserInfo(String openId) {
+        UserInfo g = new UserInfo();
+        g.setOpenId(openId);
+        return userInfoService.getInfoByUk(g);
+    }
 
     /**
      * 发现列表
@@ -93,7 +103,11 @@ public class DiscoveryAction extends IosBaseAction {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
-        return discoveryService.applyActivity(openId, id, feedId);
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未找到对应用户账号");
+        }
+        return discoveryService.applyActivity(userInfo.getId(), id, feedId);
     }
 
     /**
@@ -103,19 +117,28 @@ public class DiscoveryAction extends IosBaseAction {
      * @param id
      * @param feedId
      * @param version
+     * @param type see {@link ActivityWorksInfoEnum}
      * @return
      * @throws ServiceException
      */
     @RequestMapping(value = "/activity/apply.json", method = RequestMethod.POST)
     @ResponseBody
     public ApiRespWrapper<Boolean> applyActivity(String openId, Integer id,
-            @RequestParam(required = false) MultipartFile image, String solgan, String desc, String version)
-            throws ServiceException {
+            @RequestParam(required = false) MultipartFile image, String solgan, String desc, Integer type,
+            String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
-        // return discoveryService.applyActivity(openId, id, feedId);
-        return null;
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未找到对应用户账号");
+        }
+        if (type == null || type.intValue() == ActivityWorksInfoEnum.NORMAL.getType()) {
+            return discoveryService.applyActivity(userInfo.getId(), id, image, solgan, desc);
+        } else {
+            return new ApiRespWrapper<Boolean>(-1, "不支持的参赛作品类型", false);
+        }
+        // return null;
     }
 
     /**

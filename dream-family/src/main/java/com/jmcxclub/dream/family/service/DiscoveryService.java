@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.service;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
@@ -20,10 +22,12 @@ public interface DiscoveryService {
 
     ApiRespWrapper<ActivityInfoResp> getActivity(String openId, int id);
 
-    ApiRespWrapper<Boolean> applyActivity(String openId, int id, int feedId);
+    ApiRespWrapper<Boolean> applyActivity(int userId, int id, int feedId);
 
     ApiRespWrapper<Boolean> voteActivity(String openId, int id, int chooseId);
 
     ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, int id);
+
+    ApiRespWrapper<Boolean> applyActivity(int userId, int activityId, MultipartFile image, String solgan, String desc);
 
 }
