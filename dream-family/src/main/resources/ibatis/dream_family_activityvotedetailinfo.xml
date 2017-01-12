@@ -4,7 +4,7 @@
 	<resultMap id="activityvotedetailinfo"
 		class="com.jmcxclub.dream.family.dto.ActivityVoteDetailInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="work_id" property="workId" jdbcType="INTEGER" />
+		<result column="works_id" property="worksId" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
 		<result column="vote_date" property="voteDate" jdbcType="TIMESTAMP" />
 		<result column="ip" property="ip" jdbcType="VARCHAR" />
@@ -17,16 +17,16 @@
 	<insert id="insertOrUpdateActivityVoteDetailInfo"
 		parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteDetailInfo">
 		<![CDATA[
-			INSERT IGNORE INTO activity_vote_detail_info (`id`, `work_id`, `user_id`, `vote_date`, `ip`, `vote_time`, `status`, `update_time`, `create_time`)
-			VALUES(null, #workId#, #userId#, #voteDate#, #ip#, #voteTime#, 0, now(),now())
+			INSERT IGNORE INTO activity_vote_detail_info (`id`, `works_id`, `user_id`, `vote_date`, `ip`, `vote_time`, `status`, `update_time`, `create_time`)
+			VALUES(null, #worksId#, #userId#, #voteDate#, #ip#, #voteTime#, 0, now(),now())
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreActivityVoteDetailInfo"
 		parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteDetailInfo">
 		<![CDATA[
-			INSERT IGNORE INTO activity_vote_detail_info (`id`, `work_id`, `user_id`, `vote_date`, `ip`, `vote_time`, `status`, `update_time`, `create_time`)
-			VALUES(null, #workId#, #userId#, #voteDate#, #ip#, #voteTime#, 0, now(),now())
+			INSERT IGNORE INTO activity_vote_detail_info (`id`, `works_id`, `user_id`, `vote_date`, `ip`, `vote_time`, `status`, `update_time`, `create_time`)
+			VALUES(null, #worksId#, #userId#, #voteDate#, #ip#, #voteTime#, 0, now(),now())
 		]]>
 	</insert>
 
@@ -70,10 +70,10 @@
 					#status#
 				</isNotNull>
 			</isPropertyAvailable>
-			<isPropertyAvailable property="workId">
-				<isNotNull property="workId" prepend=" and ">
-					`work_id` =
-					#workId#
+			<isPropertyAvailable property="worksId">
+				<isNotNull property="worksId" prepend=" and ">
+					`works_id` =
+					#worksId#
 				</isNotNull>
 			</isPropertyAvailable>
 			<isPropertyAvailable property="userId">
@@ -102,10 +102,10 @@
 					#status#
 				</isNotNull>
 			</isPropertyAvailable>
-			<isPropertyAvailable property="workId">
-				<isNotNull property="workId" prepend=" and ">
-					`work_id` =
-					#workId#
+			<isPropertyAvailable property="worksId">
+				<isNotNull property="worksId" prepend=" and ">
+					`works_id` =
+					#worksId#
 				</isNotNull>
 			</isPropertyAvailable>
 			<isPropertyAvailable property="userId">
