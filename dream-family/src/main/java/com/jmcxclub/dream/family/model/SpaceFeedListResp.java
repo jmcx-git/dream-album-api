@@ -9,6 +9,7 @@ import com.dreambox.core.DbStatus;
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
@@ -18,10 +19,11 @@ public class SpaceFeedListResp {
     private int id;
     private String title;
     private String cover;
+    private String illustration;// 插图，当feed为广西,图片时 指的是feed中的图片(会进行图片合成，生成n宫格)
     // feed type
     private int type;
     private String content;
-    private String resourceUrl;
+    private String resourceUrl;// for video audio
     private long duration;// for video audio
     private String authorOpenId;
     private String avatarUrl;
@@ -37,33 +39,7 @@ public class SpaceFeedListResp {
         Date ct = feedInfo.getCreateTime();
         return DateUtils.getDateMDStringValue(ct);
     }
-
-    private static String buildTimeDesc(FeedInfo feedInfo) {
-        long curTimeMillis = System.currentTimeMillis();
-        long preVisiMillis = feedInfo.getCreateTime().getTime();
-        long minutes = (curTimeMillis - preVisiMillis) / 6000;
-        String minDesc = "";
-        if (minutes < 1) {
-            minDesc = "刚刚发布";
-        } else {
-            long hours = minutes / 60;
-            if (hours <= 0) {
-                minDesc = minutes + "分钟前";
-            } else {
-                long days = hours / 24;
-                if (days <= 0) {
-                    minDesc = hours + "小时前";
-                } else {
-                    if (days <= 355) {
-                        minDesc = days + "天前";
-                    } else {
-                        minDesc = "1年前";
-                    }
-                }
-            }
-        }
-        return minDesc;
-    }
+    
 
     public SpaceFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo, List<UserInfoResp> likeIcons,
             List<FeedCommentInfoResp> comments, boolean ilike) {
@@ -74,8 +50,9 @@ public class SpaceFeedListResp {
         this.content = feedInfo.getContent();
         this.resourceUrl = feedInfo.getResourceUrl();
         this.duration = feedInfo.getDuration();
-        this.timeDesc = buildTimeDesc(feedInfo);
+        this.timeDesc =ContentDescUtils.buildTimeDesc(feedInfo);
         this.dateDesc = buildDateDesc(feedInfo);
+        this.illustration = feedInfo.getIllustration();
         if (authorUserInfo != null) {
             this.avatarUrl = authorUserInfo.getAvatarUrl();
             this.nickname = authorUserInfo.getNickName();
@@ -204,5 +181,13 @@ public class SpaceFeedListResp {
 
     public void setIlike(int ilike) {
         this.ilike = ilike;
+    }
+
+    public String getIllustration() {
+        return illustration;
+    }
+
+    public void setIllustration(String illustration) {
+        this.illustration = illustration;
     }
 }
