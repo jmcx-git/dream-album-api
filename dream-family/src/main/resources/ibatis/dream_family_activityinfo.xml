@@ -3,14 +3,14 @@
 <sqlMap namespace="rfq">
 	<resultMap id="activityinfo" class="com.jmcxclub.dream.family.dto.ActivityInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
-		<result column="activity_id" property="activityId" jdbcType="INTEGER" />
-		<result column="user_id" property="userId" jdbcType="INTEGER" />
-		<result column="type" property="type" jdbcType="INTEGER" />
-		<result column="solgan" property="solgan" jdbcType="VARCHAR" />
-		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="introduction" property="introduction" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="content_css" property="contentCss" jdbcType="VARCHAR" />
 		<result column="cover" property="cover" jdbcType="VARCHAR" />
-		<result column="resource_url" property="resourceUrl" jdbcType="VARCHAR" />
-		<result column="duration" property="duration" jdbcType="INTEGER" />
+		<result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
+		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="finish" property="finish" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
