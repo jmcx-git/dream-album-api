@@ -372,7 +372,7 @@ public class SpaceServiceImpl implements SpaceService {
         }
         FeedInfo feedInfo = feedInfoService.getData(feedId);
         if (feedInfo == null) {
-            return new ApiRespWrapper<>(-1, "未知的用户记录.");
+            return new ApiRespWrapper<>(-1, "未知的Feed记录.");
         }
         FeedCommentInfo g = new FeedCommentInfo();
         g.setComment(comment);
@@ -409,7 +409,7 @@ public class SpaceServiceImpl implements SpaceService {
         }
         FeedLikeInfo g = new FeedLikeInfo();
         g.setFeedId(feedId);
-        g.setUserId(getUserId(openId));
+        g.setUserId(userInfo.getId());
         g.setStatus(status);
         feedLikeInfoService.addData(g);
         if (status == FeedInfo.STATUS_OK) {
