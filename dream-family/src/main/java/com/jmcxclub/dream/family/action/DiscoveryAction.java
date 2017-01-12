@@ -2,8 +2,6 @@
 
 package com.jmcxclub.dream.family.action;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +28,7 @@ import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.service.DiscoveryService;
 import com.jmcxclub.dream.family.service.ImgService;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
@@ -164,15 +163,8 @@ public class DiscoveryAction extends IosBaseAction {
         if (userInfo == null) {
             return new ApiRespWrapper<Boolean>(-1, "未找到对应用户账号");
         }
-        // 腾讯BUG
-        try {
-            solgan = URLDecoder.decode(solgan, "utf8");
-        } catch (UnsupportedEncodingException e) {
-        }
-        try {
-            desc = URLDecoder.decode(solgan, "desc");
-        } catch (UnsupportedEncodingException e) {
-        }
+        solgan = ContentDescUtils.decode(solgan);
+        desc = ContentDescUtils.decode(desc);
         if (type == null || type.intValue() == ActivityWorksInfoEnum.NORMAL.getType()) {
             return discoveryService.applyActivity(userInfo.getId(), id, image, solgan, desc);
         } else {

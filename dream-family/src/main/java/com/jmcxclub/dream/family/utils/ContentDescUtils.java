@@ -2,6 +2,11 @@
 
 package com.jmcxclub.dream.family.utils;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+import org.apache.commons.lang3.StringUtils;
+
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
@@ -14,6 +19,16 @@ import com.jmcxclub.dream.family.model.DiscoveryListResp;
  *
  */
 public class ContentDescUtils {
+    public static String decode(String content) {
+        if (StringUtils.isNotEmpty(content)) {
+            try {
+                content = URLDecoder.decode(content, "utf8");
+            } catch (UnsupportedEncodingException e) {
+            }
+        }
+        return content;
+    }
+
     public static String buildUserVisitSpaceInfo(UserSpaceInteractionInfo info) {
         if (info == null) {
             return "未发现其踪迹";

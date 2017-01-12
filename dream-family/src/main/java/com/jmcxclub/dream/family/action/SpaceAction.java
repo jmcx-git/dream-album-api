@@ -2,8 +2,6 @@
 
 package com.jmcxclub.dream.family.action;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +36,7 @@ import com.jmcxclub.dream.family.model.UploadFileSaveResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.service.ImgService;
 import com.jmcxclub.dream.family.service.SpaceService;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
@@ -97,14 +96,8 @@ public class SpaceAction extends IosBaseAction {
         }
         type = type == null ? (image == null ? FeedTypeEnum.DIARY.getType() : FeedTypeEnum.PHOTO.getType()) : type;
         // 腾讯BUG
-        try {
-            name = URLDecoder.decode(name, "utf8");
-        } catch (UnsupportedEncodingException e) {
-        }
-        try {
-            info = URLDecoder.decode(info, "desc");
-        } catch (UnsupportedEncodingException e) {
-        }
+        name = ContentDescUtils.decode(name);
+        info = ContentDescUtils.decode(info);
         return spaceService.addSpace(userInfo.getId(), gender, name, bornDate, type, icon, icon, info);
     }
 
@@ -418,14 +411,8 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         // 腾讯BUG
-        try {
-            title = URLDecoder.decode(title, "utf8");
-        } catch (UnsupportedEncodingException e) {
-        }
-        try {
-            content = URLDecoder.decode(content, "desc");
-        } catch (UnsupportedEncodingException e) {
-        }
+        title= ContentDescUtils.decode(title);
+        content= ContentDescUtils.decode(content);
         return spaceService.addFeed(userInfo.getId(), spaceId, title, content, type, cover, illustration);
     }
 
