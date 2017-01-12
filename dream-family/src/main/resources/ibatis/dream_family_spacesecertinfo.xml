@@ -50,6 +50,12 @@
 			SELECT * FROM `space_secert_info` WHERE `secert` = #secert#;
 		 ]]>
 	</select>
+	<select id="querySpaceSecertInfoLastSpaceSecert" parameterClass="java.lang.Integer"
+		resultClass="java.lang.String">
+		<![CDATA[
+			SELECT secert FROM `space_secert_info` WHERE `space_id` = #spaceId# and status = 0 order by id desc limit 1;
+		 ]]>
+	</select>
 
 	<select id="querySpaceSecertInfoListByStartId" parameterClass="java.util.Map"
 		resultMap="spacesecertinfo">

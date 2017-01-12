@@ -14,6 +14,9 @@ public abstract class ActivityVoteStatInfoService extends AbstractSortedListCach
     public static class ActivityVoteStatInfoSortedListCacheFilter extends StartSizeCacheFilter {
         private int activityId;
 
+        public ActivityVoteStatInfoSortedListCacheFilter() {
+        }
+
         public ActivityVoteStatInfoSortedListCacheFilter(int activityId, int start, int size) {
             super();
             this.activityId = activityId;

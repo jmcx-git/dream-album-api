@@ -22,9 +22,11 @@ public class SpaceUserInteractionInfoResp {
         this.openId = userInfo.getOpenId();
         this.avatalUrl = userInfo.getAvatarUrl();
         this.nickname = userInfo.getNickName();
-        this.likes = userSpaceInteractionInfo.getLikes();
-        this.comments = userSpaceInteractionInfo.getComments();
-        this.info = ContentDescUtils.buildUserVisitSpaceInfo(userSpaceInteractionInfo);
+        if (userSpaceInteractionInfo != null) {
+            this.likes = userSpaceInteractionInfo.getLikes();
+            this.comments = userSpaceInteractionInfo.getComments();
+            this.info = ContentDescUtils.buildUserVisitSpaceInfo(userSpaceInteractionInfo);
+        }
     }
 
     public String getOpenId() {

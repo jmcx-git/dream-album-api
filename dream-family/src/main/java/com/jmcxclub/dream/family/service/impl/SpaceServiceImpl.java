@@ -143,9 +143,14 @@ public class SpaceServiceImpl implements SpaceService {
 
     @Override
     public ApiRespWrapper<SpaceInfoResp> getSpaceInfo(String openId, int spaceId) throws ServiceException {
+        UserInfo userInfo = null;
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的用户.", null);
+        }
         SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
         if (spaceInfo == null) {
-            return new ApiRespWrapper<SpaceInfoResp>(-1, "Illegal space id.");
+            return new ApiRespWrapper<SpaceInfoResp>(-1, "未知的空间.");
         }
         SpaceStatInfo stat = spaceStatInfoService.getData(spaceId);
         UserSpaceRelationshipInfoSortedListCacheFilter filter = new UserSpaceRelationshipInfoSortedListCacheFilter(
@@ -156,11 +161,11 @@ public class SpaceServiceImpl implements SpaceService {
             userIds.add(userSpaceRelationshipInfo.getUserId());
         }
         List<UserInfo> userInfos = userInfoService.getData(userIds);
-        return new ApiRespWrapper<SpaceInfoResp>(buildSpaceInfoResp(spaceInfo, stat, userInfos));
-    }
-
-    private SpaceInfoResp buildSpaceInfoResp(SpaceInfo spaceInfo, SpaceStatInfo stat, List<UserInfo> userInfos) {
-        return new SpaceInfoResp(spaceInfo, stat, userInfos);
+        String secert = null;
+        if (spaceInfo.getUserId() == userInfo.getId()) {
+            secert = this.spaceSecertInfoService.getSecert(spaceId);
+        }
+        return new ApiRespWrapper<SpaceInfoResp>(new SpaceInfoResp(spaceInfo, stat, userInfos, secert));
     }
 
     private List<SpaceListResp> buildSpaceListResps(List<SpaceInfo> infos, List<SpaceStatInfo> stats) {

@@ -39,4 +39,9 @@ public class SpaceSecertInfoDaoImpl extends SpaceSecertInfoDao {
         g.setSpaceId(spaceId);
         SQLUtils.update(getSqlMapClient(), "updateSpaceSecertInfoStatusBySpaceId", g);
     }
+
+    @Override
+    public String queryLastSpaceSecert(int spaceId) throws SQLException {
+        return SQLUtils.queryObject(getSqlMapClient(), "querySpaceSecertInfoLastSpaceSecert", spaceId);
+    }
 }

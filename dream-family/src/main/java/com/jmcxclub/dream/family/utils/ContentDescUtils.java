@@ -2,8 +2,10 @@
 
 package com.jmcxclub.dream.family.utils;
 
+import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
+import com.jmcxclub.dream.family.model.DiscoveryListResp;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
@@ -66,5 +68,17 @@ public class ContentDescUtils {
             }
         }
         return minDesc;
+    }
+
+    public static void buildActivityInfo(DiscoveryListResp discoveryListResp, ActivityInfo activityInfo) {
+        String startTimeDesc = "";
+        String endTimeDesc = "";// 最后结束时间
+        String stepDesc = "";
+        long curTimeMillis = System.currentTimeMillis();
+        if (activityInfo.getStartDate().getTime() > curTimeMillis) {
+
+        } else if (activityInfo.getEndDate().getTime() > curTimeMillis) {
+        } else {
+        }
     }
 }

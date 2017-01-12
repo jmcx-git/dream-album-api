@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ import com.jmcxclub.dream.family.service.SpaceSecertInfoService;
  * @author mokous86@gmail.com create date: Jan 10, 2017
  *
  */
-@Service("SpaceSecertInfoService")
+@Service("spaceSecertInfoService")
 public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
     private static final int SECERT_LEN = 6;
     @Autowired
@@ -37,6 +38,7 @@ public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
     private JedisPool jedisDbPool;
 
     private String ukPkPrefixKey = "space:secert:pk:uk";
+    private String spaceSecertKey = "space:secert";
     private String infoPrefixKey = "space:secert:info";
 
     @Override
@@ -105,7 +107,50 @@ public class SpaceSecertInfoServiceImpl extends SpaceSecertInfoService {
     }
 
     @Override
+    public String getSecert(int spaceId) throws ServiceException {
+        String secert = RedisCacheUtils.get(buildSpaceSecertKey(spaceId), getJedisPool());
+        if (StringUtils.isEmpty(secert)) {
+            try {
+                secert = spaceSecertInfoDao.queryLastSpaceSecert(spaceId);
+            } catch (SQLException e) {
+                throw ServiceException.getSQLException(e);
+            }
+            if (StringUtils.isNotEmpty(secert)) {
+                RedisCacheUtils.set(buildSpaceSecertKey(spaceId), secert, getJedisPool());
+            }
+        }
+        return secert;
+    }
+
+    @Override
     protected int getPriority() {
         return 3;
+    }
+
+    @Override
+    protected void afterAddData(SpaceSecertInfo g) {
+        this.afterModifyData(g);
+    }
+
+    private String buildSpaceSecertKey(int spaceId) {
+        return RedisCacheUtils.buildKey(spaceSecertKey, spaceId);
+    }
+
+    @Override
+    protected void afterModifyData(SpaceSecertInfo g) {
+        if (g.getSpaceId() > 0 && !StringUtils.isEmpty(g.getSecert())) {
+            if (g.getStatus() == SpaceSecertInfo.STATUS_OK) {
+                RedisCacheUtils.set(buildSpaceSecertKey(g.getSpaceId()), g.getSecert(), getJedisPool());
+            } else {
+                RedisCacheUtils.del(getJedisPool(), buildSpaceSecertKey(g.getSpaceId()));
+            }
+        } else {
+            if (g.getSpaceId() > 0) {
+                RedisCacheUtils.del(getJedisPool(), buildSpaceSecertKey(g.getSpaceId()));
+            }
+        }
+        if (g.getId() > 0) {
+            RedisCacheUtils.del(buildDataInfoKey(g.getId()), shardedJedisPool);
+        }
     }
 }

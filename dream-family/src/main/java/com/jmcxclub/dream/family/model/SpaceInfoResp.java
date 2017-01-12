@@ -21,9 +21,10 @@ public class SpaceInfoResp {
     private String name;// 空间名称
     private String info;// 空间的描述
     private String avatarUrl;
+    private String secert;
     private List<UserInfoResp> occupantInfos;
 
-    public SpaceInfoResp(SpaceInfo spaceInfo, SpaceStatInfo stat, List<UserInfo> userInfos) {
+    public SpaceInfoResp(SpaceInfo spaceInfo, SpaceStatInfo stat, List<UserInfo> userInfos, String secert) {
         this.id = spaceInfo.getId();
         if (stat != null) {
             this.records = stat.getRecords();
@@ -38,6 +39,7 @@ public class SpaceInfoResp {
             }
             this.occupantInfos = occupantInfos;
         }
+        this.secert = secert;
     }
 
     public int getId() {
@@ -94,5 +96,13 @@ public class SpaceInfoResp {
 
     public void setOccupantInfos(List<UserInfoResp> occupantInfos) {
         this.occupantInfos = occupantInfos;
+    }
+
+    public String getSecert() {
+        return secert;
+    }
+
+    public void setSecert(String secert) {
+        this.secert = secert;
     }
 }

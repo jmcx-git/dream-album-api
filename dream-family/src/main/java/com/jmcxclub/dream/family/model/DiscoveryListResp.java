@@ -3,6 +3,7 @@
 package com.jmcxclub.dream.family.model;
 
 import com.jmcxclub.dream.family.dto.ActivityInfo;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
@@ -11,17 +12,24 @@ import com.jmcxclub.dream.family.dto.ActivityInfo;
 public class DiscoveryListResp {
     private int id;
     private String title;
-    private String intr;// 描述
+    private String introduction;// 描述
     private int type;// see DiscoveryTypeEnum
     private String cover;
-    private long endTimeMillis;// 最后结束时间
-    private int participates;// 参与人数
+    private long participates;// 参与人数
     private int step;// see ActivityStepEnum
     private String startTimeDesc;
+    private String endTimeDesc;// 最后结束时间
     private String stepDesc;
 
-    public DiscoveryListResp(ActivityInfo activityInfo) {
-        
+    public DiscoveryListResp(ActivityInfo activityInfo, long participates) {
+        this.id = activityInfo.getId();
+        this.title = activityInfo.getTitle();
+        this.introduction = activityInfo.getIntroduction();
+        this.type = DiscoveryTypeEnum.ACTIVITY.getType();
+        this.cover = activityInfo.getCover();
+        this.participates = participates;
+        ContentDescUtils.buildActivityInfo(this, activityInfo);
+
     }
 
     public int getId() {
@@ -56,28 +64,12 @@ public class DiscoveryListResp {
         this.cover = cover;
     }
 
-    public long getEndTimeMillis() {
-        return endTimeMillis;
-    }
-
-    public void setEndTimeMillis(long endTimeMillis) {
-        this.endTimeMillis = endTimeMillis;
-    }
-
-    public int getParticipates() {
+    public long getParticipates() {
         return participates;
     }
 
-    public void setParticipates(int participates) {
+    public void setParticipates(long participates) {
         this.participates = participates;
-    }
-
-    public String getIntr() {
-        return intr;
-    }
-
-    public void setIntr(String intr) {
-        this.intr = intr;
     }
 
     public int getStep() {
@@ -102,5 +94,13 @@ public class DiscoveryListResp {
 
     public void setStepDesc(String stepDesc) {
         this.stepDesc = stepDesc;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
     }
 }

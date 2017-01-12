@@ -24,6 +24,7 @@ public class ActivityInfo extends StatusSerializable {
     private String contentCss;
     private Date startDate;
     private Date endDate;
+    private int finish;// 只有中奖名单出来后，才算结束 0 未结束 1结束
 
     public int getId() {
         return id;
@@ -95,5 +96,13 @@ public class ActivityInfo extends StatusSerializable {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public int getFinish() {
+        return finish;
+    }
+
+    public void setFinish(int finish) {
+        this.finish = finish;
     }
 }
