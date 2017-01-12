@@ -10,7 +10,7 @@ import redis.clients.jedis.ShardedJedisPool;
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
-import com.jmcxclub.dream.family.dto.ActivityWorksStatInfo;
+import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.service.ActivityPrizeInfoService;
 
 /**
@@ -33,13 +33,13 @@ public class ActivityPrizeInfoServiceImpl extends ActivityPrizeInfoService {
     }
 
     @Override
-    protected StartSizeCacheFilter buildCacheFilter(ActivityWorksStatInfo value) {
+    protected StartSizeCacheFilter buildCacheFilter(ActivityVoteStatInfo value) {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    protected LoadDao<ActivityWorksStatInfo> getLoadDao() {
+    protected LoadDao<ActivityVoteStatInfo> getLoadDao() {
         // TODO Auto-generated method stub
         return null;
     }
@@ -63,7 +63,7 @@ public class ActivityPrizeInfoServiceImpl extends ActivityPrizeInfoService {
     }
 
     @Override
-    public CommonDao<ActivityWorksStatInfo> getCommonDao() {
+    public CommonDao<ActivityVoteStatInfo> getCommonDao() {
         // TODO Auto-generated method stub
         return null;
     }

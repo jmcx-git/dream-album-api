@@ -9,7 +9,7 @@ import com.dreambox.core.dto.StatusSerializable;
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-public class ActivityWorksStatInfo extends StatusSerializable {
+public class ActivityVoteStatInfo extends StatusSerializable {
     /**
      * 
      */

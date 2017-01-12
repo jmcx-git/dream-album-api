@@ -7,14 +7,14 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Repository;
 
 import com.ibatis.sqlmap.client.SqlMapClient;
-import com.jmcxclub.dream.family.dao.ActivityWorksStatInfoDao;
+import com.jmcxclub.dream.family.dao.ActivityVoteStatInfoDao;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-@Repository("activityWorksStatInfoDao")
-public class ActivityWorksStatInfoDaoImpl extends ActivityWorksStatInfoDao {
+@Repository("activityVoteStatInfoDao")
+public class ActivityVoteStatInfoDaoImpl extends ActivityVoteStatInfoDao {
     @Resource(name = "dream-family-sql-client")
     private SqlMapClient sqlMapClient;
 

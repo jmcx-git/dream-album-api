@@ -14,7 +14,7 @@
 		<![CDATA[
 			INSERT INTO space_like_info (`id`,`user_id`,`space_id`,`status`,`update_time`,`create_time`)
 			VALUES(null, #userId#, #spaceId#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` = 0, -1, 0)
 		]]>
 	</insert>
 
@@ -22,7 +22,7 @@
 		<![CDATA[
 			INSERT INTO space_like_info (`id`,`user_id`,`space_id`,`status`,`update_time`,`create_time`)
 			VALUES(null, #userId#, #spaceId#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
+			ON DUPLICATE KEY UPDATE `status` = IF(`status` = 0, -1, 0)
 		]]>
 	</insert>
 

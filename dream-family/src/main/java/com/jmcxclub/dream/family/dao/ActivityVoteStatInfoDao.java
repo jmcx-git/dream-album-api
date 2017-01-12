@@ -3,7 +3,7 @@
 package com.jmcxclub.dream.family.dao;
 
 import com.dreambox.core.dao.AbsCommonDao;
-import com.jmcxclub.dream.family.dto.ActivityWorksStatInfo;
+import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 
 /**
  * @author mokous86@gmail.com
@@ -11,6 +11,6 @@ import com.jmcxclub.dream.family.dto.ActivityWorksStatInfo;
  *
  
  */
-public abstract class ActivityWorksStatInfoDao extends AbsCommonDao<ActivityWorksStatInfo> {
+public abstract class ActivityVoteStatInfoDao extends AbsCommonDao<ActivityVoteStatInfo> {
 
 }

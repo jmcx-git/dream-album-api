@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.dto;
 
+import java.util.Date;
+
 import com.dreambox.core.dto.StatusSerializable;
 
 /**
@@ -9,10 +11,89 @@ import com.dreambox.core.dto.StatusSerializable;
  *
  */
 public class ActivityInfo extends StatusSerializable {
-
     /**
      * 
      */
     private static final long serialVersionUID = 22017033387361401L;
+    private int id;
+    private int prizeId;
+    private String cover;
+    private String title;
+    private String introduction;
+    private String content;
+    private String contentCss;
+    private Date startDate;
+    private Date endDate;
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getPrizeId() {
+        return prizeId;
+    }
+
+    public void setPrizeId(int prizeId) {
+        this.prizeId = prizeId;
+    }
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContentCss() {
+        return contentCss;
+    }
+
+    public void setContentCss(String contentCss) {
+        this.contentCss = contentCss;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 }

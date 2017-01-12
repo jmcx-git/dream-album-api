@@ -15,31 +15,31 @@ import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.utils.RedisCacheUtils;
-import com.jmcxclub.dream.family.dao.ActivityWorksStatInfoDao;
-import com.jmcxclub.dream.family.dto.ActivityWorksStatInfo;
-import com.jmcxclub.dream.family.service.ActivityWorksStatInfoService;
+import com.jmcxclub.dream.family.dao.ActivityVoteStatInfoDao;
+import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
+import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-@Service("activityWorksStatInfoService")
-public class ActivityWorksStatInfoServiceImpl extends ActivityWorksStatInfoService {
+@Service("activityVoteStatInfoService")
+public class ActivityWorksStatInfoServiceImpl extends ActivityVoteStatInfoService {
     private static final Logger log = Logger.getLogger(ActivityWorksStatInfoServiceImpl.class);
     @Autowired
-    private ActivityWorksStatInfoDao activityWorksStatInfoDao;
+    private ActivityVoteStatInfoDao activityVoteStatInfoDao;
     @Autowired
     @Resource(name = "dream-family-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
     @Resource(name = "dream-family-redisdbpool")
     private JedisPool jedisDbPool;
 
-    private String sortedSetPrefixKey = "acti:works:stat:ids";
-    private String infoKey = "relationship:info";
+    private String sortedSetPrefixKey = "acti:vote:stat:ids";
+    private String infoKey = "activotestat:info";
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
-        ActivityWorksStatInfoSortedListCacheFilter curFilter = (ActivityWorksStatInfoSortedListCacheFilter) filter;
+        ActivityVoteStatInfoSortedListCacheFilter curFilter = (ActivityVoteStatInfoSortedListCacheFilter) filter;
         return RedisCacheUtils.buildKey(sortedSetPrefixKey, curFilter.getActivityId());
     }
 
@@ -49,13 +49,13 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityWorksStatInfoServi
     }
 
     @Override
-    protected StartSizeCacheFilter buildCacheFilter(ActivityWorksStatInfo value) {
-        return new ActivityWorksStatInfoSortedListCacheFilter(value.getActivityId(), 0, 0);
+    protected StartSizeCacheFilter buildCacheFilter(ActivityVoteStatInfo value) {
+        return new ActivityVoteStatInfoSortedListCacheFilter(value.getActivityId(), 0, 0);
     }
 
     @Override
-    protected LoadDao<ActivityWorksStatInfo> getLoadDao() {
-        return activityWorksStatInfoDao;
+    protected LoadDao<ActivityVoteStatInfo> getLoadDao() {
+        return activityVoteStatInfoDao;
     }
 
     @Override
@@ -74,8 +74,8 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityWorksStatInfoServi
     }
 
     @Override
-    public CommonDao<ActivityWorksStatInfo> getCommonDao() {
-        return activityWorksStatInfoDao;
+    public CommonDao<ActivityVoteStatInfo> getCommonDao() {
+        return activityVoteStatInfoDao;
     }
 
     @Override
@@ -84,7 +84,7 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityWorksStatInfoServi
     }
 
     @Override
-    protected double buildSortedSetScore(ActivityWorksStatInfo t) {
+    protected double buildSortedSetScore(ActivityVoteStatInfo t) {
         return t.getVotes();
     }
 

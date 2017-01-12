@@ -4,17 +4,17 @@ package com.jmcxclub.dream.family.service;
 
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.service.AbstractSortedListCacheService;
-import com.jmcxclub.dream.family.dto.ActivityWorksStatInfo;
+import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
-public abstract class ActivityWorksStatInfoService extends AbstractSortedListCacheService<ActivityWorksStatInfo> {
-    public static class ActivityWorksStatInfoSortedListCacheFilter extends StartSizeCacheFilter {
+public abstract class ActivityVoteStatInfoService extends AbstractSortedListCacheService<ActivityVoteStatInfo> {
+    public static class ActivityVoteStatInfoSortedListCacheFilter extends StartSizeCacheFilter {
         private int activityId;
 
-        public ActivityWorksStatInfoSortedListCacheFilter(int activityId, int start, int size) {
+        public ActivityVoteStatInfoSortedListCacheFilter(int activityId, int start, int size) {
             super();
             this.activityId = activityId;
             super.setStart(start);
