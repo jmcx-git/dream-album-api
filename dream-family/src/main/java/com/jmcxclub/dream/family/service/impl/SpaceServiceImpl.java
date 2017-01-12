@@ -487,7 +487,7 @@ public class SpaceServiceImpl implements SpaceService {
         g.setSecert(secert);
         g = spaceSecertInfoService.getInfoByUk(g);
         if (g == null) {
-            throw ServiceException.getDbDataExceptipn("Secret is expired.");
+            return new ApiRespWrapper<>(-2, "邀请码无效", null);
         }
         UserInfo userInfo = new UserInfo();
         userInfo.setOpenId(openId);
