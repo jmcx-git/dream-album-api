@@ -42,14 +42,6 @@ public class ActivityVoteDetailInfo extends StatusSerializable {
         this.userId = userId;
     }
 
-    public Date getDate() {
-        return voteDate;
-    }
-
-    public void setDate(Date date) {
-        this.voteDate = date;
-    }
-
     public int getWorksId() {
         return worksId;
     }

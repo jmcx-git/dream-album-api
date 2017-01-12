@@ -3,6 +3,7 @@
 package com.jmcxclub.dream.family.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
+import com.jmcxclub.dream.family.dto.ActivityVoteDetailInfo;
 import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfoEnum;
@@ -159,9 +161,29 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     }
 
     @Override
-    public ApiRespWrapper<Boolean> voteActivity(String openId, int id, int chooseId) {
-        // TODO Auto-generated method stub
-        return null;
+    public ApiRespWrapper<Boolean> voteActivity(int userId, int activityId, int worksId, String ip) {
+        //
+        ActivityWorksInfo activityWorksInfo = activityWorksInfoService.getData(worksId);
+        if (activityWorksInfo == null) {
+            return new ApiRespWrapper<>(-1, "错误的投票选项", false);
+        }
+        if (activityWorksInfo.getActivityId() != activityId) {
+            return new ApiRespWrapper<>(-1, "未对应的投票活动", false);
+        }
+        Date date = new Date();
+        ActivityVoteDetailInfo activityVoteDetailInfo = new ActivityVoteDetailInfo();
+        activityVoteDetailInfo.setIp(ip);
+        activityVoteDetailInfo.setUserId(userId);
+        activityVoteDetailInfo.setVoteDate(date);
+        activityVoteDetailInfo.setVoteTime(date);
+        activityVoteDetailInfo.setWorksId(worksId);
+        boolean vote = activityVoteDetailInfoService.addOrIgnoreData(activityVoteDetailInfo);
+        if (vote) {
+            activityVoteStatInfoService.incr(worksId, activityId);
+        } else {
+            return new ApiRespWrapper<Boolean>(-1, "今天已投票", false);
+        }
+        return new ApiRespWrapper<Boolean>(true);
     }
 
     @Override

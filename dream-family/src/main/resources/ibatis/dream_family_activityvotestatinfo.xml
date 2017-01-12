@@ -15,6 +15,7 @@
 		<![CDATA[
 			INSERT INTO activity_vote_stat_info (`id`, `activity_id`, `votes`, `status`, `update_time`, `create_time`)
 			VALUES(null, #activityId#, #votes#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `votes` = `votes` + 1
 		]]>
 	</insert>
 
@@ -22,6 +23,7 @@
 		<![CDATA[
 			INSERT INTO activity_vote_stat_info (`id`, `activity_id`, `votes`, `status`, `update_time`, `create_time`)
 			VALUES(null, #activityId#, #votes#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `votes` = `votes` + 1
 		]]>
 	</insert>
 

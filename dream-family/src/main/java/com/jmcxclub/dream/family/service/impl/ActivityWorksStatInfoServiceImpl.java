@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.service.impl;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -15,6 +17,7 @@ import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.utils.RedisCacheUtils;
+import com.dreambox.web.exception.ServiceException;
 import com.jmcxclub.dream.family.dao.ActivityVoteStatInfoDao;
 import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService;
@@ -86,6 +89,18 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityVoteStatInfoServic
     @Override
     protected double buildSortedSetScore(ActivityVoteStatInfo t) {
         return t.getVotes();
+    }
+
+    @Override
+    public void incr(int id, int activityId) throws ServiceException {
+        ActivityVoteStatInfo g = new ActivityVoteStatInfo();
+        g.setId(id);
+        g.setActivityId(activityId);
+        try {
+            activityVoteStatInfoDao.insertOrUpdate(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
     }
 
 }

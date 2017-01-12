@@ -22,9 +22,9 @@ public interface DiscoveryService {
 
     ApiRespWrapper<ActivityInfoResp> getActivity(String openId, int id);
 
-    ApiRespWrapper<Boolean> applyActivity(int userId, int id, int feedId);
+    ApiRespWrapper<Boolean> applyActivity(int userId, int activityId, int feedId);
 
-    ApiRespWrapper<Boolean> voteActivity(String openId, int id, int chooseId);
+    ApiRespWrapper<Boolean> voteActivity(int userId, int activityId, int chooseId, String ip);
 
     ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, int id);
 

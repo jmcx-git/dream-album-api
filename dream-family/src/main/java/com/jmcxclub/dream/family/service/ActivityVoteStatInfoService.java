@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.service;
 
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.service.AbstractSortedListCacheService;
+import com.dreambox.web.exception.ServiceException;
 import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 
 /**
@@ -32,5 +33,7 @@ public abstract class ActivityVoteStatInfoService extends AbstractSortedListCach
             this.activityId = activityId;
         }
     }
+
+    public abstract void incr(int worksId, int activityId) throws ServiceException;
 
 }

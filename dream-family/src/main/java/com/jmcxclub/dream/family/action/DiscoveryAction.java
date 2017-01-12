@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.action;
 
+import java.util.Map;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +18,7 @@ import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.exception.ServiceException;
+import com.dreambox.web.logger.LoggingFilter;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfoEnum;
@@ -153,12 +156,18 @@ public class DiscoveryAction extends IosBaseAction {
      */
     @RequestMapping("/activity/vote.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> voteActivity(String openId, Integer id, Integer chooseId, String version)
+    public ApiRespWrapper<Boolean> voteActivity(String openId, Integer id, Integer worksId, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
-        return discoveryService.voteActivity(openId, id, chooseId);
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未找到对应用户账号");
+        }
+        Map<String, String> httpParameters = LoggingFilter.threadLocalMap.get();
+        String ip = httpParameters != null ? httpParameters.get("ip") : "";
+        return discoveryService.voteActivity(userInfo.getId(), id, worksId, ip);
     }
 
     /**
