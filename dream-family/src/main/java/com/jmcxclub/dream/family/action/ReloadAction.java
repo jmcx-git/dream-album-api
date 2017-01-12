@@ -14,6 +14,7 @@ import com.dreambox.core.service.AbsCommonCacheDataLoadService;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.utils.CollectionUtils;
+import com.jmcxclub.dream.family.service.ActivityInfoService;
 
 /**
  * @author liuxinglong
@@ -38,13 +39,40 @@ public class ReloadAction extends IosBaseAction {
     @RequestMapping("/data.json")
     @ResponseBody
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public ApiRespWrapper<Boolean> reloadAlbumInfo() {
+    public ApiRespWrapper<Boolean> reload() {
         if (CollectionUtils.notEmptyAndNull(loadServices)) {
             List<AbsCommonCacheDataLoadService> innerLoadServices = new ArrayList<AbsCommonCacheDataLoadService>(
                     loadServices);
             Collections.sort(innerLoadServices);
             for (AbsCommonCacheDataLoadService absCommonCacheDataLoadService : innerLoadServices) {
                 absCommonCacheDataLoadService.cacheInitLoad();
+            }
+        }
+        return new ApiRespWrapper<Boolean>(true);
+    }
+
+    /**
+     * 用户点击开始制作创建的用户相册信息数据
+     * 
+     * 若第一次制作则添加制作信息
+     * 
+     * 若存在制作中的记录则返回item操作历史
+     * 
+     * @param userId
+     * @param albumId
+     */
+    @RequestMapping("/activity.json")
+    @ResponseBody
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public ApiRespWrapper<Boolean> reloadActivity() {
+        if (CollectionUtils.notEmptyAndNull(loadServices)) {
+            List<AbsCommonCacheDataLoadService> innerLoadServices = new ArrayList<AbsCommonCacheDataLoadService>(
+                    loadServices);
+            Collections.sort(innerLoadServices);
+            for (AbsCommonCacheDataLoadService absCommonCacheDataLoadService : innerLoadServices) {
+                if (absCommonCacheDataLoadService instanceof ActivityInfoService) {
+                    absCommonCacheDataLoadService.cacheInitLoad();
+                }
             }
         }
         return new ApiRespWrapper<Boolean>(true);
