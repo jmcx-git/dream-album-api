@@ -73,7 +73,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
     @Override
     public ApiRespWrapper<Boolean> applyActivity(String openId, int id, int feedId) {
-        // TODO Auto-generated method stub
+        // 如果用户已参加，则返回false
         return null;
     }
 

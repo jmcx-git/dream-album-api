@@ -49,6 +49,8 @@ public class ImgServiceImpl implements ImgService {
 
     private UploadFileSaveResp saveImg(MultipartFile image, String filePrefix, String imageSubDir) {
         // 保存用户自己上传的图片
+        log.info("Image name:" + image.getOriginalFilename());
+        log.info("Image name:" + image.getName());
         String suffix = IOUtils.getSuffix(image.getOriginalFilename());
         suffix = StringUtils.isEmpty(suffix) ? ".jpg" : suffix;
         String picName = filePrefix + new Date().getTime() + suffix;
@@ -66,5 +68,4 @@ public class ImgServiceImpl implements ImgService {
         }
         return new UploadFileSaveResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
     }
-
 }

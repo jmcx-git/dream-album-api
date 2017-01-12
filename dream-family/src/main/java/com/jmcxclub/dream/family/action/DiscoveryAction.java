@@ -3,10 +3,14 @@
 package com.jmcxclub.dream.family.action;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.asm.commons.Method;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.core.utils.ParameterUtils;
@@ -24,7 +28,7 @@ import com.jmcxclub.dream.family.service.DiscoveryService;
  *
  */
 @Controller
-@RequestMapping("/discovery/*")
+@RequestMapping("/space/discovery/*")
 public class DiscoveryAction extends IosBaseAction {
     @Autowired
     private DiscoveryService discoveryService;
@@ -64,7 +68,8 @@ public class DiscoveryAction extends IosBaseAction {
      */
     @RequestMapping("/activity/detail.json")
     @ResponseBody
-    public ApiRespWrapper<ActivityInfoResp> detailSpace(String openId, int id, String version) throws ServiceException {
+    public ApiRespWrapper<ActivityInfoResp> detailSpace(String openId, Integer id, String version)
+            throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ActivityInfoResp>(-1, "未知的用户账号", null);
         }
@@ -81,14 +86,36 @@ public class DiscoveryAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
-    @RequestMapping("/activity/apply.json")
+    @RequestMapping(value = "/activity/apply.json", method = RequestMethod.GET)
     @ResponseBody
-    public ApiRespWrapper<Boolean> applyActivity(String openId, int id, int feedId, String version)
+    public ApiRespWrapper<Boolean> joinActivity(String openId, Integer id, Integer feedId, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
         return discoveryService.applyActivity(openId, id, feedId);
+    }
+
+    /**
+     * 参与活动,调用成功后客户端调用activity/result.json
+     * 
+     * @param openId
+     * @param id
+     * @param feedId
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping(value = "/activity/apply.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiRespWrapper<Boolean> applyActivity(String openId, Integer id,
+            @RequestParam(required = false) MultipartFile image, String solgan, String desc, String version)
+            throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
+        }
+        // return discoveryService.applyActivity(openId, id, feedId);
+        return null;
     }
 
     /**
@@ -103,7 +130,7 @@ public class DiscoveryAction extends IosBaseAction {
      */
     @RequestMapping("/activity/vote.json")
     @ResponseBody
-    public ApiRespWrapper<Boolean> voteActivity(String openId, int id, int chooseId, String version)
+    public ApiRespWrapper<Boolean> voteActivity(String openId, Integer id, Integer chooseId, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
@@ -122,8 +149,8 @@ public class DiscoveryAction extends IosBaseAction {
      */
     @RequestMapping("/activity/result.json")
     @ResponseBody
-    public ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, int id, String version)
-            throws ServiceException {
+    public ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, Integer id,
+            String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>>(-1, "未知的用户账号", null);
         }
