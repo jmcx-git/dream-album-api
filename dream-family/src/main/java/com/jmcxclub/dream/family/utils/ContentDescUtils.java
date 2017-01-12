@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.utils;
 
+import java.util.Date;
+
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
@@ -73,18 +75,46 @@ public class ContentDescUtils {
     }
 
     public static void buildActivityInfo(DiscoveryListResp discoveryListResp, ActivityInfo activityInfo) {
-        String startTimeDesc = "";
-        String endTimeDesc = "";// 最后结束时间
         String stepDesc = "";
-        String format = DateUtils.formatStr(activityInfo.getStartDate(), "");
-        long curTimeMillis = System.currentTimeMillis();
+        String startTimeDesc = DateUtils.formatStr(activityInfo.getStartDate(), "dd MMM.yyyy");
         if (activityInfo.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
-            
-        }
-        if (activityInfo.getStartDate().getTime() > curTimeMillis) {
-
-        } else if (activityInfo.getEndDate().getTime() > curTimeMillis) {
+            stepDesc = "已结束，点击查看结果";
         } else {
+            long curTimeMillis = System.currentTimeMillis();
+            long minutes = (curTimeMillis - activityInfo.getStartDate().getTime()) / 60000;
+            if (minutes < 0) {
+                minutes = 0 - minutes;
+                long hour = minutes / 60;
+                if (hour == 0) {
+                    stepDesc = minutes + "分钟后盛大开启，敬请期待";
+                } else {
+                    long day = hour / 60;
+                    if (day == 0) {
+                        stepDesc = hour + "小时后盛大开启，敬请期待";
+                    } else {
+                        stepDesc = hour + "天后盛大开启，敬请期待";
+                    }
+                }
+            } else {
+                long leftMinutes = activityInfo.getEndDate().getTime() - curTimeMillis;
+                if (leftMinutes > 0) {
+                    long hour = leftMinutes / 60;
+                    if (hour == 0) {
+                        stepDesc = "距结束仅剩" + leftMinutes + "分钟";
+                    } else {
+                        long day = hour / 60;
+                        if (day == 0) {
+                            stepDesc = "距结束仅剩" + leftMinutes + "小时";
+                        } else {
+                            stepDesc = "距结束" + leftMinutes + "天";
+                        }
+                    }
+                } else {
+                    stepDesc = "投票结束，正在出奖，祝您好运";
+                }
+            }
         }
+        discoveryListResp.setStepDesc(stepDesc);
+        discoveryListResp.setStartTimeDesc(startTimeDesc);
     }
 }

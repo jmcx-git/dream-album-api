@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
+import com.dreambox.core.utils.SQLUtils;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.jmcxclub.dream.family.dao.ActivityWorksInfoDao;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
@@ -28,7 +29,6 @@ public class ActivityWorksInfoDaoImpl extends ActivityWorksInfoDao {
 
     @Override
     public Integer queryIdByUk(ActivityWorksInfo t) throws SQLException {
-        // TODO Auto-generated method stub
-        return null;
+        return SQLUtils.queryObject(getSqlMapClient(), "queryActivityWorksInfoIdByUk", t);
     }
 }

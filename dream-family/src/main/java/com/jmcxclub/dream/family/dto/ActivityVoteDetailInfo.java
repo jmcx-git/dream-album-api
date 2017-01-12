@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.dto;
 
 import java.util.Date;
 
+import com.dreambox.core.dto.DbKey.UNIQUE_KEY;
 import com.dreambox.core.dto.StatusSerializable;
 
 /**
@@ -16,9 +17,14 @@ public class ActivityVoteDetailInfo extends StatusSerializable {
      */
     private static final long serialVersionUID = 4047580627451170277L;
     private int id;
+    @UNIQUE_KEY
     private int userId;
-    private int activityId;
-    private Date date;
+    @UNIQUE_KEY
+    private int worksId;// reference ActivityWorksInfo
+    @UNIQUE_KEY
+    private Date voteDate;
+    private Date voteTime;
+    private String ip;
 
     public int getId() {
         return id;
@@ -36,20 +42,44 @@ public class ActivityVoteDetailInfo extends StatusSerializable {
         this.userId = userId;
     }
 
-    public int getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(int activityId) {
-        this.activityId = activityId;
-    }
-
     public Date getDate() {
-        return date;
+        return voteDate;
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.voteDate = date;
+    }
+
+    public int getWorksId() {
+        return worksId;
+    }
+
+    public void setWorksId(int worksId) {
+        this.worksId = worksId;
+    }
+
+    public Date getVoteDate() {
+        return voteDate;
+    }
+
+    public void setVoteDate(Date voteDate) {
+        this.voteDate = voteDate;
+    }
+
+    public Date getVoteTime() {
+        return voteTime;
+    }
+
+    public void setVoteTime(Date voteTime) {
+        this.voteTime = voteTime;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
 

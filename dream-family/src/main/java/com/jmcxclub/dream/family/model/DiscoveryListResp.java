@@ -16,9 +16,8 @@ public class DiscoveryListResp {
     private int type;// see DiscoveryTypeEnum
     private String cover;
     private long participates;// 参与人数
-    private int step;// see ActivityStepEnum
+    private int step;// see ActivityStepEnum for css style
     private String startTimeDesc;
-    private String endTimeDesc;// 最后结束时间
     private String stepDesc;
 
     public DiscoveryListResp(ActivityInfo activityInfo, long participates) {

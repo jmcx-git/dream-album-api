@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="activityworksinfo"
+		class="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="activity_id" property="activityId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="solgan" property="solgan" jdbcType="VARCHAR" />
+		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="cover" property="cover" jdbcType="VARCHAR" />
+		<result column="resource_url" property="resourceUrl" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateActivityWorksInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
+		<![CDATA[
+			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `resource_url`, `duration`,`status`,`update_time`,`create_time`)
+			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #resourceUrl#, #duration#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertActivityWorksInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
+		<![CDATA[
+			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `resource_url`, `duration`,`status`,`update_time`,`create_time`)
+			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #resourceUrl#, #duration#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreActivityWorksInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
+		<![CDATA[
+			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `resource_url`, `duration`,`status`,`update_time`,`create_time`)
+			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #resourceUrl#, #duration#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateActivityWorksInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
+        <![CDATA[
+        	UPDATE `activity_works_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryActivityWorksInfoIdByUk" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo"
+		resultMap="activityworksinfo">
+		SELECT `id`,`activity_id`,`user_id`,`type`, CAST(`solgan` AS
+		CHAR
+		CHARACTER SET
+		utf8)
+		AS `solgan`, CAST(`desc` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `desc`,`cover`, `resource_url`,
+		`duration`,`status`,`update_time`,`create_time`
+		FROM
+		`activity_works_info` WHERE
+		`user_id` = #userId# AND `activity_id` = #activityId#;
+	</select>
+
+	<select id="queryActivityWorksInfoById" parameterClass="java.lang.Integer"
+		resultMap="activityworksinfo">
+		SELECT `id`,`activity_id`,`user_id`,`type`, CAST(`solgan` AS
+		CHAR
+		CHARACTER SET
+		utf8)
+		AS `solgan`, CAST(`desc` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `desc`,`cover`, `resource_url`,
+		`duration`,`status`,`update_time`,`create_time`
+		FROM
+		`activity_works_info` WHERE
+		`id` = #startId#;
+	</select>
+
+	<select id="queryActivityWorksInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="activityworksinfo">
+		SELECT `id`,`activity_id`,`user_id`,`type`, CAST(`solgan` AS
+		CHAR
+		CHARACTER SET
+		utf8)
+		AS `solgan`, CAST(`desc` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `desc`,`cover`, `resource_url`,
+		`duration`,`status`,`update_time`,`create_time`
+		FROM
+		`activity_works_info` WHERE
+		`id` > #startId# ORDER BY id LIMIT #size#;
+	</select>
+
+	<select id="queryActivityWorksInfoByIds" parameterClass="java.util.Map"
+		resultMap="activityworksinfo">
+		SELECT `id`,`activity_id`,`user_id`,`type`, CAST(`solgan` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `solgan`, CAST(`desc` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `desc`,`cover`, `resource_url`,
+		`duration`,`status`,`update_time`,`create_time`
+		FROM
+		`activity_works_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryActivityWorksInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="activityworksinfo">
+		SELECT `id`,`activity_id`,`user_id`,`type`, CAST(`solgan` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `solgan`, CAST(`desc` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `desc`,`cover`, `resource_url`,
+		`duration`,`status`,`update_time`,`create_time`
+		FROM
+		`activity_works_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="activityId">
+				<isNotNull property="activityId" prepend=" and ">
+					`activity_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countActivityWorksInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `activity_works_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="activityId">
+				<isNotNull property="activityId" prepend=" and ">
+					`activity_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

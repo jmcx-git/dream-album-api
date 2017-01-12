@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="activityinfo" class="com.jmcxclub.dream.family.dto.ActivityInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="activity_id" property="activityId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="solgan" property="solgan" jdbcType="VARCHAR" />
+		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="cover" property="cover" jdbcType="VARCHAR" />
+		<result column="resource_url" property="resourceUrl" jdbcType="VARCHAR" />
+		<result column="duration" property="duration" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateActivityInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
+		<![CDATA[
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`,`content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #contentCss#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertActivityInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
+		<![CDATA[
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`,`content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #contentCss#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreActivityInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
+		<![CDATA[
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`,`content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #contentCss#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateActivityInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
+        <![CDATA[
+        	UPDATE `activity_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryActivityInfoById" parameterClass="java.lang.Integer"
+		resultMap="activityinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `title`, CAST(`introduction` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `introduction`, CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content`, CAST(`content_css` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		FROM `activity_info` WHERE
+		`id` = #startId#;
+	</select>
+
+	<select id="queryActivityInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="activityinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `title`, CAST(`introduction` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `introduction`, CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content`, CAST(`content_css` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		FROM `activity_info` WHERE
+		`id` > #startId# ORDER BY id LIMIT #size#;
+	</select>
+
+	<select id="queryActivityInfoByIds" parameterClass="java.util.Map"
+		resultMap="activityinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `title`, CAST(`introduction` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `introduction`, CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content`, CAST(`content_css` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		FROM `activity_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryActivityInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="activityinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `title`, CAST(`introduction` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `introduction`, CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content`, CAST(`content_css` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS `content_css`, `cover`, `startDate`, `endDate`, `finish`, `status`, `update_time`, `create_time`
+		FROM `activity_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countActivityInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `activity_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="spaceId">
+				<isNotNull property="spaceId" prepend=" and ">
+					`space_id` =
+					#spaceId#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="userId">
+				<isNotNull property="userId" prepend=" and ">
+					`user_id` =
+					#userId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

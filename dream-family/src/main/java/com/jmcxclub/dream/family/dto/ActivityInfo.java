@@ -16,7 +16,6 @@ public class ActivityInfo extends StatusSerializable {
      */
     private static final long serialVersionUID = 22017033387361401L;
     private int id;
-    private int prizeId;
     private String cover;
     private String title;
     private String introduction;
@@ -32,14 +31,6 @@ public class ActivityInfo extends StatusSerializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getPrizeId() {
-        return prizeId;
-    }
-
-    public void setPrizeId(int prizeId) {
-        this.prizeId = prizeId;
     }
 
     public String getCover() {
