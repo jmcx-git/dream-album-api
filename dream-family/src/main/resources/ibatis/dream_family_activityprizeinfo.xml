@@ -7,7 +7,7 @@
 		<result column="activity_id" property="activityId" jdbcType="INTEGER" />
 		<result column="prize_id" property="prizeId" jdbcType="INTEGER" />
 		<result column="rank" property="rank" jdbcType="INTEGER" />
-		<result column="rank_desc" property="ranKDesc" jdbcType="VARCHAR" />
+		<result column="rank_desc" property="rankDesc" jdbcType="VARCHAR" />
 		<result column="count" property="count" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -17,7 +17,7 @@
 	<insert id="insertOrUpdateActivityPrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
 		<![CDATA[
 			INSERT INTO activity_prize_info (`id`, `activity_id`, `prize_id`, `rank`, `rank_desc`, `count`, `status`, `update_time`, `create_time`)
-			VALUES(null, #activityId#, #prizeId#, #rank#, #ranKDesc#, #count#, 0, now(),now())
+			VALUES(null, #activityId#, #prizeId#, #rank#, #rankDesc#, #count#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -28,7 +28,7 @@
 	<insert id="insertActivityPrizeInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
 		<![CDATA[
 			INSERT INTO activity_prize_info (`id`, `activity_id`, `prize_id`, `rank`, `rank_desc`, `count`, `status`, `update_time`, `create_time`)
-			VALUES(null, #activityId#, #prizeId#, #rank#, #ranKDesc#, #count#, 0, now(),now())
+			VALUES(null, #activityId#, #prizeId#, #rank#, #rankDesc#, #count#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -39,7 +39,7 @@
 	<insert id="insertOrIgnoreActivityPrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
 		<![CDATA[
 			INSERT INTO activity_prize_info (`id`, `activity_id`, `prize_id`, `rank`, `rank_desc`, `count`, `status`, `update_time`, `create_time`)
-			VALUES(null, #activityId#, #prizeId#, #rank#, #ranKDesc#, #count#, 0, now(),now())
+			VALUES(null, #activityId#, #prizeId#, #rank#, #rankDesc#, #count#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY

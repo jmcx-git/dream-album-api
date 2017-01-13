@@ -18,8 +18,8 @@ public class ActivityPrizeInfo extends StatusSerializable {
     @UNIQUE_KEY
     private int activityId;
     @UNIQUE_KEY
-    private int prizeId;// reference PrizeInfo
     private int rank;// for order
+    private int prizeId;// reference PrizeInfo
     private String rankDesc;
     private int count;
 
