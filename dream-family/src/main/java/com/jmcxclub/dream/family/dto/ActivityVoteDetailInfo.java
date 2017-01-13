@@ -22,7 +22,7 @@ public class ActivityVoteDetailInfo extends StatusSerializable {
     @UNIQUE_KEY
     private int worksId;// reference ActivityWorksInfo
     @UNIQUE_KEY
-    private Date voteDate;
+    private int voteDate;
     private Date voteTime;
     private String ip;
 
@@ -50,11 +50,11 @@ public class ActivityVoteDetailInfo extends StatusSerializable {
         this.worksId = worksId;
     }
 
-    public Date getVoteDate() {
+    public int getVoteDate() {
         return voteDate;
     }
 
-    public void setVoteDate(Date voteDate) {
+    public void setVoteDate(int voteDate) {
         this.voteDate = voteDate;
     }
 

@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `activity_vote_detail_info`(
 	`id` int unsigned not null auto_increment,
 	`work_id` int unsigned not null comment 'reference activity_works_info.id',
 	`user_id` int unsigned not null comment 'reference user_info.id',
-	`vote_date` date not null,
+	`vote_date` int unsigned  not null comment 'yyyy-mm-dd',
 	`ip` varchar(128) not null,
 	`vote_time` datetime not null,
 	`status` int(11) NOT NULL DEFAULT '0',

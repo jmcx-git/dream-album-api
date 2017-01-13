@@ -6,7 +6,7 @@
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="works_id" property="worksId" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
-		<result column="vote_date" property="voteDate" jdbcType="TIMESTAMP" />
+		<result column="vote_date" property="voteDate" jdbcType="INTEGER" />
 		<result column="ip" property="ip" jdbcType="VARCHAR" />
 		<result column="vote_time" property="voteTime" jdbcType="TIMESTAMP" />
 		<result column="status" property="status" jdbcType="INTEGER" />

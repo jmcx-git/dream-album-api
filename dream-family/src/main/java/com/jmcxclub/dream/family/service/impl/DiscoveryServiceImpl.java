@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dto.album.UserInfo;
+import com.dreambox.core.utils.DateUtils;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
@@ -208,7 +209,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         ActivityVoteDetailInfo activityVoteDetailInfo = new ActivityVoteDetailInfo();
         activityVoteDetailInfo.setIp(ip);
         activityVoteDetailInfo.setUserId(userId);
-        activityVoteDetailInfo.setVoteDate(date);
+        activityVoteDetailInfo.setVoteDate(DateUtils.getDateYMDIntValue(date));
         activityVoteDetailInfo.setVoteTime(date);
         activityVoteDetailInfo.setWorksId(worksId);
         boolean vote = activityVoteDetailInfoService.addOrIgnoreData(activityVoteDetailInfo);
