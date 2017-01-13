@@ -15,9 +15,13 @@ public abstract class UserNoticeInfoService extends AbstractSortedListCacheServi
         private int userId;
 
         public UserNoticeInfoSortedSetCacheFilter(int userId) {
+            this(userId, 0, Integer.MAX_VALUE);
+        }
+
+        public UserNoticeInfoSortedSetCacheFilter(int userId, int start, int size) {
             this.userId = userId;
             super.setStart(0);
-            super.setSize(Integer.MAX_VALUE);
+            super.setSize(size);
         }
 
         public int getUserId() {

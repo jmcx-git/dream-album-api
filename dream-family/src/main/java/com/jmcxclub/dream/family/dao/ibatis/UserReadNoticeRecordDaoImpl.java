@@ -3,23 +3,18 @@
 package com.jmcxclub.dream.family.dao.ibatis;
 
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.stereotype.Repository;
-
 import com.dreambox.core.utils.SQLUtils;
 import com.ibatis.sqlmap.client.SqlMapClient;
-import com.jmcxclub.dream.family.dao.UserNoticeInfoDao;
-import com.jmcxclub.dream.family.dto.UserNoticeInfo;
+import com.jmcxclub.dream.family.dao.UserReadNoticeRecordDao;
 
 /**
  * @author mokous86@gmail.com create date: Jan 13, 2017
  *
  */
-@Repository("userNoticeInfoDaoImpl")
-public class UserNoticeInfoDaoImpl extends UserNoticeInfoDao {
+public class UserReadNoticeRecordDaoImpl extends UserReadNoticeRecordDao {
     @Resource(name = "dream-family-sql-client")
     private SqlMapClient sqlMapClient;
 
@@ -29,7 +24,8 @@ public class UserNoticeInfoDaoImpl extends UserNoticeInfoDao {
     }
 
     @Override
-    public void updateRead(List<UserNoticeInfo> datas) throws SQLException {
-        SQLUtils.batchInsertOrUpdate(getSqlMapClient(), "updateUserNoticeInfoRead", datas);
+    public void updateReadTime(int id) throws SQLException {
+        SQLUtils.update(getSqlMapClient(), "updateUserReadNoticeRecordReadTime", id);
     }
+
 }

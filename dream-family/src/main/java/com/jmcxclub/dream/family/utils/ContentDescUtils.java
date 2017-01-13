@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -103,7 +104,7 @@ public class ContentDescUtils {
                 if (hour == 0) {
                     stepDesc = minutes + "分钟后盛大开启，敬请期待";
                 } else {
-                    long day = hour / 60;
+                    long day = hour / 24;
                     if (day == 0) {
                         stepDesc = hour + "小时后盛大开启，敬请期待";
                     } else {
@@ -111,13 +112,13 @@ public class ContentDescUtils {
                     }
                 }
             } else {
-                long leftMinutes = activityInfo.getEndDate().getTime() - curTimeMillis;
+                long leftMinutes = (activityInfo.getEndDate().getTime() - curTimeMillis) / 60000;
                 if (leftMinutes > 0) {
                     long hour = leftMinutes / 60;
                     if (hour == 0) {
                         stepDesc = "距结束仅剩" + leftMinutes + "分钟";
                     } else {
-                        long day = hour / 60;
+                        long day = hour / 24;
                         if (day == 0) {
                             stepDesc = "距结束仅剩" + hour + "小时";
                         } else {
@@ -136,5 +137,37 @@ public class ContentDescUtils {
     public static String buildNotice(PrizeInfo prizeInfo, ActivityInfo activityInfo, ActivityWorksInfo activityWorksInfo) {
         // 恭喜您，在***活动中，获得大奖一份，请前往发现，找到活动，获取相关信息，或者通过下方与客房对话图标联系我们。
         return "恭喜您，在【" + activityInfo.getTitle() + "】活动中，获得大奖一份，请前往发现,找到活动，获取相关信息，或者点击下方与客服对话图标联系我们。";
+    }
+
+    public static String buildNoticeTimeDesc(Date createTime) {
+        long minuteDiff = (System.currentTimeMillis() - createTime.getTime()) / 60000;
+        if (minuteDiff <= 0) {
+            return "刚刚发布";
+        }
+        long hour = minuteDiff / 60;
+        if (hour == 0) {
+            return minuteDiff + "分钟前";
+        }
+        long day = hour / 24;
+        if (day == 0) {
+            return hour + "小时前";
+        }
+        if (day == 1) {
+            return "昨天发布";
+        }
+        if (day == 2) {
+            return "前天发布";
+        }
+        long year = day / 365;
+        if (year == 0) {
+            return day + "天前发布";
+        }
+        if (year == 1) {
+            return "去年前发布";
+        }
+        if (year == 2) {
+            return "前年前发布";
+        }
+        return year + "年前发布";
     }
 }

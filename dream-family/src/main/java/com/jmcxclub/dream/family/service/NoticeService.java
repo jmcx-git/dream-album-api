@@ -17,6 +17,7 @@ public interface NoticeService {
 
     boolean hasNotice(int userId) throws ServiceException;
 
-    ApiRespWrapper<ListWrapResp<NoticeResp>> listNotice(int userId) throws ServiceException;
+    ApiRespWrapper<ListWrapResp<NoticeResp>> listNotice(int userId, Integer startId, Integer type, int size)
+            throws ServiceException;
 
 }

@@ -45,9 +45,25 @@ public class NoticeAction extends IosBaseAction {
         return new ApiRespWrapper<MyInfoResp>(new MyInfoResp(userInfo, notice));
     }
 
+    /**
+     * 对于获取最新，则startId,type不传
+     * 
+     * 如果是获取更多，则startId,type为上一条对应的id, type
+     * 
+     * startId,type (同时为空或者同时存在)
+     * 
+     * @param openId
+     * @param startId
+     * @param type
+     * @param size
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
     @RequestMapping(value = "/notice/list.json")
     @ResponseBody
-    public ApiRespWrapper<ListWrapResp<NoticeResp>> listNotice(String openId, String version) throws ServiceException {
+    public ApiRespWrapper<ListWrapResp<NoticeResp>> listNotice(String openId, Integer startId, Integer type,
+            Integer size, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<NoticeResp>>(-1, "未知的用户账号", null);
         }
@@ -55,7 +71,7 @@ public class NoticeAction extends IosBaseAction {
         if (userInfo == null) {
             return new ApiRespWrapper<ListWrapResp<NoticeResp>>(-1, "未找到此用户");
         }
-        return noticeService.listNotice(userInfo.getId());
+        return noticeService.listNotice(userInfo.getId(), startId, type, size);
     }
 
     private UserInfo getUserInfo(String openId) throws ServiceException {

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="activityuserprizeinfo"
+		class="com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="activity_id" property="activityId" jdbcType="INTEGER" />
+		<result column="works_id" property="worksId" jdbcType="INTEGER" />
+		<result column="activity_prize_id" property="activityPrizeId"
+			jdbcType="INTEGER" />
+		<result column="prize_id" property="prizeId" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="build" property="build" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateActivityUserPrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo">
+		<![CDATA[
+			INSERT INTO activity_user_prize_info (`id`, `activity_id`, `works_id`, `activity_prize_id`, `prize_id`, `user_id`, `build`, `status`, `update_time`, `create_time`)
+			VALUES(null, #activityId#, #worksId#, #activityPrizeId#, #prizeId#, #userId#, #build#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertActivityUserPrizeInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo">
+		<![CDATA[
+			INSERT INTO activity_user_prize_info (`id`, `activity_id`, `works_id`, `activity_prize_id`, `prize_id`, `user_id`, `build`, `status`, `update_time`, `create_time`)
+			VALUES(null, #activityId#, #worksId#, #activityPrizeId#, #prizeId#, #userId#, #build#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreActivityUserPrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo">
+		<![CDATA[
+			INSERT INTO activity_user_prize_info (`id`, `activity_id`, `works_id`, `activity_prize_id`, `prize_id`, `user_id`, `build`, `status`, `update_time`, `create_time`)
+			VALUES(null, #activityId#, #worksId#, #activityPrizeId#, #prizeId#, #userId#, #build#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateActivityUserPrizeInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo">
+        <![CDATA[
+        	UPDATE `activity_user_prize_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateActivityUserPrizeInfoBuild" parameterClass="com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo">
+        <![CDATA[
+        	UPDATE `activity_user_prize_info` SET `build` = #build# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryActivityUserPrizeInfoMinUnbuildId" resultClass="java.lang.Integer">
+		SELECT min(id)
+		FROM
+		`activity_user_prize_info` WHERE
+		build = 0;
+	</select>
+
+	<select id="queryActivityUserPrizeInfoById" parameterClass="java.lang.Integer"
+		resultMap="activityuserprizeinfo">
+		SELECT *
+		FROM
+		`activity_user_prize_info` WHERE
+		`id` =
+		#startId#;
+	</select>
+
+	<select id="queryActivityUserPrizeInfoListByStartId"
+		parameterClass="java.util.Map" resultMap="activityuserprizeinfo">
+		SELECT *
+		FROM
+		`activity_user_prize_info`
+		WHERE
+		`id` > #startId# ORDER BY id LIMIT
+		#size#;
+	</select>
+
+	<select id="queryActivityUserPrizeInfoByIds" parameterClass="java.util.Map"
+		resultMap="activityuserprizeinfo">
+		SELECT *
+		FROM
+		`activity_user_prize_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryActivityUserPrizeInfoListByFilter"
+		parameterClass="java.util.Map" resultMap="activityuserprizeinfo">
+		SELECT *
+		FROM
+		`activity_user_prize_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="build">
+				<isNotNull property="build" prepend=" and ">
+					`build` =
+					#build#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countActivityUserPrizeInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `activity_user_prize_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="build">
+				<isNotNull property="build" prepend=" and ">
+					`build` =
+					#build#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

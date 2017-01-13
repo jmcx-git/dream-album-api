@@ -22,11 +22,20 @@
 	<sqlMap resource="ibatis/dream_family_userspacerelationshipinfo.xml" />
 
 	<sqlMap resource="ibatis/dream_family_userspaceinteractioninfo.xml" />
-	
-	
+
+
 	<sqlMap resource="ibatis/dream_family_activityinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_activityvotedetailinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_activityvotestatinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_activityworksinfo.xml" />
+
+
+
+	<sqlMap resource="ibatis/dream_family_activityprizeinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_activityuserprizeinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_prizeinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_systemnoticeinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_usernoticeinfo.xml" />
+	<sqlMap resource="ibatis/dream_family_userreadnoticerecord.xml" />
 
 </sqlMapConfig>

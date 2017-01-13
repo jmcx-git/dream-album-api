@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="systemnoticeinfo"
+		class="com.jmcxclub.dream.family.dto.SystemNoticeInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="desc" property="desc" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateSystemNoticeInfo" parameterClass="com.jmcxclub.dream.family.dto.SystemNoticeInfo">
+		<![CDATA[
+			INSERT INTO system_notice_info (`id`,`desc`,`status`,`update_time`,`create_time`)
+			VALUES(null, #desc#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertSystemNoticeInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.SystemNoticeInfo">
+		<![CDATA[
+			INSERT INTO system_notice_info (`id`,`desc`,`status`,`update_time`,`create_time`)
+			VALUES(null, #desc#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreSystemNoticeInfo" parameterClass="com.jmcxclub.dream.family.dto.SystemNoticeInfo">
+		<![CDATA[
+			INSERT INTO system_notice_info (`id`,`desc`,`status`,`update_time`,`create_time`)
+			VALUES(null, #desc#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateSystemNoticeInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.SystemNoticeInfo">
+        <![CDATA[
+        	UPDATE `system_notice_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="querySystemNoticeInfoById" parameterClass="java.lang.Integer"
+		resultMap="systemnoticeinfo">
+		SELECT `id`,`desc`, `status`,`update_time`,`create_time`
+		FROM
+		`system_notice_info` WHERE
+		`id` = #startId#;
+	</select>
+
+	<select id="querySystemNoticeInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="systemnoticeinfo">
+		SELECT `id`,`desc`, `status`,`update_time`,`create_time`
+		FROM
+		`system_notice_info` WHERE
+		`id` > #startId# ORDER BY id LIMIT
+		#size#;
+	</select>
+
+	<select id="querySystemNoticeInfoByIds" parameterClass="java.util.Map"
+		resultMap="systemnoticeinfo">
+		SELECT `id`,`desc`, `status`,`update_time`,`create_time`
+		FROM
+		`system_notice_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="querySystemNoticeInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="systemnoticeinfo">
+		SELECT `id`,`desc`, `status`,`update_time`,`create_time`
+		FROM
+		`system_notice_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countSystemNoticeInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `system_notice_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>
