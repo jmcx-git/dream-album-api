@@ -42,4 +42,9 @@ public class SpaceInfoDaoImpl extends SpaceInfoDao {
         SQLUtils.update(getSqlMapClient(), "updateSpaceInfoIcon", g);
     }
 
+    @Override
+    public void updateCover(SpaceInfo g) throws SQLException {
+        SQLUtils.update(getSqlMapClient(), "updateSpaceInfoCover", g);
+    }
+
 }

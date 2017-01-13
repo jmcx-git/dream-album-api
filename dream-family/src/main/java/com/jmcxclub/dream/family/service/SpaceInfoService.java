@@ -20,4 +20,6 @@ public abstract class SpaceInfoService extends AbsCommonCacheDataService<SpaceIn
 
     public abstract void modifyIcon(int spaceId, String icon) throws ServiceException;
 
+    public abstract void modifyCover(int spaceId, String icon) throws ServiceException;
+
 }

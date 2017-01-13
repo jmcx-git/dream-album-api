@@ -505,6 +505,11 @@ public class SpaceServiceImpl implements SpaceService {
         spaceInfoService.modifyIcon(spaceId, icon);
         return new ApiRespWrapper<Boolean>(true);
     }
+    @Override
+    public ApiRespWrapper<Boolean> editSpaceCover(String openId, int spaceId, String cover) throws ServiceException {
+        spaceInfoService.modifyCover(spaceId, cover);
+        return new ApiRespWrapper<Boolean>(true);
+    }
 
     @Override
     public ApiRespWrapper<Integer> joinSpace(String openId, String secert) throws ServiceException {

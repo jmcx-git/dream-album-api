@@ -187,6 +187,30 @@ public class SpaceAction extends IosBaseAction {
         }
     }
 
+    @RequestMapping("/cover/edit.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> editSpaceCover(String openId, Integer spaceId,
+            @RequestParam(required = false) MultipartFile image, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
+        }
+        String cover = null;
+        if (image != null && !image.isEmpty()) {
+            UploadFileSaveResp fileResp = imgService.saveSpaceIcon(image, openId);
+            if (!fileResp.isSaved()) {
+                log.error("Save user icon failed. Errmsg:" + fileResp.getErrmsg());
+                return new ApiRespWrapper<Boolean>(false);
+            } else {
+                cover = fileResp.getUrlPath();
+            }
+        }
+        if (!StringUtils.isEmpty(cover)) {
+            return spaceService.editSpaceCover(openId, spaceId, cover);
+        } else {
+            return new ApiRespWrapper<Boolean>(false);
+        }
+    }
+
     /**
      * 
      * @param openId

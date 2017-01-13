@@ -85,6 +85,24 @@ public class SpaceInfoServiceImpl extends SpaceInfoService {
         }
         afterModifyData(g);
     }
+    
+    @Override
+    public void modifyCover(int id, String cover) throws ServiceException {
+        SpaceInfo g = getData(id);
+        if (g == null) {
+            throw ServiceException.getParameterException("Invaild space id.");
+        }
+        if (StringUtils.equalsIgnoreCase(g.getCover(), cover)) {
+            return;
+        }
+        g.setIcon(cover);
+        try {
+            spaceInfoDao.updateCover(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        afterModifyData(g);
+    }
 
 
     @Override

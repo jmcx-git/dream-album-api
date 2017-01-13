@@ -10,7 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
+import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 
@@ -129,5 +131,10 @@ public class ContentDescUtils {
         }
         discoveryListResp.setStepDesc(stepDesc);
         discoveryListResp.setStartTimeDesc(startTimeDesc);
+    }
+
+    public static String buildNotice(PrizeInfo prizeInfo, ActivityInfo activityInfo, ActivityWorksInfo activityWorksInfo) {
+        // 恭喜您，在***活动中，获得大奖一份，请前往发现，找到活动，获取相关信息，或者通过下方与客房对话图标联系我们。
+        return "恭喜您，在【" + activityInfo.getTitle() + "】活动中，获得大奖一份，请前往发现,找到活动，获取相关信息，或者点击下方与客服对话图标联系我们。";
     }
 }

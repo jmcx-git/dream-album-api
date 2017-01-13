@@ -19,4 +19,6 @@ public abstract class SpaceInfoDao extends AbsCommonDao<SpaceInfo> {
 
     public abstract void updateIcon(SpaceInfo g) throws SQLException;
 
+    public abstract void updateCover(SpaceInfo g) throws SQLException;
+
 }

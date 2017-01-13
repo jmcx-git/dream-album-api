@@ -14,18 +14,18 @@ import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.utils.RedisCacheUtils;
-import com.jmcxclub.dream.family.dao.ActivityPrizeInfoDao;
-import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
-import com.jmcxclub.dream.family.service.ActivityPrizeInfoService;
+import com.jmcxclub.dream.family.dao.UserNoticeInfoDao;
+import com.jmcxclub.dream.family.dto.UserNoticeInfo;
+import com.jmcxclub.dream.family.service.UserNoticeInfoService;
 
 /**
- * @author mokous86@gmail.com create date: Jan 11, 2017
+ * @author mokous86@gmail.com create date: Jan 13, 2017
  *
  */
-@Service("activityPrizeInfoService")
-public class ActivityPrizeInfoServiceImpl extends ActivityPrizeInfoService {
+@Service("userNoticeInfoService")
+public class UserNoticeInfoServiceImpl extends UserNoticeInfoService {
     @Autowired
-    private ActivityPrizeInfoDao activityPrizeInfoDao;
+    private UserNoticeInfoDao userNoticeInfoDao;
     @Autowired
     @Resource(name = "dream-family-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
@@ -37,8 +37,8 @@ public class ActivityPrizeInfoServiceImpl extends ActivityPrizeInfoService {
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
-        ActivityPrizeInfoSortedSetCacheFilter curFilter = (ActivityPrizeInfoSortedSetCacheFilter) filter;
-        return RedisCacheUtils.buildKey(sortedIdsKey, curFilter.getActivityId());
+        UserNoticeInfoSortedSetCacheFilter curFilter = (UserNoticeInfoSortedSetCacheFilter) filter;
+        return RedisCacheUtils.buildKey(sortedIdsKey, curFilter.getUserId());
     }
 
     @Override
@@ -47,13 +47,13 @@ public class ActivityPrizeInfoServiceImpl extends ActivityPrizeInfoService {
     }
 
     @Override
-    protected StartSizeCacheFilter buildCacheFilter(ActivityPrizeInfo value) {
-        return new ActivityPrizeInfoSortedSetCacheFilter(value.getActivityId());
+    protected StartSizeCacheFilter buildCacheFilter(UserNoticeInfo value) {
+        return new UserNoticeInfoSortedSetCacheFilter(value.getId());
     }
 
     @Override
-    protected LoadDao<ActivityPrizeInfo> getLoadDao() {
-        return activityPrizeInfoDao;
+    protected LoadDao<UserNoticeInfo> getLoadDao() {
+        return userNoticeInfoDao;
     }
 
     @Override
@@ -72,12 +72,8 @@ public class ActivityPrizeInfoServiceImpl extends ActivityPrizeInfoService {
     }
 
     @Override
-    public CommonDao<ActivityPrizeInfo> getCommonDao() {
-        return activityPrizeInfoDao;
+    public CommonDao<UserNoticeInfo> getCommonDao() {
+        return userNoticeInfoDao;
     }
 
-    @Override
-    protected double buildSortedSetScore(ActivityPrizeInfo t) {
-        return t.getRank();
-    }
 }

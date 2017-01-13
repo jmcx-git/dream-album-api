@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.dto;
 
 import java.util.Date;
 
+import com.dreambox.core.DbField.ZERO_ENABLE;
 import com.dreambox.core.dto.StatusSerializable;
 
 /**
@@ -23,6 +24,7 @@ public class ActivityInfo extends StatusSerializable {
     private String contentCss;
     private Date startDate;
     private Date endDate;
+    @ZERO_ENABLE
     private int finish;// 只有中奖名单出来后，才算结束 0 未结束 1结束
 
     public int getId() {

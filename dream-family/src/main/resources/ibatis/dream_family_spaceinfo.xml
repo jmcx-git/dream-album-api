@@ -59,6 +59,12 @@
         ]]>
 	</update>
 
+	<update id="updateSpaceInfoCover" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+        <![CDATA[
+        	UPDATE `space_info` SET `cover` = #cover# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
 	<select id="querySpaceInfoById" parameterClass="java.lang.Integer"
 		resultMap="spaceinfo">
 		SELECT `id`, `user_id`, CAST(name AS CHAR

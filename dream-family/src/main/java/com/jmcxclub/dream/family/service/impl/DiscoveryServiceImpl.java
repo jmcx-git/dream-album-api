@@ -31,6 +31,7 @@ import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.model.UploadFileSaveResp;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
 import com.jmcxclub.dream.family.service.ActivityPrizeInfoService;
+import com.jmcxclub.dream.family.service.ActivityUserPrizeInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteDetailInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService.ActivityVoteStatInfoSortedListCacheFilter;
@@ -49,8 +50,10 @@ import com.jmcxclub.dream.family.service.ImgService;
 public class DiscoveryServiceImpl implements DiscoveryService {
     @Autowired
     private ActivityInfoService activityInfoService;
-    // @Autowired
+    @Autowired
     private ActivityPrizeInfoService activityPrizeInfoService;
+    @Autowired
+    private ActivityUserPrizeInfoService activityUserPrizeInfoService;
     @Autowired
     private ActivityWorksInfoService activityWorksInfoService;
     @Autowired
@@ -95,8 +98,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         if (feedInfo == null) {
             return new ApiRespWrapper<Boolean>(-1, "未知的参赛作品", false);
         }
-        if (feedInfo.getUserId() == userId) {
-            return new ApiRespWrapper<Boolean>(-1, "未能以此作品参赛", false);
+        if (feedInfo.getUserId() != userId) {
+            return new ApiRespWrapper<Boolean>(-1, "不能以此作品参赛", false);
         }
         int type = adapationType(feedInfo.getType());
         return applyActivity(userId, activityId, feedInfo.getContent(), feedInfo.getTitle(), feedInfo.getContent(),

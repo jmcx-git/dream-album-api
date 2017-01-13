@@ -122,6 +122,8 @@ public interface SpaceService {
      */
     ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId, String icon) throws ServiceException;
 
+    ApiRespWrapper<Boolean> editSpaceCover(String openId, int spaceId, String cover) throws ServiceException;
+
     /**
      * 用户加入空间
      * 
