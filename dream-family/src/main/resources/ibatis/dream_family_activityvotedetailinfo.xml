@@ -44,6 +44,14 @@
 		 ]]>
 	</select>
 
+	<select id="queryActivityVoteDetailInfoIdByUk"
+		parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteDetailInfo"
+		resultMap="activityvotedetailinfo">
+		<![CDATA[
+			SELECT * FROM `activity_vote_detail_info` WHERE `user_id` = #userId# and `work_id` = #workId# AND `vote_date` = #voteDate#;
+		 ]]>
+	</select>
+
 	<select id="queryActivityVoteDetailInfoListByStartId"
 		parameterClass="java.util.Map" resultMap="activityvotedetailinfo">
 		<![CDATA[
