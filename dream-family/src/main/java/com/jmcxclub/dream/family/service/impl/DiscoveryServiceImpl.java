@@ -101,7 +101,9 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     public ApiRespWrapper<ActivityInfoResp> getActivity(int userId, int id) {
         ActivityInfo info = activityInfoService.getData(id);
         List<ActivityWorksExampleInfo> examples = activityWorksExampleInfoService.listInfo(id);
-        ActivityWorksInfo activityWorksInfo = null;
+        ActivityWorksInfo activityWorksInfo = new ActivityWorksInfo();
+        activityWorksInfo.setActivityId(id);
+        activityWorksInfo.setUserId(userId);
         int worksId = activityWorksInfoService.getIdByUk(activityWorksInfo);
         ListWrapResp<ActivityPrizeInfo> activityPrizeInfoResp = activityPrizeInfoService
                 .listInfo(new ActivityPrizeInfoSortedSetCacheFilter(id));
