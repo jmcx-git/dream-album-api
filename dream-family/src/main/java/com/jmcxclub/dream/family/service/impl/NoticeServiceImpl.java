@@ -44,7 +44,7 @@ public class NoticeServiceImpl implements NoticeService {
         UserReadNoticeRecord record = userReadNoticeRecordService.getData(userId);
         Date readTime = null;
         if (record != null) {
-            readTime = record.getRecordTime();
+            readTime = record.getReadTime();
         }
         StartSizeCacheFilter filter = new StartSizeCacheFilter();
         filter.setSize(1);

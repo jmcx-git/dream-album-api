@@ -17,7 +17,7 @@ public class UserReadNoticeRecord extends StatusSerializable {
      */
     private static final long serialVersionUID = -3299870136143256792L;
     private int id;
-    private Date recordTime;
+    private Date readTime;
 
     public int getId() {
         return id;
@@ -27,12 +27,12 @@ public class UserReadNoticeRecord extends StatusSerializable {
         this.id = id;
     }
 
-    public Date getRecordTime() {
-        return recordTime;
+    public Date getReadTime() {
+        return readTime;
     }
 
-    public void setRecordTime(Date recordTime) {
-        this.recordTime = recordTime;
+    public void setReadTime(Date readTime) {
+        this.readTime = readTime;
     }
 
 }
