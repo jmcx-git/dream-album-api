@@ -95,7 +95,7 @@ public class SpaceInfoServiceImpl extends SpaceInfoService {
         if (StringUtils.equalsIgnoreCase(g.getCover(), cover)) {
             return;
         }
-        g.setIcon(cover);
+        g.setCover(cover);
         try {
             spaceInfoDao.updateCover(g);
         } catch (SQLException e) {

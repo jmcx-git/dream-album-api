@@ -180,7 +180,7 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Boolean> deleteFeedComment(String openId, int feedId, int commentId) throws ServiceException;
+    ApiRespWrapper<Boolean> deleteFeedComment(int userId, int feedId, int commentId) throws ServiceException;
 
     ApiRespWrapper<ListWrapResp<OccupantFootprintResp>> listSpaceOccupantFootprint(String openId, int spaceId)
             throws ServiceException;

@@ -68,3 +68,20 @@ CREATE TABLE IF NOT EXISTS `user_read_notice_record`(
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户读取通知记录';
 
+CREATE TABLE IF NOT EXISTS `activity_works_example_info`(
+	`id` int unsigned not null comment 'user_info.id',
+	`activity_id` int unsigned not null COMMENT 'reference activity_info.id',
+	`title`  VARCHAR(255) not null COMMENT '标题',
+	`img`  VARCHAR(255) not null COMMENT '图片',
+	`status` int(11) NOT NULL DEFAULT '0',
+    `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    `create_time` datetime NOT NULL COMMENT '记录创建时间',
+    PRIMARY KEY (`id`)
+)Engine=InnoDB DEFAULT CHARSET=utf8 COMMENT '参赛作品示例';
+
+ALTER TABLE `activity_info` drop column `content_css`;
+ALTER TABLE `activity_info` ADD COLUMN `activity_rule` text after `end_date`;
+
+
+
+

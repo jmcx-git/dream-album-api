@@ -6,10 +6,11 @@
 		<result column="title" property="title" jdbcType="VARCHAR" />
 		<result column="introduction" property="introduction" jdbcType="VARCHAR" />
 		<result column="content" property="content" jdbcType="VARCHAR" />
-		<result column="content_css" property="contentCss" jdbcType="VARCHAR" />
 		<result column="cover" property="cover" jdbcType="VARCHAR" />
 		<result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
 		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="activity_rule" property="activityRule"
+			jdbcType="VARCHAR" />
 		<result column="finish" property="finish" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -18,8 +19,8 @@
 
 	<insert id="insertOrUpdateActivityInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
 		<![CDATA[
-			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`,`content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#, #introduction#, #content#, #contentCss#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -29,8 +30,8 @@
 
 	<insert id="insertActivityInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
 		<![CDATA[
-			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`,`content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#, #introduction#, #content#, #contentCss#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -40,8 +41,8 @@
 
 	<insert id="insertOrIgnoreActivityInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
 		<![CDATA[
-			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`,`content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#, #introduction#, #content#, #contentCss#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -60,18 +61,22 @@
 		SELECT `id`, CAST(`title` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `title`, CAST(`introduction` AS CHAR
+		AS
+		`title`, CAST(`introduction` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `introduction`, CAST(`content` AS CHAR
+		AS
+		`introduction`, CAST(`content` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content`, CAST(`content_css` AS CHAR
-		CHARACTER SET
-		utf8)
-		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
+		AS
+		`content`,`cover`,
+		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`status`, `update_time`,
+		`create_time`
 		FROM `activity_info` WHERE
-		`id` = #startId#;
+		`id` =
+		#startId#;
 	</select>
 
 	<select id="queryActivityInfoListByStartId" parameterClass="java.util.Map"
@@ -79,18 +84,23 @@
 		SELECT `id`, CAST(`title` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `title`, CAST(`introduction` AS CHAR
+		AS
+		`title`, CAST(`introduction` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `introduction`, CAST(`content` AS CHAR
+		AS
+		`introduction`, CAST(`content` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content`, CAST(`content_css` AS CHAR
-		CHARACTER SET
-		utf8)
-		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
+		AS
+		`content`,`cover`,
+		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`status`, `update_time`,
+		`create_time`
 		FROM `activity_info` WHERE
-		`id` > #startId# ORDER BY id LIMIT #size#;
+		`id` >
+		#startId# ORDER BY id
+		LIMIT #size#;
 	</select>
 
 	<select id="queryActivityInfoByIds" parameterClass="java.util.Map"
@@ -98,16 +108,22 @@
 		SELECT `id`, CAST(`title` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `title`, CAST(`introduction` AS CHAR
+		AS
+		`title`,
+		CAST(`introduction` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `introduction`, CAST(`content` AS CHAR
+		AS
+		`introduction`,
+		CAST(`content` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content`, CAST(`content_css` AS CHAR
-		CHARACTER SET
-		utf8)
-		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
+		AS
+		`content`,`cover`,
+		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`status`,
+		`update_time`,
+		`create_time`
 		FROM `activity_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
 			#ids[]#
@@ -119,16 +135,22 @@
 		SELECT `id`, CAST(`title` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `title`, CAST(`introduction` AS CHAR
+		AS
+		`title`,
+		CAST(`introduction` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `introduction`, CAST(`content` AS CHAR
+		AS
+		`introduction`,
+		CAST(`content` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `content`, CAST(`content_css` AS CHAR
-		CHARACTER SET
-		utf8)
-		AS `content_css`, `cover`, `start_date`, `end_date`, `finish`, `status`, `update_time`, `create_time`
+		AS
+		`content`,`cover`,
+		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`status`,
+		`update_time`,
+		`create_time`
 		FROM `activity_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">

@@ -121,6 +121,8 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         type = type == null ? FeedTypeEnum.DIARY.getType() : type;
+        info = ContentDescUtils.decode(info);
+        name = ContentDescUtils.decode(name);
         return spaceService.addSpace(userInfo.getId(), gender, name, bornDate, type, icon, icon, info);
     }
 
@@ -435,8 +437,8 @@ public class SpaceAction extends IosBaseAction {
             }
         }
         // 腾讯BUG
-        title= ContentDescUtils.decode(title);
-        content= ContentDescUtils.decode(content);
+        title = ContentDescUtils.decode(title);
+        content = ContentDescUtils.decode(content);
         return spaceService.addFeed(userInfo.getId(), spaceId, title, content, type, cover, illustration);
     }
 
@@ -534,6 +536,12 @@ public class SpaceAction extends IosBaseAction {
         if (commentId == null || commentId.intValue() <= 0) {
             return new ApiRespWrapper<Boolean>(-1, "未知的评论", null);
         }
-        return spaceService.deleteFeedComment(openId, feedId, commentId);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "Illegal open id.");
+        }
+        return spaceService.deleteFeedComment(userInfo.getId(), feedId, commentId);
     }
 }

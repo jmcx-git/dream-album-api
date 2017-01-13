@@ -4,17 +4,24 @@ package com.jmcxclub.dream.family.utils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
+import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
+import com.jmcxclub.dream.family.model.ActivityInfoResp;
+import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
+import com.jmcxclub.dream.family.model.ActivityStepEnum;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 
 /**
@@ -169,5 +176,119 @@ public class ContentDescUtils {
             return "前年前发布";
         }
         return year + "年前发布";
+    }
+
+    /**
+     * 
+     // need build private int step;// see ActivityStepEnum for css style
+     * private List<String> contentSections;// 活动段落 private String
+     * activityTimeDesc;// 活动时间 private List<ActivityPrizeResp> prizes;
+     * 
+     * private int stepTime;// 距结束N天中的天 private String stepTimeUnitDesc;//
+     * 距结束N天中的N;
+     * 
+     * @param activityInfoResp
+     * @param info
+     * @param activityPrizeInfos
+     * @param prizeInfos
+     */
+    public static void buildActivityInfoRespOthers(ActivityInfoResp activityInfoResp, ActivityInfo info,
+            List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos) {
+        int step = 0;
+        long stepTime = 0;
+        String stepTimeUnit = "";
+        String stepDesc = "";
+        String activityTimeDesc = buildStartEndTimeDesc(info.getStartDate(), info.getEndDate());
+        String[] contens = info.getContent().split("<br/>");
+        if (contens.length == 1) {
+            contens = info.getContent().split("\r\n");
+        }
+        if (contens.length == 1) {
+            contens = info.getContent().split("\n");
+        }
+        List<String> contentSections = Arrays.asList(contens);
+        if (info.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
+            //
+            stepDesc = "活动已结束";
+            step = ActivityStepEnum.FINISH.getStep();
+        } else {
+            Date curDate = new Date();
+            if (info.getStartDate().after(curDate)) {
+                stepDesc = "活动未开始";
+                step = ActivityStepEnum.INIT.getStep();
+            } else if (info.getEndDate().before(curDate)) {
+                stepDesc = "计票统计中，即将开奖";
+                step = ActivityStepEnum.AUDIT.getStep();
+            } else {
+                long seconds = (curDate.getTime() - info.getEndDate().getTime()) / 1000;
+                if (seconds == 0) {
+                    stepDesc = "活动已结束";
+                    step = ActivityStepEnum.FINISH.getStep();
+                } else {
+                    step = ActivityStepEnum.ING.getStep();
+                    long minutes = seconds / 60;
+                    if (minutes == 0) {
+                        stepTime = seconds;
+                        stepTimeUnit = "秒";
+                    } else {
+                        long hour = minutes / 60;
+                        if (hour == 0) {
+                            stepTime = minutes;
+                            stepTimeUnit = "分钟";
+                        } else {
+                            long day = hour / 24;
+                            if (day == 0) {
+                                stepTime = minutes;
+                                stepTimeUnit = "小时";
+                            } else {
+                                stepTime = minutes;
+                                stepTimeUnit = "天";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        List<ActivityPrizeResp> prizes = new ArrayList<ActivityPrizeResp>();
+        String rankDescPrefix = "NO.";
+        int rank = 1;
+        boolean firstInit = true;
+        for (ActivityPrizeInfo activityPrizeInfo : activityPrizeInfos) {
+            PrizeInfo curPrize = null;
+            for (PrizeInfo prizeInfo : prizeInfos) {
+                if (activityPrizeInfo.getPrizeId() == prizeInfo.getId()) {
+                    curPrize = prizeInfo;
+                }
+            }
+            if (curPrize == null) {
+                continue;
+            }
+            String rankDesc;
+            String prizeInfo;
+            if (firstInit) {
+                firstInit = false;
+            } else {
+                rank++;
+            }
+            rankDesc = rankDescPrefix + rank;
+            prizeInfo = curPrize.getTitle() + activityPrizeInfo.getCount() + "名";
+            prizes.add(new ActivityPrizeResp(rankDesc, prizeInfo, curPrize.getImg()));
+        }
+        activityInfoResp.setContentSections(contentSections);
+        activityInfoResp.setPrizes(prizes);
+        activityInfoResp.setStep(step);
+        activityInfoResp.setStepDesc(stepDesc);
+        activityInfoResp.setStepTime(stepTime);
+        activityInfoResp.setStepTimeUnit(stepTimeUnit);
+        activityInfoResp.setActivityTimeDesc(activityTimeDesc);
+    }
+
+    private static String buildStartEndTimeDesc(Date startDate, Date endDate) {
+        int sm = DateUtils.getMonth(startDate);
+        int em = DateUtils.getMonth(endDate);
+        int sd = DateUtils.getDay(startDate);
+        int ed = DateUtils.getDay(endDate);
+        return sm + "月" + sd + "日一" + em + "月" + ed + "日";
     }
 }

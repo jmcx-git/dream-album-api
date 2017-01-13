@@ -505,6 +505,7 @@ public class SpaceServiceImpl implements SpaceService {
         spaceInfoService.modifyIcon(spaceId, icon);
         return new ApiRespWrapper<Boolean>(true);
     }
+
     @Override
     public ApiRespWrapper<Boolean> editSpaceCover(String openId, int spaceId, String cover) throws ServiceException {
         spaceInfoService.modifyCover(spaceId, cover);
@@ -546,13 +547,7 @@ public class SpaceServiceImpl implements SpaceService {
 
     // 只有评论者和owner才有权限删除
     @Override
-    public ApiRespWrapper<Boolean> deleteFeedComment(String openId, int feedId, int commentId) throws ServiceException {
-        UserInfo userInfo = new UserInfo();
-        // permission
-        userInfo = userInfoService.getInfoByUk(userInfo);
-        if (userInfo == null) {
-            return new ApiRespWrapper<>(-1, "未知的用户");
-        }
+    public ApiRespWrapper<Boolean> deleteFeedComment(int userId, int feedId, int commentId) throws ServiceException {
         FeedCommentInfo feedCommentInfo = feedCommentInfoService.getData(commentId);
         if (feedCommentInfo == null) {
             return new ApiRespWrapper<>(-1, "未知的评论记录", false);
@@ -565,11 +560,11 @@ public class SpaceServiceImpl implements SpaceService {
             return new ApiRespWrapper<>(-1, "未知的记录", false);
         }
         // self or feed owner
-        if (feedCommentInfo.getUserId() == userInfo.getId() || feedInfo.getUserId() == userInfo.getId()) {
-            log.warn("Feed comment :" + commentId + " delete by:" + userInfo.getId());
+        if (feedCommentInfo.getUserId() == userId || feedInfo.getUserId() == userId) {
+            log.warn("Feed comment :" + commentId + " delete by:" + userId);
             feedCommentInfo.setStatus(FeedCommentInfo.STATUS_DEL);
             this.feedCommentInfoService.modifyStatus(feedCommentInfo);
-            afterModifyComment(false, userInfo.getId(), feedInfo.getSpaceId(), feedId);
+            afterModifyComment(false, userId, feedInfo.getSpaceId(), feedId);
             return new ApiRespWrapper<Boolean>(true);
         }
         return new ApiRespWrapper<>(-1, "你没有删除当前评论的权限.", false);

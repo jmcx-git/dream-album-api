@@ -20,10 +20,10 @@ public class ActivityInfo extends StatusSerializable {
     private String cover;
     private String title;
     private String introduction;
-    private String content;
-    private String contentCss;
+    private String content;// 多段用<br/>或\r\n或\n来分隔，分隔符不能混合使用
     private Date startDate;
     private Date endDate;
+    private String activityRule;
     @ZERO_ENABLE
     private int finish;// 只有中奖名单出来后，才算结束 0 未结束 1结束
 
@@ -67,14 +67,6 @@ public class ActivityInfo extends StatusSerializable {
         this.content = content;
     }
 
-    public String getContentCss() {
-        return contentCss;
-    }
-
-    public void setContentCss(String contentCss) {
-        this.contentCss = contentCss;
-    }
-
     public Date getStartDate() {
         return startDate;
     }
@@ -97,5 +89,13 @@ public class ActivityInfo extends StatusSerializable {
 
     public void setFinish(int finish) {
         this.finish = finish;
+    }
+
+    public String getActivityRule() {
+        return activityRule;
+    }
+
+    public void setActivityRule(String activityRule) {
+        this.activityRule = activityRule;
     }
 }

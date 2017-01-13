@@ -81,14 +81,18 @@ public class DiscoveryAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
-    @RequestMapping("/activity/detail.json")
+    @RequestMapping("/activity/info.json")
     @ResponseBody
-    public ApiRespWrapper<ActivityInfoResp> detailSpace(String openId, Integer id, String version)
+    public ApiRespWrapper<ActivityInfoResp> getActivityInfo(String openId, Integer id, String version)
             throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ActivityInfoResp>(-1, "未知的用户账号", null);
         }
-        return discoveryService.getActivity(openId, id);
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<ActivityInfoResp>(-1, "未找到对应用户账号");
+        }
+        return discoveryService.getActivity(userInfo.getId(), id);
     }
 
     /**

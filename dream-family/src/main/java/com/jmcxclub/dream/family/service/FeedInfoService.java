@@ -20,6 +20,8 @@ public abstract class FeedInfoService extends AbstractSortedListCacheService<Fee
             super();
             this.userId = userId;
             this.spaceId = spaceId;
+            super.setStart(start);
+            super.setSize(size);
         }
 
         public Integer getUserId() {

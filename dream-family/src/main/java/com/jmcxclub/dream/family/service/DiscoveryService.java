@@ -22,7 +22,7 @@ public interface DiscoveryService {
     ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size)
             throws ServiceException;
 
-    ApiRespWrapper<ActivityInfoResp> getActivity(String openId, int activityId) throws ServiceException;
+    ApiRespWrapper<ActivityInfoResp> getActivity(int userId, int activityId) throws ServiceException;
 
     ApiRespWrapper<Boolean> applyActivity(int userId, int activityId, int feedId) throws ServiceException;
 

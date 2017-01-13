@@ -18,12 +18,15 @@ import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
+import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityVoteDetailInfo;
 import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
+import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfoEnum;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.FeedTypeEnum;
+import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.ActivityWorksResp;
@@ -31,14 +34,18 @@ import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.model.UploadFileSaveResp;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
 import com.jmcxclub.dream.family.service.ActivityPrizeInfoService;
+import com.jmcxclub.dream.family.service.ActivityPrizeInfoService.ActivityPrizeInfoSortedSetCacheFilter;
 import com.jmcxclub.dream.family.service.ActivityUserPrizeInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteDetailInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService.ActivityVoteStatInfoSortedListCacheFilter;
+import com.jmcxclub.dream.family.service.ActivityWorksExampleInfoService;
+import com.jmcxclub.dream.family.service.ActivityWorksExampleInfoService.ActivityWorksExampleInfoSetCacheFilter;
 import com.jmcxclub.dream.family.service.ActivityWorksInfoService;
 import com.jmcxclub.dream.family.service.DiscoveryService;
 import com.jmcxclub.dream.family.service.FeedInfoService;
 import com.jmcxclub.dream.family.service.ImgService;
+import com.jmcxclub.dream.family.service.PrizeInfoService;
 
 /**
  * 发现tab页数据服务类
@@ -57,6 +64,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     @Autowired
     private ActivityWorksInfoService activityWorksInfoService;
     @Autowired
+    private ActivityWorksExampleInfoService activityWorksExampleInfoService;
+    @Autowired
     private ActivityVoteStatInfoService activityVoteStatInfoService;
     @Autowired
     private ImgService imgService;
@@ -64,6 +73,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     private ActivityVoteDetailInfoService activityVoteDetailInfoService;
     @Autowired
     private FeedInfoService feedInfoService;
+    @Autowired
+    private PrizeInfoService prizeInfoService;
 
     @Override
     public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size)
@@ -87,9 +98,26 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     }
 
     @Override
-    public ApiRespWrapper<ActivityInfoResp> getActivity(String openId, int id) {
+    public ApiRespWrapper<ActivityInfoResp> getActivity(int userId, int id) {
         // TODO Auto-generated method stub
-        return null;
+        ActivityInfo info = activityInfoService.getData(id);
+        ListWrapResp<ActivityWorksExampleInfo> exampleResp = activityWorksExampleInfoService
+                .listInfo(new ActivityWorksExampleInfoSetCacheFilter(id));
+        ActivityWorksInfo activityWorksInfo = null;
+        int worksId = activityWorksInfoService.getIdByUk(activityWorksInfo);
+        ListWrapResp<ActivityPrizeInfo> activityPrizeInfoResp = activityPrizeInfoService
+                .listInfo(new ActivityPrizeInfoSortedSetCacheFilter(id));
+        List<ActivityWorksExampleInfo> examples = exampleResp == null ? new ArrayList<ActivityWorksExampleInfo>()
+                : exampleResp.getResultList();
+        List<ActivityPrizeInfo> activityPrizeInfos = activityPrizeInfoResp == null ? new ArrayList<ActivityPrizeInfo>()
+                : activityPrizeInfoResp.getResultList();
+        List<Integer> prizeIds = new ArrayList<Integer>();
+        for (ActivityPrizeInfo activityPrizeInfo : activityPrizeInfos) {
+            prizeIds.add(activityPrizeInfo.getPrizeId());
+        }
+        List<PrizeInfo> prizeInfos = prizeInfoService.getData(prizeIds);
+        return new ApiRespWrapper<ActivityInfoResp>(new ActivityInfoResp(info, examples, activityPrizeInfos,
+                prizeInfos, worksId > 0));
     }
 
     @Override
@@ -194,7 +222,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
     @Override
     public ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, int id) {
-        // TODO Auto-generated method stub
+        // TODO
         return null;
     }
 
