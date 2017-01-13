@@ -41,7 +41,6 @@ import com.jmcxclub.dream.family.service.ActivityVoteDetailInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService;
 import com.jmcxclub.dream.family.service.ActivityVoteStatInfoService.ActivityVoteStatInfoSortedListCacheFilter;
 import com.jmcxclub.dream.family.service.ActivityWorksExampleInfoService;
-import com.jmcxclub.dream.family.service.ActivityWorksExampleInfoService.ActivityWorksExampleInfoSetCacheFilter;
 import com.jmcxclub.dream.family.service.ActivityWorksInfoService;
 import com.jmcxclub.dream.family.service.DiscoveryService;
 import com.jmcxclub.dream.family.service.FeedInfoService;
@@ -100,16 +99,12 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
     @Override
     public ApiRespWrapper<ActivityInfoResp> getActivity(int userId, int id) {
-        // TODO Auto-generated method stub
         ActivityInfo info = activityInfoService.getData(id);
-        ListWrapResp<ActivityWorksExampleInfo> exampleResp = activityWorksExampleInfoService
-                .listInfo(new ActivityWorksExampleInfoSetCacheFilter(id));
+        List<ActivityWorksExampleInfo> examples = activityWorksExampleInfoService.listInfo(id);
         ActivityWorksInfo activityWorksInfo = null;
         int worksId = activityWorksInfoService.getIdByUk(activityWorksInfo);
         ListWrapResp<ActivityPrizeInfo> activityPrizeInfoResp = activityPrizeInfoService
                 .listInfo(new ActivityPrizeInfoSortedSetCacheFilter(id));
-        List<ActivityWorksExampleInfo> examples = exampleResp == null ? new ArrayList<ActivityWorksExampleInfo>()
-                : exampleResp.getResultList();
         List<ActivityPrizeInfo> activityPrizeInfos = activityPrizeInfoResp == null ? new ArrayList<ActivityPrizeInfo>()
                 : activityPrizeInfoResp.getResultList();
         List<Integer> prizeIds = new ArrayList<Integer>();

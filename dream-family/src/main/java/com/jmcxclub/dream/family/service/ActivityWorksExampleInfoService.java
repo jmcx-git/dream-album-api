@@ -2,8 +2,11 @@
 
 package com.jmcxclub.dream.family.service;
 
+import java.util.List;
+
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.service.AbstractSetCacheService;
+import com.dreambox.web.exception.ServiceException;
 import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
 
 /**
@@ -11,6 +14,9 @@ import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
  *
  */
 public abstract class ActivityWorksExampleInfoService extends AbstractSetCacheService<ActivityWorksExampleInfo> {
+
+    public abstract List<ActivityWorksExampleInfo> listInfo(int activityId) throws ServiceException;
+
     public static class ActivityWorksExampleInfoSetCacheFilter extends StartSizeCacheFilter {
         private int activityId;
 

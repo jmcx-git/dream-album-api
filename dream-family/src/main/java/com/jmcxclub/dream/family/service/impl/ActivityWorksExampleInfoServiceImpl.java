@@ -2,6 +2,9 @@
 
 package com.jmcxclub.dream.family.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -15,6 +18,8 @@ import com.dreambox.core.cache.CacheFilter.SizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.utils.RedisCacheUtils;
+import com.dreambox.web.exception.ServiceException;
+import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dao.ActivityWorksExampleInfoDao;
 import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
 import com.jmcxclub.dream.family.service.ActivityWorksExampleInfoService;
@@ -35,6 +40,7 @@ public class ActivityWorksExampleInfoServiceImpl extends ActivityWorksExampleInf
     private JedisPool jedisDbPool;
     private String setKey = "activity:works:example:ids";
     private String infoKey = "activity:works:example:info";
+
 
     @Override
     protected String buildSetKey(SizeCacheFilter filter) {
@@ -80,6 +86,18 @@ public class ActivityWorksExampleInfoServiceImpl extends ActivityWorksExampleInf
     @Override
     protected Logger getLogger() {
         return log;
+    }
+
+    @Override
+    public List<ActivityWorksExampleInfo> listInfo(int activityId) throws ServiceException {
+        SizeCacheFilter filter = new ActivityWorksExampleInfoSetCacheFilter(activityId);
+        String key = buildSetKey(filter);
+        List<Integer> ids = RedisCacheUtils.smemberIds(key, getJedisPool());
+        if (CollectionUtils.emptyOrNull(ids)) {
+            return new ArrayList<ActivityWorksExampleInfo>();
+        }
+        List<ActivityWorksExampleInfo> infos = getData(ids);
+        return infos;
     }
 
 }
