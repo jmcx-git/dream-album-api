@@ -6,6 +6,8 @@ import java.sql.SQLException;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Repository;
+
 import com.dreambox.core.utils.SQLUtils;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.jmcxclub.dream.family.dao.UserReadNoticeRecordDao;
@@ -14,6 +16,7 @@ import com.jmcxclub.dream.family.dao.UserReadNoticeRecordDao;
  * @author mokous86@gmail.com create date: Jan 13, 2017
  *
  */
+@Repository("userReadNoticeRecordDao")
 public class UserReadNoticeRecordDaoImpl extends UserReadNoticeRecordDao {
     @Resource(name = "dream-family-sql-client")
     private SqlMapClient sqlMapClient;
