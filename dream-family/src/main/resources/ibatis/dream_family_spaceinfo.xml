@@ -71,7 +71,11 @@
 		CHARACTER SET
 		utf8)
 		AS
-		`name`, `born_date`, `gender`, `type`, `icon`, `cover`, `info`,
+		`name`, `born_date`, `gender`, `type`, `icon`, `cover`, CAST(`info` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info` WHERE
 		`id` =
@@ -84,7 +88,11 @@
 		CHARACTER SET
 		utf8)
 		AS
-		`name`, `born_date`, `gender`, `type`, `icon`, `cover`, `info`,
+		`name`, `born_date`, `gender`, `type`, `icon`, `cover`, CAST(`info` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info` WHERE
 		`id` >
@@ -98,7 +106,11 @@
 		utf8)
 		AS
 		`name`,
-		`born_date`, `gender`, `type`, `icon`, `cover`, `info`,
+		`born_date`, `gender`, `type`, `icon`, `cover`, CAST(`info` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
@@ -113,7 +125,11 @@
 		utf8)
 		AS
 		`name`,
-		`born_date`, `gender`, `type`, `icon`, `cover`, `info`,
+		`born_date`, `gender`, `type`, `icon`, `cover`, CAST(`info` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`info`,
 		`status`,`update_time`,`create_time`
 		FROM `space_info`
 		<dynamic prepend=" WHERE ">
