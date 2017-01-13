@@ -49,7 +49,9 @@ public class UserReadNoticeRecordServiceImpl extends UserReadNoticeRecordService
     @Override
     public void modifyReadTime(int userId) throws ServiceException {
         try {
-            userReadNoticeRecordDao.updateReadTime(userId);
+            UserReadNoticeRecord g = new UserReadNoticeRecord();
+            g.setId(userId);
+            userReadNoticeRecordDao.insertOrIgnore(g);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }

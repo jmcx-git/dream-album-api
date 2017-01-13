@@ -13,14 +13,16 @@
 	<insert id="insertOrUpdateUserReadNoticeRecord" parameterClass="com.jmcxclub.dream.family.dto.UserReadNoticeRecord">
 		<![CDATA[
 			INSERT INTO user_read_notice_record (`id`,`read_time`,`status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #readTime#, 0, now(),now())
+			VALUES(#id#, #readTime#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `read_time` = now()
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreUserReadNoticeRecord" parameterClass="com.jmcxclub.dream.family.dto.UserReadNoticeRecord">
 		<![CDATA[
 			INSERT INTO user_read_notice_record (`id`,`read_time`,`status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #readTim"#, 0, now(),now())
+			VALUES(#id#, #readTime#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `read_time` = now()
 		]]>
 	</insert>
 
