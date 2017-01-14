@@ -16,7 +16,7 @@ import com.jmcxclub.dream.family.dto.SpaceInfo;
  */
 public abstract class SpaceInfoService extends AbsCommonCacheDataService<SpaceInfo> {
 
-    public abstract void modifyInfo(int id, String title, Date born) throws ServiceException;
+    public abstract void modifyInfo(int id, String title, Date born, String info) throws ServiceException;
 
     public abstract void modifyIcon(int spaceId, String icon) throws ServiceException;
 

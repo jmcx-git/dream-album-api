@@ -45,7 +45,7 @@ public class SpaceInfoServiceImpl extends SpaceInfoService {
     }
 
     @Override
-    public void modifyInfo(int id, String name, Date bornDate) throws ServiceException {
+    public void modifyInfo(int id, String name, Date bornDate, String info) throws ServiceException {
         SpaceInfo g = getData(id);
         if (g == null) {
             throw ServiceException.getParameterException("Invaild space id.");
@@ -60,8 +60,11 @@ public class SpaceInfoServiceImpl extends SpaceInfoService {
         if (bornDate != null) {
             g.setBornDate(bornDate);
         }
+        if (!StringUtils.isEmpty(info)) {
+            g.setInfo(info);
+        }
         try {
-            spaceInfoDao.updateNameAndBornDate(g);
+            spaceInfoDao.updateNameAndBornDateAndInfo(g);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
@@ -85,7 +88,7 @@ public class SpaceInfoServiceImpl extends SpaceInfoService {
         }
         afterModifyData(g);
     }
-    
+
     @Override
     public void modifyCover(int id, String cover) throws ServiceException {
         SpaceInfo g = getData(id);

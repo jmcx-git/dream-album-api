@@ -9,7 +9,6 @@ import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
-import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 
@@ -28,13 +27,25 @@ public interface DiscoveryService {
 
     ApiRespWrapper<Boolean> voteActivity(int userId, int activityId, int worksId, String ip) throws ServiceException;
 
-    ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, int activityId)
-            throws ServiceException;
-
     ApiRespWrapper<Boolean> applyActivity(int userId, int activityId, MultipartFile image, String solgan, String desc)
             throws ServiceException;
 
-    ApiRespWrapper<ListWrapResp<ActivityWorksResp>> listActivityWorks(UserInfo userInfo, Integer activityId, String findKey,
-            Integer start, Integer size) throws ServiceException;
+    /**
+     * 
+     * 也会将当前用户的置顶，如果startId=0
+     * 
+     * 投票分享过来的，用于置顶 如果startId=0
+     * 
+     * @param userInfo
+     * @param activityId
+     * @param findKey 用户搜索的
+     * @param voteWorksId 投票分享过来的，用于置顶
+     * @param start
+     * @param size
+     * @return
+     * @throws ServiceException
+     */
+    ApiRespWrapper<ListWrapResp<ActivityWorksResp>> listActivityWorks(UserInfo userInfo, Integer activityId,
+            String findKey, Integer voteWorksId, Integer start, Integer size) throws ServiceException;
 
 }

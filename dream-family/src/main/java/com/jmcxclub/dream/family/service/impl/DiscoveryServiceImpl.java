@@ -32,7 +32,6 @@ import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.FeedTypeEnum;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
-import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.model.UploadFileSaveResp;
@@ -234,70 +233,103 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     }
 
     @Override
-    public ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, int id) {
-        // TODO
-        return null;
-    }
-
-    @Override
     public ApiRespWrapper<ListWrapResp<ActivityWorksResp>> listActivityWorks(UserInfo userInfo, Integer activityId,
-            String findKey, Integer start, Integer size) throws ServiceException {
+            String findKey, Integer voteWorksId, Integer start, Integer size) throws ServiceException {
+        if (!StringUtils.isEmpty(findKey)) {
+            return handleFindActivityWorks(findKey);
+        }
         ListWrapResp<ActivityVoteStatInfo> datas = activityVoteStatInfoService
                 .listInfo(new ActivityVoteStatInfoSortedListCacheFilter(activityId, start, size));
         ActivityWorksInfo curUserActiviteWorksInfo = null;
+        ActivityWorksInfo voteActiviteWorksInfo = null;
         ActivityVoteStatInfo curUserActivityVoteStatInfo = null;
+        ActivityVoteStatInfo voteWorkActivityVoteStatInfo = null;
         int curUserActiviteWorksRank = 0;
+        int voteActiviteWorksRank = 0;
         if (start == 0) {
             ActivityWorksInfo activiteWorksInfo = new ActivityWorksInfo();
             activiteWorksInfo.setUserId(userInfo.getId());
             activiteWorksInfo.setActivityId(activityId);
             curUserActiviteWorksInfo = activityWorksInfoService.getInfoByUk(activiteWorksInfo);
             if (curUserActiviteWorksInfo != null) {
+                // 当前作者作品
                 curUserActivityVoteStatInfo = activityVoteStatInfoService.getData(curUserActiviteWorksInfo.getId());
                 curUserActiviteWorksRank = activityVoteStatInfoService.rank(curUserActiviteWorksInfo.getId());
             }
-        }
-        ActivityWorksInfo curFindActiviteWorksInfo = null;
-        ActivityVoteStatInfo curFindActivityVoteStatInfo = null;
-        int curFindActiviteWorksRank = 0;
-        if (!StringUtils.isEmpty(findKey)) {
-            try {
-                int findWorksId = Integer.parseInt(findKey);
-                curFindActiviteWorksInfo = activityWorksInfoService.getData(findWorksId);
-                if (curFindActiviteWorksInfo != null) {
-                    curFindActivityVoteStatInfo = activityVoteStatInfoService.getData(findWorksId);
-                    curFindActiviteWorksRank = activityVoteStatInfoService.rank(findWorksId);
-                }
-            } catch (Exception e) {
+
+            if (voteWorksId != null
+                    && (curUserActiviteWorksInfo != null && curUserActiviteWorksInfo.getId() != voteWorksId)) {
+                // 当前投票作品
+                voteActiviteWorksInfo = activityWorksInfoService.getData(voteWorksId.intValue());
+                voteWorkActivityVoteStatInfo = activityVoteStatInfoService.getData(voteWorksId.intValue());
+                curUserActiviteWorksRank = activityVoteStatInfoService.rank(voteWorksId.intValue());
             }
         }
         List<Integer> worksIds = new ArrayList<Integer>();
         for (ActivityVoteStatInfo activityVoteStatInfo : datas.getResultList()) {
             worksIds.add(activityVoteStatInfo.getId());
         }
-        List<ActivityWorksInfo> activityWorksInfos = activityWorksInfoService.getData(worksIds);
-        List<ActivityWorksResp> values = new ArrayList<ActivityWorksResp>();
         int addtional = 0;
-        if (curUserActivityVoteStatInfo != null && curUserActiviteWorksInfo != null) {
-            values.add(new ActivityWorksResp(curUserActiviteWorksInfo, curUserActiviteWorksRank,
-                    curUserActivityVoteStatInfo.getVotes()));
+        List<ActivityWorksInfo> activityWorksInfos = activityWorksInfoService.getData(worksIds);
+        if (start == 0 && curUserActiviteWorksInfo != null) {
+            activityWorksInfos.add(0, curUserActiviteWorksInfo);
             addtional++;
         }
-        if (curFindActiviteWorksInfo != null && curFindActivityVoteStatInfo != null) {
-            values.add(new ActivityWorksResp(curFindActiviteWorksInfo, curFindActiviteWorksRank,
-                    curFindActivityVoteStatInfo.getVotes()));
+        if (start == 0 && voteActiviteWorksInfo != null) {
+            activityWorksInfos.add(0, voteActiviteWorksInfo);
             addtional++;
         }
-        int rank = start + 1;
-        for (ActivityVoteStatInfo activityVoteStatInfo : datas.getResultList()) {
-            for (ActivityWorksInfo activityWorksInfo : activityWorksInfos) {
+        int rank = start;
+        List<ActivityWorksResp> values = new ArrayList<ActivityWorksResp>();
+        for (ActivityWorksInfo activityWorksInfo : activityWorksInfos) {
+            if (curUserActiviteWorksInfo != null && activityWorksInfo.getId() == curUserActiviteWorksInfo.getId()
+                    && curUserActivityVoteStatInfo != null) {
+                values.add(new ActivityWorksResp(activityWorksInfo, curUserActiviteWorksRank,
+                        curUserActivityVoteStatInfo.getVotes()));
+                continue;
+            }
+            if (voteActiviteWorksInfo != null && activityWorksInfo.getId() == voteActiviteWorksInfo.getId()
+                    && voteWorkActivityVoteStatInfo != null) {
+                values.add(new ActivityWorksResp(activityWorksInfo, voteActiviteWorksRank, voteWorkActivityVoteStatInfo
+                        .getVotes()));
+                continue;
+            }
+            rank++;
+            if (curUserActiviteWorksInfo != null && activityWorksInfo.getId() == curUserActiviteWorksInfo.getId()) {
+                addtional--;
+                continue;
+            }
+            if (voteActiviteWorksInfo != null && activityWorksInfo.getId() == voteActiviteWorksInfo.getId()) {
+                addtional--;
+                continue;
+            }
+            for (ActivityVoteStatInfo activityVoteStatInfo : datas.getResultList()) {
                 if (activityVoteStatInfo.getId() == activityWorksInfo.getId()) {
-                    values.add(new ActivityWorksResp(activityWorksInfo, rank++, activityVoteStatInfo.getVotes()));
+                    values.add(new ActivityWorksResp(activityWorksInfo, rank, activityVoteStatInfo.getVotes()));
+                    break;
                 }
             }
         }
         boolean more = datas.isMore() && datas.getTotalCount() > start + size + addtional;
         return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(new ListWrapResp<ActivityWorksResp>(
                 datas.getTotalCount(), values, more, datas.getNext()));
+    }
+
+    private ApiRespWrapper<ListWrapResp<ActivityWorksResp>> handleFindActivityWorks(String findKey) {
+        try {
+            int findWorksId = Integer.parseInt(findKey);
+            ActivityWorksInfo activityWorksInfo = activityWorksInfoService.getData(findWorksId);
+            if (activityWorksInfo != null) {
+                ActivityVoteStatInfo activityVoteStatInfo = activityVoteStatInfoService.getData(findWorksId);
+                int rank = activityVoteStatInfoService.rank(findWorksId);
+                List<ActivityWorksResp> resultList = new ArrayList<ActivityWorksResp>();
+                resultList.add(new ActivityWorksResp(activityWorksInfo, rank, activityVoteStatInfo == null ? 0
+                        : activityVoteStatInfo.getVotes()));
+                return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(new ListWrapResp<ActivityWorksResp>(
+                        resultList));
+            }
+        } catch (Exception e) {
+        }
+        return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(null);
     }
 }

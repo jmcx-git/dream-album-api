@@ -142,7 +142,7 @@ public class ContentDescUtils {
                         }
                     }
                 } else {
-                    stepDesc = "投票结束，正在出奖，祝您好运";
+                    stepDesc = "投票结束，正在出奖，敬请等待.";
                 }
             }
         }
@@ -236,7 +236,7 @@ public class ContentDescUtils {
                 bottomStepDesc = "计票统计中，即将开奖";
                 step = ActivityStepEnum.AUDIT.getStep();
             } else {
-                long seconds = (curDate.getTime() - info.getEndDate().getTime()) / 1000;
+                long seconds = (info.getEndDate().getTime() - curDate.getTime()) / 1000;
                 if (seconds == 0) {
                     stepDesc = "活动已结束";
                     bottomStepDesc = "计票统计中，即将开奖";

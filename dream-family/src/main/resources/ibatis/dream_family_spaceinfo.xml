@@ -47,9 +47,9 @@
         ]]>
 	</update>
 
-	<update id="updateSpaceInfoNameAndBornDate" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
+	<update id="updateSpaceInfoNameAndBornDateAndInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceInfo">
         <![CDATA[
-        	UPDATE `space_info` SET `name` = #name#, `born_date` = #bornDate# WHERE `id`=#id# ;
+        	UPDATE `space_info` SET `name` = #name#, `born_date` = #bornDate#, `info` = #info# WHERE `id`=#id# ;
         ]]>
 	</update>
 

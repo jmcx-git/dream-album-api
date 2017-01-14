@@ -105,10 +105,11 @@ public interface SpaceService {
      * @param spaceId
      * @param name
      * @param born
+     * @param info 
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String name, Date born) throws ServiceException;
+    ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String name, Date born, String info) throws ServiceException;
 
     /**
      * 用户编辑空间

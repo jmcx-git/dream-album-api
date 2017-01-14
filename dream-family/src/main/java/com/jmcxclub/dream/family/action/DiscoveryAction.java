@@ -23,7 +23,6 @@ import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfoEnum;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
-import com.jmcxclub.dream.family.model.ActivityVoteInfoResp;
 import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.service.DiscoveryService;
@@ -107,7 +106,7 @@ public class DiscoveryAction extends IosBaseAction {
     @RequestMapping("/activity/works/list.json")
     @ResponseBody
     public ApiRespWrapper<ListWrapResp<ActivityWorksResp>> listActivityWorks(String openId, Integer id, String findKey,
-            Integer start, Integer size, String version) throws ServiceException {
+            Integer start, Integer size, String version, Integer voteWorksId) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(-1, "未知的用户账号", null);
         }
@@ -117,7 +116,7 @@ public class DiscoveryAction extends IosBaseAction {
         }
         start = ParameterUtils.formatStart(start);
         size = ParameterUtils.formatStart(size);
-        return discoveryService.listActivityWorks(userInfo, id, findKey, start, size);
+        return discoveryService.listActivityWorks(userInfo, id, findKey, voteWorksId, start, size);
     }
 
     /**
@@ -201,24 +200,5 @@ public class DiscoveryAction extends IosBaseAction {
         Map<String, String> httpParameters = LoggingFilter.threadLocalMap.get();
         String ip = httpParameters != null ? httpParameters.get("ip") : "";
         return discoveryService.voteActivity(userInfo.getId(), id, worksId, ip);
-    }
-
-    /**
-     * 获取投票结果
-     * 
-     * @param openId
-     * @param id
-     * @param version
-     * @return
-     * @throws ServiceException
-     */
-    @RequestMapping("/activity/result.json")
-    @ResponseBody
-    public ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>> listActivityResult(String openId, Integer id,
-            String version) throws ServiceException {
-        if (StringUtils.isEmpty(openId)) {
-            return new ApiRespWrapper<ListWrapResp<ActivityVoteInfoResp>>(-1, "未知的用户账号", null);
-        }
-        return discoveryService.listActivityResult(openId, id);
     }
 }

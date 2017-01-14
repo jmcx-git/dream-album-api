@@ -250,7 +250,7 @@ public class SpaceAction extends IosBaseAction {
     @RequestMapping("/info/edit.json")
     @ResponseBody
     public ApiRespWrapper<Boolean> editSpaceInfo(String openId, Integer spaceId, String name, String born,
-            String version) throws ServiceException {
+            String version, String info) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
         }
@@ -261,7 +261,7 @@ public class SpaceAction extends IosBaseAction {
             } catch (Exception e) {
             }
         }
-        return spaceService.editSpace(openId, spaceId, name, bornDate);
+        return spaceService.editSpace(openId, spaceId, name, bornDate, info);
     }
 
     @RequestMapping("/delete.json")

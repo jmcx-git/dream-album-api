@@ -28,8 +28,8 @@ public class SpaceInfoDaoImpl extends SpaceInfoDao {
     }
 
     @Override
-    public void updateNameAndBornDate(SpaceInfo g) throws SQLException {
-        SQLUtils.update(getSqlMapClient(), "updateSpaceInfoNameAndBornDate", g);
+    public void updateNameAndBornDateAndInfo(SpaceInfo g) throws SQLException {
+        SQLUtils.update(getSqlMapClient(), "updateSpaceInfoNameAndBornDateAndInfo", g);
     }
 
     @Override

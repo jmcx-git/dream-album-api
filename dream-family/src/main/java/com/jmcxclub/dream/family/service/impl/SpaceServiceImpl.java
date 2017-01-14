@@ -502,9 +502,9 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String name, Date born)
+    public ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String name, Date born, String info)
             throws ServiceException {
-        spaceInfoService.modifyInfo(spaceId, name, born);
+        spaceInfoService.modifyInfo(spaceId, name, born, info);
         return new ApiRespWrapper<Boolean>(true);
     }
 

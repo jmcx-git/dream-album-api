@@ -35,8 +35,9 @@ public class WxLoginAction {
 
     @RequestMapping("/session.json")
     @ResponseBody
-    public String getUser3rdSesseion(String appId, String code) {
+    public String getUser3rdSesseion(String appId, String code, String fromOpenId) {
         UserOpenIdInfo info = userOpenIdInfoService.getUser3rdSesseion(appId, code);
+        log.info("The from open id " + fromOpenId + " share a new user." + info.getOpenid());
         return info.getOpenid();
     }
 
