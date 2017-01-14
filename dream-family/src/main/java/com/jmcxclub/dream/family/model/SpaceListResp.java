@@ -23,6 +23,7 @@ public class SpaceListResp {
     private int occupants;// 人气数
     private String name;// 空间名称
     private String info;// 空间的描述
+    private int type;// 空间类型 see SpaceTypeEnum
 
     private String timeDesc;// dd MMM.yy
 
@@ -33,6 +34,7 @@ public class SpaceListResp {
         this.name = spaceInfo.getName();
         this.timeDesc = ContentDescUtils.buildEnglishTimeDesc(spaceInfo.getCreateTime());
         this.info = spaceInfo.getInfo();// TODO
+        this.type = spaceInfo.getType();
         if (curStat != null) {
             this.records = curStat.getRecords();
             this.occupants = curStat.getOccupants();
@@ -101,5 +103,13 @@ public class SpaceListResp {
 
     public void setTimeDesc(String timeDesc) {
         this.timeDesc = timeDesc;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }
