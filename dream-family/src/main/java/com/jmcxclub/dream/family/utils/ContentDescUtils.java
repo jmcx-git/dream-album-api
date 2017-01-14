@@ -97,9 +97,13 @@ public class ContentDescUtils {
         return minDesc;
     }
 
+    public static String buildEnglishTimeDesc(Date date) {
+        return DateUtils.formatStr(date, "dd MMM.yyyy");
+    }
+
     public static void buildActivityInfo(DiscoveryListResp discoveryListResp, ActivityInfo activityInfo) {
         String stepDesc = "";
-        String startTimeDesc = DateUtils.formatStr(activityInfo.getStartDate(), "dd MMM.yyyy");
+        String startTimeDesc = buildEnglishTimeDesc(activityInfo.getStartDate());
         if (activityInfo.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
             stepDesc = "已结束，点击查看结果";
         } else {
@@ -198,6 +202,7 @@ public class ContentDescUtils {
         long stepTime = 0;
         String stepTimeUnit = "";
         String stepDesc = "";
+        String bottomStepDesc = "";//只在step==0,2,3只有值F
         String activityTimeDesc = buildStartEndTimeDesc(info.getStartDate(), info.getEndDate());
         String[] contens = info.getContent().split("<br/>");
         if (contens.length == 1) {
@@ -210,19 +215,23 @@ public class ContentDescUtils {
         if (info.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
             //
             stepDesc = "活动已结束";
+            bottomStepDesc = "活动已结束-点击查看结果";
             step = ActivityStepEnum.FINISH.getStep();
         } else {
             Date curDate = new Date();
             if (info.getStartDate().after(curDate)) {
                 stepDesc = "活动未开始";
+                bottomStepDesc = "即将开始，敬请期待";
                 step = ActivityStepEnum.INIT.getStep();
             } else if (info.getEndDate().before(curDate)) {
                 stepDesc = "计票统计中，即将开奖";
+                bottomStepDesc = "计票统计中，即将开奖";
                 step = ActivityStepEnum.AUDIT.getStep();
             } else {
                 long seconds = (curDate.getTime() - info.getEndDate().getTime()) / 1000;
                 if (seconds == 0) {
                     stepDesc = "活动已结束";
+                    bottomStepDesc = "计票统计中，即将开奖";
                     step = ActivityStepEnum.FINISH.getStep();
                 } else {
                     step = ActivityStepEnum.ING.getStep();
@@ -238,10 +247,10 @@ public class ContentDescUtils {
                         } else {
                             long day = hour / 24;
                             if (day == 0) {
-                                stepTime = minutes;
+                                stepTime = hour;
                                 stepTimeUnit = "小时";
                             } else {
-                                stepTime = minutes;
+                                stepTime = day;
                                 stepTimeUnit = "天";
                             }
                         }
@@ -282,6 +291,7 @@ public class ContentDescUtils {
         activityInfoResp.setStepTime(stepTime);
         activityInfoResp.setStepTimeUnit(stepTimeUnit);
         activityInfoResp.setActivityTimeDesc(activityTimeDesc);
+        activityInfoResp.setBottomStepDesc(bottomStepDesc);
     }
 
     private static String buildStartEndTimeDesc(Date startDate, Date endDate) {

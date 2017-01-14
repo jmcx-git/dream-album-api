@@ -7,7 +7,7 @@ package com.jmcxclub.dream.family.model;
  *
  */
 public enum ActivityStepEnum {
-    INIT(0, "未开始"), ING(0, "进行中"), AUDIT(0, "投票审计中"), FINISH(0, "结束");
+    INIT(0, "未开始"), ING(1, "进行中"), AUDIT(2, "投票审计中"), FINISH(3, "结束");
     private int step;
     private String desc;
 

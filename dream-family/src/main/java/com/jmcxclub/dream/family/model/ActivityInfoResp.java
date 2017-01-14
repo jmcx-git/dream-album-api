@@ -29,6 +29,7 @@ public class ActivityInfoResp {
     private String stepTimeUnit;// 距结束N天中的N;在step==1时使用
     private int step;// see ActivityStepEnum for css style
     private String stepDesc;// 在step!=1时使用此数据
+    private String bottomStepDesc = "";// 只在step!=1在底部使用此值
     private List<String> contentSections;// 活动段落
     private String activityTimeDesc;// 活动时间
     private List<ActivityPrizeResp> prizes;
@@ -201,5 +202,13 @@ public class ActivityInfoResp {
 
     public void setStepTimeUnit(String stepTimeUnit) {
         this.stepTimeUnit = stepTimeUnit;
+    }
+
+    public String getBottomStepDesc() {
+        return bottomStepDesc;
+    }
+
+    public void setBottomStepDesc(String bottomStepDesc) {
+        this.bottomStepDesc = bottomStepDesc;
     }
 }

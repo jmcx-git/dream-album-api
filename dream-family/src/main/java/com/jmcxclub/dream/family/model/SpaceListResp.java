@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.model;
 
 import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceStatInfo;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 
 /**
@@ -23,11 +24,14 @@ public class SpaceListResp {
     private String name;// 空间名称
     private String info;// 空间的描述
 
+    private String timeDesc;// dd MMM.yy
+
     public SpaceListResp(SpaceInfo spaceInfo, SpaceStatInfo curStat) {
         this.id = spaceInfo.getId();
         this.cover = spaceInfo.getCover();
         this.notice = false;
         this.name = spaceInfo.getName();
+        this.timeDesc = ContentDescUtils.buildEnglishTimeDesc(spaceInfo.getCreateTime());
         this.info = spaceInfo.getInfo();// TODO
         if (curStat != null) {
             this.records = curStat.getRecords();
@@ -89,5 +93,13 @@ public class SpaceListResp {
 
     public void setInfo(String info) {
         this.info = info;
+    }
+
+    public String getTimeDesc() {
+        return timeDesc;
+    }
+
+    public void setTimeDesc(String timeDesc) {
+        this.timeDesc = timeDesc;
     }
 }
