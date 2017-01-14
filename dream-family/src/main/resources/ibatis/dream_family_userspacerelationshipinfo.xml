@@ -52,7 +52,7 @@
 
 	<select id="queryUserSpaceRelationshipInfoIdByUk"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo"
-		resultClass="java.lnag.Integer">
+		resultClass="java.lang.Integer">
 		<![CDATA[
 			SELECT id FROM `user_space_relationship_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId# and `status` = #status#;
 		 ]]>
