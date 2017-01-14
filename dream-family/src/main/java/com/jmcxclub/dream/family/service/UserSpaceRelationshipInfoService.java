@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.service;
 
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.service.AbstractSortedListCacheService;
+import com.dreambox.web.exception.ServiceException;
 import com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo;
 
 /**
@@ -46,5 +47,7 @@ public abstract class UserSpaceRelationshipInfoService extends
             this.userId = userId;
         }
     }
+
+    public abstract boolean joinedSpace(int spaceId, int userId) throws ServiceException;
 
 }

@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,5 +151,20 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
     @Override
     protected int getPriority() {
         return 3;
+    }
+
+    @Override
+    public boolean joinedSpace(int spaceId, int userId) throws ServiceException {
+        UserSpaceRelationshipInfo g = new UserSpaceRelationshipInfo();
+        g.setSpaceId(spaceId);
+        g.setUserId(userId);
+        g.setStatus(UserSpaceRelationshipInfo.STATUS_OK);
+        Integer id = null;
+        try {
+            id = this.userSpaceRelationshipInfoDao.queryIdByUk(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        return id != null && id.intValue() > 0;
     }
 }

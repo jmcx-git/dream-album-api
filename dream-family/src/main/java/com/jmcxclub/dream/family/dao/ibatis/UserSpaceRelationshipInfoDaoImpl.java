@@ -2,18 +2,20 @@
 
 package com.jmcxclub.dream.family.dao.ibatis;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
+import com.dreambox.core.utils.SQLUtils;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.jmcxclub.dream.family.dao.UserSpaceRelationshipInfoDao;
+import com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo;
 
 /**
- * @author mokous86@gmail.com
- * create date: Jan 10, 2017
+ * @author mokous86@gmail.com create date: Jan 10, 2017
  *
- 
  */
 @Repository("userSpaceRelationshipInfoDao")
 public class UserSpaceRelationshipInfoDaoImpl extends UserSpaceRelationshipInfoDao {
@@ -23,6 +25,11 @@ public class UserSpaceRelationshipInfoDaoImpl extends UserSpaceRelationshipInfoD
     @Override
     public SqlMapClient getSqlMapClient() {
         return sqlMapClient;
+    }
+
+    @Override
+    public Integer queryIdByUk(UserSpaceRelationshipInfo g) throws SQLException {
+        return SQLUtils.queryObject(getSqlMapClient(), "queryUserSpaceRelationshipInfoIdByUk", g);
     }
 
 }

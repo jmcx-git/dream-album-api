@@ -163,4 +163,10 @@ public class UserSpaceInteractionInfoServiceImpl extends UserSpaceInteractionInf
         return 3;
     }
 
+    @Override
+    protected void afterAddData(UserSpaceInteractionInfo g) {
+        // uk pk的对应关系未找到时会自动从数据库获取，无须预载入
+        return;
+    }
+
 }

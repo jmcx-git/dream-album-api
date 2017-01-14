@@ -135,13 +135,37 @@ public class SpaceAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
+    @RequestMapping("/joined.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> joinedSpace(String openId, Integer spaceId) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "用户账号不能为空", null);
+        }
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号.");
+        }
+        return spaceService.joinedSpace(userInfo.getId(), spaceId);
+    }
+
+
+    /**
+     * 加入空间
+     * 
+     * @param openId
+     * @param secert
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
     @RequestMapping("/join.json")
     @ResponseBody
-    public ApiRespWrapper<Integer> joinSpace(String openId, String secert, String version) throws ServiceException {
+    public ApiRespWrapper<Integer> joinSpace(String openId, String secert, Integer spaceId, String fromOpenId,
+            String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
         }
-        return spaceService.joinSpace(openId, secert);
+        return spaceService.joinSpace(openId, secert, fromOpenId, spaceId == null ? 0 : spaceId.intValue());
     }
 
     /**

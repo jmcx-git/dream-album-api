@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -212,13 +213,20 @@ public class SpaceServiceImpl implements SpaceService {
         }
         FeedInfoSortedListCacheFilter filter = new FeedInfoSortedListCacheFilter(null, spaceId, start, size);
         ListWrapResp<FeedInfo> infos = feedInfoService.listInfo(filter);
-        spaceStatInfoService.incrViews(spaceId);
-        userSpaceInteractionInfoService.incrViews(userInfo.getId(), spaceId);
+        afterViewSpace(userInfo.getId(), spaceId);
         if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
                     new ArrayList<SpaceFeedListResp>(0)));
         }
         return buildFeedListResp(spaceInfo, infos, userInfo.getId());
+    }
+
+    private void afterViewSpace(int userId, int spaceId) {
+        spaceStatInfoService.incrViews(spaceId);
+        UserSpaceInteractionInfo g = new UserSpaceInteractionInfo();
+        g.setUserId(userId);
+        g.setSpaceId(spaceId);
+        userSpaceInteractionInfoService.addData(g);
     }
 
     @Override
@@ -513,25 +521,48 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<Integer> joinSpace(String openId, String secert) throws ServiceException {
-        SpaceSecertInfo g = new SpaceSecertInfo();
-        g.setSecert(secert);
-        g = spaceSecertInfoService.getInfoByUk(g);
-        if (g == null) {
-            return new ApiRespWrapper<>(-2, "邀请码无效", null);
-        }
+    public ApiRespWrapper<Integer> joinSpace(String openId, String secert, String fromOpenId, int spaceId)
+            throws ServiceException {
         UserInfo userInfo = new UserInfo();
         userInfo.setOpenId(openId);
         int userId = userInfoService.getIdByUk(userInfo);
         if (userId <= -1) {
-            throw ServiceException.getParameterException("Invalid open id");
+            return new ApiRespWrapper<Integer>(-2, "不存在用户Id", null);
+        }
+        if (StringUtils.isEmpty(secert)) {
+            SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
+            if (spaceInfo == null) {
+                return new ApiRespWrapper<Integer>(-2, "不存在的空间", null);
+            }
+            UserInfo g = new UserInfo();
+            g.setOpenId(fromOpenId);
+            int spaceOwnerId = userInfoService.getIdByUk(g);
+            if (spaceOwnerId <= -1) {
+                return new ApiRespWrapper<Integer>(-2, "不存在空间用户Id", null);
+            }
+            if (spaceInfo.getUserId() != spaceOwnerId) {
+                return new ApiRespWrapper<Integer>(-2, "当前用户并未创建此空间", null);
+            }
+        } else {
+            SpaceSecertInfo g = new SpaceSecertInfo();
+            g.setSecert(secert);
+            g = spaceSecertInfoService.getInfoByUk(g);
+            if (g == null) {
+                return new ApiRespWrapper<>(-2, "邀请码无效", null);
+            }
+            spaceId = g.getSpaceId();
         }
         UserSpaceRelationshipInfo userSpaceRelationshipInfo = new UserSpaceRelationshipInfo();
         userSpaceRelationshipInfo.setUserId(userId);
-        userSpaceRelationshipInfo.setSpaceId(g.getSpaceId());
+        userSpaceRelationshipInfo.setSpaceId(spaceId);
         userSpaceRelationshipInfo.setRelationship(SpaceRelationshipEnum.OCCUPANTS.getFlag());
         userSpaceRelationshipInfoService.addData(userSpaceRelationshipInfo);
-        return new ApiRespWrapper<Integer>(g.getSpaceId());
+        return new ApiRespWrapper<Integer>(spaceId);
+    }
+
+    @Override
+    public ApiRespWrapper<Boolean> joinedSpace(int userId, int spaceId) throws ServiceException {
+        return new ApiRespWrapper<Boolean>(userSpaceRelationshipInfoService.joinedSpace(spaceId, userId));
     }
 
     @Override

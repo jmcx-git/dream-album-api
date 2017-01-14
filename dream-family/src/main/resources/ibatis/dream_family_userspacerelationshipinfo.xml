@@ -50,6 +50,14 @@
 		 ]]>
 	</select>
 
+	<select id="queryUserSpaceRelationshipInfoIdByUk"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo"
+		resultClass="java.lnag.Integer">
+		<![CDATA[
+			SELECT id FROM `user_space_relationship_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId# and `status` = #status#;
+		 ]]>
+	</select>
+
 	<select id="queryUserSpaceRelationshipInfoListByStartId"
 		parameterClass="java.util.Map" resultMap="spacestatinfo">
 		<![CDATA[

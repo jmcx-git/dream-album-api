@@ -132,7 +132,8 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Integer> joinSpace(String openId, String secert) throws ServiceException;
+    ApiRespWrapper<Integer> joinSpace(String openId, String secert, String fromOpenId, int spaceId)
+            throws ServiceException;
 
     /**
      * 用户生成空间加密码
@@ -194,4 +195,6 @@ public interface SpaceService {
             throws ServiceException;
 
     ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException;
+
+    ApiRespWrapper<Boolean> joinedSpace(int id, int spaceId) throws ServiceException;
 }
