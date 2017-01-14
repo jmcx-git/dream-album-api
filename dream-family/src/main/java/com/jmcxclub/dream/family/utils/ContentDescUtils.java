@@ -11,10 +11,13 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.utils.DateUtils;
+import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
+import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
@@ -23,6 +26,8 @@ import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
 import com.jmcxclub.dream.family.model.ActivityStepEnum;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
+import com.jmcxclub.dream.family.model.UserInfoResp;
+import com.jmcxclub.dream.family.model.UserPrizeResp;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
@@ -195,14 +200,17 @@ public class ContentDescUtils {
      * @param info
      * @param activityPrizeInfos
      * @param prizeInfos
+     * @param userInfos
+     * @param userPrizes
      */
     public static void buildActivityInfoRespOthers(ActivityInfoResp activityInfoResp, ActivityInfo info,
-            List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos) {
+            List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos,
+            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> userInfos) {
         int step = 0;
         long stepTime = 0;
         String stepTimeUnit = "";
         String stepDesc = "";
-        String bottomStepDesc = "";//只在step==0,2,3只有值F
+        String bottomStepDesc = "";// 只在step==0,2,3只有值F
         String activityTimeDesc = buildStartEndTimeDesc(info.getStartDate(), info.getEndDate());
         String[] contens = info.getContent().split("<br/>");
         if (contens.length == 1) {
@@ -284,6 +292,61 @@ public class ContentDescUtils {
             prizeInfo = curPrize.getTitle() + activityPrizeInfo.getCount() + "名";
             prizes.add(new ActivityPrizeResp(rankDesc, prizeInfo, curPrize.getImg()));
         }
+
+        List<UserPrizeResp> userPrizeResp = null;// 用户中奖信息
+        if (CollectionUtils.notEmptyAndNull(userPrizes) && CollectionUtils.notEmptyAndNull(userInfos)) {
+            userPrizeResp = new ArrayList<UserPrizeResp>();
+            boolean moreRankPrizes = activityPrizeInfos != null && activityPrizeInfos.size() > 1;
+
+            for (ActivityPrizeInfo activityPrizeInfo : activityPrizeInfos) {
+                for (ActivityUserPrizeInfo userPrize : userPrizes) {
+                    if (activityPrizeInfo.getId() == userPrize.getActivityPrizeId()) {
+                        UserInfo curUser = null;
+                        for (UserInfo userInfo : userInfos) {
+                            if (userPrize.getUserId() == userInfo.getId()) {
+                                curUser = userInfo;
+                                break;
+                            }
+                        }
+                        if (curUser == null) {
+                            break;
+                        }
+                        UserInfoResp userInfoResp = new UserInfoResp(curUser);
+                        if (userPrizeResp.isEmpty()) {
+                            UserPrizeResp addResp = new UserPrizeResp();
+                            addResp.setRank(activityPrizeInfo.getRank());
+                            if (moreRankPrizes) {
+                                addResp.setDesc(activityPrizeInfo.getRankDesc() + "奖品获得者:");
+                            } else {
+                                addResp.setDesc("奖品获得者:");
+                            }
+                            List<UserInfoResp> usrInfos = new ArrayList<UserInfoResp>();
+                            usrInfos.add(userInfoResp);
+                            addResp.setUserInfos(usrInfos);
+                            userPrizeResp.add(addResp);
+                        } else {
+                            UserPrizeResp pre = userPrizeResp.get(userPrizeResp.size() - 1);
+                            if (pre.getRank() == activityPrizeInfo.getRank()) {
+                                pre.getUserInfos().add(userInfoResp);
+                            } else {
+                                UserPrizeResp addResp = new UserPrizeResp();
+                                addResp.setRank(activityPrizeInfo.getRank());
+                                if (moreRankPrizes) {
+                                    addResp.setDesc(activityPrizeInfo.getRankDesc() + "奖品获得者:");
+                                } else {
+                                    addResp.setDesc("奖品获得者:");
+                                }
+                                List<UserInfoResp> usrInfos = new ArrayList<UserInfoResp>();
+                                usrInfos.add(userInfoResp);
+                                addResp.setUserInfos(usrInfos);
+                                userPrizeResp.add(addResp);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
         activityInfoResp.setContentSections(contentSections);
         activityInfoResp.setPrizes(prizes);
         activityInfoResp.setStep(step);
@@ -292,6 +355,7 @@ public class ContentDescUtils {
         activityInfoResp.setStepTimeUnit(stepTimeUnit);
         activityInfoResp.setActivityTimeDesc(activityTimeDesc);
         activityInfoResp.setBottomStepDesc(bottomStepDesc);
+        activityInfoResp.setUserPrizes(userPrizeResp);
     }
 
     private static String buildStartEndTimeDesc(Date startDate, Date endDate) {

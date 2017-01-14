@@ -4,8 +4,10 @@ package com.jmcxclub.dream.family.model;
 
 import java.util.List;
 
+import com.dreambox.core.dto.album.UserInfo;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
+import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.utils.ContentDescUtils;
@@ -23,6 +25,7 @@ public class ActivityInfoResp {
     private String activityRule;// 活动规则
     private List<ActivityWorksExampleInfo> examples;
     private int joined;// 当前用户是否已参赛0 not joined 1 joined
+    private Integer worksId;// 当前用户的参赛作品id
 
     // need build
     private long stepTime;// 距结束N天中的天在step==1时使用
@@ -33,18 +36,20 @@ public class ActivityInfoResp {
     private List<String> contentSections;// 活动段落
     private String activityTimeDesc;// 活动时间
     private List<ActivityPrizeResp> prizes;
+    private List<UserPrizeResp> userPrizes;// 用户中奖信息
 
     public ActivityInfoResp(ActivityInfo info, List<ActivityWorksExampleInfo> examples,
-            List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos, boolean joined) {
+            List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos, Integer worksId,
+            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> userInfos) {
         this.id = info.getId();
         this.title = info.getTitle();
         this.introduction = info.getIntroduction();
         this.cover = info.getCover();
-        this.joined = joined ? 1 : 0;
+        this.joined = worksId != null && worksId.intValue() > 0 ? 1 : 0;
         this.examples = examples;
         this.activityRule = info.getActivityRule();
-        ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos);
-
+        this.worksId = worksId;
+        ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos, userPrizes, userInfos);
     }
 
     public int getId() {
@@ -210,5 +215,21 @@ public class ActivityInfoResp {
 
     public void setBottomStepDesc(String bottomStepDesc) {
         this.bottomStepDesc = bottomStepDesc;
+    }
+
+    public Integer getWorksId() {
+        return worksId;
+    }
+
+    public void setWorksId(Integer worksId) {
+        this.worksId = worksId;
+    }
+
+    public List<UserPrizeResp> getUserPrizes() {
+        return userPrizes;
+    }
+
+    public void setUserPrizes(List<UserPrizeResp> userPrizes) {
+        this.userPrizes = userPrizes;
     }
 }

@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `user_read_notice_record`(
 )Engine=InnoDB DEFAULT CHARSET=utf8 COMMENT '用户读取通知记录';
 
 CREATE TABLE IF NOT EXISTS `activity_works_example_info`(
-	`id` int unsigned not null comment 'user_info.id',
+	`id` int unsigned not null auto_increment,
 	`activity_id` int unsigned not null COMMENT 'reference activity_info.id',
 	`title`  VARCHAR(255) not null COMMENT '标题',
 	`img`  VARCHAR(255) not null COMMENT '图片',

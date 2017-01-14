@@ -13,13 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dto.album.UserInfo;
+import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.core.utils.DateUtils;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
+import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
+import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityVoteDetailInfo;
 import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
@@ -75,6 +78,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     private FeedInfoService feedInfoService;
     @Autowired
     private PrizeInfoService prizeInfoService;
+    @Autowired
+    private UserInfoService userInfoService;
 
     @Override
     public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size)
@@ -114,8 +119,18 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             prizeIds.add(activityPrizeInfo.getPrizeId());
         }
         List<PrizeInfo> prizeInfos = prizeInfoService.getData(prizeIds);
+        List<ActivityUserPrizeInfo> userPrizes = null;
+        List<UserInfo> userInfos = null;
+        if (info.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
+            userPrizes = activityUserPrizeInfoService.listInfo(info.getId());
+            List<Integer> userIds = new ArrayList<Integer>();
+            for (ActivityUserPrizeInfo activityUserPrizeInfo : userPrizes) {
+                userIds.add(activityUserPrizeInfo.getUserId());
+            }
+            userInfoService.getData(userIds);
+        }
         return new ApiRespWrapper<ActivityInfoResp>(new ActivityInfoResp(info, examples, activityPrizeInfos,
-                prizeInfos, worksId > 0));
+                prizeInfos, worksId, userPrizes, userInfos));
     }
 
     @Override

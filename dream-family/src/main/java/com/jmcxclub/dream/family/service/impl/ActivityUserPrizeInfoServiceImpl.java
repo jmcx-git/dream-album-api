@@ -3,6 +3,7 @@
 package com.jmcxclub.dream.family.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -19,6 +20,7 @@ import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.utils.RedisCacheUtils;
 import com.dreambox.web.exception.ServiceException;
+import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dao.ActivityUserPrizeInfoDao;
 import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
 import com.jmcxclub.dream.family.service.ActivityUserPrizeInfoService;
@@ -97,6 +99,18 @@ public class ActivityUserPrizeInfoServiceImpl extends ActivityUserPrizeInfoServi
     @Override
     public CommonDao<ActivityUserPrizeInfo> getCommonDao() {
         return activityUserPrizeInfoDao;
+    }
+
+    @Override
+    public List<ActivityUserPrizeInfo> listInfo(int activityId) throws ServiceException {
+        SizeCacheFilter filter = new ActivityUserPrizeInfoSetCacheFilter(activityId);
+        String key = buildSetKey(filter);
+        List<Integer> ids = RedisCacheUtils.smemberIds(key, getJedisPool());
+        if (CollectionUtils.emptyOrNull(ids)) {
+            return new ArrayList<ActivityUserPrizeInfo>();
+        }
+        List<ActivityUserPrizeInfo> infos = getData(ids);
+        return infos;
     }
 
 

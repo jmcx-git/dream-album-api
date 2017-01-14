@@ -38,5 +38,6 @@ public abstract class ActivityUserPrizeInfoService extends AbstractSetCacheServi
         }
     }
 
+    public abstract List<ActivityUserPrizeInfo> listInfo(int activityId) throws ServiceException;
 
 }
