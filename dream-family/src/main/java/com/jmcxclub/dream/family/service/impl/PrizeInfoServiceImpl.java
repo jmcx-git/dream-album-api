@@ -10,15 +10,14 @@ import org.springframework.stereotype.Service;
 import redis.clients.jedis.ShardedJedisPool;
 
 import com.dreambox.core.dao.CommonDao;
+import com.dreambox.core.utils.RedisCacheUtils;
 import com.jmcxclub.dream.family.dao.PrizeInfoDao;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.service.PrizeInfoService;
 
 /**
- * @author mokous86@gmail.com
- * create date: Jan 13, 2017
+ * @author mokous86@gmail.com create date: Jan 13, 2017
  *
- 
  */
 @Service("prizeInfoService")
 public class PrizeInfoServiceImpl extends PrizeInfoService {
@@ -27,7 +26,7 @@ public class PrizeInfoServiceImpl extends PrizeInfoService {
     @Autowired
     @Resource(name = "dream-family-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
-    private String infoKey="prize:info:";
+    private String infoKey = "prize:info";
 
 
     @Override
@@ -37,7 +36,7 @@ public class PrizeInfoServiceImpl extends PrizeInfoService {
 
     @Override
     protected String buildDataInfoKey(int id) {
-        return infoKey;
+        return RedisCacheUtils.buildKey(infoKey, id);
     }
 
     @Override
