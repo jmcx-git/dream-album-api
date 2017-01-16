@@ -50,7 +50,7 @@ public class SpaceInfoServiceImpl extends SpaceInfoService {
         if (g == null) {
             throw ServiceException.getParameterException("Invaild space id.");
         }
-        if (StringUtils.equalsIgnoreCase(g.getName(), name)
+        if (StringUtils.equalsIgnoreCase(g.getName(), name) && StringUtils.equalsIgnoreCase(g.getInfo(), info)
                 && org.apache.commons.lang3.time.DateUtils.isSameDay(bornDate, g.getBornDate())) {
             return;
         }
