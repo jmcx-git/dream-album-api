@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
 <sqlMap namespace="rfq">
-	<resultMap id="feedstatinfo"
+	<resultMap id="userspaceinteractioninfo"
 		class="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
@@ -75,7 +75,7 @@
 	</update>
 
 	<select id="queryUserSpaceInteractionInfoById" parameterClass="java.lang.Integer"
-		resultMap="feedstatinfo">
+		resultMap="userspaceinteractioninfo">
 		<![CDATA[
 			SELECT * FROM `user_space_interaction_info` WHERE `id` = #startId#;
 		 ]]>
@@ -83,21 +83,21 @@
 
 	<select id="queryUserSpaceInteractionInfoIdByUk"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo"
-		resultMap="feedstatinfo">
+		resultMap="userspaceinteractioninfo">
 		<![CDATA[
 			SELECT id FROM `user_space_interaction_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId#;
 		 ]]>
 	</select>
 
 	<select id="queryUserSpaceInteractionInfoListByStartId"
-		parameterClass="java.util.Map" resultMap="feedstatinfo">
+		parameterClass="java.util.Map" resultMap="userspaceinteractioninfo">
 		<![CDATA[
 			SELECT * FROM `user_space_interaction_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
 		 ]]>
 	</select>
 
 	<select id="queryUserSpaceInteractionInfoByIds" parameterClass="java.util.Map"
-		resultMap="feedstatinfo">
+		resultMap="userspaceinteractioninfo">
 		SELECT *
 		FROM `user_space_interaction_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
@@ -106,8 +106,8 @@
 	</select>
 
 	<select id="queryUserSpaceInteractionInfoListByFilter"
-		parameterClass="java.util.Map" resultMap="feedstatinfo">
-		SELECT * FROM `user_space_interaction_info`
+	parameterClass="java.util.Map" resultMap="userspaceinteractioninfo">
+	SELECT * FROM `user_space_interaction_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">
