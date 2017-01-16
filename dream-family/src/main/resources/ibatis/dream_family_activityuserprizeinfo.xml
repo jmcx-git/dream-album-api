@@ -87,6 +87,17 @@
 		#size#;
 	</select>
 
+	<select id="queryActivityUserPrizeInfoListByStartIdFilter"
+		parameterClass="java.util.Map" resultMap="activityuserprizeinfo">
+		SELECT *
+		FROM
+		`activity_user_prize_info`
+		WHERE
+		`id` > #startId# AND `status` = 0 ORDER
+		BY id LIMIT
+		#size#;
+	</select>
+
 	<select id="queryActivityUserPrizeInfoByIds" parameterClass="java.util.Map"
 		resultMap="activityuserprizeinfo">
 		SELECT *
