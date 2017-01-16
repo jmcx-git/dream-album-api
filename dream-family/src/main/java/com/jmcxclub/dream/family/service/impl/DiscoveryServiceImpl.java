@@ -5,6 +5,7 @@ package com.jmcxclub.dream.family.service.impl;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,17 +122,23 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         }
         List<PrizeInfo> prizeInfos = prizeInfoService.getData(prizeIds);
         List<ActivityUserPrizeInfo> userPrizes = null;
-        List<UserInfo> prizeUserInfos = null;
+        Map<Integer, UserInfo> userMap = null;
+        Map<Integer, ActivityVoteStatInfo> workVotesMap = null;
         if (info.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
             userPrizes = activityUserPrizeInfoService.listInfo(info.getId());
             List<Integer> userIds = new ArrayList<Integer>();
+            List<Integer> worksIds = new ArrayList<Integer>();
             for (ActivityUserPrizeInfo activityUserPrizeInfo : userPrizes) {
                 userIds.add(activityUserPrizeInfo.getUserId());
+                worksIds.add(activityUserPrizeInfo.getWorksId());
             }
-            prizeUserInfos = userInfoService.getData(userIds);
+            List<UserInfo> prizeUserInfos = userInfoService.getData(userIds);
+            userMap = CollectionUtils.transformToMap(prizeUserInfos);
+            List<ActivityVoteStatInfo> votesInfos = activityVoteStatInfoService.getData(worksIds);
+            workVotesMap = CollectionUtils.transformToMap(votesInfos);
         }
         return new ApiRespWrapper<ActivityInfoResp>(new ActivityInfoResp(info, participates, examples,
-                activityPrizeInfos, prizeInfos, worksId, userPrizes, prizeUserInfos));
+                activityPrizeInfos, prizeInfos, worksId, userPrizes, userMap, workVotesMap));
     }
 
     @Override

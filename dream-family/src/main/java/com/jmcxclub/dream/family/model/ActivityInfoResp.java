@@ -3,11 +3,13 @@
 package com.jmcxclub.dream.family.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.dreambox.core.dto.album.UserInfo;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
+import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.utils.ContentDescUtils;
@@ -40,7 +42,8 @@ public class ActivityInfoResp {
 
     public ActivityInfoResp(ActivityInfo info, long participates, List<ActivityWorksExampleInfo> examples,
             List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos, Integer worksId,
-            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> prizeUserInfos) {
+            List<ActivityUserPrizeInfo> userPrizes, Map<Integer, UserInfo> userMap,
+            Map<Integer, ActivityVoteStatInfo> votesMap) {
         this.id = info.getId();
         this.title = info.getTitle();
         this.introduction = info.getIntroduction();
@@ -50,7 +53,8 @@ public class ActivityInfoResp {
         this.examples = examples;
         this.joined = worksId != null && worksId.intValue() > 0 ? 1 : 0;
         this.worksId = worksId;
-        ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos, userPrizes, prizeUserInfos);
+        ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos, userPrizes, userMap,
+                votesMap);
     }
 
     public int getId() {

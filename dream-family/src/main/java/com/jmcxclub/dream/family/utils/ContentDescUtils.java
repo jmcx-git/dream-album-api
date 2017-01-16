@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,6 +19,7 @@ import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
+import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
@@ -28,7 +30,6 @@ import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
 import com.jmcxclub.dream.family.model.ActivityStepEnum;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
-import com.jmcxclub.dream.family.model.UserInfoResp;
 import com.jmcxclub.dream.family.model.UserPrizeResp;
 
 /**
@@ -219,7 +220,8 @@ public class ContentDescUtils {
      */
     public static void buildActivityInfoRespOthers(ActivityInfoResp activityInfoResp, ActivityInfo info,
             List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos,
-            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> prizeUserInfos) {
+            List<ActivityUserPrizeInfo> userPrizes, Map<Integer, UserInfo> userMap,
+            Map<Integer, ActivityVoteStatInfo> votesMap) {
         int step = 0;
         long stepTime = 0;
         String stepTimeUnit = "";
@@ -308,54 +310,23 @@ public class ContentDescUtils {
         }
 
         List<UserPrizeResp> userPrizeResp = null;// 用户中奖信息
-        if (CollectionUtils.notEmptyAndNull(userPrizes) && CollectionUtils.notEmptyAndNull(prizeUserInfos)) {
+        if (CollectionUtils.notEmptyAndNull(userPrizes) && CollectionUtils.notEmptyAndNull(userMap)
+                && CollectionUtils.notEmptyAndNull(votesMap)) {
             userPrizeResp = new ArrayList<UserPrizeResp>();
-            boolean moreRankPrizes = activityPrizeInfos != null && activityPrizeInfos.size() > 1;
 
             for (ActivityPrizeInfo activityPrizeInfo : activityPrizeInfos) {
                 for (ActivityUserPrizeInfo userPrize : userPrizes) {
                     if (activityPrizeInfo.getId() == userPrize.getActivityPrizeId()) {
-                        UserInfo curUser = null;
-                        for (UserInfo userInfo : prizeUserInfos) {
-                            if (userPrize.getUserId() == userInfo.getId()) {
-                                curUser = userInfo;
-                                break;
-                            }
-                        }
-                        if (curUser == null) {
+                        UserInfo curUser = userMap.get(userPrize.getUserId());
+                        ActivityVoteStatInfo statInfo = votesMap.get(userPrize.getWorksId());
+                        if (curUser == null || statInfo == null) {
                             break;
                         }
-                        UserInfoResp userInfoResp = new UserInfoResp(curUser);
-                        if (userPrizeResp.isEmpty()) {
-                            UserPrizeResp addResp = new UserPrizeResp();
-                            addResp.setRank(activityPrizeInfo.getRank());
-                            if (moreRankPrizes) {
-                                addResp.setDesc(activityPrizeInfo.getRankDesc() + "奖品获得者:");
-                            } else {
-                                addResp.setDesc("奖品获得者:");
-                            }
-                            List<UserInfoResp> usrInfos = new ArrayList<UserInfoResp>();
-                            usrInfos.add(userInfoResp);
-                            addResp.setUserInfos(usrInfos);
-                            userPrizeResp.add(addResp);
-                        } else {
-                            UserPrizeResp pre = userPrizeResp.get(userPrizeResp.size() - 1);
-                            if (pre.getRank() == activityPrizeInfo.getRank()) {
-                                pre.getUserInfos().add(userInfoResp);
-                            } else {
-                                UserPrizeResp addResp = new UserPrizeResp();
-                                addResp.setRank(activityPrizeInfo.getRank());
-                                if (moreRankPrizes) {
-                                    addResp.setDesc(activityPrizeInfo.getRankDesc() + "奖品获得者:");
-                                } else {
-                                    addResp.setDesc("奖品获得者:");
-                                }
-                                List<UserInfoResp> usrInfos = new ArrayList<UserInfoResp>();
-                                usrInfos.add(userInfoResp);
-                                addResp.setUserInfos(usrInfos);
-                                userPrizeResp.add(addResp);
-                            }
-                        }
+                        UserPrizeResp addResp = new UserPrizeResp();
+                        addResp.setRank(activityPrizeInfo.getRank());
+                        addResp.setVote(statInfo.getVotes());
+                        addResp.setName(curUser.getNickName());
+                        userPrizeResp.add(addResp);
                         break;
                     }
                 }
@@ -389,4 +360,5 @@ public class ContentDescUtils {
         }
         return null;
     }
+
 }
