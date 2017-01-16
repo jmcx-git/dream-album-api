@@ -89,6 +89,10 @@ public class NoticeServiceImpl implements NoticeService {
                 allNotices.add(new NoticeResp(systemNoticeInfo));
             }
         }
+        UserReadNoticeRecord userReadNoticeRecord = new UserReadNoticeRecord();
+        userReadNoticeRecord.setId(userId);
+        userReadNoticeRecord.setReadTime(new Date());
+        userReadNoticeRecordService.addData(userReadNoticeRecord);
         if (CollectionUtils.emptyOrNull(allNotices)) {
             return new ApiRespWrapper<ListWrapResp<NoticeResp>>(new ListWrapResp<NoticeResp>(
                     new ArrayList<NoticeResp>()));
@@ -96,6 +100,9 @@ public class NoticeServiceImpl implements NoticeService {
         Collections.sort(allNotices, new Comparator<NoticeResp>() {
             @Override
             public int compare(NoticeResp o1, NoticeResp o2) {
+                if (o2.getTime() == o1.getTime()) {
+                    return o2.getId() - o1.getId();
+                }
                 return (int) (o2.getTime() - o1.getTime());
             }
         });

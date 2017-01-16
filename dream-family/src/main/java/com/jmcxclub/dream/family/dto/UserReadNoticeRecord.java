@@ -16,7 +16,7 @@ public class UserReadNoticeRecord extends StatusSerializable {
      * 
      */
     private static final long serialVersionUID = -3299870136143256792L;
-    private int id;
+    private int id;// reference user id
     private Date readTime;
 
     public int getId() {
