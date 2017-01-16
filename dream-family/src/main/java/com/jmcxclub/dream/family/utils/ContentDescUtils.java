@@ -6,6 +6,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -314,8 +316,8 @@ public class ContentDescUtils {
                 && CollectionUtils.notEmptyAndNull(votesMap)) {
             userPrizeResp = new ArrayList<UserPrizeResp>();
 
-            for (ActivityPrizeInfo activityPrizeInfo : activityPrizeInfos) {
-                for (ActivityUserPrizeInfo userPrize : userPrizes) {
+            for (ActivityUserPrizeInfo userPrize : userPrizes) {
+                for (ActivityPrizeInfo activityPrizeInfo : activityPrizeInfos) {
                     if (activityPrizeInfo.getId() == userPrize.getActivityPrizeId()) {
                         UserInfo curUser = userMap.get(userPrize.getUserId());
                         ActivityVoteStatInfo statInfo = votesMap.get(userPrize.getWorksId());
@@ -332,6 +334,13 @@ public class ContentDescUtils {
                 }
             }
         }
+        Collections.sort(userPrizeResp, new Comparator<UserPrizeResp>() {
+
+            @Override
+            public int compare(UserPrizeResp o1, UserPrizeResp o2) {
+                return o1.getRank() - o2.getRank();
+            }
+        });
         activityInfoResp.setContentSections(contentSections);
         activityInfoResp.setPrizes(prizes);
         activityInfoResp.setStep(step);
