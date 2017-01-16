@@ -24,10 +24,10 @@ import com.jmcxclub.dream.family.service.PrizeInfoService;
 public class PrizeInfoServiceImpl extends PrizeInfoService {
     @Autowired
     private PrizeInfoDao prizeInfoDao;
-    private String infoKey="prize:info:";
     @Autowired
     @Resource(name = "dream-family-rediscacheshardedpool")
     private ShardedJedisPool shardedJedisPool;
+    private String infoKey="prize:info:";
 
 
     @Override

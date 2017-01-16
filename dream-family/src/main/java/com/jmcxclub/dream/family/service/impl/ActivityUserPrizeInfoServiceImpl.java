@@ -39,8 +39,8 @@ public class ActivityUserPrizeInfoServiceImpl extends ActivityUserPrizeInfoServi
     @Resource(name = "dream-family-redisdbpool")
     private JedisPool jedisDbPool;
 
-    private String idsKey = "activity:prize:ids";
-    private String infoKey = "activity:prize:info";
+    private String idsKey = "activity:user:prize:ids";
+    private String infoKey = "activity:user:prize:info";
 
     @Override
     public int minUnbuildId() throws ServiceException {

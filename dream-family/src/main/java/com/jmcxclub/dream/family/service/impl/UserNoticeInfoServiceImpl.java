@@ -32,8 +32,8 @@ public class UserNoticeInfoServiceImpl extends UserNoticeInfoService {
     @Resource(name = "dream-family-redisdbpool")
     private JedisPool jedisDbPool;
 
-    private String sortedIdsKey = "activity:prize:ids";
-    private String infoKey = "activity:prize:info";
+    private String sortedIdsKey = "user:notice:ids";
+    private String infoKey = "user:notice:info";
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
