@@ -21,7 +21,7 @@ public class ActivityInfoResp {
     private String title;
     private String introduction;// 描述
     private String cover;
-    private int participates;// 参与人数
+    private long participates;// 参与人数
     private String activityRule;// 活动规则
     private List<ActivityWorksExampleInfo> examples;
     private int joined;// 当前用户是否已参赛0 not joined 1 joined
@@ -38,16 +38,17 @@ public class ActivityInfoResp {
     private List<ActivityPrizeResp> prizes;
     private List<UserPrizeResp> userPrizes;// 用户中奖信息
 
-    public ActivityInfoResp(ActivityInfo info, List<ActivityWorksExampleInfo> examples,
+    public ActivityInfoResp(ActivityInfo info, long participates, List<ActivityWorksExampleInfo> examples,
             List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos, Integer worksId,
             List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> userInfos) {
         this.id = info.getId();
         this.title = info.getTitle();
         this.introduction = info.getIntroduction();
         this.cover = info.getCover();
-        this.joined = worksId != null && worksId.intValue() > 0 ? 1 : 0;
-        this.examples = examples;
+        this.participates = participates;
         this.activityRule = info.getActivityRule();
+        this.examples = examples;
+        this.joined = worksId != null && worksId.intValue() > 0 ? 1 : 0;
         this.worksId = worksId;
         ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos, userPrizes, userInfos);
     }
@@ -92,11 +93,11 @@ public class ActivityInfoResp {
         this.step = step;
     }
 
-    public int getParticipates() {
+    public long getParticipates() {
         return participates;
     }
 
-    public void setParticipates(int participates) {
+    public void setParticipates(long participates) {
         this.participates = participates;
     }
 

@@ -61,7 +61,7 @@ public class DiscoveryAction extends IosBaseAction {
      */
     @RequestMapping("/list.json")
     @ResponseBody
-    public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listSpace(String openId, Integer start, Integer size,
+    public ApiRespWrapper<ListWrapResp<DiscoveryListResp>> listDiscovery(String openId, Integer start, Integer size,
             String version) throws ServiceException {
         if (StringUtils.isEmpty(openId)) {
             return new ApiRespWrapper<ListWrapResp<DiscoveryListResp>>(-1, "未知的用户账号", null);

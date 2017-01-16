@@ -94,6 +94,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         List<DiscoveryListResp> datas = new ArrayList<DiscoveryListResp>();
         ActivityVoteStatInfoSortedListCacheFilter statCacheFilter = new ActivityVoteStatInfoSortedListCacheFilter();
         for (ActivityInfo info : infos.getResultList()) {
+            statCacheFilter.setActivityId(info.getId());
             long participates = activityVoteStatInfoService.count(statCacheFilter);
             datas.add(new DiscoveryListResp(info, participates));
         }
@@ -104,6 +105,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     @Override
     public ApiRespWrapper<ActivityInfoResp> getActivity(int userId, int id) {
         ActivityInfo info = activityInfoService.getData(id);
+        long participates = activityVoteStatInfoService.count(new ActivityVoteStatInfoSortedListCacheFilter(id, 0, 0));
         List<ActivityWorksExampleInfo> examples = activityWorksExampleInfoService.listInfo(id);
         ActivityWorksInfo activityWorksInfo = new ActivityWorksInfo();
         activityWorksInfo.setActivityId(id);
@@ -128,8 +130,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             }
             userInfoService.getData(userIds);
         }
-        return new ApiRespWrapper<ActivityInfoResp>(new ActivityInfoResp(info, examples, activityPrizeInfos,
-                prizeInfos, worksId, userPrizes, userInfos));
+        return new ApiRespWrapper<ActivityInfoResp>(new ActivityInfoResp(info, participates, examples,
+                activityPrizeInfos, prizeInfos, worksId, userPrizes, userInfos));
     }
 
     @Override
