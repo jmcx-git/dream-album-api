@@ -238,7 +238,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
     public ApiRespWrapper<ListWrapResp<ActivityWorksResp>> listActivityWorks(UserInfo userInfo, Integer activityId,
             String findKey, Integer voteWorksId, Integer start, Integer size) throws ServiceException {
         if (!StringUtils.isEmpty(findKey)) {
-            return handleFindActivityWorks(findKey);
+            return handleFindActivityWorks(activityId, findKey);
         }
         ListWrapResp<ActivityVoteStatInfo> datas = activityVoteStatInfoService
                 .listInfo(new ActivityVoteStatInfoSortedListCacheFilter(activityId, start, size));
@@ -326,11 +326,11 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                 datas.getTotalCount(), values, more, datas.getNext()));
     }
 
-    private ApiRespWrapper<ListWrapResp<ActivityWorksResp>> handleFindActivityWorks(String findKey) {
+    private ApiRespWrapper<ListWrapResp<ActivityWorksResp>> handleFindActivityWorks(int activityId, String findKey) {
         try {
             int findWorksId = Integer.parseInt(findKey);
             ActivityWorksInfo activityWorksInfo = activityWorksInfoService.getData(findWorksId);
-            if (activityWorksInfo != null) {
+            if (activityWorksInfo != null && activityWorksInfo.getActivityId() == activityId) {
                 ActivityVoteStatInfo activityVoteStatInfo = activityVoteStatInfoService.getData(findWorksId);
                 int rank = activityVoteStatInfoService.rank(activityWorksInfo.getActivityId(), findWorksId);
                 List<ActivityWorksResp> resultList = new ArrayList<ActivityWorksResp>();
@@ -341,6 +341,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             }
         } catch (Exception e) {
         }
-        return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(null);
+        return new ApiRespWrapper<ListWrapResp<ActivityWorksResp>>(new ListWrapResp<ActivityWorksResp>(
+                new ArrayList<ActivityWorksResp>()));
     }
 }

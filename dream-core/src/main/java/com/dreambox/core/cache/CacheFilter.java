@@ -23,6 +23,7 @@ public class CacheFilter {
 
     public static class StartSizeCacheFilter extends SizeCacheFilter {
         private int start;
+        private boolean reverse = true;
 
         public int getStart() {
             return start;
@@ -30,6 +31,14 @@ public class CacheFilter {
 
         public void setStart(int start) {
             this.start = start;
+        }
+
+        public boolean isReverse() {
+            return reverse;
+        }
+
+        public void setReverse(boolean reverse) {
+            this.reverse = reverse;
         }
     }
 

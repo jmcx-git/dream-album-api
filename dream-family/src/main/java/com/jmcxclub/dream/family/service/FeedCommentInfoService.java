@@ -21,6 +21,7 @@ public abstract class FeedCommentInfoService extends AbstractSortedListCacheServ
             this.feedId = feedId;
             super.setSize(size);
             super.setStart(start);
+            super.setReverse(false);
         }
 
         public Integer getUserId() {
