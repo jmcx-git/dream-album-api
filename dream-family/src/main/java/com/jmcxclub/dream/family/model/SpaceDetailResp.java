@@ -40,6 +40,7 @@ public class SpaceDetailResp {
             this.occupants = stat.getOccupants();
         }
         this.name = spaceInfo.getName();
+        this.info = spaceInfo.getInfo();
         this.icon = spaceInfo.getIcon();
         this.cover = spaceInfo.getCover();
         this.avatarUrl = owner.getAvatarUrl();

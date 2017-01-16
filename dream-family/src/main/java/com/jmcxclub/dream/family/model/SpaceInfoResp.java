@@ -25,6 +25,7 @@ public class SpaceInfoResp {
     public SpaceInfoResp(SpaceInfo spaceInfo, UserInfo owner) {
         this.id = spaceInfo.getId();
         this.name = spaceInfo.getName();
+        this.info = spaceInfo.getInfo();
         this.icon = spaceInfo.getIcon();
         this.cover = spaceInfo.getCover();
         this.bornDate = spaceInfo.getBornDate();
