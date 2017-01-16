@@ -334,13 +334,15 @@ public class ContentDescUtils {
                 }
             }
         }
-        Collections.sort(userPrizeResp, new Comparator<UserPrizeResp>() {
+        if (CollectionUtils.notEmptyAndNull(userPrizeResp)) {
+            Collections.sort(userPrizeResp, new Comparator<UserPrizeResp>() {
 
-            @Override
-            public int compare(UserPrizeResp o1, UserPrizeResp o2) {
-                return o1.getRank() - o2.getRank();
-            }
-        });
+                @Override
+                public int compare(UserPrizeResp o1, UserPrizeResp o2) {
+                    return o1.getRank() - o2.getRank();
+                }
+            });
+        }
         activityInfoResp.setContentSections(contentSections);
         activityInfoResp.setPrizes(prizes);
         activityInfoResp.setStep(step);
