@@ -67,7 +67,7 @@ public class NoticeServiceImpl implements NoticeService {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override

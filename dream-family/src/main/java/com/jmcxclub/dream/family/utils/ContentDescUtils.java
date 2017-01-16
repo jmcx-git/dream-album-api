@@ -21,6 +21,8 @@ import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
+import com.jmcxclub.dream.family.dto.SpaceInfo;
+import com.jmcxclub.dream.family.dto.SpaceTypeEnum;
 import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
@@ -364,5 +366,15 @@ public class ContentDescUtils {
         int sd = DateUtils.getDay(startDate);
         int ed = DateUtils.getDay(endDate);
         return sm + "月" + sd + "日一" + em + "月" + ed + "日";
+    }
+
+    public static String buildSpaceInfo(SpaceInfo spaceInfo) {
+        if (StringUtils.isNotBlank(spaceInfo.getInfo())) {
+            return spaceInfo.getInfo();
+        }
+        if (spaceInfo.getType() == SpaceTypeEnum.BABY.getType()) {
+        } else if (spaceInfo.getType() == SpaceTypeEnum.LOVE.getType()) {
+        }
+        return null;
     }
 }

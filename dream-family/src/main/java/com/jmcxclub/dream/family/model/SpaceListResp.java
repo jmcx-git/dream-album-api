@@ -33,7 +33,7 @@ public class SpaceListResp {
         this.notice = false;
         this.name = spaceInfo.getName();
         this.timeDesc = ContentDescUtils.buildEnglishTimeDesc(spaceInfo.getCreateTime());
-        this.info = spaceInfo.getInfo();// TODO
+        this.info = ContentDescUtils.buildSpaceInfo(spaceInfo);// TODO
         this.type = spaceInfo.getType();
         if (curStat != null) {
             this.records = curStat.getRecords();
