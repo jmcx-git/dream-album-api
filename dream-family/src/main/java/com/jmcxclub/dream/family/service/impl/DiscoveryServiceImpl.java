@@ -254,7 +254,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             if (curUserActiviteWorksInfo != null) {
                 // 当前作者作品
                 curUserActivityVoteStatInfo = activityVoteStatInfoService.getData(curUserActiviteWorksInfo.getId());
-                curUserActiviteWorksRank = activityVoteStatInfoService.rank(curUserActiviteWorksInfo.getId());
+                curUserActiviteWorksRank = activityVoteStatInfoService.rank(activityId.intValue(),
+                        curUserActiviteWorksInfo.getId());
             }
 
             if (voteWorksId != null
@@ -264,7 +265,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                 // 当前投票作品
                 voteActiviteWorksInfo = activityWorksInfoService.getData(voteWorksId.intValue());
                 voteWorkActivityVoteStatInfo = activityVoteStatInfoService.getData(voteWorksId.intValue());
-                voteActiviteWorksRank = activityVoteStatInfoService.rank(voteWorksId.intValue());
+                voteActiviteWorksRank = activityVoteStatInfoService.rank(activityId.intValue(), voteWorksId.intValue());
             }
         }
         List<Integer> worksIds = new ArrayList<Integer>();
@@ -281,22 +282,26 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             activityWorksInfos.add(0, voteActiviteWorksInfo);
             addtional++;
         }
-        int rank = start;
         List<ActivityWorksResp> values = new ArrayList<ActivityWorksResp>();
+        boolean voteWorksAdd = false;
+        boolean userWorksAdd = false;
         for (ActivityWorksInfo activityWorksInfo : activityWorksInfos) {
-            if (curUserActiviteWorksInfo != null && activityWorksInfo.getId() == curUserActiviteWorksInfo.getId()
-                    && curUserActivityVoteStatInfo != null) {
-                values.add(new ActivityWorksResp(activityWorksInfo, curUserActiviteWorksRank,
-                        curUserActivityVoteStatInfo.getVotes()));
-                continue;
-            }
-            if (voteActiviteWorksInfo != null && activityWorksInfo.getId() == voteActiviteWorksInfo.getId()
+            if (!voteWorksAdd && voteActiviteWorksInfo != null
+                    && activityWorksInfo.getId() == voteActiviteWorksInfo.getId()
                     && voteWorkActivityVoteStatInfo != null) {
                 values.add(new ActivityWorksResp(activityWorksInfo, voteActiviteWorksRank, voteWorkActivityVoteStatInfo
                         .getVotes()));
+                voteWorksAdd = true;
                 continue;
             }
-            rank++;
+            if (!userWorksAdd && curUserActiviteWorksInfo != null
+                    && activityWorksInfo.getId() == curUserActiviteWorksInfo.getId()
+                    && curUserActivityVoteStatInfo != null) {
+                values.add(new ActivityWorksResp(activityWorksInfo, curUserActiviteWorksRank,
+                        curUserActivityVoteStatInfo.getVotes()));
+                userWorksAdd = true;
+                continue;
+            }
             if (curUserActiviteWorksInfo != null && activityWorksInfo.getId() == curUserActiviteWorksInfo.getId()) {
                 addtional--;
                 continue;
@@ -307,6 +312,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             }
             for (ActivityVoteStatInfo activityVoteStatInfo : datas.getResultList()) {
                 if (activityVoteStatInfo.getId() == activityWorksInfo.getId()) {
+                    int rank = activityVoteStatInfoService.rank(activityVoteStatInfo.getActivityId(),
+                            activityVoteStatInfo.getId());
                     values.add(new ActivityWorksResp(activityWorksInfo, rank, activityVoteStatInfo.getVotes()));
                     break;
                 }
@@ -323,7 +330,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             ActivityWorksInfo activityWorksInfo = activityWorksInfoService.getData(findWorksId);
             if (activityWorksInfo != null) {
                 ActivityVoteStatInfo activityVoteStatInfo = activityVoteStatInfoService.getData(findWorksId);
-                int rank = activityVoteStatInfoService.rank(findWorksId);
+                int rank = activityVoteStatInfoService.rank(activityWorksInfo.getActivityId(), findWorksId);
                 List<ActivityWorksResp> resultList = new ArrayList<ActivityWorksResp>();
                 resultList.add(new ActivityWorksResp(activityWorksInfo, rank, activityVoteStatInfo == null ? 0
                         : activityVoteStatInfo.getVotes()));

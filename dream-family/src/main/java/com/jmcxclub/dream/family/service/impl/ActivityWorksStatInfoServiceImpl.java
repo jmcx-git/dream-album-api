@@ -108,9 +108,10 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityVoteStatInfoServic
     // modify score and info
 
     @Override
-    public int rank(int id) throws ServiceException {
-        Long rank = RedisCacheUtils.zrank(buildSortedSetKey(new ActivityVoteStatInfoSortedListCacheFilter(id, 0, 0)),
-                String.valueOf(id), getJedisPool());
+    public int rank(int activityId, int worksId) throws ServiceException {
+        // 因为队列是从小到大排 所以采用zrevrank
+        Long rank = RedisCacheUtils.zrevrank(buildSortedSetKey(new ActivityVoteStatInfoSortedListCacheFilter(
+                activityId, 0, 0)), String.valueOf(worksId), getJedisPool());
         if (rank == null) {
             return -1;
         }
