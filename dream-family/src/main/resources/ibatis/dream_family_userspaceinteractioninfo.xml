@@ -81,10 +81,11 @@
 		 ]]>
 	</select>
 
-	<select id="queryUserSpaceInteractionInfoIdByUk" parameterClass="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo"
+	<select id="queryUserSpaceInteractionInfoIdByUk"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo"
 		resultMap="feedstatinfo">
 		<![CDATA[
-			SELECT * FROM `user_space_interaction_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId#;
+			SELECT id FROM `user_space_interaction_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId#;
 		 ]]>
 	</select>
 
