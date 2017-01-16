@@ -20,6 +20,7 @@ public abstract class ActivityPrizeInfoService extends AbstractSortedListCacheSe
             this.activityId = activityId;
             super.setStart(0);
             super.setSize(Integer.MAX_VALUE);
+            super.setReverse(false);
         }
 
         public int getActivityId() {
