@@ -48,7 +48,7 @@ public class UserNoticeInfoServiceImpl extends UserNoticeInfoService {
 
     @Override
     protected StartSizeCacheFilter buildCacheFilter(UserNoticeInfo value) {
-        return new UserNoticeInfoSortedSetCacheFilter(value.getId());
+        return new UserNoticeInfoSortedSetCacheFilter(value.getUserId());
     }
 
     @Override
