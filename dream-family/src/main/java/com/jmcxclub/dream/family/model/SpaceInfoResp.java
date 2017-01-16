@@ -17,6 +17,7 @@ public class SpaceInfoResp {
     private String info;// 空间的描述
     private String icon;// 空间icon
     private String cover;// 空间背景图
+    private String openId;
     private Date bornDate;
     private Integer gender;
     private int type;
@@ -29,6 +30,7 @@ public class SpaceInfoResp {
         this.bornDate = spaceInfo.getBornDate();
         this.gender = spaceInfo.getGender();
         this.type = spaceInfo.getType();
+        this.openId = owner.getOpenId();
     }
 
     public int getId() {
@@ -93,5 +95,13 @@ public class SpaceInfoResp {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

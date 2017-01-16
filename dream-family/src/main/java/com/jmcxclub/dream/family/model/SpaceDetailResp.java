@@ -23,6 +23,7 @@ public class SpaceDetailResp {
     private String info;// 空间的描述
     private String icon;// 空间icon
     private String cover;// 空间背景图
+    private String openId;
     private String avatarUrl;// 拥有者的微信头像
     private String nickname;// 拥有者的微信呢称
     private String secert;
@@ -43,6 +44,7 @@ public class SpaceDetailResp {
         this.cover = spaceInfo.getCover();
         this.avatarUrl = owner.getAvatarUrl();
         this.nickname = owner.getNickName();
+        this.openId = owner.getOpenId();
         this.secert = secert;
         this.bornDate = spaceInfo.getBornDate();
         this.gender = spaceInfo.getGender();
@@ -166,5 +168,13 @@ public class SpaceDetailResp {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

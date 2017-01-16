@@ -3,6 +3,7 @@
 package com.jmcxclub.dream.family.service.impl;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -163,10 +164,20 @@ public class UserSpaceInteractionInfoServiceImpl extends UserSpaceInteractionInf
         return 3;
     }
 
+
     @Override
-    protected void afterAddData(UserSpaceInteractionInfo g) {
-        // uk pk的对应关系未找到时会自动从数据库获取，无须预载入
-        return;
+    protected void afterAddData(List<UserSpaceInteractionInfo> gg) {
+        // remove g's info
+        for (UserSpaceInteractionInfo g : gg) {
+            if (g.getId() > 0) {
+                delCacheInfo(g);
+            } else {
+                int id = getIdByUk(g);
+                if (id > 0) {
+                    delCacheInfo(g);
+                }
+            }
+        }
     }
 
 }
