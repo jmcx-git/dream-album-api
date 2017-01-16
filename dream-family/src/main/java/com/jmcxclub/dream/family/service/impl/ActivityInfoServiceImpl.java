@@ -101,6 +101,6 @@ public class ActivityInfoServiceImpl extends ActivityInfoService {
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
-        afterModifyData(g);
+        RedisCacheUtils.del(buildDataInfoKey(id), getSharedJedisPool());
     }
 }
