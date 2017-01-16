@@ -83,7 +83,7 @@
 
 	<select id="queryUserSpaceInteractionInfoIdByUk"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo"
-		resultMap="userspaceinteractioninfo">
+		resultClass="java.lang.Integer">
 		<![CDATA[
 			SELECT id FROM `user_space_interaction_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId#;
 		 ]]>
@@ -106,8 +106,8 @@
 	</select>
 
 	<select id="queryUserSpaceInteractionInfoListByFilter"
-	parameterClass="java.util.Map" resultMap="userspaceinteractioninfo">
-	SELECT * FROM `user_space_interaction_info`
+		parameterClass="java.util.Map" resultMap="userspaceinteractioninfo">
+		SELECT * FROM `user_space_interaction_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">
