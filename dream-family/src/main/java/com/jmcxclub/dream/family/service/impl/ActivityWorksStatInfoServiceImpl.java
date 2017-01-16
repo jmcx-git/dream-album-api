@@ -3,6 +3,8 @@
 package com.jmcxclub.dream.family.service.impl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -103,6 +105,8 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityVoteStatInfoServic
         }
     }
 
+    // modify score and info
+
     @Override
     public int rank(int id) throws ServiceException {
         Long rank = RedisCacheUtils.zrank(buildSortedSetKey(new ActivityVoteStatInfoSortedListCacheFilter(id, 0, 0)),
@@ -114,8 +118,21 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityVoteStatInfoServic
     }
 
     @Override
-    protected String buildSortedSetMember(ActivityVoteStatInfo t) {
-        return String.valueOf(t.getId());
+    protected void afterModifyData(List<ActivityVoteStatInfo> gg) {
+        // remove infos
+        List<String> keys = new ArrayList<String>();
+        List<Integer> ids = new ArrayList<Integer>();
+        for (ActivityVoteStatInfo g : gg) {
+            keys.add(buildDataInfoKey(g.getId()));
+            ids.add(g.getId());
+        }
+        RedisCacheUtils.del(keys, shardedJedisPool);
+        deltaCacheInitLoad(ids);
+    }
+
+    @Override
+    protected void afterAddData(List<ActivityVoteStatInfo> gg) {
+        this.afterModifyData(gg);
     }
 
 }

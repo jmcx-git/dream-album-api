@@ -18,14 +18,15 @@ public class SpaceUserInteractionInfoResp {
     private int likes;
     private int comments;
 
-    public SpaceUserInteractionInfoResp(UserInfo userInfo, UserSpaceInteractionInfo userSpaceInteractionInfo) {
+    public SpaceUserInteractionInfoResp(UserInfo userInfo, UserSpaceInteractionInfo userSpaceInteractionInfo,
+            UserInfo spaceOwnerUserInfo) {
         this.openId = userInfo.getOpenId();
         this.avatalUrl = userInfo.getAvatarUrl();
         this.nickname = userInfo.getNickName();
         if (userSpaceInteractionInfo != null) {
             this.likes = userSpaceInteractionInfo.getLikes();
             this.comments = userSpaceInteractionInfo.getComments();
-            this.info = ContentDescUtils.buildUserVisitSpaceInfo(userSpaceInteractionInfo);
+            this.info = ContentDescUtils.buildUserVisitSpaceInfo(userSpaceInteractionInfo, spaceOwnerUserInfo);
         }
     }
 

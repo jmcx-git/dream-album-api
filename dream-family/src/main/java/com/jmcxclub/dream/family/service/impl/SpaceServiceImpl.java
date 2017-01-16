@@ -610,12 +610,21 @@ public class SpaceServiceImpl implements SpaceService {
         if (userInfo == null) {
             return new ApiRespWrapper<>(-1, "未知的用户账号.");
         }
+        SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
+        if (spaceInfo == null) {
+            return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的空间.");
+        }
+        UserInfo ownerUser = userInfoService.getData(spaceInfo.getUserId());
+        if (ownerUser == null) {
+            return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的空间用户账号.");
+        }
+
         UserSpaceInteractionInfo userSpaceInteractionInfo = new UserSpaceInteractionInfo();
         userSpaceInteractionInfo.setUserId(userInfo.getId());
         userSpaceInteractionInfo.setSpaceId(spaceId);
         userSpaceInteractionInfo = userSpaceInteractionInfoService.getInfoByUk(userSpaceInteractionInfo);
         return new ApiRespWrapper<SpaceUserInteractionInfoResp>(new SpaceUserInteractionInfoResp(userInfo,
-                userSpaceInteractionInfo));
+                userSpaceInteractionInfo, ownerUser));
     }
 
     // //////////以下方法暂时不需要实现

@@ -258,11 +258,13 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             }
 
             if (voteWorksId != null
-                    && (curUserActiviteWorksInfo != null && curUserActiviteWorksInfo.getId() != voteWorksId)) {
+                    && voteWorksId.intValue() > 0
+                    && (curUserActiviteWorksInfo == null || (curUserActiviteWorksInfo != null && curUserActiviteWorksInfo
+                            .getId() != voteWorksId))) {
                 // 当前投票作品
                 voteActiviteWorksInfo = activityWorksInfoService.getData(voteWorksId.intValue());
                 voteWorkActivityVoteStatInfo = activityVoteStatInfoService.getData(voteWorksId.intValue());
-                curUserActiviteWorksRank = activityVoteStatInfoService.rank(voteWorksId.intValue());
+                voteActiviteWorksRank = activityVoteStatInfoService.rank(voteWorksId.intValue());
             }
         }
         List<Integer> worksIds = new ArrayList<Integer>();

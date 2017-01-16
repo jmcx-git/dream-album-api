@@ -17,7 +17,7 @@ public class OccupantFootprintResp {
     private String info;// BUILD BY SYSTEM
 
     public OccupantFootprintResp(UserSpaceInteractionInfo info, UserInfo userInfo) {
-        this.info = ContentDescUtils.buildUserVisitSpaceInfo(info);
+        this.info = ContentDescUtils.buildUserVisitSpaceInfo(info, userInfo);
         if (userInfo != null) {
             this.nickname = userInfo.getNickName();
             this.avatarUrl = userInfo.getAvatarUrl();

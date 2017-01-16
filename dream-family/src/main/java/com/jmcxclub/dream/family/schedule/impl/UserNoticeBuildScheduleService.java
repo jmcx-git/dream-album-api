@@ -59,7 +59,7 @@ public class UserNoticeBuildScheduleService extends AbstractScheduleService {
         this.stop = true;
     }
 
-    @Scheduled(cron = "0 0 */1 * * ?")
+    @Scheduled(cron = "0 */5 * * * ?")
     @Override
     public void schedule() {
         if (stop) {
@@ -78,7 +78,7 @@ public class UserNoticeBuildScheduleService extends AbstractScheduleService {
         if (startId <= 0) {
             return;
         }
-        //query excludive id
+        // query excludive id
         startId = startId - 1;
         List<UserNoticeInfo> userNoticeInfos;
         while (!stop) {

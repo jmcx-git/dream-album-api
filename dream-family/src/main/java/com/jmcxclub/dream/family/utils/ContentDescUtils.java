@@ -46,7 +46,7 @@ public class ContentDescUtils {
         return content;
     }
 
-    public static String buildUserVisitSpaceInfo(UserSpaceInteractionInfo info) {
+    public static String buildUserVisitSpaceInfo(UserSpaceInteractionInfo info, UserInfo userInfo) {
         if (info == null) {
             return "未发现其踪迹";
         }
@@ -55,7 +55,7 @@ public class ContentDescUtils {
 
         long minutes = (curTimeMillis - preVisiMillis) / 6000;
         String minDesc = "";
-        if (minutes < 1) {
+        if (userInfo.getId() == info.getUserId() || minutes < 1) {
             minDesc = "正在查看";
         } else {
             long hours = minutes / 60;
