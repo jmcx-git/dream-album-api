@@ -33,8 +33,9 @@ import com.jmcxclub.dream.family.service.UserSpaceRelationshipInfoService;
 @Service("userSpaceRelationshipInfoService")
 public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipInfoService {
     private static final Logger log = Logger.getLogger(UserSpaceRelationshipInfoServiceImpl.class);
-    private static final double OWNER_SCORE = Double.MAX_VALUE;
-    private static final double TOP_SCORE = Double.MAX_VALUE / 2;
+    private static final double MAX_SCORE = Double.MAX_VALUE / 2;
+    private static final double NIDDLE_SCORE = Double.MAX_VALUE / 4;
+    private static final double MIN_SCORE = Double.MAX_VALUE / 8;
     @Autowired
     private UserSpaceRelationshipInfoDao userSpaceRelationshipInfoDao;
     @Autowired
@@ -122,12 +123,12 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
         double userIdListScore = 0d;
         double spaceIdListScore = t.getUpdateTime().getTime();
         if (t.getRelationship() == SpaceRelationshipEnum.OWNER.getFlag()) {
-            userIdListScore = OWNER_SCORE;
+            userIdListScore = MAX_SCORE + t.getId();
         } else if (t.getTop() == SpaceTopEnum.YES.getTop()) {
-            userIdListScore = TOP_SCORE;
+            userIdListScore = NIDDLE_SCORE;
         } else {
-            // 最早加入的放在最前面
-            userIdListScore = OWNER_SCORE - t.getCreateTime().getTime();
+            // 越晚加入的权重越小
+            userIdListScore = MIN_SCORE - t.getCreateTime().getTime();
         }
         List<Double> scores = new ArrayList<Double>();
         scores.add(userIdListScore);
