@@ -103,6 +103,7 @@ public class ActivityWorksStatInfoServiceImpl extends ActivityVoteStatInfoServic
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
+        afterModifyData(g);
     }
 
     // modify score and info
