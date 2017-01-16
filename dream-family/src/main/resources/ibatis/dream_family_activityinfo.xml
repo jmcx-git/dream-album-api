@@ -56,6 +56,12 @@
         ]]>
 	</update>
 
+	<update id="updateActivityInfoFinish" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
+        <![CDATA[
+        	UPDATE `activity_info` SET `finish` = #finish# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
 	<select id="queryActivityInfoById" parameterClass="java.lang.Integer"
 		resultMap="activityinfo">
 		SELECT `id`, CAST(`title` AS CHAR

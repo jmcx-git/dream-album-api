@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.service.impl;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.apache.log4j.Logger;
@@ -15,6 +17,7 @@ import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.utils.RedisCacheUtils;
+import com.dreambox.web.exception.ServiceException;
 import com.jmcxclub.dream.family.dao.ActivityInfoDao;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
@@ -86,5 +89,18 @@ public class ActivityInfoServiceImpl extends ActivityInfoService {
     @Override
     protected Logger getLogger() {
         return log;
+    }
+
+    @Override
+    public void modifyFinish(int id, int finish) throws ServiceException {
+        ActivityInfo g = new ActivityInfo();
+        g.setId(id);
+        g.setFinish(finish);
+        try {
+            this.activityInfoDao.updateFinish(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        afterModifyData(g);
     }
 }

@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.dao;
 
+import java.sql.SQLException;
+
 import com.dreambox.core.dao.AbsCommonDao;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 
@@ -12,5 +14,7 @@ import com.jmcxclub.dream.family.dto.ActivityInfo;
  
  */
 public abstract class ActivityInfoDao extends AbsCommonDao<ActivityInfo> {
+
+    public abstract void updateFinish(ActivityInfo g)throws SQLException;
 
 }

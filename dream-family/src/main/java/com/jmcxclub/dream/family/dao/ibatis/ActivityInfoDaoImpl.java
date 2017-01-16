@@ -2,12 +2,16 @@
 
 package com.jmcxclub.dream.family.dao.ibatis;
 
+import java.sql.SQLException;
+
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Repository;
 
+import com.dreambox.core.utils.SQLUtils;
 import com.ibatis.sqlmap.client.SqlMapClient;
 import com.jmcxclub.dream.family.dao.ActivityInfoDao;
+import com.jmcxclub.dream.family.dto.ActivityInfo;
 
 /**
  * @author mokous86@gmail.com
@@ -23,6 +27,11 @@ public class ActivityInfoDaoImpl extends ActivityInfoDao {
     @Override
     public SqlMapClient getSqlMapClient() {
         return sqlMapClient;
+    }
+
+    @Override
+    public void updateFinish(ActivityInfo g) throws SQLException {
+        SQLUtils.update(getSqlMapClient(), "updateActivityInfoFinish", g);
     }
 
 }

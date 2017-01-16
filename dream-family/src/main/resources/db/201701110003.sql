@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `user_notice_info`(
 	`id` int unsigned not null auto_increment,
 	`user_id` int unsigned not null COMMENT 'user_info.id',
 	`desc`  VARCHAR(255) not null COMMENT '描述',
-	`read` int unsigned not null COMMENT '0 INIT 1 READ',
+	`read` int unsigned not null default 0 COMMENT '0 INIT 1 READ',
 	`status` int(11) NOT NULL DEFAULT '0',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',

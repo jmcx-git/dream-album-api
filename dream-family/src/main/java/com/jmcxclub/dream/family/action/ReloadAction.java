@@ -14,6 +14,7 @@ import com.dreambox.core.service.AbsCommonCacheDataLoadService;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.utils.CollectionUtils;
+import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
 
 /**
@@ -25,6 +26,8 @@ import com.jmcxclub.dream.family.service.ActivityInfoService;
 public class ReloadAction extends IosBaseAction {
     @Autowired
     private Collection<AbsCommonCacheDataLoadService<?>> loadServices;
+    @Autowired
+    private ActivityInfoService activityInfoService;
 
     /**
      * 用户点击开始制作创建的用户相册信息数据
@@ -75,6 +78,23 @@ public class ReloadAction extends IosBaseAction {
                 }
             }
         }
+        return new ApiRespWrapper<Boolean>(true);
+    }
+
+    /**
+     * 用户点击开始制作创建的用户相册信息数据
+     * 
+     * 若第一次制作则添加制作信息
+     * 
+     * 若存在制作中的记录则返回item操作历史
+     * 
+     * @param userId
+     * @param albumId
+     */
+    @RequestMapping("/activity/finish.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> finishActivity(Integer id) {
+        activityInfoService.modifyFinish(id, ActivityFinishEnum.FINISH.getFinish());
         return new ApiRespWrapper<Boolean>(true);
     }
 }
