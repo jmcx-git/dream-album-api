@@ -109,14 +109,17 @@ public class ContentDescUtils {
     }
 
     public static void buildActivityInfo(DiscoveryListResp discoveryListResp, ActivityInfo activityInfo) {
+        int step = 0;
         String stepDesc = "";
         String startTimeDesc = buildEnglishTimeDesc(activityInfo.getStartDate());
         if (activityInfo.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
             stepDesc = "已结束，点击查看结果";
+            step = ActivityStepEnum.FINISH.getStep();
         } else {
             long curTimeMillis = System.currentTimeMillis();
             long minutes = (curTimeMillis - activityInfo.getStartDate().getTime()) / 60000;
             if (minutes < 0) {
+                step = ActivityStepEnum.INIT.getStep();
                 minutes = 0 - minutes;
                 long hour = minutes / 60;
                 if (hour == 0) {
@@ -130,26 +133,35 @@ public class ContentDescUtils {
                     }
                 }
             } else {
-                long leftMinutes = (activityInfo.getEndDate().getTime() - curTimeMillis) / 60000;
-                if (leftMinutes > 0) {
-                    long hour = leftMinutes / 60;
-                    if (hour == 0) {
-                        stepDesc = "距结束仅剩" + leftMinutes + "分钟";
+                long leftSeconds = (activityInfo.getEndDate().getTime() - curTimeMillis) / 1000;
+                if (leftSeconds > 0) {
+                    step = ActivityStepEnum.ING.getStep();
+                    long leftMinutes = leftSeconds / 60;
+                    if (leftMinutes == 0) {
+                        stepDesc = "距结束仅剩" + leftSeconds + "秒钟";
                     } else {
-                        long day = hour / 24;
-                        if (day == 0) {
-                            stepDesc = "距结束仅剩" + hour + "小时";
+                        long hour = leftMinutes / 60;
+                        if (hour == 0) {
+                            stepDesc = "距结束仅剩" + leftMinutes + "分钟";
                         } else {
-                            stepDesc = "距结束" + day + "天";
+                            long day = hour / 24;
+                            if (day == 0) {
+                                stepDesc = "距结束仅剩" + hour + "小时";
+                            } else {
+                                stepDesc = "距结束" + day + "天";
+                            }
                         }
                     }
+
                 } else {
                     stepDesc = "投票结束，正在出奖，敬请等待.";
+                    step = ActivityStepEnum.AUDIT.getStep();
                 }
             }
         }
         discoveryListResp.setStepDesc(stepDesc);
         discoveryListResp.setStartTimeDesc(startTimeDesc);
+        discoveryListResp.setStep(step);
     }
 
     public static String buildNotice(PrizeInfo prizeInfo, ActivityInfo activityInfo, ActivityWorksInfo activityWorksInfo) {
@@ -202,12 +214,12 @@ public class ContentDescUtils {
      * @param info
      * @param activityPrizeInfos
      * @param prizeInfos
-     * @param userInfos
+     * @param prizeUserInfos
      * @param userPrizes
      */
     public static void buildActivityInfoRespOthers(ActivityInfoResp activityInfoResp, ActivityInfo info,
             List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos,
-            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> userInfos) {
+            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> prizeUserInfos) {
         int step = 0;
         long stepTime = 0;
         String stepTimeUnit = "";
@@ -296,7 +308,7 @@ public class ContentDescUtils {
         }
 
         List<UserPrizeResp> userPrizeResp = null;// 用户中奖信息
-        if (CollectionUtils.notEmptyAndNull(userPrizes) && CollectionUtils.notEmptyAndNull(userInfos)) {
+        if (CollectionUtils.notEmptyAndNull(userPrizes) && CollectionUtils.notEmptyAndNull(prizeUserInfos)) {
             userPrizeResp = new ArrayList<UserPrizeResp>();
             boolean moreRankPrizes = activityPrizeInfos != null && activityPrizeInfos.size() > 1;
 
@@ -304,7 +316,7 @@ public class ContentDescUtils {
                 for (ActivityUserPrizeInfo userPrize : userPrizes) {
                     if (activityPrizeInfo.getId() == userPrize.getActivityPrizeId()) {
                         UserInfo curUser = null;
-                        for (UserInfo userInfo : userInfos) {
+                        for (UserInfo userInfo : prizeUserInfos) {
                             if (userPrize.getUserId() == userInfo.getId()) {
                                 curUser = userInfo;
                                 break;

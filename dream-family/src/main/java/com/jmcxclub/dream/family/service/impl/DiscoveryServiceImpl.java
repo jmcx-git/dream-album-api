@@ -121,17 +121,17 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         }
         List<PrizeInfo> prizeInfos = prizeInfoService.getData(prizeIds);
         List<ActivityUserPrizeInfo> userPrizes = null;
-        List<UserInfo> userInfos = null;
+        List<UserInfo> prizeUserInfos = null;
         if (info.getFinish() == ActivityFinishEnum.FINISH.getFinish()) {
             userPrizes = activityUserPrizeInfoService.listInfo(info.getId());
             List<Integer> userIds = new ArrayList<Integer>();
             for (ActivityUserPrizeInfo activityUserPrizeInfo : userPrizes) {
                 userIds.add(activityUserPrizeInfo.getUserId());
             }
-            userInfoService.getData(userIds);
+            prizeUserInfos = userInfoService.getData(userIds);
         }
         return new ApiRespWrapper<ActivityInfoResp>(new ActivityInfoResp(info, participates, examples,
-                activityPrizeInfos, prizeInfos, worksId, userPrizes, userInfos));
+                activityPrizeInfos, prizeInfos, worksId, userPrizes, prizeUserInfos));
     }
 
     @Override

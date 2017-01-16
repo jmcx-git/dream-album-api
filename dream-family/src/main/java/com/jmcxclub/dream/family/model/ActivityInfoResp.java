@@ -40,7 +40,7 @@ public class ActivityInfoResp {
 
     public ActivityInfoResp(ActivityInfo info, long participates, List<ActivityWorksExampleInfo> examples,
             List<ActivityPrizeInfo> activityPrizeInfos, List<PrizeInfo> prizeInfos, Integer worksId,
-            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> userInfos) {
+            List<ActivityUserPrizeInfo> userPrizes, List<UserInfo> prizeUserInfos) {
         this.id = info.getId();
         this.title = info.getTitle();
         this.introduction = info.getIntroduction();
@@ -50,7 +50,7 @@ public class ActivityInfoResp {
         this.examples = examples;
         this.joined = worksId != null && worksId.intValue() > 0 ? 1 : 0;
         this.worksId = worksId;
-        ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos, userPrizes, userInfos);
+        ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos, userPrizes, prizeUserInfos);
     }
 
     public int getId() {
