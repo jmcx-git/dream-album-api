@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +60,6 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
 
     public List<G> getData(List<Integer> ids) {
         Map<String, Integer> keyIdMap = new LinkedHashMap<String, Integer>();
-        List<G> ret = new ArrayList<G>();
         List<Integer> pureDbFetcIds = new ArrayList<Integer>();
         for (Integer id : ids) {
             String key = buildDataInfoKey(id);
@@ -73,19 +73,18 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
                 pureDbFetcIds.add(id);
             }
         }
-        Map<String, G> cacheResp = RedisCacheUtils.getObject(keyIdMap.keySet(), getSharedJedisPool());
+        Map<String, G> cacheResp = RedisCacheUtils.getObject(keyIdMap.keySet(), getSharedJedisPool(), true);
         List<Integer> dbIds = CollectionUtils.notExists(keyIdMap, cacheResp, false);
         dbIds.addAll(pureDbFetcIds);
+        Map<String, G> toCacheMap = new HashMap<String, G>();
         if (CollectionUtils.notEmptyAndNull(dbIds)) {
             List<G> dbDatas = getDirectFromDb(dbIds);
             if (CollectionUtils.notEmptyAndNull(dbDatas)) {
-                Map<String, G> toCacheMap = new HashMap<String, G>();
                 for (G dbData : dbDatas) {
                     if (!canPutToCache(dbData)) {
                         continue;
                     }
                     dbData = beforeToCache(dbData);
-                    ret.add(dbData);
                     String key = buildDataInfoKey(getIdFromG(dbData));
                     if (!StringUtils.isEmpty(key)) {
                         toCacheMap.put(key, dbData);
@@ -96,8 +95,16 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
                 }
             }
         }
-        if (CollectionUtils.notEmptyAndNull(cacheResp.values())) {
-            ret.addAll(cacheResp.values());
+        List<G> ret = new ArrayList<G>();
+        for (Entry<String, G> entry : cacheResp.entrySet()) {
+            if (entry.getValue() == null) {
+                G g = toCacheMap.get(entry.getKey());
+                if (g != null) {
+                    ret.add(g);
+                }
+            } else {
+                ret.add(entry.getValue());
+            }
         }
         return ret;
     }
@@ -169,6 +176,11 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
 
     @Override
     protected void afterModifyStatus(List<G> gg) {
+        this.afterModifyData(gg);
+    }
+
+    @Override
+    protected void afterModifyData(List<G> gg) {
         List<String> keys = new ArrayList<String>();
         for (G g : gg) {
             String key = buildDataInfoKey(getIdFromG(g));

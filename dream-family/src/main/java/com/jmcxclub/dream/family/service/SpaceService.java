@@ -4,15 +4,19 @@ package com.jmcxclub.dream.family.service;
 
 import java.util.Date;
 
+import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.model.OccupantFootprintResp;
-import com.jmcxclub.dream.family.model.SpaceInfoResp;
-import com.jmcxclub.dream.family.model.SpaceListResp;
+import com.jmcxclub.dream.family.model.SpaceDetailResp;
 import com.jmcxclub.dream.family.model.SpaceFeedCommentListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedResp;
+import com.jmcxclub.dream.family.model.SpaceInfoResp;
+import com.jmcxclub.dream.family.model.SpaceListResp;
+import com.jmcxclub.dream.family.model.SpaceUserInteractionInfoResp;
+import com.jmcxclub.dream.family.model.UserFeedListResp;
 
 /**
  * @author mokous86@gmail.com create date: Jan 9, 2017
@@ -30,7 +34,7 @@ public interface SpaceService {
      */
     ApiRespWrapper<ListWrapResp<SpaceListResp>> listSpace(String openId, int start, int size) throws ServiceException;
 
-    ApiRespWrapper<SpaceInfoResp> getSpaceInfo(String openId, int spaceId) throws ServiceException;
+    ApiRespWrapper<SpaceDetailResp> getSpaceDetail(UserInfo userInfo, int spaceId) throws ServiceException;
 
     /**
      * 返回具体空间的feed列表
@@ -44,6 +48,8 @@ public interface SpaceService {
      */
     ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> listSpaceFeed(String openId, int spaceId, int start, int size)
             throws ServiceException;
+
+    ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(UserInfo userInfo, int start, int size);
 
     /**
      * 对空间feed添加评论,支持emoji,返回生成的评论的id
@@ -79,8 +85,8 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Integer> addSpace(String openId, String title, String darlingName, Date darlingBornDate,
-            int darlingType, String icon, String cover, String info) throws ServiceException;
+    ApiRespWrapper<Integer> addSpace(int userId, Integer gender, String name, Date bornDate, int type, String icon,
+            String cover, String info) throws ServiceException;
 
     /**
      * 用户删除空间
@@ -90,18 +96,35 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Boolean> deleteSpace(String openId, int spaceId) throws ServiceException;
+    ApiRespWrapper<Boolean> deleteSpace(int id, int spaceId) throws ServiceException;
 
     /**
      * 用户编辑空间
      * 
      * @param openId
      * @param spaceId
-     * @param title
+     * @param name
+     * @param born
+     * @param info
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String title) throws ServiceException;
+    ApiRespWrapper<Boolean> editSpace(String openId, int spaceId, String name, Date born, String info)
+            throws ServiceException;
+
+    /**
+     * 用户编辑空间
+     * 
+     * @param openId
+     * @param spaceId
+     * @param name
+     * @param born
+     * @return
+     * @throws ServiceException
+     */
+    ApiRespWrapper<Boolean> editSpaceIcon(String openId, int spaceId, String icon) throws ServiceException;
+
+    ApiRespWrapper<Boolean> editSpaceCover(String openId, int spaceId, String cover) throws ServiceException;
 
     /**
      * 用户加入空间
@@ -111,7 +134,8 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<ListWrapResp<SpaceFeedListResp>> joinSpace(String openId, String secert) throws ServiceException;
+    ApiRespWrapper<Integer> joinSpace(String openId, String secert, String fromOpenId, int spaceId)
+            throws ServiceException;
 
     /**
      * 用户生成空间加密码
@@ -159,11 +183,20 @@ public interface SpaceService {
      * @return
      * @throws ServiceException
      */
-    ApiRespWrapper<Boolean> deleteFeedComment(String openId, int feedId, int commentId) throws ServiceException;
+    ApiRespWrapper<Boolean> deleteFeedComment(int userId, int feedId, int commentId) throws ServiceException;
 
     ApiRespWrapper<ListWrapResp<OccupantFootprintResp>> listSpaceOccupantFootprint(String openId, int spaceId)
             throws ServiceException;
 
     ApiRespWrapper<Integer> addFeed(int userId, int spaceId, String title, String content, int type, String cover,
             String illustration) throws ServiceException;
+
+    ApiRespWrapper<Boolean> deleteFeed(int userId, int id) throws ServiceException;
+
+    ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, String interOpenId,
+            int spaceId) throws ServiceException;
+
+    ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException;
+
+    ApiRespWrapper<Boolean> joinedSpace(int id, int spaceId) throws ServiceException;
 }

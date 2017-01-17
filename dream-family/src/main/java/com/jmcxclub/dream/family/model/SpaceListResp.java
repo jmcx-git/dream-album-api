@@ -4,6 +4,7 @@ package com.jmcxclub.dream.family.model;
 
 import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceStatInfo;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 
 /**
@@ -20,15 +21,20 @@ public class SpaceListResp {
 
     private int records;
     private int occupants;// 人气数
-    private String title;// 空间名称
-    private String desc;// 空间的描述
+    private String name;// 空间名称
+    private String info;// 空间的描述
+    private int type;// 空间类型 see SpaceTypeEnum
+
+    private String timeDesc;// dd MMM.yy
 
     public SpaceListResp(SpaceInfo spaceInfo, SpaceStatInfo curStat) {
         this.id = spaceInfo.getId();
         this.cover = spaceInfo.getCover();
         this.notice = false;
-        this.title = spaceInfo.getTitle();
-        this.desc = spaceInfo.getTitle();// TODO
+        this.name = spaceInfo.getName();
+        this.timeDesc = ContentDescUtils.buildEnglishTimeDesc(spaceInfo.getCreateTime());
+        this.info = ContentDescUtils.buildSpaceInfo(spaceInfo);// TODO
+        this.type = spaceInfo.getType();
         if (curStat != null) {
             this.records = curStat.getRecords();
             this.occupants = curStat.getOccupants();
@@ -59,22 +65,6 @@ public class SpaceListResp {
         this.notice = notice;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDesc() {
-        return desc;
-    }
-
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
     public int getRecords() {
         return records;
     }
@@ -89,5 +79,37 @@ public class SpaceListResp {
 
     public void setOccupants(int occupants) {
         this.occupants = occupants;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getInfo() {
+        return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
+    }
+
+    public String getTimeDesc() {
+        return timeDesc;
+    }
+
+    public void setTimeDesc(String timeDesc) {
+        this.timeDesc = timeDesc;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

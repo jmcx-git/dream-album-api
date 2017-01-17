@@ -4,6 +4,8 @@ package com.jmcxclub.dream.family.service;
 
 import com.dreambox.core.cache.CacheFilter.StartSizeCacheFilter;
 import com.dreambox.core.service.AbstractSortedListCacheService;
+import com.dreambox.web.exception.ServiceException;
+import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 
 /**
@@ -12,14 +14,19 @@ import com.jmcxclub.dream.family.dto.FeedInfo;
  */
 public abstract class FeedInfoService extends AbstractSortedListCacheService<FeedInfo> {
 
-    public static class SortedListCacheFilter extends StartSizeCacheFilter {
+    public abstract ListWrapResp<FeedInfo> listUserPhotoFeedInfo(int userId, int start, int size)
+            throws ServiceException;
+
+    public static class FeedInfoSortedListCacheFilter extends StartSizeCacheFilter {
         private Integer userId;
         private Integer spaceId;
 
-        public SortedListCacheFilter(Integer userId, Integer spaceId, int start, int size) {
+        public FeedInfoSortedListCacheFilter(Integer userId, Integer spaceId, int start, int size) {
             super();
             this.userId = userId;
             this.spaceId = spaceId;
+            super.setStart(start);
+            super.setSize(size);
         }
 
         public Integer getUserId() {

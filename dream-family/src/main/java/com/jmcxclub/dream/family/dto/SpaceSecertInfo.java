@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.dto;
 
+import com.dreambox.core.dto.DbKey.UNIQUE_KEY;
 import com.dreambox.core.dto.StatusSerializable;
 
 /**
@@ -18,6 +19,7 @@ public class SpaceSecertInfo extends StatusSerializable {
     private static final long serialVersionUID = 1867867524627291770L;
     private int id;
     private int spaceId;
+    @UNIQUE_KEY
     private String secert;
 
     public int getId() {

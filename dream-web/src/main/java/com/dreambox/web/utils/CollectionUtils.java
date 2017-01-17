@@ -2,7 +2,6 @@
 
 package com.dreambox.web.utils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -112,6 +111,10 @@ public class CollectionUtils {
 
     public static boolean emptyOrNull(byte[] values) {
         return values == null || values.length == 0;
+    }
+
+    public static boolean notEmptyAndNull(byte[] values) {
+        return values != null && values.length > 0;
     }
 
     public static boolean emptyOrNull(Object[] values) {

@@ -53,11 +53,11 @@
 		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
 		CHARACTER SET
 		utf8) AS
-		`title`, `CAST(content AS CHAR
+		`title`, CAST(content AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
-		`content`, `cover`, `illustration`, `resource_url`, ``, `duration`,
+		`content`, `cover`, `illustration`, `resource_url`, `duration`,
 		`type`, `status`,`update_time`,`create_time`
 		FROM `feed_info` WHERE
 		`id` = #startId#;
@@ -68,11 +68,11 @@
 		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
 		CHARACTER SET
 		utf8) AS
-		`title`, `CAST(content AS CHAR
+		`title`, CAST(content AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
-		`content`, `cover`, `illustration`, `resource_url`, ``, `duration`,
+		`content`, `cover`, `illustration`, `resource_url`, `duration`,
 		`type`, `status`,`update_time`,`create_time`
 		FROM `feed_info` WHERE
 		`id` > #startId# ORDER BY id LIMIT #size#;
@@ -83,12 +83,12 @@
 		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
 		CHARACTER SET
 		utf8) AS
-		`title`, `CAST(content AS CHAR
+		`title`, CAST(content AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
 		`content`,
-		`cover`, `illustration`, `resource_url`, ``, `duration`,
+		`cover`, `illustration`, `resource_url`, `duration`,
 		`type`,
 		`status`,`update_time`,`create_time`
 		FROM `feed_info`
@@ -102,12 +102,12 @@
 		SELECT `id`, `user_id`, `space_id`, CAST(title AS CHAR
 		CHARACTER SET
 		utf8) AS
-		`title`, `CAST(content AS CHAR
+		`title`, CAST(content AS CHAR
 		CHARACTER SET
 		utf8)
 		AS
 		`content`,
-		`cover`, `illustration`, `resource_url`, ``, `duration`,
+		`cover`, `illustration`, `resource_url`, `duration`,
 		`type`,
 		`status`,`update_time`,`create_time`
 		FROM `feed_info`

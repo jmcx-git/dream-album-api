@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="userreadnoticerecord"
+		class="com.jmcxclub.dream.family.dto.UserReadNoticeRecord">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="read_time" property="readTime" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateUserReadNoticeRecord" parameterClass="com.jmcxclub.dream.family.dto.UserReadNoticeRecord">
+		<![CDATA[
+			INSERT INTO user_read_notice_record (`id`,`read_time`,`status`,`update_time`,`create_time`)
+			VALUES(#id#, #readTime#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `read_time` = now()
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreUserReadNoticeRecord" parameterClass="com.jmcxclub.dream.family.dto.UserReadNoticeRecord">
+		<![CDATA[
+			INSERT INTO user_read_notice_record (`id`,`read_time`,`status`,`update_time`,`create_time`)
+			VALUES(#id#, #readTime#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `read_time` = now()
+		]]>
+	</insert>
+
+	<update id="updateUserReadNoticeRecordStatus" parameterClass="com.jmcxclub.dream.family.dto.UserReadNoticeRecord">
+        <![CDATA[
+        	UPDATE `user_read_notice_record` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<update id="updateUserReadNoticeRecordReadTime" parameterClass="java.lang.Integer">
+        <![CDATA[
+        	UPDATE `user_read_notice_record` SET `read_time` = now() WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryUserReadNoticeRecordById" parameterClass="java.lang.Integer"
+		resultMap="userreadnoticerecord">
+		SELECT *
+		FROM
+		`user_read_notice_record` WHERE
+		`id` = #startId#;
+	</select>
+
+	<select id="queryUserReadNoticeRecordListByStartId"
+		parameterClass="java.util.Map" resultMap="userreadnoticerecord">
+		SELECT *
+		FROM
+		`user_read_notice_record` WHERE
+		`id` > #startId# ORDER
+		BY id LIMIT
+		#size#;
+	</select>
+
+	<select id="queryUserReadNoticeRecordByIds" parameterClass="java.util.Map"
+		resultMap="userreadnoticerecord">
+		SELECT *
+		FROM
+		`user_read_notice_record`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryUserReadNoticeRecordListByFilter"
+		parameterClass="java.util.Map" resultMap="userreadnoticerecord">
+		SELECT *
+		FROM
+		`user_read_notice_record`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countUserReadNoticeRecordByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `user_read_notice_record`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

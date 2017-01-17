@@ -46,9 +46,14 @@ public class FeedCommentInfoServiceImpl extends FeedCommentInfoService {
             // TODO
         }
         if (curFilter.getFeedId() != null) {
-            RedisCacheUtils.buildKey(feedCommentIdsKey, curFilter.getFeedId());
+            return RedisCacheUtils.buildKey(feedCommentIdsKey, curFilter.getFeedId());
         }
         return null;
+    }
+
+    @Override
+    protected int getPriority() {
+        return 4;
     }
 
     @Override

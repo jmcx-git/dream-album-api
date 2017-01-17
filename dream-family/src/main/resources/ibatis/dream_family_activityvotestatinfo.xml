@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="activityvotestatinfo"
+		class="com.jmcxclub.dream.family.dto.ActivityVoteStatInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="activity_id" property="activityId" jdbcType="INTEGER" />
+		<result column="votes" property="votes" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateActivityVoteStatInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteStatInfo">
+		<![CDATA[
+			INSERT INTO activity_vote_stat_info (`id`, `activity_id`, `votes`, `status`, `update_time`, `create_time`)
+			VALUES(#id#, #activityId#, #votes#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `votes` = `votes` + 1
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnoreActivityVoteStatInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteStatInfo">
+		<![CDATA[
+			INSERT INTO activity_vote_stat_info (`id`, `activity_id`, `votes`, `status`, `update_time`, `create_time`)
+			VALUES(#id#, #activityId#, #votes#, 0, now(),now())
+			ON DUPLICATE KEY UPDATE `votes` = `votes` + 1
+		]]>
+	</insert>
+
+	<update id="updateActivityVoteStatInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.ActivityVoteStatInfo">
+        <![CDATA[
+        	UPDATE `activity_vote_stat_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryActivityVoteStatInfoById" parameterClass="java.lang.Integer"
+		resultMap="activityvotestatinfo">
+		<![CDATA[
+			SELECT * FROM `activity_vote_stat_info` WHERE `id` = #startId#;
+		 ]]>
+	</select>
+
+	<select id="queryActivityVoteStatInfoListByStartId"
+		parameterClass="java.util.Map" resultMap="activityvotestatinfo">
+		<![CDATA[
+			SELECT * FROM `activity_vote_stat_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		 ]]>
+	</select>
+
+	<select id="queryActivityVoteStatInfoByIds" parameterClass="java.util.Map"
+		resultMap="activityvotestatinfo">
+		SELECT *
+		FROM `activity_vote_stat_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryActivityVoteStatInfoListByFilter"
+		parameterClass="java.util.Map" resultMap="activityvotestatinfo">
+		SELECT * FROM `activity_vote_stat_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="activityId">
+				<isNotNull property="activityId" prepend=" and ">
+					`activity_id` =
+					#activityId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countActivityVoteStatInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `activity_vote_stat_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="activityId">
+				<isNotNull property="activityId" prepend=" and ">
+					`activity_id` =
+					#activityId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

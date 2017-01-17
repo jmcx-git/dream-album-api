@@ -92,4 +92,9 @@ public class SmallAppDeveloperInfoServiceImpl extends SmallAppDeveloperInfoServi
         }
     }
 
+    @Override
+    protected int getPriority() {
+        return 0;
+    }
+
 }

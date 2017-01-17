@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="activityprizeinfo"
+		class="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="activity_id" property="activityId" jdbcType="INTEGER" />
+		<result column="prize_id" property="prizeId" jdbcType="INTEGER" />
+		<result column="rank" property="rank" jdbcType="INTEGER" />
+		<result column="rank_desc" property="rankDesc" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateActivityPrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
+		<![CDATA[
+			INSERT INTO activity_prize_info (`id`, `activity_id`, `prize_id`, `rank`, `rank_desc`, `count`, `status`, `update_time`, `create_time`)
+			VALUES(null, #activityId#, #prizeId#, #rank#, #rankDesc#, #count#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertActivityPrizeInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
+		<![CDATA[
+			INSERT INTO activity_prize_info (`id`, `activity_id`, `prize_id`, `rank`, `rank_desc`, `count`, `status`, `update_time`, `create_time`)
+			VALUES(null, #activityId#, #prizeId#, #rank#, #rankDesc#, #count#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreActivityPrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
+		<![CDATA[
+			INSERT INTO activity_prize_info (`id`, `activity_id`, `prize_id`, `rank`, `rank_desc`, `count`, `status`, `update_time`, `create_time`)
+			VALUES(null, #activityId#, #prizeId#, #rank#, #rankDesc#, #count#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateActivityPrizeInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.ActivityPrizeInfo">
+        <![CDATA[
+        	UPDATE `activity_prize_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryActivityPrizeInfoById" parameterClass="java.lang.Integer"
+		resultMap="activityprizeinfo">
+		SELECT *
+		FROM
+		`activity_prize_info` WHERE
+		`id` =
+		#startId#;
+	</select>
+
+	<select id="queryActivityPrizeInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="activityprizeinfo">
+		SELECT *
+		FROM
+		`activity_prize_info`
+		WHERE
+		`id` > #startId#
+		ORDER
+		BY id LIMIT
+		#size#;
+	</select>
+
+	<select id="queryActivityPrizeInfoByIds" parameterClass="java.util.Map"
+		resultMap="activityprizeinfo">
+		SELECT *
+		FROM
+		`activity_prize_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryActivityPrizeInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="activityprizeinfo">
+		SELECT *
+		FROM
+		`activity_prize_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="activityId">
+				<isNotNull property="activityId" prepend=" and ">
+					`activity_id` =
+					#activityId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countActivityPrizeInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `activity_prize_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+			<isPropertyAvailable property="activityId">
+				<isNotNull property="activityId" prepend=" and ">
+					`activity_id` =
+					#activityId#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

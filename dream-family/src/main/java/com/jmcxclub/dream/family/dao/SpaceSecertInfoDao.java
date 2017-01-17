@@ -17,4 +17,6 @@ public abstract class SpaceSecertInfoDao extends AbsCommonDao<SpaceSecertInfo> {
 
     public abstract void updateStatusBySpaceId(int spaceId) throws SQLException;
 
+    public abstract String queryLastSpaceSecert(int spaceId) throws SQLException;
+
 }

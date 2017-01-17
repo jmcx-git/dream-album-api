@@ -12,58 +12,62 @@
 
 	<insert id="insertOrUpdateSpaceSecertInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
 		<![CDATA[
-			INSERT INTO space_like_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
+			INSERT IGNORE INTO space_secert_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
 			VALUES(null, #secert#, #spaceId#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreSpaceSecertInfo" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
 		<![CDATA[
-			INSERT INTO space_like_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
+			INSERT IGNORE INTO space_secert_info (`id`,`secert`,`space_id`,`status`,`update_time`,`create_time`)
 			VALUES(null, #secert#, #spaceId#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `status` = IF(`status` == 0, -1, 0)
 		]]>
 	</insert>
 
 	<update id="updateSpaceSecertInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
         <![CDATA[
-        	UPDATE `space_like_info` SET `status` = #status# WHERE `id`=#id# ;
+        	UPDATE `space_secert_info` SET `status` = #status# WHERE `id`=#id# ;
         ]]>
 	</update>
 
 	<update id="updateSpaceSecertInfoStatusBySpaceId"
 		parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo">
         <![CDATA[
-        	UPDATE `space_like_info` SET `status` = #status# WHERE `space_id`=#spaceId# ;
+        	UPDATE `space_secert_info` SET `status` = #status# WHERE `space_id`=#spaceId# ;
         ]]>
 	</update>
 
 	<select id="querySpaceSecertInfoById" parameterClass="java.lang.Integer"
 		resultMap="spacesecertinfo">
 		<![CDATA[
-			SELECT * FROM `space_like_info` WHERE `id` = #startId#;
+			SELECT * FROM `space_secert_info` WHERE `id` = #startId#;
 		 ]]>
 	</select>
 
 	<select id="querySpaceSecertInfoIdByUk" parameterClass="com.jmcxclub.dream.family.dto.SpaceSecertInfo"
 		resultMap="spacesecertinfo">
 		<![CDATA[
-			SELECT * FROM `space_like_info` WHERE `secert` = #secert#;
+			SELECT * FROM `space_secert_info` WHERE `secert` = #secert#;
+		 ]]>
+	</select>
+	<select id="querySpaceSecertInfoLastSpaceSecert" parameterClass="java.lang.Integer"
+		resultClass="java.lang.String">
+		<![CDATA[
+			SELECT secert FROM `space_secert_info` WHERE `space_id` = #spaceId# and status = 0 order by id desc limit 1;
 		 ]]>
 	</select>
 
 	<select id="querySpaceSecertInfoListByStartId" parameterClass="java.util.Map"
 		resultMap="spacesecertinfo">
 		<![CDATA[
-			SELECT * FROM `space_like_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+			SELECT * FROM `space_secert_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
 		 ]]>
 	</select>
 
 	<select id="querySpaceSecertInfoByIds" parameterClass="java.util.Map"
 		resultMap="spacesecertinfo">
 		SELECT *
-		FROM `space_like_info`
+		FROM `space_secert_info`
 		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
 			#ids[]#
 		</iterate>
@@ -71,7 +75,7 @@
 
 	<select id="querySpaceSecertInfoListByFilter" parameterClass="java.util.Map"
 		resultMap="spacesecertinfo">
-		SELECT * FROM `space_like_info`
+		SELECT * FROM `space_secert_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">
@@ -97,7 +101,7 @@
 
 	<select id="countSpaceSecertInfoByFilter" parameterClass="java.util.Map"
 		resultClass="java.lang.Long">
-		SELECT COUNT(*) FROM `space_like_info`
+		SELECT COUNT(*) FROM `space_secert_info`
 		<dynamic prepend=" WHERE ">
 			<isPropertyAvailable property="status">
 				<isNotNull property="status" prepend=" and ">

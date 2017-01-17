@@ -276,14 +276,14 @@ public class RedisCacheUtils {
     }
 
     /**
-     * 返回的map中的value不为null
+     * 返回的map中的value可为null
      *
      * @param keys
      * @param shardedJedisPool
      * @return
      */
     public static <T extends Serializable> Map<String, T> getObject(Collection<String> keys,
-            ShardedJedisPool shardedJedisPool) {
+            ShardedJedisPool shardedJedisPool, boolean supportNullObjectInMap) {
         if (CollectionUtils.emptyOrNull(keys)) {
             return Collections.emptyMap();
         }
@@ -293,7 +293,7 @@ public class RedisCacheUtils {
             for (String key : keys) {
                 byte[] values = shardedJedis.get(key.getBytes());
                 shardedJedis.expire(key, CACHE_EXPIRE_SEC);
-                if (values != null) {
+                if (supportNullObjectInMap || values != null) {
                     kvs.put(key, values);
                 }
             }
@@ -308,19 +308,32 @@ public class RedisCacheUtils {
         }
         Map<String, T> ret = new LinkedHashMap<String, T>();
         for (Entry<String, byte[]> kvsEntry : kvs.entrySet()) {
-            if (CollectionUtils.emptyOrNull(kvsEntry.getValue())) {
-                continue;
-            }
-            try {
-                T t = ObjectBytesUtils.bytesToObject(kvsEntry.getValue());
-                if (t != null) {
-                    ret.put(kvsEntry.getKey(), t);
+            if (supportNullObjectInMap || CollectionUtils.notEmptyAndNull(kvsEntry.getValue())) {
+                T t = null;
+                if (CollectionUtils.notEmptyAndNull(kvsEntry.getValue())) {
+                    try {
+                        t = ObjectBytesUtils.bytesToObject(kvsEntry.getValue());
+                    } catch (Exception e) {
+                        log.error("无法将缓存数据转换成对应的数据模型. Errmsg:" + e.getMessage(), e);
+                    }
                 }
-            } catch (Exception e) {
-                log.error("无法将缓存数据转换成对应的数据模型. Errmsg:" + e.getMessage(), e);
+                ret.put(kvsEntry.getKey(), t);
             }
         }
         return ret;
+
+    }
+
+    /**
+     * 返回的map中的value不为null
+     *
+     * @param keys
+     * @param shardedJedisPool
+     * @return
+     */
+    public static <T extends Serializable> Map<String, T> getObject(Collection<String> keys,
+            ShardedJedisPool shardedJedisPool) {
+        return getObject(keys, shardedJedisPool, false);
     }
 
     public static <T extends Serializable> T getObject(String key, int expiredSeconds, ShardedJedisPool shardedJedisPool) {

@@ -35,8 +35,9 @@ public class WxLoginAction {
 
     @RequestMapping("/session.json")
     @ResponseBody
-    public String getUser3rdSesseion(String appId, String code) {
+    public String getUser3rdSesseion(String appId, String code, String fromOpenId) {
         UserOpenIdInfo info = userOpenIdInfoService.getUser3rdSesseion(appId, code);
+        log.info("The from open id " + fromOpenId + " share a new user." + info.getOpenid());
         return info.getOpenid();
     }
 
@@ -101,5 +102,40 @@ public class WxLoginAction {
         }
         return new ApiRespWrapper<UserInfoResp>(-1, "Get user info failed.");
     }
+
+
+    @RequestMapping("/noauthorize/info.json")
+    @ResponseBody
+    public ApiRespWrapper<UserInfoResp> getNoAuthorizeInfo(String openId, String appId) {
+        if (StringUtils.isAnyEmpty(openId)) {
+            return new ApiRespWrapper<UserInfoResp>(-1, "Illegal parameter for get user info.");
+        }
+        UserOpenIdInfo userOpenIdInfo = userOpenIdInfoService.getInfo(openId);
+        if (userOpenIdInfo == null) {
+            return new ApiRespWrapper<UserInfoResp>(-1, "Illegal openid for weixin user.");
+        }
+        try {
+            UserInfo g = new UserInfo();
+            g.setOpenId(openId);
+            g = userInfoService.getInfoByUk(g);
+            if (g == null) {
+                g = new UserInfo();
+            }
+            g.setAvatarUrl("https://cdn.mokous.com/static/familydefault.png");
+            g.setNickName("未授权用户");
+            g.setAppid(appId);
+            if (g.getId() == 0) {
+                userInfoService.addData(g);
+            } else {
+                userInfoService.modifyUserInfo(g);
+            }
+            UserInfoResp data = new UserInfoResp(g);
+            return new ApiRespWrapper<UserInfoResp>(data);
+        } catch (Exception e) {
+            log.error("parse userinfo failed." + e.getMessage());
+        }
+        return new ApiRespWrapper<UserInfoResp>(-1, "Get user info failed.");
+    }
+
 
 }

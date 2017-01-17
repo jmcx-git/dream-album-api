@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="prizeinfo" class="com.jmcxclub.dream.family.dto.PrizeInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="INTEGER" />
+		<result column="desc" property="desc" jdbcType="INTEGER" />
+		<result column="img" property="img" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdatePrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.PrizeInfo">
+		<![CDATA[
+			INSERT INTO prize_info (`id`,`title`, `desc`, `img`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #desc#, #img#, 0, now(),now())
+		]]>
+	</insert>
+
+	<insert id="insertOrIgnorePrizeInfo" parameterClass="com.jmcxclub.dream.family.dto.PrizeInfo">
+		<![CDATA[
+			INSERT INTO prize_info (`id`,`desc`,`status`,`update_time`,`create_time`)
+			VALUES(null, #desc#, 0, now(),now())
+		]]>
+	</insert>
+
+	<update id="updatePrizeInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.PrizeInfo">
+        <![CDATA[
+        	UPDATE `prize_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryPrizeInfoById" parameterClass="java.lang.Integer"
+		resultMap="prizeinfo">
+		<![CDATA[
+			SELECT * FROM `prize_info` WHERE `id` = #startId#;
+		]]>
+	</select>
+
+	<select id="queryPrizeInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="prizeinfo">
+		<![CDATA[
+			SELECT * FROM `prize_info` WHERE `id` > #startId# ORDER BY id LIMIT #size#;
+		]]>
+	</select>
+
+	<select id="queryPrizeInfoByIds" parameterClass="java.util.Map"
+		resultMap="prizeinfo">
+		SELECT *
+		FROM
+		`prize_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryPrizeInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="prizeinfo">
+		SELECT *
+		FROM
+		`prize_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countPrizeInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `prize_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

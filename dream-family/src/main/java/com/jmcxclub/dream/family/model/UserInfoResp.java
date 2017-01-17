@@ -9,11 +9,13 @@ import com.dreambox.core.dto.album.UserInfo;
  *
  */
 public class UserInfoResp {
+    private String openId;
     private String nickName;
     private String avatarUrl;
     private int gender;// refer from wx info.gender[性别 0:未知、1:男、2:女]
 
     public UserInfoResp(UserInfo g) {
+        this.openId = g.getOpenId();
         this.nickName = g.getNickName();
         this.avatarUrl = g.getAvatarUrl();
         this.gender = g.getGender();
@@ -41,5 +43,13 @@ public class UserInfoResp {
 
     public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

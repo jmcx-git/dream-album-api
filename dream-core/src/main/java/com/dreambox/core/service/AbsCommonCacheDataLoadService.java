@@ -96,7 +96,7 @@ public abstract class AbsCommonCacheDataLoadService<T extends Serializable> exte
                 // TODO
             }
         }
-        return 0;
+        return 10000;
     }
 
     public String getName() {

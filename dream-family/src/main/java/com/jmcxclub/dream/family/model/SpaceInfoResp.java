@@ -2,13 +2,10 @@
 
 package com.jmcxclub.dream.family.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import com.dreambox.core.dto.album.UserInfo;
-import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dto.SpaceInfo;
-import com.jmcxclub.dream.family.dto.SpaceStatInfo;
 
 /**
  * @author mokous86@gmail.com create date: Jan 10, 2017
@@ -16,27 +13,25 @@ import com.jmcxclub.dream.family.dto.SpaceStatInfo;
  */
 public class SpaceInfoResp {
     private int id;
-    private int records;
-    private int occupants;// 人气数
-    private String title;// 空间名称
-    private String desc;// 空间的描述
-    private String avatarUrl;
-    private List<String> occupantAvatarUrls;
+    private String name;// 空间名称
+    private String info;// 空间的描述
+    private String icon;// 空间icon
+    private String cover;// 空间背景图
+    private String openId;
+    private Date bornDate;
+    private Integer gender;
+    private int type;
 
-    public SpaceInfoResp(SpaceInfo spaceInfo, SpaceStatInfo stat, List<UserInfo> userInfos) {
+    public SpaceInfoResp(SpaceInfo spaceInfo, UserInfo owner) {
         this.id = spaceInfo.getId();
-        this.records = stat.getRecords();
-        this.occupants = stat.getOccupants();
-        this.title = spaceInfo.getTitle();
-        this.avatarUrl = spaceInfo.getIcon();
-        if (CollectionUtils.notEmptyAndNull(userInfos)) {
-            List<String> urls = new ArrayList<String>(userInfos.size());
-            for (UserInfo userInfo : userInfos) {
-                urls.add(userInfo.getAvatarUrl());
-            }
-            this.occupantAvatarUrls = urls;
-        }
-
+        this.name = spaceInfo.getName();
+        this.info = spaceInfo.getInfo();
+        this.icon = spaceInfo.getIcon();
+        this.cover = spaceInfo.getCover();
+        this.bornDate = spaceInfo.getBornDate();
+        this.gender = spaceInfo.getGender();
+        this.type = spaceInfo.getType();
+        this.openId = owner.getOpenId();
     }
 
     public int getId() {
@@ -47,51 +42,67 @@ public class SpaceInfoResp {
         this.id = id;
     }
 
-    public int getRecords() {
-        return records;
+    public String getName() {
+        return name;
     }
 
-    public void setRecords(int records) {
-        this.records = records;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getOccupants() {
-        return occupants;
+    public String getInfo() {
+        return info;
     }
 
-    public void setOccupants(int occupants) {
-        this.occupants = occupants;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
-    public String getTitle() {
-        return title;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getCover() {
+        return cover;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setCover(String cover) {
+        this.cover = cover;
     }
 
-    public String getAvatarUrl() {
-        return avatarUrl;
+    public Date getBornDate() {
+        return bornDate;
     }
 
-    public void setAvatarUrl(String avatarUrl) {
-        this.avatarUrl = avatarUrl;
+    public void setBornDate(Date bornDate) {
+        this.bornDate = bornDate;
     }
 
-    public List<String> getOccupantAvatarUrls() {
-        return occupantAvatarUrls;
+    public Integer getGender() {
+        return gender;
     }
 
-    public void setOccupantAvatarUrls(List<String> occupantAvatarUrls) {
-        this.occupantAvatarUrls = occupantAvatarUrls;
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
     }
 }

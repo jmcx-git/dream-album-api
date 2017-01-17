@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,9 @@ import com.jmcxclub.dream.family.service.UserSpaceRelationshipInfoService;
 @Service("userSpaceRelationshipInfoService")
 public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipInfoService {
     private static final Logger log = Logger.getLogger(UserSpaceRelationshipInfoServiceImpl.class);
-    private static final double OWNER_SCORE = Double.MAX_VALUE;
-    private static final double TOP_SCORE = Double.MAX_VALUE / 2;
+    private static final double MAX_SCORE = Long.MAX_VALUE >> 12;
+    private static final double MIDDLE_SCORE = Long.MAX_VALUE >> 13;
+    private static final double MIN_SCORE = Long.MAX_VALUE >> 14;
     @Autowired
     private UserSpaceRelationshipInfoDao userSpaceRelationshipInfoDao;
     @Autowired
@@ -48,10 +50,10 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
 
     @Override
     protected String buildSortedSetKey(StartSizeCacheFilter filter) {
-        if (!(filter instanceof RelationshipInfoSortedListCacheFilter)) {
+        if (!(filter instanceof UserSpaceRelationshipInfoSortedListCacheFilter)) {
             throw ServiceException.getInternalException("Unknown cache filter. Filter:" + filter);
         }
-        RelationshipInfoSortedListCacheFilter curFilter = (RelationshipInfoSortedListCacheFilter) filter;
+        UserSpaceRelationshipInfoSortedListCacheFilter curFilter = (UserSpaceRelationshipInfoSortedListCacheFilter) filter;
         if (curFilter.getSpaceId() != null) {
             return buildSpaceIdListKey(curFilter.getSpaceId());
         }
@@ -68,7 +70,7 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
 
     @Override
     protected StartSizeCacheFilter buildCacheFilter(UserSpaceRelationshipInfo value) {
-        return new RelationshipInfoSortedListCacheFilter(value.getSpaceId(), value.getUserId(), 0, 10);
+        return new UserSpaceRelationshipInfoSortedListCacheFilter(value.getSpaceId(), value.getUserId(), 0, 10);
     }
 
     @Override
@@ -106,10 +108,10 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
 
     @Override
     protected List<String> buildSortedSetKeys(StartSizeCacheFilter filter) {
-        if (!(filter instanceof RelationshipInfoSortedListCacheFilter)) {
+        if (!(filter instanceof UserSpaceRelationshipInfoSortedListCacheFilter)) {
             throw ServiceException.getInternalException("Unknown cache filter. Filter:" + filter);
         }
-        RelationshipInfoSortedListCacheFilter curFilter = (RelationshipInfoSortedListCacheFilter) filter;
+        UserSpaceRelationshipInfoSortedListCacheFilter curFilter = (UserSpaceRelationshipInfoSortedListCacheFilter) filter;
         List<String> keys = new ArrayList<String>();
         keys.add(buildUserIdListKey(curFilter.getUserId()));
         keys.add(buildSpaceIdListKey(curFilter.getSpaceId()));
@@ -118,18 +120,18 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
 
     @Override
     protected List<Double> buildSortedSetScores(UserSpaceRelationshipInfo t) {
-        double userIdListScore = 0d;
+        double userScoreList = 0d;
         double spaceIdListScore = t.getUpdateTime().getTime();
         if (t.getRelationship() == SpaceRelationshipEnum.OWNER.getFlag()) {
-            userIdListScore = OWNER_SCORE;
+            userScoreList = MAX_SCORE + t.getSpaceId();
         } else if (t.getTop() == SpaceTopEnum.YES.getTop()) {
-            userIdListScore = TOP_SCORE;
+            userScoreList = MIDDLE_SCORE + t.getSpaceId();
         } else {
-            // 最早加入的放在最前面
-            userIdListScore = OWNER_SCORE - t.getCreateTime().getTime();
+            // 越晚加入的权重越小
+            userScoreList = MIN_SCORE - t.getSpaceId();
         }
         List<Double> scores = new ArrayList<Double>();
-        scores.add(userIdListScore);
+        scores.add(userScoreList);
         scores.add(spaceIdListScore);
         return scores;
     }
@@ -145,5 +147,25 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
     @Override
     protected Logger getLogger() {
         return log;
+    }
+
+    @Override
+    protected int getPriority() {
+        return 3;
+    }
+
+    @Override
+    public boolean joinedSpace(int spaceId, int userId) throws ServiceException {
+        UserSpaceRelationshipInfo g = new UserSpaceRelationshipInfo();
+        g.setSpaceId(spaceId);
+        g.setUserId(userId);
+        g.setStatus(UserSpaceRelationshipInfo.STATUS_OK);
+        Integer id = null;
+        try {
+            id = this.userSpaceRelationshipInfoDao.queryIdByUk(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        return id != null && id.intValue() > 0;
     }
 }

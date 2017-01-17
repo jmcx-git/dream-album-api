@@ -76,8 +76,13 @@ public abstract class AbstractSortedListCacheService<T extends DbStatus> extends
         if (StringUtils.isEmpty(key)) {
             return Collections.emptyList();
         }
-        return RedisCacheUtils.zrevrange(key, filter.getStart(), filter.getStart() + filter.getSize() - 1,
-                getJedisPool());
+        if (filter.isReverse()) {
+            return RedisCacheUtils.zrevrange(key, filter.getStart(), filter.getStart() + filter.getSize() - 1,
+                    getJedisPool());
+        } else {
+            return RedisCacheUtils.zrangeIds(key, filter.getStart(), filter.getStart() + filter.getSize() - 1,
+                    getJedisPool());
+        }
     }
 
     protected ListWrapResp<T> formatRespValues(List<T> values, long total, int start, int size) {

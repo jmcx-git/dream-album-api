@@ -32,10 +32,10 @@ CREATE TABLE IF NOT EXISTS `smallapp_developer_info`(
 CREATE TABLE IF NOT EXISTS `space_info`(
 	`id` int unsigned not null auto_increment,
 	`user_id` int unsigned not null comment 'reference user_info.id',
-	`title` blob,
-	`darling_name` blob,
-	`darling_born_date` datetime,
-	`darling_type` int unsigned not null default 0 comment '0:baby,1:love reference SpaceTypeEnum',
+	`name` blob,
+	`born_date` datetime,
+	`gender` int default 0 COMMENT '0,1,2',
+	`type` int unsigned not null default 0 comment '0:baby,1:love reference SpaceTypeEnum',
 	`icon` varchar(255) DEFAULT '',	
 	`cover` VARCHAR(255) DEFAULT '',	
 	`info` blob,
@@ -54,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `space_secert_info`(
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
     PRIMARY KEY (`id`),
-    UNIQUE KEY(`space_id`),
+    UNIQUE KEY(`secert`),
     KEY(`space_id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8 COMMENT '空间密码表';
 
@@ -64,7 +64,6 @@ CREATE TABLE IF NOT EXISTS `user_space_relationship_info`(
 	`user_id` int unsigned not null comment 'reference user_info.id',
 	`relationship` int(11) NOT NULL DEFAULT '0' COMMENT 'REFERENCE SpaceRelationshipEnum 1 owner 0 occupant',
 	`top` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '1 MEANS IN THE SPACE LIST TOP EXCLUDE OWNER SPACE',
-	`view` int(11) unsigned NOT NULL  DEFAULT '1',
 	`status` int(11) NOT NULL DEFAULT '0',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `create_time` datetime NOT NULL COMMENT '记录创建时间',
@@ -119,6 +118,7 @@ CREATE TABLE IF NOT EXISTS `feed_comment_info`(
 	`id` int unsigned not null auto_increment,
 	`user_id` int unsigned not null comment 'reference user_info.id',
 	`feed_id` int unsigned not null comment 'reference feed_info.id',
+	`comment` blob;
 	`comment_ref_id` int DEFAULT NULL comment 'reference feed_comment_info.id if not null',
 	`status` int(11) NOT NULL DEFAULT '0',
     `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

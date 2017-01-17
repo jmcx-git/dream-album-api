@@ -8,7 +8,6 @@
 		<result column="space_id" property="spaceId" jdbcType="INTEGER" />
 		<result column="relationship" property="relationship" jdbcType="INTEGER" />
 		<result column="top" property="top" jdbcType="INTEGER" />
-		<result column="views" property="views" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -17,18 +16,16 @@
 	<insert id="insertOrUpdateUserSpaceRelationshipInfo"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
 		<![CDATA[
-			INSERT INTO user_space_relationship_info (`id`,`"user_id"`,`space_id`, `relationship`, `top`, `views`, `status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, #views#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `views` = `views` + 1
+			INSERT INTO user_space_relationship_info (`id`,`user_id`,`space_id`, `relationship`, `top`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, 0, now(),now())
 		]]>
 	</insert>
 
 	<insert id="insertOrIgnoreUserSpaceRelationshipInfo"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
 		<![CDATA[
-			INSERT INTO user_space_relationship_info (`id`,`"user_id"`,`space_id`, `relationship`, `top`, `views`, `status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, #views#, 0, now(),now())
-			ON DUPLICATE KEY UPDATE `views` = `views` + 1
+			INSERT INTO user_space_relationship_info (`id`,`user_id`,`space_id`, `relationship`, `top`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #spaceId#, #relationship#, #top#, 0, now(),now())
 		]]>
 	</insert>
 
@@ -36,13 +33,6 @@
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
         <![CDATA[
         	UPDATE `user_space_relationship_info` SET `status` = #status# WHERE `id`=#id# ;
-        ]]>
-	</update>
-
-	<update id="updateUserSpaceRelationshipInfoViews"
-		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
-        <![CDATA[
-        	UPDATE `user_space_relationship_info` SET `views` = `views` + 1 WHERE `id`=#id# ;
         ]]>
 	</update>
 
@@ -57,6 +47,14 @@
 		resultMap="spacestatinfo">
 		<![CDATA[
 			SELECT * FROM `user_space_relationship_info` WHERE `id` = #startId#;
+		 ]]>
+	</select>
+
+	<select id="queryUserSpaceRelationshipInfoIdByUk"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo"
+		resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT id FROM `user_space_relationship_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId# and `status` = #status#;
 		 ]]>
 	</select>
 

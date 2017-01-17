@@ -33,7 +33,7 @@ public class FeedLikeInfoServiceImpl extends FeedLikeInfoService {
     @Resource(name = "dream-family-redisdbpool")
     private JedisPool jedisDbPool;
 
-    private String spaceFeedIdsKey = "feed:like:ids";
+    private String feedLikeIdsKey = "feed:like:ids";
     private String infoKey = "feed:like:info";
 
     @Override
@@ -46,7 +46,7 @@ public class FeedLikeInfoServiceImpl extends FeedLikeInfoService {
             // TODO
         }
         if (curFilter.getFeedId() != null) {
-            RedisCacheUtils.buildKey(spaceFeedIdsKey, curFilter.getFeedId());
+            return RedisCacheUtils.buildKey(feedLikeIdsKey, curFilter.getFeedId());
         }
         return null;
     }
@@ -84,6 +84,11 @@ public class FeedLikeInfoServiceImpl extends FeedLikeInfoService {
     @Override
     public CommonDao<FeedLikeInfo> getCommonDao() {
         return feedLikeInfoDao;
+    }
+
+    @Override
+    protected int getPriority() {
+        return 4;
     }
 
 }

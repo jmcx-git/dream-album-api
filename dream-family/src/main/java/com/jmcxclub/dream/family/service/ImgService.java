@@ -13,8 +13,10 @@ import com.jmcxclub.dream.family.model.UploadFileSaveResp;
  */
 public interface ImgService {
 
-    UploadFileSaveResp saveSpaceIcon(MultipartFile image) throws ServiceException;
+    UploadFileSaveResp saveSpaceIcon(MultipartFile image, String openId) throws ServiceException;
 
-    UploadFileSaveResp saveFeedImg(MultipartFile image) throws ServiceException;
+    UploadFileSaveResp saveFeedImg(MultipartFile image, String openId) throws ServiceException;
+
+    UploadFileSaveResp saveActivityWorksImg(MultipartFile image, int userId) throws ServiceException;
 
 }
