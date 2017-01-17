@@ -33,10 +33,9 @@ import com.jmcxclub.dream.family.service.UserSpaceRelationshipInfoService;
 @Service("userSpaceRelationshipInfoService")
 public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipInfoService {
     private static final Logger log = Logger.getLogger(UserSpaceRelationshipInfoServiceImpl.class);
-    // REDIS SUPPORT MAX SCORE -(2^53) and +(2^53) included.
     private static final double MAX_SCORE = Long.MAX_VALUE >> 12;
     private static final double MIDDLE_SCORE = Long.MAX_VALUE >> 13;
-    private static final double MIN_SCORE = Long.MAX_VALUE / 14;
+    private static final double MIN_SCORE = Long.MAX_VALUE >> 14;
     @Autowired
     private UserSpaceRelationshipInfoDao userSpaceRelationshipInfoDao;
     @Autowired
