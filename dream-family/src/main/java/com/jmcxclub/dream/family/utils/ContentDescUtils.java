@@ -173,35 +173,7 @@ public class ContentDescUtils {
     }
 
     public static String buildNoticeTimeDesc(Date createTime) {
-        long minuteDiff = (System.currentTimeMillis() - createTime.getTime()) / 60000;
-        if (minuteDiff <= 0) {
-            return "刚刚发布";
-        }
-        long hour = minuteDiff / 60;
-        if (hour == 0) {
-            return minuteDiff + "分钟前";
-        }
-        long day = hour / 24;
-        if (day == 0) {
-            return hour + "小时前";
-        }
-        if (day == 1) {
-            return "昨天发布";
-        }
-        if (day == 2) {
-            return "前天发布";
-        }
-        long year = day / 365;
-        if (year == 0) {
-            return day + "天前发布";
-        }
-        if (year == 1) {
-            return "去年前发布";
-        }
-        if (year == 2) {
-            return "前年前发布";
-        }
-        return year + "年前发布";
+        return DateUtils.formatStr(createTime, DateUtils.YYYYMMDDHHMM_FORMAT);
     }
 
     /**

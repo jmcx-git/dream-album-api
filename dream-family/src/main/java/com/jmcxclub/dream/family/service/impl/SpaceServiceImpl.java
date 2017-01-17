@@ -249,8 +249,7 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public ApiRespWrapper<ListWrapResp<UserFeedListResp>> listUserFeed(UserInfo userInfo, int start, int size)
             throws ServiceException {
-        FeedInfoSortedListCacheFilter filter = new FeedInfoSortedListCacheFilter(userInfo.getId(), null, start, size);
-        ListWrapResp<FeedInfo> infos = feedInfoService.listInfo(filter);
+        ListWrapResp<FeedInfo> infos = feedInfoService.listUserPhotoFeedInfo(userInfo.getId(), start, size);
         if (infos == null || CollectionUtils.emptyOrNull(infos.getResultList())) {
             return new ApiRespWrapper<ListWrapResp<UserFeedListResp>>(new ListWrapResp<UserFeedListResp>(
                     new ArrayList<UserFeedListResp>(0)));
