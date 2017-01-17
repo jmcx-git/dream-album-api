@@ -60,7 +60,6 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
 
     public List<G> getData(List<Integer> ids) {
         Map<String, Integer> keyIdMap = new LinkedHashMap<String, Integer>();
-        List<G> ret = new ArrayList<G>();
         List<Integer> pureDbFetcIds = new ArrayList<Integer>();
         for (Integer id : ids) {
             String key = buildDataInfoKey(id);
@@ -86,7 +85,6 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
                         continue;
                     }
                     dbData = beforeToCache(dbData);
-                    ret.add(dbData);
                     String key = buildDataInfoKey(getIdFromG(dbData));
                     if (!StringUtils.isEmpty(key)) {
                         toCacheMap.put(key, dbData);
@@ -97,6 +95,7 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
                 }
             }
         }
+        List<G> ret = new ArrayList<G>();
         for (Entry<String, G> entry : cacheResp.entrySet()) {
             if (entry.getValue() == null) {
                 G g = toCacheMap.get(entry.getKey());
