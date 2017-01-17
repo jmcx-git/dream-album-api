@@ -216,6 +216,17 @@ public class DiscoveryServiceImpl implements DiscoveryService {
 
     @Override
     public ApiRespWrapper<Boolean> voteActivity(int userId, int activityId, int worksId, String ip) {
+        ActivityInfo activityInfo = activityInfoService.getData(activityId);
+        if (activityInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的活动", false);
+        }
+        Date date = new Date();
+        if (activityInfo.getStartDate().after(date)) {
+            return new ApiRespWrapper<Boolean>(-1, "活动暂未开始", false);
+        }
+        if (activityInfo.getEndDate().before(date)) {
+            return new ApiRespWrapper<Boolean>(-1, "活动已结束", false);
+        }
         //
         ActivityWorksInfo activityWorksInfo = activityWorksInfoService.getData(worksId);
         if (activityWorksInfo == null) {
@@ -224,7 +235,6 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         if (activityWorksInfo.getActivityId() != activityId) {
             return new ApiRespWrapper<>(-1, "未对应的投票活动", false);
         }
-        Date date = new Date();
         ActivityVoteDetailInfo activityVoteDetailInfo = new ActivityVoteDetailInfo();
         activityVoteDetailInfo.setIp(ip);
         activityVoteDetailInfo.setUserId(userId);
