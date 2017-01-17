@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -73,13 +74,13 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
                 pureDbFetcIds.add(id);
             }
         }
-        Map<String, G> cacheResp = RedisCacheUtils.getObject(keyIdMap.keySet(), getSharedJedisPool());
+        Map<String, G> cacheResp = RedisCacheUtils.getObject(keyIdMap.keySet(), getSharedJedisPool(), true);
         List<Integer> dbIds = CollectionUtils.notExists(keyIdMap, cacheResp, false);
         dbIds.addAll(pureDbFetcIds);
+        Map<String, G> toCacheMap = new HashMap<String, G>();
         if (CollectionUtils.notEmptyAndNull(dbIds)) {
             List<G> dbDatas = getDirectFromDb(dbIds);
             if (CollectionUtils.notEmptyAndNull(dbDatas)) {
-                Map<String, G> toCacheMap = new HashMap<String, G>();
                 for (G dbData : dbDatas) {
                     if (!canPutToCache(dbData)) {
                         continue;
@@ -96,8 +97,15 @@ public abstract class AbsCommonCacheDataService<G extends Serializable> extends 
                 }
             }
         }
-        if (CollectionUtils.notEmptyAndNull(cacheResp.values())) {
-            ret.addAll(cacheResp.values());
+        for (Entry<String, G> entry : cacheResp.entrySet()) {
+            if (entry.getValue() == null) {
+                G g = toCacheMap.get(entry.getKey());
+                if (g != null) {
+                    ret.add(g);
+                }
+            } else {
+                ret.add(entry.getValue());
+            }
         }
         return ret;
     }

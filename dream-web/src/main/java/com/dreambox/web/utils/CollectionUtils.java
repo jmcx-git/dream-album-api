@@ -113,6 +113,10 @@ public class CollectionUtils {
         return values == null || values.length == 0;
     }
 
+    public static boolean notEmptyAndNull(byte[] values) {
+        return values != null && values.length > 0;
+    }
+
     public static boolean emptyOrNull(Object[] values) {
         return values == null || values.length == 0;
     }

@@ -234,7 +234,6 @@ public class SpaceServiceImpl implements SpaceService {
             return new ApiRespWrapper<ListWrapResp<SpaceFeedListResp>>(new ListWrapResp<SpaceFeedListResp>(
                     new ArrayList<SpaceFeedListResp>(0)));
         }
-        log.info("Space feed infos:" + infos);
         return buildFeedListResp(spaceInfo, infos, userInfo.getId());
     }
 

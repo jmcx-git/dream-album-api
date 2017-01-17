@@ -27,7 +27,6 @@ public abstract class AbstractSortedListCacheService<T extends DbStatus> extends
     public ListWrapResp<T> listInfo(StartSizeCacheFilter filter) {
         long total = count(filter);
         List<Integer> ids = getIds(filter);
-        getLogger().info("Result info ids:" + ids);
         if (ids.isEmpty()) {
             return new ListWrapResp<T>(total, new ArrayList<T>(0), false, filter.getStart());
         }
