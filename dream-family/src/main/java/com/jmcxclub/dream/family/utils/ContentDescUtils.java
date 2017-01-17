@@ -173,7 +173,7 @@ public class ContentDescUtils {
     }
 
     public static String buildNoticeTimeDesc(Date createTime) {
-        return DateUtils.formatStr(createTime, DateUtils.YYYYMMDDHHMM_FORMAT);
+        return DateUtils.formatStr(createTime, DateUtils.YYYYMMDDHHMMSS_FORMAT);
     }
 
     /**
