@@ -642,7 +642,7 @@ public class SpaceServiceImpl implements SpaceService {
         userSpaceInteractionInfo.setSpaceId(spaceId);
         userSpaceInteractionInfo = userSpaceInteractionInfoService.getInfoByUk(userSpaceInteractionInfo);
         return new ApiRespWrapper<SpaceUserInteractionInfoResp>(new SpaceUserInteractionInfoResp(interUserInfo,
-                userSpaceInteractionInfo));
+                userSpaceInteractionInfo, userInfo));
     }
 
     // //////////以下方法暂时不需要实现
