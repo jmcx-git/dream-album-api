@@ -151,8 +151,7 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             return new ApiRespWrapper<Boolean>(-1, "不能以此作品参赛", false);
         }
         int type = adapationType(feedInfo.getType());
-        return applyActivity(userId, activityId, feedInfo.getContent(), feedInfo.getTitle(), feedInfo.getContent(),
-                type);
+        return applyActivity(userId, activityId, feedInfo.getCover(), feedInfo.getTitle(), feedInfo.getContent(), type);
     }
 
     private int adapationType(int type) {
