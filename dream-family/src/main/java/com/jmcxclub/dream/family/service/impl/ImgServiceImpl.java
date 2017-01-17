@@ -59,7 +59,7 @@ public class ImgServiceImpl implements ImgService {
         String dir = IOUtils.spliceDirPath(IOUtils.spliceDirPath(imgLocalDir, imageSubDir), subDir);
         String filePath = IOUtils.spliceFileName(dir, picName);
         File outputfile = new File(filePath);
-        outputfile.mkdirs();
+        outputfile.getParentFile().mkdirs();
         try {
             if (StringUtils.equalsIgnoreCase(suffix, ".gif")) {
                 FileUtils.copyInputStreamToFile(image.getInputStream(), outputfile);
