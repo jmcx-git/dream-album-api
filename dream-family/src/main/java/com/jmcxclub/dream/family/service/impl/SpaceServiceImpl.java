@@ -242,6 +242,7 @@ public class SpaceServiceImpl implements SpaceService {
         UserSpaceInteractionInfo g = new UserSpaceInteractionInfo();
         g.setUserId(userId);
         g.setSpaceId(spaceId);
+        g.setViews(1);
         userSpaceInteractionInfoService.addData(g);
     }
 
