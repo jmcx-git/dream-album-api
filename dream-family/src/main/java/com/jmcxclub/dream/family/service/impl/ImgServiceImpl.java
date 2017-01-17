@@ -8,6 +8,7 @@ import java.util.Date;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,9 +52,6 @@ public class ImgServiceImpl implements ImgService {
 
     private UploadFileSaveResp saveImg(MultipartFile image, String filePrefix, String imageSubDir) {
         // 保存用户自己上传的图片
-        log.info("Image name:" + image.getOriginalFilename());
-        log.info("Image name:" + image.getName());
-        log.info("Image size:" + image.getSize());
         String suffix = IOUtils.getSuffix(image.getOriginalFilename());
         suffix = StringUtils.isEmpty(suffix) ? ".jpg" : suffix;
         String picName = filePrefix + new Date().getTime() + suffix;
@@ -63,7 +61,11 @@ public class ImgServiceImpl implements ImgService {
         File outputfile = new File(filePath);
         outputfile.mkdirs();
         try {
-            ImageIO.write(ImageIO.read(image.getInputStream()), suffix.substring(1), outputfile);
+            if (StringUtils.equalsIgnoreCase(suffix, ".gif")) {
+                FileUtils.copyInputStreamToFile(image.getInputStream(), outputfile);
+            } else {
+                ImageIO.write(ImageIO.read(image.getInputStream()), suffix.substring(1), outputfile);
+            }
             outputfile.setReadable(true, false);
         } catch (IOException e) {
             log.info("Save user upload file failed. Image path:" + filePath + ", Errmsg:" + e.getMessage(), e);
