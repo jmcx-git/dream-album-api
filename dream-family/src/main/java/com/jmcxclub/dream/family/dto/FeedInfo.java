@@ -104,4 +104,11 @@ public class FeedInfo extends StatusSerializable {
     public void setIllustration(String illustration) {
         this.illustration = illustration;
     }
+
+    @Override
+    public String toString() {
+        return "FeedInfo [id=" + id + ", userId=" + userId + ", spaceId=" + spaceId + ", title=" + title + ", content="
+                + content + ", cover=" + cover + ", illustration=" + illustration + ", resourceUrl=" + resourceUrl
+                + ", type=" + type + ", duration=" + duration + "]";
+    }
 }
