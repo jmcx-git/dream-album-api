@@ -1477,6 +1477,7 @@ public class RedisCacheUtils {
 
     public static List<Integer> zrevrange(String key, int start, int end, JedisPool jedisPool) {
         Set<String> ids = zrevrangeIdStringSet(key, start, end, jedisPool);
+        log.info("Get data from cache:" + ids);
         try {
             return CollectionUtils.setStringToListInt(ids);
         } catch (Exception e) {

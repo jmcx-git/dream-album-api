@@ -48,7 +48,7 @@ public class FeedInfoServiceImpl extends FeedInfoService {
     private String spaceFeedIdsKey = "space:feed:ids";
     private String userFeedIdsKey = "user:feed:ids";
     private String infoKey = "feed:info";
-    private String userPhotoFeedIdsKey = "user:photo:feed:ids";;
+    private String userPhotoFeedIdsKey = "user:photo:feed:ids";
 
     @Override
     public void addData(FeedInfo g) throws ServiceException {
