@@ -112,32 +112,48 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public ApiRespWrapper<ListWrapResp<OccupantFootprintResp>> listSpaceOccupantFootprint(String openId, int spaceId)
             throws ServiceException {
+        UserInfo g = new UserInfo();
+        g.setOpenId(openId);
+        UserInfo accessUserInfo = userInfoService.getInfoByUk(g);
+        if (accessUserInfo == null) {
+            return new ApiRespWrapper<ListWrapResp<OccupantFootprintResp>>(-2, "不存在用户OpenId", null);
+        }
+        SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
+        if (spaceInfo == null) {
+            return new ApiRespWrapper<ListWrapResp<OccupantFootprintResp>>(-2, "不存在空间", null);
+        }
         UserSpaceRelationshipInfoSortedListCacheFilter filter = new UserSpaceRelationshipInfoSortedListCacheFilter(
                 spaceId, null, 0, Integer.MAX_VALUE);
         ListWrapResp<UserSpaceRelationshipInfo> infos = userSpaceRelationshipInfoService.listInfo(filter);
-
         List<OccupantFootprintResp> resultList = new ArrayList<OccupantFootprintResp>();
         List<Integer> userIds = new ArrayList<Integer>();
+        boolean hasRelation = false;
         for (UserSpaceRelationshipInfo info : infos.getResultList()) {
+            if (!hasRelation && info.getUserId() == accessUserInfo.getId()) {
+                hasRelation = true;
+            }
             userIds.add(info.getUserId());
+        }
+        if (!hasRelation) {
+            return new ApiRespWrapper<ListWrapResp<OccupantFootprintResp>>(-2, "您暂无访问该空间的权限", null);
         }
         List<UserInfo> userInfos = userInfoService.getData(userIds);
         for (UserSpaceRelationshipInfo info : infos.getResultList()) {
-            UserInfo curUser = null;
+            UserInfo spaceUser = null;
             UserSpaceInteractionInfo userSpaceInteractionInfo = null;
             for (UserInfo userInfo : userInfos) {
                 if (userInfo.getId() == info.getUserId()) {
-                    curUser = userInfo;
+                    spaceUser = userInfo;
                 }
             }
-            if (curUser != null) {
+            if (spaceUser != null) {
                 userSpaceInteractionInfo = new UserSpaceInteractionInfo();
-                userSpaceInteractionInfo.setUserId(curUser.getId());
+                userSpaceInteractionInfo.setUserId(spaceUser.getId());
                 userSpaceInteractionInfo.setSpaceId(spaceId);
                 userSpaceInteractionInfo = userSpaceInteractionInfoService.getInfoByUk(userSpaceInteractionInfo);
             }
 
-            resultList.add(new OccupantFootprintResp(userSpaceInteractionInfo, curUser));
+            resultList.add(new OccupantFootprintResp(userSpaceInteractionInfo, spaceUser, accessUserInfo.getId()));
         }
         ListWrapResp<OccupantFootprintResp> datas = new ListWrapResp<OccupantFootprintResp>(resultList);
         return new ApiRespWrapper<ListWrapResp<OccupantFootprintResp>>(datas);
@@ -602,29 +618,31 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
-    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, int spaceId)
-            throws ServiceException {
+    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, String interOpenId,
+            int spaceId) throws ServiceException {
         UserInfo userInfo = new UserInfo();
         userInfo.setOpenId(openId);
         userInfo = userInfoService.getInfoByUk(userInfo);
         if (userInfo == null) {
-            return new ApiRespWrapper<>(-1, "未知的用户账号.");
+            return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的用户账号.");
+        }
+
+        UserInfo interUserInfo = new UserInfo();
+        interUserInfo.setOpenId(interOpenId);
+        interUserInfo = userInfoService.getInfoByUk(interUserInfo);
+        if (interUserInfo == null) {
+            return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的用户账号.");
         }
         SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
         if (spaceInfo == null) {
             return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的空间.");
         }
-        UserInfo ownerUser = userInfoService.getData(spaceInfo.getUserId());
-        if (ownerUser == null) {
-            return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的空间用户账号.");
-        }
-
         UserSpaceInteractionInfo userSpaceInteractionInfo = new UserSpaceInteractionInfo();
-        userSpaceInteractionInfo.setUserId(userInfo.getId());
+        userSpaceInteractionInfo.setUserId(interUserInfo.getId());
         userSpaceInteractionInfo.setSpaceId(spaceId);
         userSpaceInteractionInfo = userSpaceInteractionInfoService.getInfoByUk(userSpaceInteractionInfo);
-        return new ApiRespWrapper<SpaceUserInteractionInfoResp>(new SpaceUserInteractionInfoResp(userInfo,
-                userSpaceInteractionInfo, ownerUser));
+        return new ApiRespWrapper<SpaceUserInteractionInfoResp>(new SpaceUserInteractionInfoResp(interUserInfo,
+                userSpaceInteractionInfo));
     }
 
     // //////////以下方法暂时不需要实现

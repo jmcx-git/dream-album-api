@@ -16,13 +16,13 @@ public class OccupantFootprintResp {
     private String avatarUrl;
     private String info;// BUILD BY SYSTEM
 
-    public OccupantFootprintResp(UserSpaceInteractionInfo info, UserInfo userInfo) {
-        this.info = ContentDescUtils.buildUserVisitSpaceInfo(info, userInfo);
-        if (userInfo != null) {
-            this.nickname = userInfo.getNickName();
-            this.avatarUrl = userInfo.getAvatarUrl();
-            this.openId = userInfo.getOpenId();
+    public OccupantFootprintResp(UserSpaceInteractionInfo info, UserInfo spaceUser, int accessUserId) {
+        if (spaceUser != null) {
+            this.nickname = spaceUser.getNickName();
+            this.avatarUrl = spaceUser.getAvatarUrl();
+            this.openId = spaceUser.getOpenId();
         }
+        this.info = ContentDescUtils.buildUserVisitSpaceInfo(info, accessUserId);
     }
 
     public String getNickname() {

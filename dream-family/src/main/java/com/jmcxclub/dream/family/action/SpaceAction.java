@@ -376,12 +376,12 @@ public class SpaceAction extends IosBaseAction {
      */
     @RequestMapping("/user/interaction/info.json")
     @ResponseBody
-    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, Integer spaceId,
-            String version) throws ServiceException {
-        if (StringUtils.isEmpty(openId)) {
+    public ApiRespWrapper<SpaceUserInteractionInfoResp> getSpaceUserInteractionInfo(String openId, String interOpenId,
+            Integer spaceId, String version) throws ServiceException {
+        if (StringUtils.isAnyEmpty(openId, interOpenId)) {
             return new ApiRespWrapper<SpaceUserInteractionInfoResp>(-1, "未知的用户账号", null);
         }
-        return spaceService.getSpaceUserInteractionInfo(openId, spaceId);
+        return spaceService.getSpaceUserInteractionInfo(openId, interOpenId, spaceId);
     }
 
     @RequestMapping("/feed/detail.json")
