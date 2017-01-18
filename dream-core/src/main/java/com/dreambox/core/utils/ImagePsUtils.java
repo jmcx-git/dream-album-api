@@ -196,9 +196,9 @@ public class ImagePsUtils {
                 int startY = covertHeight > height ? (covertHeight - height) / 2 : 0;
                 int endX = covertWidht > width ? startX + width : width;
                 int endY = covertHeight > height ? startY + height : height;
-                g2d.rotate(Math.toRadians(degree), x + width / 2, y + height / 2);
+                g2d.rotate(Math.toRadians(degree), x, y);
                 g2d.drawImage(convertBufferedImage, x, y, width + x, height + y, startX, startY, endX, endY, null);
-                g2d.rotate(Math.toRadians(-degree), x + width / 2, y + height / 2);
+                g2d.rotate(Math.toRadians(-degree), x, y);
             }
             g2d.drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
             File outputFile = new File(toPath);
