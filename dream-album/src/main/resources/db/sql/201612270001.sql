@@ -12,3 +12,4 @@ CREATE TABLE IF NOT EXISTS `smallapp_developer_info`(
 
 INSERT INTO `smallapp_developer_info` values(null, 'wxdfbe82261831dda7', 'eabaf170cf7c3993d3fbf02eadae42ac', '萌娃相册', 0, now(), now());
 INSERT INTO `smallapp_developer_info` values(null, 'wx0ddc8673b8df3827', '16619bf042c6ef47965f45af7e09afe8', '水滴相册', 0, now(), now());
+INSERT INTO `smallapp_developer_info` values(null, 'wx1c1943ad2a3edaf1', '02d54d767ba1ed06501fdecb02e7f160', '光阴之旅', 0, now(), now());

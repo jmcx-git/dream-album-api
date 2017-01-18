@@ -34,6 +34,7 @@ import com.dreambox.core.service.album.UserInfoService;
 import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.model.ApiRespWrapper;
+import com.dreambox.web.utils.UrlUtils;
 
 /**
  * @author liuxinglong
@@ -139,6 +140,36 @@ public class AlbumAction extends IosBaseAction {
             albumInfo.setAlbumItemList(albumItemInfos);
         }
         return infos;
+    }
+
+
+    /**
+     * 相册Lite版选取模版列表接口
+     * 
+     * @param start
+     * @param size
+     * @return
+     */
+    @RequestMapping("/delete.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> deleteUserAlbum(String openId, Integer userAlbumId) {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户Id", false);
+        }
+        if (userAlbumId == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户相册Id", false);
+        }
+        UserInfo g = new UserInfo();
+        g.setOpenId(openId);
+        UserInfo userInfo = userInfoService.getInfoByUk(g);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "当前用户不存在", false);
+        }
+        UserAlbumInfo userAlbumInfo = new UserAlbumInfo();
+        userAlbumInfo.setId(userAlbumId.intValue());
+        userAlbumInfo.setStatus(UserAlbumInfo.STATUS_DEL);
+        userAlbumInfoService.modifyStatus(userAlbumInfo);
+        return new ApiRespWrapper<Boolean>(true);
     }
 
     /**
@@ -282,6 +313,8 @@ public class AlbumAction extends IosBaseAction {
             model.setUserAlbumId(userAlbumInfo.getId());
             model.setComplete(userAlbumInfo.getComplete());
             model.setProductImg(userAlbumInfo.getPreviewImg());
+            model.setAudioAlbum(UrlUtils.isUrl(albumInfo.getMusic()) ? MyAlbumModel.AUDIO_ALBUM
+                    : MyAlbumModel.PURE_PHOTO_ALBUM);
             resultData.add(model);
         }
         return resultData;

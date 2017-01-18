@@ -5,6 +5,8 @@ package com.dream.album.dto;
  * @date 2016年12月9日
  */
 public class MyAlbumModel {
+    public static final int PURE_PHOTO_ALBUM = 0;
+    public static final int AUDIO_ALBUM = 1;
     private int albumId;// 相册
     private String title;
     private String cover;// 封面图
@@ -13,6 +15,7 @@ public class MyAlbumModel {
     private int userAlbumId;// 用户相册Id
     private int complete;// 是否生成了相册
     private String productImg;// 在用户户生成完相册后根据信息生成预览图
+    private int audioAlbum;// 0 非音乐相册 1音乐相册
 
 
     public int getAlbumId() {
@@ -69,5 +72,13 @@ public class MyAlbumModel {
 
     public void setPreviewImg(String previewImg) {
         this.previewImg = previewImg;
+    }
+
+    public int getAudioAlbum() {
+        return audioAlbum;
+    }
+
+    public void setAudioAlbum(int audioAlbum) {
+        this.audioAlbum = audioAlbum;
     }
 }
