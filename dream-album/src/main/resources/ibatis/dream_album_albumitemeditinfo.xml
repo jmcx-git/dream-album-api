@@ -41,7 +41,7 @@
 	<update id="updateAlbumItemEditInfoStatus"
 	parameterClass="com.dreambox.core.dto.album.AlbumItemEditInfo">
 		<![CDATA[
-		UPDATE `album_item_edit_info` SET `status` = #status# WHERE `id=#id# ;
+		UPDATE `album_item_edit_info` SET `status` = #status# WHERE `id`=#id# ;
 		]]>
 	</update>
 	<select id="queryAlbumItemEditInfoByUk" parameterClass="com.dreambox.core.dto.album.AlbumItemEditInfo"

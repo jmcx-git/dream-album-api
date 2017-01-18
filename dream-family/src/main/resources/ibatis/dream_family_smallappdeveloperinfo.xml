@@ -25,7 +25,7 @@
 	</insert>
 	<update id="updateSmallAppDeveloperInfoStatus" parameterClass="com.dreambox.core.dto.album.SmallAppDeveloperInfo">
 		<![CDATA[
-		UPDATE `smallapp_developer_info` SET `status` = #status# WHERE `id=#id# ;
+		UPDATE `smallapp_developer_info` SET `status` = #status# WHERE `id`=#id# ;
 		]]>
 	</update>
 	<select id="querySmallAppDeveloperInfoById" parameterClass="java.lang.Integer"
