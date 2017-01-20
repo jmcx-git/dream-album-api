@@ -20,7 +20,7 @@ public class MyInfoResp {
         this.nickname = userInfo.getNickName();
         this.avatarUrl = userInfo.getAvatarUrl();
         this.notices = notice ? 1 : 0;
-        this.bottomDesc = AboutUsResp.bottomDesctions;
+        this.bottomDesc = new AboutUsResp().getBottomDesctions();
     }
 
     public String getNickname() {
