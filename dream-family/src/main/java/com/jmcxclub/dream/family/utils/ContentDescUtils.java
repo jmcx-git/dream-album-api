@@ -271,9 +271,6 @@ public class ContentDescUtils {
         }
 
         List<ActivityPrizeResp> prizes = new ArrayList<ActivityPrizeResp>();
-        String rankDescPrefix = "NO.";
-        int rank = 1;
-        boolean firstInit = true;
         for (ActivityPrizeInfo activityPrizeInfo : activityPrizeInfos) {
             PrizeInfo curPrize = null;
             for (PrizeInfo prizeInfo : prizeInfos) {
@@ -284,16 +281,8 @@ public class ContentDescUtils {
             if (curPrize == null) {
                 continue;
             }
-            String rankDesc;
-            String prizeInfo;
-            if (firstInit) {
-                firstInit = false;
-            } else {
-                rank++;
-            }
-            rankDesc = rankDescPrefix + rank;
-            prizeInfo = curPrize.getTitle() + activityPrizeInfo.getCount() + "名";
-            prizes.add(new ActivityPrizeResp(rankDesc, prizeInfo, curPrize.getImg()));
+            String prizeInfo = curPrize.getTitle() + activityPrizeInfo.getCount() + "个";
+            prizes.add(new ActivityPrizeResp(activityPrizeInfo.getRankDesc(), prizeInfo, curPrize.getImg()));
         }
 
         List<UserPrizeResp> userPrizeResp = null;// 用户中奖信息
