@@ -9,6 +9,7 @@
 		<result column="cover" property="cover" jdbcType="VARCHAR" />
 		<result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
 		<result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="prize_date" property="prizeDate" jdbcType="TIMESTAMP" />
 		<result column="activity_rule" property="activityRule"
 			jdbcType="VARCHAR" />
 		<result column="finish" property="finish" jdbcType="INTEGER" />
@@ -19,8 +20,8 @@
 
 	<insert id="insertOrUpdateActivityInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
 		<![CDATA[
-			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `prize_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #prizeDate#, #finish#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -30,8 +31,8 @@
 
 	<insert id="insertActivityInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
 		<![CDATA[
-			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `prize_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #prizeDate#, #finish#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -41,8 +42,8 @@
 
 	<insert id="insertOrIgnoreActivityInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityInfo">
 		<![CDATA[
-			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
-			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #finish#, 0, now(),now())
+			INSERT INTO activity_info (`id`, `title`, `introduction`, `content`, `cover`, `start_date`, `end_date`, `prize_date`, `activity_rule`, `finish`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #introduction#, #content#, #cover#, #startDate#, #endDate#, #prizeDate#, #finish#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -77,7 +78,7 @@
 		utf8)
 		AS
 		`content`,`cover`,
-		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`start_date`, `end_date`, `prize_date`, `activity_rule`, `finish`,
 		`status`, `update_time`,
 		`create_time`
 		FROM `activity_info` WHERE
@@ -100,7 +101,7 @@
 		utf8)
 		AS
 		`content`,`cover`,
-		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`start_date`, `end_date`, `prize_date`, `activity_rule`, `finish`,
 		`status`, `update_time`,
 		`create_time`
 		FROM `activity_info` WHERE
@@ -126,7 +127,7 @@
 		utf8)
 		AS
 		`content`,`cover`,
-		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`start_date`, `end_date`, `prize_date`, `activity_rule`, `finish`,
 		`status`,
 		`update_time`,
 		`create_time`
@@ -153,7 +154,7 @@
 		utf8)
 		AS
 		`content`,`cover`,
-		`start_date`, `end_date`, `activity_rule`, `finish`,
+		`start_date`, `end_date`, `prize_date`, `activity_rule`, `finish`,
 		`status`,
 		`update_time`,
 		`create_time`

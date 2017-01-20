@@ -214,6 +214,7 @@ public class ContentDescUtils {
         String stepDesc = "";
         String bottomStepDesc = "";// 只在step==0,2,3只有值F
         String activityTimeDesc = buildStartEndTimeDesc(info.getStartDate(), info.getEndDate());
+        String prizeTimeDesc = buildChineseTimeDesc(info.getPrizeDate());
         String[] contens = info.getContent().split("<br/>");
         if (contens.length == 1) {
             contens = info.getContent().split("\r\n");
@@ -334,16 +335,20 @@ public class ContentDescUtils {
         activityInfoResp.setStepTime(stepTime);
         activityInfoResp.setStepTimeUnit(stepTimeUnit);
         activityInfoResp.setActivityTimeDesc(activityTimeDesc);
+        activityInfoResp.setPrizeTimeDesc(prizeTimeDesc);
         activityInfoResp.setBottomStepDesc(bottomStepDesc);
         activityInfoResp.setUserPrizes(userPrizeResp);
     }
 
+    private static String buildChineseTimeDesc(Date date) {
+        int year = DateUtils.getYear(date);
+        int month = DateUtils.getMonth(date);
+        int day = DateUtils.getDay(date);
+        return year + "年" + month + "月" + day + "日";
+    }
+
     private static String buildStartEndTimeDesc(Date startDate, Date endDate) {
-        int sm = DateUtils.getMonth(startDate);
-        int em = DateUtils.getMonth(endDate);
-        int sd = DateUtils.getDay(startDate);
-        int ed = DateUtils.getDay(endDate);
-        return sm + "月" + sd + "日一" + em + "月" + ed + "日";
+        return buildChineseTimeDesc(startDate) + "一" + buildChineseTimeDesc(endDate);
     }
 
     public static String buildSpaceInfo(SpaceInfo spaceInfo) {
@@ -463,5 +468,19 @@ public class ContentDescUtils {
             ret.add(add);
         }
         return ret;
+    }
+
+    public static List<String> buildPhase(String activityRule) {
+        if (StringUtils.isEmpty(activityRule)) {
+            return new ArrayList<String>(0);
+        }
+        String[] rules = activityRule.split("<br/>");
+        if (rules.length == 1) {
+            rules = activityRule.split("\r\n");
+        }
+        if (rules.length == 1) {
+            rules = activityRule.split("\n");
+        }
+        return Arrays.asList(rules);
     }
 }

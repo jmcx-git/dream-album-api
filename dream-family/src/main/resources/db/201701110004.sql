@@ -16,3 +16,4 @@ update activity_works_info set illustration = concat(`illustration`, '"}');
 
 ALTER TABLE `activity_works_info` add column `illustration` text after `cover`;
 ALTER TABLE `user_notice_info` add column `img_url` varchar(255) after `desc`;
+ALTER TABLE `activity_info` add column `prize_date` datetime after `end_date`;

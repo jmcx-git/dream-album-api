@@ -26,6 +26,7 @@ public class ActivityInfoResp {
     private String cover;
     private long participates;// 参与人数
     private String activityRule;// 活动规则
+    private List<String> activityRules;// 活动规则
     private List<ActivityWorksExampleInfo> examples;
     private int joined;// 当前用户是否已参赛0 not joined 1 joined
     private Integer worksId;// 当前用户的参赛作品id
@@ -38,6 +39,7 @@ public class ActivityInfoResp {
     private String bottomStepDesc = "";// 只在step!=1在底部使用此值
     private List<String> contentSections;// 活动段落
     private String activityTimeDesc;// 活动时间
+    private String prizeTimeDesc;// 开奖时间
     private List<ActivityPrizeResp> prizes;
     private List<UserPrizeResp> userPrizes;// 用户中奖信息
 
@@ -51,6 +53,7 @@ public class ActivityInfoResp {
         this.cover = info.getCover();
         this.participates = participates;
         this.activityRule = info.getActivityRule();
+        this.activityRules = ContentDescUtils.buildPhase(info.getActivityRule());
         this.examples = new ArrayList<ActivityWorksExampleInfo>();
         this.joined = worksId != null && worksId.intValue() > 0 ? 1 : 0;
         this.worksId = worksId;
@@ -237,5 +240,21 @@ public class ActivityInfoResp {
 
     public void setUserPrizes(List<UserPrizeResp> userPrizes) {
         this.userPrizes = userPrizes;
+    }
+
+    public List<String> getActivityRules() {
+        return activityRules;
+    }
+
+    public void setActivityRules(List<String> activityRules) {
+        this.activityRules = activityRules;
+    }
+
+    public String getPrizeTimeDesc() {
+        return prizeTimeDesc;
+    }
+
+    public void setPrizeTimeDesc(String prizeTimeDesc) {
+        this.prizeTimeDesc = prizeTimeDesc;
     }
 }

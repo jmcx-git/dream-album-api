@@ -23,7 +23,8 @@ public class ActivityInfo extends StatusSerializable {
     private String content;// 多段用<br/>或\r\n或\n来分隔，分隔符不能混合使用
     private Date startDate;
     private Date endDate;
-    private String activityRule;
+    private Date prizeDate;
+    private String activityRule;// 多段用<br/>或\r\n或\n来分隔，分隔符不能混合使用
     @ZERO_ENABLE
     private int finish;// 只有中奖名单出来后，才算结束 0 未结束 1结束
 
@@ -97,5 +98,13 @@ public class ActivityInfo extends StatusSerializable {
 
     public void setActivityRule(String activityRule) {
         this.activityRule = activityRule;
+    }
+
+    public Date getPrizeDate() {
+        return prizeDate;
+    }
+
+    public void setPrizeDate(Date prizeDate) {
+        this.prizeDate = prizeDate;
     }
 }
