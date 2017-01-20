@@ -3,10 +3,12 @@
 package com.jmcxclub.dream.family.model;
 
 import java.util.Date;
+import java.util.List;
 
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
@@ -20,6 +22,7 @@ public class UserFeedListResp {
     private int type;
     private String content;
     private String resourceUrl;
+    private List<String> illustrations;
     private long duration;// for video audio
     private String avatarUrl;
     private String openId;
@@ -27,6 +30,23 @@ public class UserFeedListResp {
     private String timeDesc;
     private String dateDesc;
 
+
+    public UserFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo) {
+        this.id = feedInfo.getId();
+        this.title = feedInfo.getTitle();
+        this.cover = feedInfo.getCover();
+        ContentDescUtils.buildFeedCoverAndIllustration(this, feedInfo);
+        this.content = feedInfo.getContent();
+        this.resourceUrl = feedInfo.getResourceUrl();
+        this.duration = feedInfo.getDuration();
+        this.timeDesc = buildTimeDesc(feedInfo);
+        this.dateDesc = buildDateDesc(feedInfo);
+        if (authorUserInfo != null) {
+            this.avatarUrl = authorUserInfo.getAvatarUrl();
+            this.nickname = authorUserInfo.getNickName();
+            this.openId = authorUserInfo.getOpenId();
+        }
+    }
 
     private static String buildDateDesc(FeedInfo feedInfo) {
         Date ct = feedInfo.getCreateTime();
@@ -58,23 +78,6 @@ public class UserFeedListResp {
             }
         }
         return minDesc;
-    }
-
-    public UserFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo) {
-        this.id = feedInfo.getId();
-        this.title = feedInfo.getTitle();
-        this.cover = feedInfo.getCover();
-        this.type = feedInfo.getType();
-        this.content = feedInfo.getContent();
-        this.resourceUrl = feedInfo.getResourceUrl();
-        this.duration = feedInfo.getDuration();
-        this.timeDesc = buildTimeDesc(feedInfo);
-        this.dateDesc = buildDateDesc(feedInfo);
-        if (authorUserInfo != null) {
-            this.avatarUrl = authorUserInfo.getAvatarUrl();
-            this.nickname = authorUserInfo.getNickName();
-            this.openId = authorUserInfo.getOpenId();
-        }
     }
 
     public int getId() {
@@ -171,5 +174,13 @@ public class UserFeedListResp {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public List<String> getIllustrations() {
+        return illustrations;
+    }
+
+    public void setIllustrations(List<String> illustrations) {
+        this.illustrations = illustrations;
     }
 }

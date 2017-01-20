@@ -21,8 +21,10 @@ import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
+import com.dreambox.web.utils.GsonUtils;
 import com.jmcxclub.dream.family.dto.FeedCommentInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.dto.FeedInnerPhoto;
 import com.jmcxclub.dream.family.dto.FeedLikeInfo;
 import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceRelationshipEnum;
@@ -365,7 +367,35 @@ public class SpaceServiceImpl implements SpaceService {
                 infos.getTotalCount(), datas, infos.isMore(), infos.getNext()));
     }
 
+
+    /**
+     * 对多个文件上传的支持
+     * 
+     * @param id
+     * @param spaceId
+     * @param feedId
+     * @param index
+     * @param count
+     * @param file
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
     @Override
+    public boolean addMultiFeed(int userId, int spaceId, int feedId, String illustration, int index, int count, int type)
+            throws ServiceException {
+        String illustrationJson = GsonUtils.toJson(new FeedInnerPhoto(index, illustration));
+        FeedInfo feedInfo = new FeedInfo();
+        if (index == 0) {
+            feedInfo.setCover(illustration);
+        }
+        feedInfo.setId(feedId);
+        feedInfo.setSpaceId(spaceId);
+        feedInfo.setUserId(userId);
+        feedInfo.setIllustration(illustrationJson);
+        return feedInfoService.modifyIllustration(feedInfo, count);
+    }
+
     public ApiRespWrapper<Integer> addFeed(int userId, int spaceId, String title, String content, int type,
             String cover, String illustration) throws ServiceException {
         FeedInfo g = new FeedInfo();
@@ -376,7 +406,26 @@ public class SpaceServiceImpl implements SpaceService {
         g.setIllustration(illustration);
         g.setSpaceId(spaceId);
         g.setUserId(userId);
+        g.setStatus(FeedInfo.STATUS_OK);
         feedInfoService.addData(g);
+        try {
+            spaceStatInfoService.incrRecords(spaceId);
+        } catch (ServiceException e) {
+            log.error("Incr space records failed. SpaceId:" + spaceId + ", Errmsg:" + e.getMessage());
+        }
+        return new ApiRespWrapper<Integer>(g.getId());
+    }
+
+    @Override
+    public ApiRespWrapper<Integer> addMultiFeedFirst(int userId, int spaceId, String title, String content, int type)
+            throws ServiceException {
+        FeedInfo g = new FeedInfo();
+        g.setContent(content);
+        g.setTitle(title);
+        g.setType(type);
+        g.setSpaceId(spaceId);
+        g.setUserId(userId);
+        feedInfoService.addMultiFeedFirst(g);
         try {
             spaceStatInfoService.incrRecords(spaceId);
         } catch (ServiceException e) {

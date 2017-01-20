@@ -13,10 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.utils.DateUtils;
+import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.utils.CollectionUtils;
+import com.dreambox.web.utils.GsonUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
@@ -24,6 +27,7 @@ import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.dto.FeedInnerPhoto;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceTypeEnum;
@@ -32,6 +36,8 @@ import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
 import com.jmcxclub.dream.family.model.ActivityStepEnum;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
+import com.jmcxclub.dream.family.model.SpaceFeedListResp;
+import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.model.UserPrizeResp;
 
 /**
@@ -39,6 +45,8 @@ import com.jmcxclub.dream.family.model.UserPrizeResp;
  *
  */
 public class ContentDescUtils {
+    private static final Logger log = Logger.getLogger(ContentDescUtils.class);
+
     public static String decode(String content) {
         if (StringUtils.isNotEmpty(content)) {
             try {
@@ -342,6 +350,67 @@ public class ContentDescUtils {
         } else if (spaceInfo.getType() == SpaceTypeEnum.LOVE.getType()) {
         }
         return null;
+    }
+
+    public static void buildFeedCoverAndIllustration(SpaceFeedListResp spaceFeedListResp, FeedInfo feedInfo) {
+        if (StringUtils.isEmpty(feedInfo.getIllustration())) {
+            spaceFeedListResp.setCover(feedInfo.getCover());
+        } else {
+            String illustration = feedInfo.getIllustration();
+            String[] illustrations = StringUtils.split(illustration, "&");
+            List<String> illustrationList = new ArrayList<String>(illustrations.length);
+            String cover = null;
+            for (String illustrationInner : illustrations) {
+                FeedInnerPhoto feedInnerPhoto;
+                try {
+                    feedInnerPhoto = GsonUtils.convert(illustrationInner, FeedInnerPhoto.class);
+                } catch (Exception e) {
+                    log.error("Convert " + illustrationInner + " to " + FeedInnerPhoto.class.getName()
+                            + " failed.Errmsg:" + e.getMessage(), e);
+
+                    throw ServiceException.getInternalException("Json数据格式错误");
+                }
+                illustrationList.add(feedInnerPhoto.getIndex(), feedInnerPhoto.getUrl());
+                if (feedInnerPhoto.getIndex() == 0) {
+                    cover = feedInnerPhoto.getUrl();
+                }
+            }
+            spaceFeedListResp.setCover(cover);
+            spaceFeedListResp.setIllustrations(illustrationList);
+        }
+    }
+
+    public static String buildDateDesc(FeedInfo feedInfo) {
+        Date ct = feedInfo.getCreateTime();
+        return DateUtils.getDateMDStringValue(ct);
+    }
+
+    public static void buildFeedCoverAndIllustration(UserFeedListResp userFeedListResp, FeedInfo feedInfo) {
+        if (StringUtils.isEmpty(feedInfo.getIllustration())) {
+            userFeedListResp.setCover(feedInfo.getCover());
+        } else {
+            String illustration = feedInfo.getIllustration();
+            String[] illustrations = StringUtils.split(illustration, "&");
+            List<String> illustrationList = new ArrayList<String>(illustrations.length);
+            String cover = null;
+            for (String illustrationInner : illustrations) {
+                FeedInnerPhoto feedInnerPhoto;
+                try {
+                    feedInnerPhoto = GsonUtils.convert(illustrationInner, FeedInnerPhoto.class);
+                } catch (Exception e) {
+                    log.error("Convert " + illustrationInner + " to " + FeedInnerPhoto.class.getName()
+                            + " failed.Errmsg:" + e.getMessage(), e);
+
+                    throw ServiceException.getInternalException("Json数据格式错误");
+                }
+                illustrationList.add(feedInnerPhoto.getIndex(), feedInnerPhoto.getUrl());
+                if (feedInnerPhoto.getIndex() == 0) {
+                    cover = feedInnerPhoto.getUrl();
+                }
+            }
+            userFeedListResp.setCover(cover);
+            userFeedListResp.setIllustrations(illustrationList);
+        }
     }
 
 }

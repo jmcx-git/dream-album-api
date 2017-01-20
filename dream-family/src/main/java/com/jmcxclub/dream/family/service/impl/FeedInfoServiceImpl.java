@@ -25,8 +25,10 @@ import com.dreambox.core.utils.RedisCacheUtils;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
+import com.dreambox.web.utils.GsonUtils;
 import com.jmcxclub.dream.family.dao.FeedInfoDao;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.dto.FeedInnerPhoto;
 import com.jmcxclub.dream.family.dto.FeedTypeEnum;
 import com.jmcxclub.dream.family.service.FeedInfoService;
 
@@ -52,6 +54,11 @@ public class FeedInfoServiceImpl extends FeedInfoService {
 
     @Override
     public void addData(FeedInfo g) throws ServiceException {
+        // illustration有变化 以json对象来支持
+        if (StringUtils.isNotEmpty(g.getIllustration())) {
+            String illustrationJson = GsonUtils.toJson(new FeedInnerPhoto(0, g.getIllustration()));
+            g.setIllustration(illustrationJson);
+        }
         int id;
         try {
             id = feedInfoDao.insertReturnId(g);
@@ -210,6 +217,43 @@ public class FeedInfoServiceImpl extends FeedInfoService {
         List<Integer> ids = RedisCacheUtils.zrangeIds(key, start, start + size - 1, getJedisPool());
         List<FeedInfo> feedInfos = getData(ids);
         boolean more = count > (start + ids.size());
-        return new ListWrapResp<>(count, feedInfos, more, start + ids.size());
+        return new ListWrapResp<FeedInfo>(count, feedInfos, more, start + ids.size());
+    }
+
+    @Override
+    public boolean modifyIllustration(FeedInfo feedInfo, int count) throws ServiceException {
+        boolean success;
+        feedInfo.setStatus(FeedInfo.STATUS_DEL);
+        try {
+            success = this.feedInfoDao.updateIllustration(feedInfo);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        if (success) {
+            String illustration;
+            try {
+                illustration = feedInfoDao.queryIllustration(feedInfo.getId());
+            } catch (SQLException e) {
+                throw ServiceException.getSQLException(e);
+            }
+            String[] illustrations = StringUtils.split(illustration, "&");
+            if (illustrations.length == count) {
+                feedInfo.setStatus(FeedInfo.STATUS_OK);
+                modifyStatus(feedInfo);
+            }
+        }
+        return success;
+    }
+
+    @Override
+    public void addMultiFeedFirst(FeedInfo g) throws ServiceException {
+        int id;
+        g.setStatus(FeedInfo.STATUS_DEL);
+        try {
+            id = feedInfoDao.insertReturnId(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        g.setId(id);
     }
 }

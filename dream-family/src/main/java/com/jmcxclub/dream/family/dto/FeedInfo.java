@@ -20,7 +20,7 @@ public class FeedInfo extends StatusSerializable {
     private String title;
     private String content;
     private String cover;
-    private String illustration;
+    private String illustration;// json object inde url see FeedInnerPhoto
     private String resourceUrl;
     private int type;
     private long duration;
