@@ -436,7 +436,7 @@ public class SpaceAction extends IosBaseAction {
      * @return
      * @throws ServiceException
      */
-    @RequestMapping(value = "/feed/multi/add.json", method = RequestMethod.POST)
+    @RequestMapping(value = "/feed/multi/add.json", method = RequestMethod.GET)
     @ResponseBody
     public ApiRespWrapper<Integer> addMultiFeedFirst(String openId, Integer spaceId, String title, String content,
             String version) throws ServiceException {

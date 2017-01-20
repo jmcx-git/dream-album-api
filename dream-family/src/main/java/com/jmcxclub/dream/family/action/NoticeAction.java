@@ -2,6 +2,8 @@
 
 package com.jmcxclub.dream.family.action;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,12 +12,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.service.album.UserInfoService;
+import com.dreambox.core.utils.ParameterUtils;
 import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.model.MyInfoResp;
 import com.jmcxclub.dream.family.model.NoticeResp;
+import com.jmcxclub.dream.family.model.WikiResp;
 import com.jmcxclub.dream.family.service.NoticeService;
 
 /**
@@ -45,6 +49,23 @@ public class NoticeAction extends IosBaseAction {
         return new ApiRespWrapper<MyInfoResp>(new MyInfoResp(userInfo, notice));
     }
 
+    @RequestMapping(value = "/wiki/detail.json")
+    @ResponseBody
+    public ApiRespWrapper<WikiResp> detailWiki(String openId, String version, Integer id) throws ServiceException {
+        return new ApiRespWrapper<WikiResp>(noticeService.getWiki(id));
+    }
+
+    @RequestMapping(value = "/wiki/list.json")
+    @ResponseBody
+    public ApiRespWrapper<ListWrapResp<WikiResp>> listWiki(String openId, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<ListWrapResp<WikiResp>>(-1, "未知的用户账号", null);
+        }
+        List<WikiResp> wikis = noticeService.listWikis();
+
+        return new ApiRespWrapper<ListWrapResp<WikiResp>>(new ListWrapResp<WikiResp>(wikis));
+    }
+
     /**
      * 对于获取最新，则startId,type不传
      * 
@@ -71,6 +92,8 @@ public class NoticeAction extends IosBaseAction {
         if (userInfo == null) {
             return new ApiRespWrapper<ListWrapResp<NoticeResp>>(-1, "未找到此用户");
         }
+        startId = ParameterUtils.formatStart(startId);
+        size = ParameterUtils.formatStart(size);
         return noticeService.listNotice(userInfo.getId(), startId, type, size);
     }
 

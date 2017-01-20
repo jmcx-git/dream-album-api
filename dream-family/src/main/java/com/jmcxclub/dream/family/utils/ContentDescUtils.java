@@ -32,6 +32,7 @@ import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceTypeEnum;
 import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
+import com.jmcxclub.dream.family.dto.WikiInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
 import com.jmcxclub.dream.family.model.ActivityStepEnum;
@@ -39,6 +40,7 @@ import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.model.UserPrizeResp;
+import com.jmcxclub.dream.family.model.WikiPhaseResp;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
@@ -411,6 +413,11 @@ public class ContentDescUtils {
             userFeedListResp.setCover(cover);
             userFeedListResp.setIllustrations(illustrationList);
         }
+    }
+
+    public static List<WikiPhaseResp> buildWikiContent(WikiInfo wikiInfo, boolean desc) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

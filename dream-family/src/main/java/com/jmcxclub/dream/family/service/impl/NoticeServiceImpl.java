@@ -20,6 +20,7 @@ import com.jmcxclub.dream.family.dto.SystemNoticeInfo;
 import com.jmcxclub.dream.family.dto.UserNoticeInfo;
 import com.jmcxclub.dream.family.dto.UserReadNoticeRecord;
 import com.jmcxclub.dream.family.model.NoticeResp;
+import com.jmcxclub.dream.family.model.WikiResp;
 import com.jmcxclub.dream.family.service.NoticeService;
 import com.jmcxclub.dream.family.service.SystemNoticeInfoService;
 import com.jmcxclub.dream.family.service.UserNoticeInfoService;
@@ -138,5 +139,17 @@ public class NoticeServiceImpl implements NoticeService {
                     startIndex + datas.size()));
 
         }
+    }
+
+    @Override
+    public List<WikiResp> listWikis() throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public WikiResp getWiki(Integer id) throws ServiceException {
+        // TODO Auto-generated method stub
+        return null;
     }
 }
