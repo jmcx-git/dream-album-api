@@ -105,7 +105,7 @@ public class SpaceServiceImpl implements SpaceService {
         }
         List<SpaceInfo> infos = spaceInfoService.getData(spaceIds);
         List<SpaceStatInfo> stats = spaceStatInfoService.getData(spaceIds);
-        List<SpaceListResp> datas = buildSpaceListResps(infos, stats);
+        List<SpaceListResp> datas = buildSpaceListResps(infos, stats, userId);
         ListWrapResp<SpaceListResp> data = new ListWrapResp<SpaceListResp>(spaceInfosResp.getTotalCount(), datas,
                 spaceInfosResp.isMore(), spaceInfosResp.getNext());
         return new ApiRespWrapper<ListWrapResp<SpaceListResp>>(data);
@@ -202,7 +202,7 @@ public class SpaceServiceImpl implements SpaceService {
         return new ApiRespWrapper<SpaceInfoResp>(new SpaceInfoResp(spaceInfo, owner));
     }
 
-    private List<SpaceListResp> buildSpaceListResps(List<SpaceInfo> infos, List<SpaceStatInfo> stats) {
+    private List<SpaceListResp> buildSpaceListResps(List<SpaceInfo> infos, List<SpaceStatInfo> stats, int accessUserId) {
         List<SpaceListResp> datas = new ArrayList<SpaceListResp>();
         for (SpaceInfo spaceInfo : infos) {
             SpaceStatInfo curStat = null;
@@ -211,7 +211,8 @@ public class SpaceServiceImpl implements SpaceService {
                     curStat = stat;
                 }
             }
-            datas.add(new SpaceListResp(spaceInfo, curStat));
+            boolean owner = spaceInfo.getUserId() == accessUserId;
+            datas.add(new SpaceListResp(spaceInfo, curStat, owner));
         }
         return datas;
     }

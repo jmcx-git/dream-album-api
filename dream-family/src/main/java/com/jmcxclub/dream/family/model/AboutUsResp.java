@@ -17,19 +17,11 @@ public class AboutUsResp implements Serializable {
      * 
      */
     private static final long serialVersionUID = -3298197307282539699L;
-    private String solgan = "";
+    private String solgan = "一分钟记录生活中的每一刻感动";
+    private String version = "1.0.0";
     private String officialServiceQrCode = "https://cdn.mokous.com/static/qrcode/official_service_qucode_170127.jpeg";// 服务群
     private String mpQrCode = "https://cdn.mokous.com/static/qrcode/mp_qrcode_170127.jpg";// 公方号
-    private List<String> bottomDesctions = new ArrayList<String>() {
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 6253738440098832074L;
-
-        {
-            add("官方QQ群:612883308");
-        }
-    };
+    private List<String> bottomDesctions = new ArrayList<String>(0);
 
     public static void main(String[] args) {
         System.out.println(GsonUtils.toJson(new AboutUsResp()));
@@ -65,5 +57,13 @@ public class AboutUsResp implements Serializable {
 
     public void setBottomDesctions(List<String> bottomDesctions) {
         this.bottomDesctions = bottomDesctions;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

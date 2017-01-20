@@ -24,10 +24,11 @@ public class SpaceListResp {
     private String name;// 空间名称
     private String info;// 空间的描述
     private int type;// 空间类型 see SpaceTypeEnum
+    private int owner;// 1 yes 0 no
 
     private String timeDesc;// dd MMM.yy
 
-    public SpaceListResp(SpaceInfo spaceInfo, SpaceStatInfo curStat) {
+    public SpaceListResp(SpaceInfo spaceInfo, SpaceStatInfo curStat, boolean owner) {
         this.id = spaceInfo.getId();
         this.cover = spaceInfo.getCover();
         this.notice = false;
@@ -35,6 +36,7 @@ public class SpaceListResp {
         this.timeDesc = ContentDescUtils.buildEnglishTimeDesc(spaceInfo.getCreateTime());
         this.info = ContentDescUtils.buildSpaceInfo(spaceInfo);// TODO
         this.type = spaceInfo.getType();
+        this.owner = owner ? 1 : 0;
         if (curStat != null) {
             this.records = curStat.getRecords();
             this.occupants = curStat.getOccupants();
@@ -111,5 +113,13 @@ public class SpaceListResp {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public int getOwner() {
+        return owner;
+    }
+
+    public void setOwner(int owner) {
+        this.owner = owner;
     }
 }
