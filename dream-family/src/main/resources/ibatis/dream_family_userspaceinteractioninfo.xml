@@ -46,6 +46,13 @@
         ]]>
 	</update>
 
+	<update id="updateUserSpaceInteractionInfoStatusByUk"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo">
+        <![CDATA[
+        	UPDATE `user_space_interaction_info` SET `status` = #status# WHERE `user_id`= #userId# AND `space_id` = #spaceId# ;
+        ]]>
+	</update>
+
 	<update id="updateDecrUserSpaceInteractionInfoComments"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo">
         <![CDATA[

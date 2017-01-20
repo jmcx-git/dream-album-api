@@ -521,6 +521,26 @@ public class SpaceServiceImpl implements SpaceService {
     }
 
     @Override
+    public ApiRespWrapper<Boolean> leaveSpace(int userId, int spaceId) throws ServiceException {
+        SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
+        if (spaceInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "错误的空间编号");
+        }
+        if (spaceInfo.getUserId() == userId) {
+            // owner解散空间
+            spaceInfo.setStatus(SpaceInfo.STATUS_DEL);
+            spaceInfoService.modifyStatus(spaceInfo);
+            userSpaceRelationshipInfoService.modifyStatusBySpaceId(spaceId);
+            return new ApiRespWrapper<Boolean>(true);
+        } else {
+            userSpaceRelationshipInfoService.leaveSpace(userId, spaceId);
+            userSpaceInteractionInfoService.modifyStatusByUserIdAndSpaceId(userId, spaceId);
+            spaceStatInfoService.decrOccupants(spaceId);
+        }
+        return new ApiRespWrapper<Boolean>(true);
+    }
+
+    @Override
     public ApiRespWrapper<Integer> addSpace(int userId, Integer gender, String name, Date bornDate, int type,
             String icon, String cover, String info) throws ServiceException {
         SpaceInfo g = new SpaceInfo();

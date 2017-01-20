@@ -3,6 +3,7 @@
 package com.jmcxclub.dream.family.dao.ibatis;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -32,4 +33,13 @@ public class UserSpaceRelationshipInfoDaoImpl extends UserSpaceRelationshipInfoD
         return SQLUtils.queryObject(getSqlMapClient(), "queryUserSpaceRelationshipInfoIdByUk", g);
     }
 
+    @Override
+    public void updateStatusBySpaceId(UserSpaceRelationshipInfo userSpaceRelationshipInfo) throws SQLException {
+        SQLUtils.update(getSqlMapClient(), "updateUserSpaceRelationshipInfoStatusBySpaceId", userSpaceRelationshipInfo);
+    }
+
+    @Override
+    public List<UserSpaceRelationshipInfo> queryListBySpaceId(int spaceId) throws SQLException {
+        return SQLUtils.queryList(getSqlMapClient(), "queryUserSpaceRelationshipInfoListBySpaceId", spaceId);
+    }
 }

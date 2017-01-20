@@ -53,6 +53,20 @@ public class SpaceAction extends IosBaseAction {
     @Autowired
     private UserInfoService userInfoService;
 
+
+    @RequestMapping(value = "/leave.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiRespWrapper<Boolean> leaveSpace(String openId, Integer spaceId, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId) || spaceId == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号或空间", null);
+        }
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "Illegal open id.");
+        }
+        return spaceService.leaveSpace(userInfo.getId(), spaceId.intValue());
+    }
+
     /**
      * after add redirect to home page. Invoker will redirect space/list.json
      * 

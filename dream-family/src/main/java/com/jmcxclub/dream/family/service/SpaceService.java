@@ -205,4 +205,7 @@ public interface SpaceService {
 
     boolean addMultiFeed(int userId, int spaceId, int feedId, String illustration, int index, int count, int type)
             throws ServiceException;
+
+    ApiRespWrapper<Boolean> leaveSpace(int id, int intValue) throws ServiceException;
+
 }

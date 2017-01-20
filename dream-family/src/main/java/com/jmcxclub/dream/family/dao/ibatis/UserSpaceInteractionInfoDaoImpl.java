@@ -57,4 +57,9 @@ public class UserSpaceInteractionInfoDaoImpl extends UserSpaceInteractionInfoDao
         SQLUtils.update(getSqlMapClient(), "updateDecrUserSpaceInteractionInfoComments", t);
     }
 
+    @Override
+    public void updateStatusByUk(UserSpaceInteractionInfo t) throws SQLException {
+        SQLUtils.update(getSqlMapClient(), "updateUserSpaceInteractionInfoStatusByUk", t);
+    }
+
 }

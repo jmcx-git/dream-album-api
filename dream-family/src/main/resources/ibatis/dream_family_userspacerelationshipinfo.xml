@@ -36,6 +36,13 @@
         ]]>
 	</update>
 
+	<update id="updateUserSpaceRelationshipInfoStatusBySpaceId"
+		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
+        <![CDATA[
+        	UPDATE `user_space_relationship_info` SET `status` = #status# WHERE `space_id`=#spaceId# ;
+        ]]>
+	</update>
+
 	<update id="updateUserSpaceRelationshipInfoTop"
 		parameterClass="com.jmcxclub.dream.family.dto.UserSpaceRelationshipInfo">
         <![CDATA[
@@ -55,6 +62,13 @@
 		resultClass="java.lang.Integer">
 		<![CDATA[
 			SELECT id FROM `user_space_relationship_info` WHERE `space_id` = #spaceId# AND `user_id` = #userId# and `status` = #status#;
+		 ]]>
+	</select>
+
+	<select id="queryUserSpaceRelationshipInfoListBySpaceId"
+		parameterClass="java.lang.Integer" resultMap="spacestatinfo">
+		<![CDATA[
+			SELECT * FROM `user_space_relationship_info` WHERE `space_id` = #spaceId#;
 		 ]]>
 	</select>
 

@@ -21,5 +21,6 @@ public abstract class UserSpaceInteractionInfoService extends AbsCommonCacheDbUk
     public abstract void incrComments(int userId, int spaceId) throws ServiceException;
 
     public abstract void decrComments(int userId, int spaceId) throws ServiceException;
-    
+
+    public abstract void modifyStatusByUserIdAndSpaceId(int userId, int spaceId) throws ServiceException;
 }
