@@ -2,12 +2,18 @@
 
 package com.jmcxclub.dream.family.model;
 
+import java.io.Serializable;
+
 
 /**
  * @author mokous86@gmail.com create date: Jan 14, 2017
  *
  */
-public class UserPrizeResp {
+public class UserPrizeResp implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7345036100339309403L;
     private int rank;
     private int vote;
     private String name;

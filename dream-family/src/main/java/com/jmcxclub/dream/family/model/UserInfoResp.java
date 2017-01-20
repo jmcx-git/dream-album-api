@@ -2,13 +2,19 @@
 
 package com.jmcxclub.dream.family.model;
 
+import java.io.Serializable;
+
 import com.dreambox.core.dto.album.UserInfo;
 
 /**
  * @author mokous86@gmail.com create date: Dec 30, 2016
  *
  */
-public class UserInfoResp {
+public class UserInfoResp implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -5540656235380143846L;
     private String openId;
     private String nickName;
     private String avatarUrl;

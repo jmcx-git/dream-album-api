@@ -15,3 +15,4 @@ update activity_works_info set illustration = concat('{"index":0,"url":"', `cove
 update activity_works_info set illustration = concat(`illustration`, '"}');
 
 ALTER TABLE `activity_works_info` add column `illustration` text after `cover`;
+ALTER TABLE `user_notice_info` add column `img_url` varchar(255) after `desc`;

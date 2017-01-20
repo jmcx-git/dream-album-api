@@ -9,7 +9,6 @@ import java.io.Serializable;
  *
  */
 public class WikiPhaseResp implements Serializable {
-
     /**
      * 
      */
