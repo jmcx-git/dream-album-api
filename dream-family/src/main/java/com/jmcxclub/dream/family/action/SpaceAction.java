@@ -54,7 +54,7 @@ public class SpaceAction extends IosBaseAction {
     private UserInfoService userInfoService;
 
 
-    @RequestMapping(value = "/leave.json", method = RequestMethod.POST)
+    @RequestMapping(value = "/leave.json")
     @ResponseBody
     public ApiRespWrapper<Boolean> leaveSpace(String openId, Integer spaceId, String version) throws ServiceException {
         if (StringUtils.isEmpty(openId) || spaceId == null) {
