@@ -36,6 +36,7 @@ import com.jmcxclub.dream.family.dto.WikiInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
 import com.jmcxclub.dream.family.model.ActivityStepEnum;
+import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
 import com.jmcxclub.dream.family.model.SpaceFeedListResp;
 import com.jmcxclub.dream.family.model.UserFeedListResp;
@@ -48,6 +49,7 @@ import com.jmcxclub.dream.family.model.WikiPhaseResp;
  */
 public class ContentDescUtils {
     private static final Logger log = Logger.getLogger(ContentDescUtils.class);
+    public static final String JSON_OBJECT_LIST_SPLIT_CHAR = "&";
 
     public static String decode(String content) {
         if (StringUtils.isNotEmpty(content)) {
@@ -359,7 +361,7 @@ public class ContentDescUtils {
             spaceFeedListResp.setCover(feedInfo.getCover());
         } else {
             String illustration = feedInfo.getIllustration();
-            String[] illustrations = StringUtils.split(illustration, "&");
+            String[] illustrations = StringUtils.split(illustration, JSON_OBJECT_LIST_SPLIT_CHAR);
             List<String> illustrationList = new ArrayList<String>(illustrations.length);
             String cover = null;
             for (String illustrationInner : illustrations) {
@@ -382,6 +384,35 @@ public class ContentDescUtils {
         }
     }
 
+    public static void buildCoverAndIllustrations(ActivityWorksResp activityWorksResp, ActivityWorksInfo info) {
+        if (StringUtils.isEmpty(info.getIllustration())) {
+            activityWorksResp.setCover(info.getCover());
+        } else {
+            String illustration = info.getIllustration();
+            String[] illustrations = StringUtils.split(illustration, ContentDescUtils.JSON_OBJECT_LIST_SPLIT_CHAR);
+            List<String> illustrationList = new ArrayList<String>(illustrations.length);
+            String cover = null;
+            for (String illustrationInner : illustrations) {
+                FeedInnerPhoto feedInnerPhoto;
+                try {
+                    feedInnerPhoto = GsonUtils.convert(illustrationInner, FeedInnerPhoto.class);
+                } catch (Exception e) {
+                    log.error("Convert " + illustrationInner + " to " + FeedInnerPhoto.class.getName()
+                            + " failed.Errmsg:" + e.getMessage(), e);
+
+                    throw ServiceException.getInternalException("Json数据格式错误");
+                }
+                illustrationList.add(feedInnerPhoto.getIndex(), feedInnerPhoto.getUrl());
+                if (feedInnerPhoto.getIndex() == 0) {
+                    cover = feedInnerPhoto.getUrl();
+                }
+            }
+            activityWorksResp.setCover(cover);
+            activityWorksResp.setIllustrations(illustrationList);
+        }
+
+    }
+
     public static String buildDateDesc(FeedInfo feedInfo) {
         Date ct = feedInfo.getCreateTime();
         return DateUtils.getDateMDStringValue(ct);
@@ -392,7 +423,7 @@ public class ContentDescUtils {
             userFeedListResp.setCover(feedInfo.getCover());
         } else {
             String illustration = feedInfo.getIllustration();
-            String[] illustrations = StringUtils.split(illustration, "&");
+            String[] illustrations = StringUtils.split(illustration, JSON_OBJECT_LIST_SPLIT_CHAR);
             List<String> illustrationList = new ArrayList<String>(illustrations.length);
             String cover = null;
             for (String illustrationInner : illustrations) {
@@ -417,7 +448,7 @@ public class ContentDescUtils {
 
     public static List<WikiPhaseResp> buildWikiContent(WikiInfo wikiInfo, boolean desc) {
         String content = wikiInfo.getContent();
-        String[] contents = StringUtils.split(content, "&");
+        String[] contents = StringUtils.split(content, JSON_OBJECT_LIST_SPLIT_CHAR);
         List<WikiPhaseResp> ret = new ArrayList<WikiPhaseResp>(contents.length);
         for (String contentJson : contents) {
             WikiPhaseResp add;

@@ -20,6 +20,7 @@ import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
+import com.dreambox.web.utils.GsonUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
@@ -30,6 +31,7 @@ import com.jmcxclub.dream.family.dto.ActivityWorksExampleInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfoEnum;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.dto.FeedInnerPhoto;
 import com.jmcxclub.dream.family.dto.FeedTypeEnum;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
@@ -151,7 +153,8 @@ public class DiscoveryServiceImpl implements DiscoveryService {
             return new ApiRespWrapper<Boolean>(-1, "不能以此作品参赛", false);
         }
         int type = adapationType(feedInfo.getType());
-        return applyActivity(userId, activityId, feedInfo.getCover(), feedInfo.getTitle(), feedInfo.getContent(), type);
+        return applyActivity(userId, activityId, feedInfo.getCover(), feedInfo.getIllustration(), feedInfo.getTitle(),
+                feedInfo.getContent(), type);
     }
 
     private int adapationType(int type) {
@@ -184,11 +187,11 @@ public class DiscoveryServiceImpl implements DiscoveryService {
                 return new ApiRespWrapper<Boolean>(-1, "存储作品图片失败", false);
             }
         }
-        return applyActivity(userId, activityId, cover, solgan, desc, ActivityWorksInfoEnum.NORMAL.getType());
+        return applyActivity(userId, activityId, cover, null, solgan, desc, ActivityWorksInfoEnum.NORMAL.getType());
     }
 
-    private ApiRespWrapper<Boolean> applyActivity(int userId, int activityId, String cover, String solgan, String desc,
-            int type) {
+    private ApiRespWrapper<Boolean> applyActivity(int userId, int activityId, String cover, String illustration,
+            String solgan, String desc, int type) {
         ActivityWorksInfo g = new ActivityWorksInfo();
         g.setActivityId(activityId);
         g.setCover(cover);
@@ -196,6 +199,12 @@ public class DiscoveryServiceImpl implements DiscoveryService {
         g.setSolgan(solgan);
         g.setType(type);
         g.setUserId(userId);
+        if (StringUtils.isEmpty(illustration)) {
+            FeedInnerPhoto feedInnerPhoto = new FeedInnerPhoto(0, cover);
+            g.setIllustration(GsonUtils.toJson(feedInnerPhoto));
+        } else {
+            g.setIllustration(illustration);
+        }
         try {
             activityWorksInfoService.addData(g);
         } catch (ServiceException e) {

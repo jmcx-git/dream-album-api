@@ -31,6 +31,7 @@ import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.dto.FeedInnerPhoto;
 import com.jmcxclub.dream.family.dto.FeedTypeEnum;
 import com.jmcxclub.dream.family.service.FeedInfoService;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 10, 2017
@@ -236,7 +237,7 @@ public class FeedInfoServiceImpl extends FeedInfoService {
             } catch (SQLException e) {
                 throw ServiceException.getSQLException(e);
             }
-            String[] illustrations = StringUtils.split(illustration, "&");
+            String[] illustrations = StringUtils.split(illustration, ContentDescUtils.JSON_OBJECT_LIST_SPLIT_CHAR);
             if (illustrations.length == count) {
                 feedInfo.setStatus(FeedInfo.STATUS_OK);
                 modifyStatus(feedInfo);
