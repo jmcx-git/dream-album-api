@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -50,7 +51,7 @@ public class ActivityInfoResp {
         this.cover = info.getCover();
         this.participates = participates;
         this.activityRule = info.getActivityRule();
-        this.examples = examples;
+        this.examples = new ArrayList<ActivityWorksExampleInfo>();
         this.joined = worksId != null && worksId.intValue() > 0 ? 1 : 0;
         this.worksId = worksId;
         ContentDescUtils.buildActivityInfoRespOthers(this, info, activityPrizeInfos, prizeInfos, userPrizes, userMap,
