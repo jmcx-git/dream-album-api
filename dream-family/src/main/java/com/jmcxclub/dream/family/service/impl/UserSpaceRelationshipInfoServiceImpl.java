@@ -178,7 +178,7 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
         userSpaceRelationshipInfo.setSpaceId(spaceId);
         userSpaceRelationshipInfo.setStatus(UserSpaceRelationshipInfo.STATUS_DEL);
         try {
-            userSpaceRelationshipInfoDao.updateStatus(userSpaceRelationshipInfo);
+            userSpaceRelationshipInfoDao.updateStatusBySpaceId(userSpaceRelationshipInfo);
         } catch (SQLException e) {
             throw ServiceException.getSQLException(e);
         }
