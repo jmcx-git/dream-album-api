@@ -25,6 +25,6 @@ public interface NoticeService {
 
     List<WikiResp> listWikis() throws ServiceException;
 
-    WikiResp getWiki(Integer id) throws ServiceException;
+    WikiResp getWiki(int id) throws ServiceException;
 
 }

@@ -18,12 +18,14 @@ public class WikiResp implements Serializable {
      */
     private static final long serialVersionUID = 6784553349275329755L;
     private int id;
+    private String title;
     private List<WikiPhaseResp> content;
     private String timeDesc;
     private long time;
 
     public WikiResp(WikiInfo wikiInfo, boolean desc) {
         this.id = wikiInfo.getId();
+        this.title = wikiInfo.getTitle();
         this.content = ContentDescUtils.buildWikiContent(wikiInfo, desc);
         this.time = wikiInfo.getCreateTime().getTime();
         this.timeDesc = ContentDescUtils.buildNoticeTimeDesc(wikiInfo.getCreateTime());
@@ -62,6 +64,14 @@ public class WikiResp implements Serializable {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 }

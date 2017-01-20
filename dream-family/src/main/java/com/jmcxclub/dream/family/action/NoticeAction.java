@@ -17,6 +17,7 @@ import com.dreambox.web.action.IosBaseAction;
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
+import com.jmcxclub.dream.family.model.AboutUsResp;
 import com.jmcxclub.dream.family.model.MyInfoResp;
 import com.jmcxclub.dream.family.model.NoticeResp;
 import com.jmcxclub.dream.family.model.WikiResp;
@@ -34,7 +35,6 @@ public class NoticeAction extends IosBaseAction {
     @Autowired
     private NoticeService noticeService;
 
-
     @RequestMapping(value = "/info.json")
     @ResponseBody
     public ApiRespWrapper<MyInfoResp> addSpace(String openId, String version) throws ServiceException {
@@ -47,6 +47,12 @@ public class NoticeAction extends IosBaseAction {
         }
         boolean notice = noticeService.hasNotice(userInfo.getId());
         return new ApiRespWrapper<MyInfoResp>(new MyInfoResp(userInfo, notice));
+    }
+
+    @RequestMapping(value = "/about/us.json")
+    @ResponseBody
+    public ApiRespWrapper<AboutUsResp> aboutUs(String openId, String version) throws ServiceException {
+        return new ApiRespWrapper<AboutUsResp>(new AboutUsResp());
     }
 
     @RequestMapping(value = "/wiki/detail.json")

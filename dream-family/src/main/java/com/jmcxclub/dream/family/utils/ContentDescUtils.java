@@ -416,8 +416,21 @@ public class ContentDescUtils {
     }
 
     public static List<WikiPhaseResp> buildWikiContent(WikiInfo wikiInfo, boolean desc) {
-        // TODO Auto-generated method stub
-        return null;
+        String content = wikiInfo.getContent();
+        String[] contents = StringUtils.split(content, "&");
+        List<WikiPhaseResp> ret = new ArrayList<WikiPhaseResp>(contents.length);
+        for (String contentJson : contents) {
+            WikiPhaseResp add;
+            try {
+                add = GsonUtils.convert(contentJson, WikiPhaseResp.class);
+            } catch (Exception e) {
+                String errMsg = "Convert " + contentJson + " to " + WikiPhaseResp.class.getName() + " failed.Errmsg:"
+                        + e.getMessage();
+                log.error(errMsg, e);
+                continue;
+            }
+            ret.add(add);
+        }
+        return ret;
     }
-
 }

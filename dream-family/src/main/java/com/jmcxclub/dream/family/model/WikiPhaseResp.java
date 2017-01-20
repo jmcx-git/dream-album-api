@@ -17,6 +17,12 @@ public class WikiPhaseResp implements Serializable {
     private String content;
     private String imgUrl;
 
+    public WikiPhaseResp(String content, String imgUrl) {
+        super();
+        this.content = content;
+        this.imgUrl = imgUrl;
+    }
+
     public String getContent() {
         return content;
     }

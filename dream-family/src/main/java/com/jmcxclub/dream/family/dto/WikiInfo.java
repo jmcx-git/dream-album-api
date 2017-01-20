@@ -15,8 +15,7 @@ public class WikiInfo extends StatusSerializable {
     private static final long serialVersionUID = 7752705828119337619L;
     private int id;
     private String title;
-    private String shortDesc;
-    private String content;//List JSON
+    private String content;// List JSON desc, img see WikiPhaseResp
 
     public int getId() {
         return id;
@@ -32,14 +31,6 @@ public class WikiInfo extends StatusSerializable {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public String getShortDesc() {
-        return shortDesc;
-    }
-
-    public void setShortDesc(String shortDesc) {
-        this.shortDesc = shortDesc;
     }
 
     public String getContent() {

@@ -37,7 +37,9 @@
 	<sqlMap resource="ibatis/dream_family_systemnoticeinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_usernoticeinfo.xml" />
 	<sqlMap resource="ibatis/dream_family_userreadnoticerecord.xml" />
-	
+
 	<sqlMap resource="ibatis/dream_family_activityworksexampleinfo.xml" />
+
+	<sqlMap resource="ibatis/dream_family_wikiinfo.xml" />
 
 </sqlMapConfig>
