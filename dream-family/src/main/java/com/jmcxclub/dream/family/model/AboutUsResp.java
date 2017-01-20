@@ -11,7 +11,8 @@ import java.util.List;
  */
 public class AboutUsResp {
     public static final String solgan = "";
-    public static final String qrCode = "";
+    public static final String officialServiceQrCode = "https://cdn.mokous.com/static/qrcode/official_service_qucode_170127.jpeg";// 服务群
+    public static final String mpQrCode = "https://cdn.mokous.com/static/qrcode/official_service_qucode_170127.jpeg";// 公方号
     public static final List<String> bottomDesctions = new ArrayList<String>() {
         /**
          * 
