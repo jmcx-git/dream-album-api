@@ -11,5 +11,7 @@ CREATE TABLE IF NOT EXISTS `wiki_info`(
 
 update feed_info set illustration = concat('{"index":0,"url":"', `illustration`);
 update feed_info set illustration = concat(`illustration`, '"}');
+update activity_works_info set illustration = concat('{"index":0,"url":"', `cover`);
+update activity_works_info set illustration = concat(`illustration`, '"}');
 
 ALTER TABLE `activity_works_info` add column `illustration` text after `cover`;
