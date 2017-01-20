@@ -2,6 +2,7 @@
 
 package com.jmcxclub.dream.family.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,11 @@ import java.util.List;
  * @author mokous86@gmail.com create date: Jan 20, 2017
  *
  */
-public class AboutUsResp {
+public class AboutUsResp implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -3298197307282539699L;
     public static final String solgan = "";
     public static final String officialServiceQrCode = "https://cdn.mokous.com/static/qrcode/official_service_qucode_170127.jpeg";// 服务群
     public static final String mpQrCode = "https://cdn.mokous.com/static/qrcode/official_service_qucode_170127.jpeg";// 公方号
