@@ -4,8 +4,6 @@ package com.jmcxclub.dream.family.dto;
 
 import java.io.Serializable;
 
-import com.dreambox.web.utils.GsonUtils;
-
 /**
  * @author mokous86@gmail.com create date: Jan 20, 2017
  *
