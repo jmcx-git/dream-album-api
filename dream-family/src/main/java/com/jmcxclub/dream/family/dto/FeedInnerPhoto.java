@@ -2,13 +2,15 @@
 
 package com.jmcxclub.dream.family.dto;
 
-import com.dreambox.core.dto.StatusSerializable;
+import java.io.Serializable;
+
+import com.dreambox.web.utils.GsonUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 20, 2017
  *
  */
-public class FeedInnerPhoto extends StatusSerializable {
+public class FeedInnerPhoto implements Serializable {
     /**
      * 
      */
