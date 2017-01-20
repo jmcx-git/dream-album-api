@@ -27,7 +27,7 @@
 	<insert id="insertFeedInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.FeedInfo">
 		<![CDATA[
 			INSERT INTO feed_info (`id`,`user_id`,`space_id`,`title`, `content`, `cover`,`illustration`, `resource_url`, `duration`,`type`, `status`,`update_time`,`create_time`)
-			VALUES(null, #userId#,#spaceId#,#title#, #content#, #cover#,#illustration#,#resourceUrl#, #duration#, #type#, 0, now(),now())
+			VALUES(null, #userId#,#spaceId#,#title#, #content#, #cover#,#illustration#,#resourceUrl#, #duration#, #type#, #status#, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -47,6 +47,20 @@
         	UPDATE `feed_info` SET `status` = #status# WHERE `id`=#id# ;
         ]]>
 	</update>
+
+	<update id="updateFeedInfoIllustration" parameterClass="com.jmcxclub.dream.family.dto.FeedInfo">
+        <![CDATA[
+        	UPDATE `feed_info` SET `illustration` = CONCAT_WS('&', `illustration`, #illustration#), `cover` = IF(LENGTH(`cover`) = 0, #cover#, `cover`), `status` = #status# WHERE `id`=#id# AND user_id = #userId# AND `space_id` = #spaceId#;
+        ]]>
+	</update>
+
+	<select id="queryFeedInfoIllustration" parameterClass="java.lang.Integer"
+		resultClass="java.lang.String">
+		SELECT `illustration`
+		FROM `feed_info` WHERE
+		`id` =
+		#id#;
+	</select>
 
 	<select id="queryFeedInfoById" parameterClass="java.lang.Integer"
 		resultMap="feedinfo">

@@ -199,4 +199,13 @@ public interface SpaceService {
     ApiRespWrapper<SpaceInfoResp> getSpaceInfo(UserInfo userInfo, int spaceId) throws ServiceException;
 
     ApiRespWrapper<Boolean> joinedSpace(int id, int spaceId) throws ServiceException;
+
+    ApiRespWrapper<Integer> addMultiFeedFirst(int id, int spaceId, String title, String content, int type)
+            throws ServiceException;
+
+    boolean addMultiFeed(int userId, int spaceId, int feedId, String illustration, int index, int count, int type)
+            throws ServiceException;
+
+    ApiRespWrapper<Boolean> leaveSpace(int id, int intValue) throws ServiceException;
+
 }

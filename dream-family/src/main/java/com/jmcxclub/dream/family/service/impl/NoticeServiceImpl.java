@@ -19,10 +19,13 @@ import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dto.SystemNoticeInfo;
 import com.jmcxclub.dream.family.dto.UserNoticeInfo;
 import com.jmcxclub.dream.family.dto.UserReadNoticeRecord;
+import com.jmcxclub.dream.family.dto.WikiInfo;
 import com.jmcxclub.dream.family.model.NoticeResp;
+import com.jmcxclub.dream.family.model.WikiResp;
 import com.jmcxclub.dream.family.service.NoticeService;
 import com.jmcxclub.dream.family.service.SystemNoticeInfoService;
 import com.jmcxclub.dream.family.service.UserNoticeInfoService;
+import com.jmcxclub.dream.family.service.WikiInfoService;
 import com.jmcxclub.dream.family.service.UserNoticeInfoService.UserNoticeInfoSortedSetCacheFilter;
 import com.jmcxclub.dream.family.service.UserReadNoticeRecordService;
 
@@ -38,6 +41,8 @@ public class NoticeServiceImpl implements NoticeService {
     private SystemNoticeInfoService systemNoticeInfoService;
     @Autowired
     private UserReadNoticeRecordService userReadNoticeRecordService;
+    @Autowired
+    private WikiInfoService wikiInfoService;
 
     @Override
     public boolean hasNotice(int userId) throws ServiceException {
@@ -138,5 +143,26 @@ public class NoticeServiceImpl implements NoticeService {
                     startIndex + datas.size()));
 
         }
+    }
+
+    @Override
+    public List<WikiResp> listWikis() throws ServiceException {
+        StartSizeCacheFilter filter = new StartSizeCacheFilter();
+        filter.setSize(Integer.MAX_VALUE);
+        ListWrapResp<WikiInfo> wikis = wikiInfoService.listInfo(filter);
+        List<WikiResp> ret = new ArrayList<>();
+        if (wikis != null && CollectionUtils.notEmptyAndNull(wikis.getResultList())) {
+            List<WikiInfo> infos = wikis.getResultList();
+            for (WikiInfo wikiInfo : infos) {
+                ret.add(new WikiResp(wikiInfo, true));
+            }
+        }
+        return ret;
+    }
+
+    @Override
+    public WikiResp getWiki(int id) throws ServiceException {
+        WikiInfo wiki = wikiInfoService.getData(id);
+        return new WikiResp(wiki, false);
     }
 }

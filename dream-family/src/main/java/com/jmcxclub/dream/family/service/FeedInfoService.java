@@ -13,9 +13,10 @@ import com.jmcxclub.dream.family.dto.FeedInfo;
  *
  */
 public abstract class FeedInfoService extends AbstractSortedListCacheService<FeedInfo> {
-
     public abstract ListWrapResp<FeedInfo> listUserPhotoFeedInfo(int userId, int start, int size)
             throws ServiceException;
+
+    public abstract boolean modifyIllustration(FeedInfo feedInfo, int count) throws ServiceException;
 
     public static class FeedInfoSortedListCacheFilter extends StartSizeCacheFilter {
         private Integer userId;
@@ -45,4 +46,6 @@ public abstract class FeedInfoService extends AbstractSortedListCacheService<Fee
             this.spaceId = spaceId;
         }
     }
+
+    public abstract void addMultiFeedFirst(FeedInfo g) throws ServiceException;
 }

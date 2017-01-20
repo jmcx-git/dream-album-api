@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="rfq">
+	<resultMap id="wikiinfo" class="com.jmcxclub.dream.family.dto.WikiInfo">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="insertOrUpdateWikiInfo" parameterClass="com.jmcxclub.dream.family.dto.WikiInfo">
+		<![CDATA[
+			INSERT INTO wiki_info (`id`, `title`, `content`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #content#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertWikiInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.WikiInfo">
+		<![CDATA[
+			INSERT INTO wiki_info (`id`, `title`, `content`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #content#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<insert id="insertOrIgnoreWikiInfo" parameterClass="com.jmcxclub.dream.family.dto.WikiInfo">
+		<![CDATA[
+			INSERT INTO wiki_info (`id`, `title`, `content`, `status`,`update_time`,`create_time`)
+			VALUES(null, #title#, #content#, 0, now(),now())
+		]]>
+		<selectKey resultClass="int" keyProperty="id">
+			SELECT @@IDENTITY
+			AS id
+		</selectKey>
+	</insert>
+
+	<update id="updateWikiInfoStatus" parameterClass="com.jmcxclub.dream.family.dto.WikiInfo">
+        <![CDATA[
+        	UPDATE `wiki_info` SET `status` = #status# WHERE `id`=#id# ;
+        ]]>
+	</update>
+
+	<select id="queryWikiInfoById" parameterClass="java.lang.Integer"
+		resultMap="wikiinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`title`,CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`,
+		`status`,
+		`update_time`,
+		`create_time`
+		FROM `wiki_info` WHERE
+		`id` =
+		#startId#;
+	</select>
+
+	<select id="queryWikiInfoListByStartId" parameterClass="java.util.Map"
+		resultMap="wikiinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`title`,CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`,
+		`status`,
+		`update_time`,
+		`create_time`
+		FROM `wiki_info` WHERE
+		`id` >
+		#startId# ORDER
+		BY id
+		LIMIT #size#;
+	</select>
+
+	<select id="queryWikiInfoByIds" parameterClass="java.util.Map"
+		resultMap="wikiinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`title`,CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`,
+		`status`,
+		`update_time`,
+		`create_time`
+		FROM `wiki_info`
+		<iterate property="ids" conjunction="," close=")" open=" WHERE id in (">
+			#ids[]#
+		</iterate>
+	</select>
+
+	<select id="queryWikiInfoListByFilter" parameterClass="java.util.Map"
+		resultMap="wikiinfo">
+		SELECT `id`, CAST(`title` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`title`,CAST(`content` AS CHAR
+		CHARACTER SET
+		utf8)
+		AS
+		`content`,
+		`status`,
+		`update_time`,
+		`create_time`
+		FROM `wiki_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+		ORDER BY id DESC LIMIT #start#, #size#
+	</select>
+
+	<select id="countWikiInfoByFilter" parameterClass="java.util.Map"
+		resultClass="java.lang.Long">
+		SELECT COUNT(*) FROM `wiki_info`
+		<dynamic prepend=" WHERE ">
+			<isPropertyAvailable property="status">
+				<isNotNull property="status" prepend=" and ">
+					`status` =
+					#status#
+				</isNotNull>
+			</isPropertyAvailable>
+		</dynamic>
+	</select>
+</sqlMap>

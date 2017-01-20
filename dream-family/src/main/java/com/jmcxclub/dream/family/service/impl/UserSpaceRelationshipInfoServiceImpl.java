@@ -4,7 +4,9 @@ package com.jmcxclub.dream.family.service.impl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -20,6 +22,7 @@ import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
 import com.dreambox.core.utils.RedisCacheUtils;
 import com.dreambox.web.exception.ServiceException;
+import com.dreambox.web.utils.CollectionUtils;
 import com.jmcxclub.dream.family.dao.UserSpaceRelationshipInfoDao;
 import com.jmcxclub.dream.family.dto.SpaceRelationshipEnum;
 import com.jmcxclub.dream.family.dto.SpaceTopEnum;
@@ -167,5 +170,64 @@ public class UserSpaceRelationshipInfoServiceImpl extends UserSpaceRelationshipI
             throw ServiceException.getSQLException(e);
         }
         return id != null && id.intValue() > 0;
+    }
+
+    @Override
+    public void modifyStatusBySpaceId(final int spaceId) throws ServiceException {
+        UserSpaceRelationshipInfo userSpaceRelationshipInfo = new UserSpaceRelationshipInfo();
+        userSpaceRelationshipInfo.setSpaceId(spaceId);
+        userSpaceRelationshipInfo.setStatus(UserSpaceRelationshipInfo.STATUS_DEL);
+        try {
+            userSpaceRelationshipInfoDao.updateStatusBySpaceId(userSpaceRelationshipInfo);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        new Thread() {
+            @Override
+            public void run() {
+                RedisCacheUtils.del(getJedisPool(), buildSpaceIdListKey(spaceId));
+                // del space user
+                try {
+                    List<UserSpaceRelationshipInfo> userInfos = userSpaceRelationshipInfoDao
+                            .queryListBySpaceId(spaceId);
+                    Map<String, List<String>> keyMembers = new HashMap<String, List<String>>();
+                    for (UserSpaceRelationshipInfo userInfo : userInfos) {
+                        try {
+                            CollectionUtils.mapAddList(buildUserIdListKey(userInfo.getUserId()), keyMembers,
+                                    String.valueOf(userInfo.getId()));
+                        } catch (Exception e1) {
+                        }
+                    }
+                    RedisCacheUtils.zrem(keyMembers, getJedisPool());
+                } catch (SQLException e) {
+                    throw ServiceException.getSQLException(e);
+                }
+            }
+        }.start();
+    }
+
+    @Override
+    public void leaveSpace(int userId, int spaceId) throws ServiceException {
+        Integer id;
+        UserSpaceRelationshipInfo g = new UserSpaceRelationshipInfo();
+        g.setSpaceId(spaceId);
+        g.setUserId(userId);
+        try {
+            id = userSpaceRelationshipInfoDao.queryIdByUk(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        if (id == null || id.intValue() <= 0) {
+            return;
+        }
+        g.setId(id);
+        g.setStatus(UserSpaceRelationshipInfo.STATUS_DEL);
+        try {
+            userSpaceRelationshipInfoDao.updateStatus(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        RedisCacheUtils.zrem(jedisDbPool, buildUserIdListKey(userId), String.valueOf(id));
+        RedisCacheUtils.zrem(jedisDbPool, buildSpaceIdListKey(spaceId), String.valueOf(id));
     }
 }

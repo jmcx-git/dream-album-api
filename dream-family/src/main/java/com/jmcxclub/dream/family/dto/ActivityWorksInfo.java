@@ -21,7 +21,8 @@ public class ActivityWorksInfo extends StatusSerializable {
     private int activityId;// 活动id
     private int type;// 作品类型 0：非视频 1:视频 2:音频
     private String cover;// 如果是以type==0参赛,则此处和resourceUrl一样,否则此值为对应的资源封面
-    private String resourceUrl;// 如果是以type==0参赛,则此处和cover一样,否则此值为对应的资源地址
+    private String illustration;// json url see FeedInnerPhoto
+    private String resourceUrl;// 如果是以type==1,2参赛,则此处和cover一样,否则此值为对应的资源地址
     private Long durations;// 参赛作品如果是视频,音频则为其时长
     private String solgan;// 参赛作品口号
     private String desc;// 参赛作品描述
@@ -96,5 +97,13 @@ public class ActivityWorksInfo extends StatusSerializable {
 
     public void setDurations(Long durations) {
         this.durations = durations;
+    }
+
+    public String getIllustration() {
+        return illustration;
+    }
+
+    public void setIllustration(String illustration) {
+        this.illustration = illustration;
     }
 }

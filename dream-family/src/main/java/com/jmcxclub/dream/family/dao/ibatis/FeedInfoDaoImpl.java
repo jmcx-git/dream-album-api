@@ -32,4 +32,14 @@ public class FeedInfoDaoImpl extends FeedInfoDao {
         return SQLUtils.insertReturnId(getSqlMapClient(), "insertFeedInfoReturnId", g);
     }
 
+    @Override
+    public boolean updateIllustration(FeedInfo feedInfo) throws SQLException {
+        return SQLUtils.update(getSqlMapClient(), "updateFeedInfoIllustration", feedInfo) > 0;
+    }
+
+    @Override
+    public String queryIllustration(int id) throws SQLException {
+        return SQLUtils.queryObject(getSqlMapClient(), "queryFeedInfoIllustration", id);
+    }
+
 }

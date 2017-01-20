@@ -2,10 +2,13 @@
 
 package com.jmcxclub.dream.family.service;
 
+import java.util.List;
+
 import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.jmcxclub.dream.family.model.NoticeResp;
+import com.jmcxclub.dream.family.model.WikiResp;
 
 /**
  * 分成系统消息和用户消息两种
@@ -19,5 +22,9 @@ public interface NoticeService {
 
     ApiRespWrapper<ListWrapResp<NoticeResp>> listNotice(int userId, Integer startId, Integer type, int size)
             throws ServiceException;
+
+    List<WikiResp> listWikis() throws ServiceException;
+
+    WikiResp getWiki(int id) throws ServiceException;
 
 }

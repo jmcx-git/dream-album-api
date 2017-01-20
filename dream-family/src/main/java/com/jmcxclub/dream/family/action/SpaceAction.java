@@ -53,6 +53,20 @@ public class SpaceAction extends IosBaseAction {
     @Autowired
     private UserInfoService userInfoService;
 
+
+    @RequestMapping(value = "/leave.json")
+    @ResponseBody
+    public ApiRespWrapper<Boolean> leaveSpace(String openId, Integer spaceId, String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId) || spaceId == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号或空间", null);
+        }
+        UserInfo userInfo = getUserInfo(openId);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "Illegal open id.");
+        }
+        return spaceService.leaveSpace(userInfo.getId(), spaceId.intValue());
+    }
+
     /**
      * after add redirect to home page. Invoker will redirect space/list.json
      * 
@@ -419,6 +433,95 @@ public class SpaceAction extends IosBaseAction {
         start = ParameterUtils.formatStart(start);
         size = ParameterUtils.formatStart(size);
         return spaceService.listFeedComment(openId, feedId, headCommentId, start, size);
+    }
+
+    /**
+     * 
+     * 多图模式
+     * 
+     * @param openId
+     * @param spaceId
+     * @param title
+     * @param content
+     * @param type DIARY(1, "日记"), AUDIO(2, "录音"), PHOTO(0, "照片"), VIDEO(3,
+     *        "视频");
+     * @param file 用户上传上来的图，现在只支持一张
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping(value = "/feed/multi/add.json", method = RequestMethod.GET)
+    @ResponseBody
+    public ApiRespWrapper<Integer> addMultiFeedFirst(String openId, Integer spaceId, String title, String content,
+            String version) throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Integer>(-1, "未知的用户账号", null);
+        }
+        if (spaceId == null) {
+            return new ApiRespWrapper<Integer>(-1, "未知的空间", null);
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Integer>(-1, "Illegal open id.");
+        }
+        return spaceService.addMultiFeedFirst(userInfo.getId(), spaceId, title, content, FeedTypeEnum.PHOTO.getType());
+    }
+
+    /**
+     * 
+     * 多图模式
+     * 
+     * @param openId
+     * @param spaceId
+     * @param title
+     * @param content
+     * @param type DIARY(1, "日记"), AUDIO(2, "录音"), PHOTO(0, "照片"), VIDEO(3,
+     *        "视频");
+     * @param file 用户上传上来的图，现在只支持一张
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
+    @RequestMapping(value = "/feed/multi/add.json", method = RequestMethod.POST)
+    @ResponseBody
+    public ApiRespWrapper<Boolean> addMultiFeed(String openId, Integer spaceId, Integer feedId,
+            @RequestParam(required = false) MultipartFile file, Integer index, Integer count, String version)
+            throws ServiceException {
+        if (StringUtils.isEmpty(openId)) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的用户账号", null);
+        }
+        if (spaceId == null || spaceId.intValue() <= 0) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的空间", null);
+        }
+        if (feedId == null || feedId.intValue() <= 0) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的空间Feed", null);
+        }
+        if (index == null) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的图片上传索引", null);
+        }
+        if (count == null || count.intValue() <= 0) {
+            return new ApiRespWrapper<Boolean>(-1, "未知的图片数量", null);
+        }
+        UserInfo userInfo = new UserInfo();
+        userInfo.setOpenId(openId);
+        userInfo = userInfoService.getInfoByUk(userInfo);
+        if (userInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "Illegal open id.");
+        }
+        // cover
+        // illustration
+        String illustration = null;
+        if (file != null && !file.isEmpty()) {
+            UploadFileSaveResp uploadFileSaveResp = imgService.saveFeedImg(file, openId);
+            if (uploadFileSaveResp.isSaved()) {
+                illustration = uploadFileSaveResp.getUrlPath();
+            }
+        }
+        boolean success = spaceService.addMultiFeed(userInfo.getId(), spaceId, feedId.intValue(), illustration,
+                index.intValue(), count.intValue(), FeedTypeEnum.PHOTO.getType());
+        return new ApiRespWrapper<Boolean>(success);
     }
 
     /**

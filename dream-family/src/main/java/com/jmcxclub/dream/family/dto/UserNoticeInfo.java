@@ -16,6 +16,7 @@ public class UserNoticeInfo extends StatusSerializable {
     private int id;
     private int userId;
     private String desc;
+    private String imgUrl;
     private int read;// see UserNoticeReadEnum
 
     public int getId() {
@@ -48,5 +49,13 @@ public class UserNoticeInfo extends StatusSerializable {
 
     public void setRead(int read) {
         this.read = read;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }

@@ -180,4 +180,18 @@ public class UserSpaceInteractionInfoServiceImpl extends UserSpaceInteractionInf
         }
     }
 
+    @Override
+    public void modifyStatusByUserIdAndSpaceId(int userId, int spaceId) throws ServiceException {
+        UserSpaceInteractionInfo g = new UserSpaceInteractionInfo();
+        g.setUserId(userId);
+        g.setSpaceId(spaceId);
+        try {
+            userSpaceInteractionInfoDao.updateStatusByUk(g);
+        } catch (SQLException e) {
+            throw ServiceException.getSQLException(e);
+        }
+        String key = buildUkReflectPkKey(g);
+        RedisCacheUtils.del(getJedisPool(), key);
+    }
+
 }

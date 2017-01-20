@@ -25,4 +25,6 @@ public abstract class UserSpaceInteractionInfoDao extends AbsCommonDao<UserSpace
 
     public abstract void updateDecrComments(UserSpaceInteractionInfo t) throws SQLException;
 
+    public abstract void updateStatusByUk(UserSpaceInteractionInfo g) throws SQLException;
+
 }

@@ -21,8 +21,10 @@ import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.model.ApiRespWrapper;
 import com.dreambox.web.model.ListWrapResp;
 import com.dreambox.web.utils.CollectionUtils;
+import com.dreambox.web.utils.GsonUtils;
 import com.jmcxclub.dream.family.dto.FeedCommentInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.dto.FeedInnerPhoto;
 import com.jmcxclub.dream.family.dto.FeedLikeInfo;
 import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceRelationshipEnum;
@@ -103,7 +105,7 @@ public class SpaceServiceImpl implements SpaceService {
         }
         List<SpaceInfo> infos = spaceInfoService.getData(spaceIds);
         List<SpaceStatInfo> stats = spaceStatInfoService.getData(spaceIds);
-        List<SpaceListResp> datas = buildSpaceListResps(infos, stats);
+        List<SpaceListResp> datas = buildSpaceListResps(infos, stats, userId);
         ListWrapResp<SpaceListResp> data = new ListWrapResp<SpaceListResp>(spaceInfosResp.getTotalCount(), datas,
                 spaceInfosResp.isMore(), spaceInfosResp.getNext());
         return new ApiRespWrapper<ListWrapResp<SpaceListResp>>(data);
@@ -200,7 +202,7 @@ public class SpaceServiceImpl implements SpaceService {
         return new ApiRespWrapper<SpaceInfoResp>(new SpaceInfoResp(spaceInfo, owner));
     }
 
-    private List<SpaceListResp> buildSpaceListResps(List<SpaceInfo> infos, List<SpaceStatInfo> stats) {
+    private List<SpaceListResp> buildSpaceListResps(List<SpaceInfo> infos, List<SpaceStatInfo> stats, int accessUserId) {
         List<SpaceListResp> datas = new ArrayList<SpaceListResp>();
         for (SpaceInfo spaceInfo : infos) {
             SpaceStatInfo curStat = null;
@@ -209,7 +211,8 @@ public class SpaceServiceImpl implements SpaceService {
                     curStat = stat;
                 }
             }
-            datas.add(new SpaceListResp(spaceInfo, curStat));
+            boolean owner = spaceInfo.getUserId() == accessUserId;
+            datas.add(new SpaceListResp(spaceInfo, curStat, owner));
         }
         return datas;
     }
@@ -365,7 +368,35 @@ public class SpaceServiceImpl implements SpaceService {
                 infos.getTotalCount(), datas, infos.isMore(), infos.getNext()));
     }
 
+
+    /**
+     * 对多个文件上传的支持
+     * 
+     * @param id
+     * @param spaceId
+     * @param feedId
+     * @param index
+     * @param count
+     * @param file
+     * @param version
+     * @return
+     * @throws ServiceException
+     */
     @Override
+    public boolean addMultiFeed(int userId, int spaceId, int feedId, String illustration, int index, int count, int type)
+            throws ServiceException {
+        String illustrationJson = GsonUtils.toJson(new FeedInnerPhoto(index, illustration));
+        FeedInfo feedInfo = new FeedInfo();
+        if (index == 0) {
+            feedInfo.setCover(illustration);
+        }
+        feedInfo.setId(feedId);
+        feedInfo.setSpaceId(spaceId);
+        feedInfo.setUserId(userId);
+        feedInfo.setIllustration(illustrationJson);
+        return feedInfoService.modifyIllustration(feedInfo, count);
+    }
+
     public ApiRespWrapper<Integer> addFeed(int userId, int spaceId, String title, String content, int type,
             String cover, String illustration) throws ServiceException {
         FeedInfo g = new FeedInfo();
@@ -376,7 +407,26 @@ public class SpaceServiceImpl implements SpaceService {
         g.setIllustration(illustration);
         g.setSpaceId(spaceId);
         g.setUserId(userId);
+        g.setStatus(FeedInfo.STATUS_OK);
         feedInfoService.addData(g);
+        try {
+            spaceStatInfoService.incrRecords(spaceId);
+        } catch (ServiceException e) {
+            log.error("Incr space records failed. SpaceId:" + spaceId + ", Errmsg:" + e.getMessage());
+        }
+        return new ApiRespWrapper<Integer>(g.getId());
+    }
+
+    @Override
+    public ApiRespWrapper<Integer> addMultiFeedFirst(int userId, int spaceId, String title, String content, int type)
+            throws ServiceException {
+        FeedInfo g = new FeedInfo();
+        g.setContent(content);
+        g.setTitle(title);
+        g.setType(type);
+        g.setSpaceId(spaceId);
+        g.setUserId(userId);
+        feedInfoService.addMultiFeedFirst(g);
         try {
             spaceStatInfoService.incrRecords(spaceId);
         } catch (ServiceException e) {
@@ -467,6 +517,26 @@ public class SpaceServiceImpl implements SpaceService {
         } else {
             feedStatInfoService.decrLikes(feedId);
             userSpaceInteractionInfoService.decrLikes(userInfo.getId(), feedInfo.getSpaceId());
+        }
+        return new ApiRespWrapper<Boolean>(true);
+    }
+
+    @Override
+    public ApiRespWrapper<Boolean> leaveSpace(int userId, int spaceId) throws ServiceException {
+        SpaceInfo spaceInfo = spaceInfoService.getData(spaceId);
+        if (spaceInfo == null) {
+            return new ApiRespWrapper<Boolean>(-1, "错误的空间编号");
+        }
+        if (spaceInfo.getUserId() == userId) {
+            // owner解散空间
+            spaceInfo.setStatus(SpaceInfo.STATUS_DEL);
+            spaceInfoService.modifyStatus(spaceInfo);
+            userSpaceRelationshipInfoService.modifyStatusBySpaceId(spaceId);
+            return new ApiRespWrapper<Boolean>(true);
+        } else {
+            userSpaceRelationshipInfoService.leaveSpace(userId, spaceId);
+            userSpaceInteractionInfoService.modifyStatusByUserIdAndSpaceId(userId, spaceId);
+            spaceStatInfoService.decrOccupants(spaceId);
         }
         return new ApiRespWrapper<Boolean>(true);
     }

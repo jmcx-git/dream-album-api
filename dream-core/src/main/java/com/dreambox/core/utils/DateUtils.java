@@ -265,6 +265,12 @@ public class DateUtils {
         return addDays(new Date(), 1);
     }
 
+    public static int getYear(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.YEAR);
+    }
+
     public static int getMonth(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);

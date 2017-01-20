@@ -10,6 +10,7 @@
 		<result column="solgan" property="solgan" jdbcType="VARCHAR" />
 		<result column="desc" property="desc" jdbcType="VARCHAR" />
 		<result column="cover" property="cover" jdbcType="VARCHAR" />
+		<result column="illustration" property="illustration" jdbcType="VARCHAR" />
 		<result column="resource_url" property="resourceUrl" jdbcType="VARCHAR" />
 		<result column="durations" property="durations" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="INTEGER" />
@@ -19,8 +20,8 @@
 
 	<insert id="insertOrUpdateActivityWorksInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
 		<![CDATA[
-			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `resource_url`, `durations`,`status`,`update_time`,`create_time`)
-			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #resourceUrl#, #durations#, 0, now(),now())
+			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `illustration`, `resource_url`, `durations`,`status`,`update_time`,`create_time`)
+			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #illustration#, #resourceUrl#, #durations#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -30,8 +31,8 @@
 
 	<insert id="insertActivityWorksInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
 		<![CDATA[
-			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `resource_url`, `durations`,`status`,`update_time`,`create_time`)
-			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #resourceUrl#, #durations#, 0, now(),now())
+			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `illustration`, `resource_url`, `durations`,`status`,`update_time`,`create_time`)
+			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #illustration#, #resourceUrl#, #durations#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -41,8 +42,8 @@
 
 	<insert id="insertOrIgnoreActivityWorksInfo" parameterClass="com.jmcxclub.dream.family.dto.ActivityWorksInfo">
 		<![CDATA[
-			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `resource_url`, `durations`,`status`,`update_time`,`create_time`)
-			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #resourceUrl#, #durations#, 0, now(),now())
+			INSERT INTO activity_works_info (`id`,`activity_id`,`user_id`,`type`, `solgan`, `desc`,`cover`, `illustration`, `resource_url`, `durations`,`status`,`update_time`,`create_time`)
+			VALUES(null, #activityId#, #userId#, #type#, #solgan#, #desc#, #cover#, #illustration#, #resourceUrl#, #durations#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -65,7 +66,7 @@
 		AS `solgan`, CAST(`desc` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `desc`,`cover`, `resource_url`,
+		AS `desc`,`cover`, `illustration`, `resource_url`,
 		`durations`,`status`,`update_time`,`create_time`
 		FROM
 		`activity_works_info` WHERE
@@ -81,7 +82,7 @@
 		AS `solgan`, CAST(`desc` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `desc`,`cover`, `resource_url`,
+		AS `desc`,`cover`, `illustration`, `resource_url`,
 		`durations`,`status`,`update_time`,`create_time`
 		FROM
 		`activity_works_info` WHERE
@@ -97,7 +98,7 @@
 		AS `solgan`, CAST(`desc` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `desc`,`cover`, `resource_url`,
+		AS `desc`,`cover`, `illustration`, `resource_url`,
 		`durations`,`status`,`update_time`,`create_time`
 		FROM
 		`activity_works_info` WHERE
@@ -112,7 +113,7 @@
 		AS `solgan`, CAST(`desc` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `desc`,`cover`, `resource_url`,
+		AS `desc`,`cover`, `illustration`, `resource_url`,
 		`durations`,`status`,`update_time`,`create_time`
 		FROM
 		`activity_works_info`
@@ -129,7 +130,7 @@
 		AS `solgan`, CAST(`desc` AS CHAR
 		CHARACTER SET
 		utf8)
-		AS `desc`,`cover`, `resource_url`,
+		AS `desc`,`cover`, `illustration`, `resource_url`,
 		`durations`,`status`,`update_time`,`create_time`
 		FROM
 		`activity_works_info`

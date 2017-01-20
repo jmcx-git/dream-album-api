@@ -14,4 +14,8 @@ import com.jmcxclub.dream.family.dto.FeedInfo;
 public abstract class FeedInfoDao extends AbsCommonDao<FeedInfo> {
 
     public abstract int insertReturnId(FeedInfo g) throws SQLException;
+
+    public abstract boolean updateIllustration(FeedInfo feedInfo) throws SQLException;
+
+    public abstract String queryIllustration(int id) throws SQLException;
 }

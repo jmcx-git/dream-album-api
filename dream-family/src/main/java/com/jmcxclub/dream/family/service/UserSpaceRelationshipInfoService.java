@@ -50,4 +50,14 @@ public abstract class UserSpaceRelationshipInfoService extends
 
     public abstract boolean joinedSpace(int spaceId, int userId) throws ServiceException;
 
+    /**
+     * 空间删除
+     * 
+     * @param spaceId
+     * @throws ServiceException
+     */
+    public abstract void modifyStatusBySpaceId(int spaceId) throws ServiceException;
+
+    public abstract void leaveSpace(int userId, int spaceId) throws ServiceException;
+
 }

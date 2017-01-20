@@ -2,12 +2,10 @@
 
 package com.jmcxclub.dream.family.model;
 
-import java.util.Date;
 import java.util.List;
 
 import com.dreambox.core.DbStatus;
 import com.dreambox.core.dto.album.UserInfo;
-import com.dreambox.core.utils.DateUtils;
 import com.jmcxclub.dream.family.dto.FeedInfo;
 import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
@@ -19,7 +17,8 @@ public class SpaceFeedListResp {
     private int id;
     private String title;
     private String cover;
-    private String illustration;// 插图，当feed为广西,图片时 指的是feed中的图片(会进行图片合成，生成n宫格)
+    // private String illustration;// 插图，当feed为视频,图片时 指的是feed中的图片(会进行图片合成，生成n宫格)
+    private List<String> illustrations;
     // feed type
     private int type;
     private String content;
@@ -35,24 +34,17 @@ public class SpaceFeedListResp {
     private List<FeedCommentInfoResp> comments;
 
 
-    private static String buildDateDesc(FeedInfo feedInfo) {
-        Date ct = feedInfo.getCreateTime();
-        return DateUtils.getDateMDStringValue(ct);
-    }
-    
-
     public SpaceFeedListResp(FeedInfo feedInfo, UserInfo authorUserInfo, List<UserInfoResp> likeIcons,
             List<FeedCommentInfoResp> comments, boolean ilike) {
         this.id = feedInfo.getId();
         this.title = feedInfo.getTitle();
-        this.cover = feedInfo.getCover();
         this.type = feedInfo.getType();
         this.content = feedInfo.getContent();
         this.resourceUrl = feedInfo.getResourceUrl();
         this.duration = feedInfo.getDuration();
-        this.timeDesc =ContentDescUtils.buildTimeDesc(feedInfo);
-        this.dateDesc = buildDateDesc(feedInfo);
-        this.illustration = feedInfo.getIllustration();
+        this.timeDesc = ContentDescUtils.buildTimeDesc(feedInfo);
+        this.dateDesc = ContentDescUtils.buildDateDesc(feedInfo);
+        ContentDescUtils.buildFeedCoverAndIllustration(this, feedInfo);
         if (authorUserInfo != null) {
             this.avatarUrl = authorUserInfo.getAvatarUrl();
             this.nickname = authorUserInfo.getNickName();
@@ -183,11 +175,12 @@ public class SpaceFeedListResp {
         this.ilike = ilike;
     }
 
-    public String getIllustration() {
-        return illustration;
+    public List<String> getIllustrations() {
+        return illustrations;
     }
 
-    public void setIllustration(String illustration) {
-        this.illustration = illustration;
+
+    public void setIllustrations(List<String> illustrations) {
+        this.illustrations = illustrations;
     }
 }

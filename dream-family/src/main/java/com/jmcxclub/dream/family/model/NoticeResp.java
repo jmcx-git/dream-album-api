@@ -26,6 +26,7 @@ public class NoticeResp {
         this.content = userNoticeInfo.getDesc();
         this.time = userNoticeInfo.getCreateTime().getTime();
         this.timeDesc = ContentDescUtils.buildNoticeTimeDesc(userNoticeInfo.getCreateTime());
+        this.resourceUrl = userNoticeInfo.getImgUrl();
     }
 
     public NoticeResp(SystemNoticeInfo systemNoticeInfo) {

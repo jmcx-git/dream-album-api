@@ -3,10 +3,12 @@
 package com.jmcxclub.dream.family.model;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
+import com.jmcxclub.dream.family.utils.ContentDescUtils;
 
 /**
  * @author mokous86@gmail.com create date: Jan 12, 2017
@@ -19,6 +21,7 @@ public class ActivityWorksResp {
     private int type;// 作品类型 0：非视频 1:视频 2:音频
     private String cover;// 如果是以type==0参赛,则此处和resourceUrl一样,否则此值为对应的资源封面
     private String resourceUrl;// 如果是以type==0参赛,则此处和cover一样,否则此值为对应的资源地址
+    private List<String> illustrations;
     private Long durations;// 参赛作品如果是视频,音频则为其时长
     private String solgan;// 参赛作品口号
     private String desc;// 参赛作品描述
@@ -29,6 +32,7 @@ public class ActivityWorksResp {
         } catch (IllegalAccessException e) {
         } catch (InvocationTargetException e) {
         }
+        ContentDescUtils.buildCoverAndIllustrations(this, info);
         this.rank = rank;
         this.votes = votes;
     }
@@ -103,5 +107,13 @@ public class ActivityWorksResp {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public List<String> getIllustrations() {
+        return illustrations;
+    }
+
+    public void setIllustrations(List<String> illustrations) {
+        this.illustrations = illustrations;
     }
 }

@@ -4,7 +4,8 @@
 	<resultMap id="usernoticeinfo" class="com.jmcxclub.dream.family.dto.UserNoticeInfo">
 		<result column="id" property="id" jdbcType="INTEGER" />
 		<result column="user_id" property="userId" jdbcType="INTEGER" />
-		<result column="desc" property="desc" jdbcType="INTEGER" />
+		<result column="desc" property="desc" jdbcType="VARCHAR" />
+		<result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="INTEGER" />
 		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
 		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -12,8 +13,8 @@
 
 	<insert id="insertOrUpdateUserNoticeInfo" parameterClass="com.jmcxclub.dream.family.dto.UserNoticeInfo">
 		<![CDATA[
-			INSERT INTO user_notice_info (`id`, `user_id`, `desc`,`status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #desc#, 0, now(),now())
+			INSERT INTO user_notice_info (`id`, `user_id`, `desc`, `img_url`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #desc#, #imgUrl#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -23,8 +24,8 @@
 
 	<insert id="insertUserNoticeInfoReturnId" parameterClass="com.jmcxclub.dream.family.dto.UserNoticeInfo">
 		<![CDATA[
-			INSERT INTO user_notice_info (`id`, `user_id`, `desc`,`status`,`update_time`,`create_time`)
-			VALUES(null, #userId#, #desc#, 0, now(),now())
+			INSERT INTO user_notice_info (`id`, `user_id`, `desc`, `img_url`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #desc#, #imgUrl#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY
@@ -34,8 +35,8 @@
 
 	<insert id="insertOrIgnoreUserNoticeInfo" parameterClass="com.jmcxclub.dream.family.dto.UserNoticeInfo">
 		<![CDATA[
-			INSERT INTO user_notice_info (`id`,`desc`,`status`,`update_time`,`create_time`)
-			VALUES(null, #desc#, 0, now(),now())
+			INSERT INTO user_notice_info (`id`, `user_id`, `desc`, `img_url`, `status`,`update_time`,`create_time`)
+			VALUES(null, #userId#, #desc#, #imgUrl#, 0, now(),now())
 		]]>
 		<selectKey resultClass="int" keyProperty="id">
 			SELECT @@IDENTITY

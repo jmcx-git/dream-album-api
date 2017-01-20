@@ -13,10 +13,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 
 import com.dreambox.core.dto.album.UserInfo;
 import com.dreambox.core.utils.DateUtils;
+import com.dreambox.web.exception.ServiceException;
 import com.dreambox.web.utils.CollectionUtils;
+import com.dreambox.web.utils.GsonUtils;
 import com.jmcxclub.dream.family.dto.ActivityFinishEnum;
 import com.jmcxclub.dream.family.dto.ActivityInfo;
 import com.jmcxclub.dream.family.dto.ActivityPrizeInfo;
@@ -24,21 +27,30 @@ import com.jmcxclub.dream.family.dto.ActivityUserPrizeInfo;
 import com.jmcxclub.dream.family.dto.ActivityVoteStatInfo;
 import com.jmcxclub.dream.family.dto.ActivityWorksInfo;
 import com.jmcxclub.dream.family.dto.FeedInfo;
+import com.jmcxclub.dream.family.dto.FeedInnerPhoto;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.dto.SpaceInfo;
 import com.jmcxclub.dream.family.dto.SpaceTypeEnum;
 import com.jmcxclub.dream.family.dto.UserSpaceInteractionInfo;
+import com.jmcxclub.dream.family.dto.WikiInfo;
 import com.jmcxclub.dream.family.model.ActivityInfoResp;
 import com.jmcxclub.dream.family.model.ActivityInfoResp.ActivityPrizeResp;
 import com.jmcxclub.dream.family.model.ActivityStepEnum;
+import com.jmcxclub.dream.family.model.ActivityWorksResp;
 import com.jmcxclub.dream.family.model.DiscoveryListResp;
+import com.jmcxclub.dream.family.model.SpaceFeedListResp;
+import com.jmcxclub.dream.family.model.UserFeedListResp;
 import com.jmcxclub.dream.family.model.UserPrizeResp;
+import com.jmcxclub.dream.family.model.WikiPhaseResp;
 
 /**
  * @author mokous86@gmail.com create date: Jan 11, 2017
  *
  */
 public class ContentDescUtils {
+    private static final Logger log = Logger.getLogger(ContentDescUtils.class);
+    public static final String JSON_OBJECT_LIST_SPLIT_CHAR = "&";
+
     public static String decode(String content) {
         if (StringUtils.isNotEmpty(content)) {
             try {
@@ -202,6 +214,7 @@ public class ContentDescUtils {
         String stepDesc = "";
         String bottomStepDesc = "";// 只在step==0,2,3只有值F
         String activityTimeDesc = buildStartEndTimeDesc(info.getStartDate(), info.getEndDate());
+        String prizeTimeDesc = buildChineseTimeDesc(info.getPrizeDate());
         String[] contens = info.getContent().split("<br/>");
         if (contens.length == 1) {
             contens = info.getContent().split("\r\n");
@@ -322,16 +335,20 @@ public class ContentDescUtils {
         activityInfoResp.setStepTime(stepTime);
         activityInfoResp.setStepTimeUnit(stepTimeUnit);
         activityInfoResp.setActivityTimeDesc(activityTimeDesc);
+        activityInfoResp.setPrizeTimeDesc(prizeTimeDesc);
         activityInfoResp.setBottomStepDesc(bottomStepDesc);
         activityInfoResp.setUserPrizes(userPrizeResp);
     }
 
+    private static String buildChineseTimeDesc(Date date) {
+        int year = DateUtils.getYear(date);
+        int month = DateUtils.getMonth(date);
+        int day = DateUtils.getDay(date);
+        return year + "年" + month + "月" + day + "日";
+    }
+
     private static String buildStartEndTimeDesc(Date startDate, Date endDate) {
-        int sm = DateUtils.getMonth(startDate);
-        int em = DateUtils.getMonth(endDate);
-        int sd = DateUtils.getDay(startDate);
-        int ed = DateUtils.getDay(endDate);
-        return sm + "月" + sd + "日一" + em + "月" + ed + "日";
+        return buildChineseTimeDesc(startDate) + "一" + buildChineseTimeDesc(endDate);
     }
 
     public static String buildSpaceInfo(SpaceInfo spaceInfo) {
@@ -344,4 +361,126 @@ public class ContentDescUtils {
         return null;
     }
 
+    public static void buildFeedCoverAndIllustration(SpaceFeedListResp spaceFeedListResp, FeedInfo feedInfo) {
+        if (StringUtils.isEmpty(feedInfo.getIllustration())) {
+            spaceFeedListResp.setCover(feedInfo.getCover());
+        } else {
+            String illustration = feedInfo.getIllustration();
+            String[] illustrations = StringUtils.split(illustration, JSON_OBJECT_LIST_SPLIT_CHAR);
+            List<String> illustrationList = new ArrayList<String>(illustrations.length);
+            String cover = null;
+            for (String illustrationInner : illustrations) {
+                FeedInnerPhoto feedInnerPhoto;
+                try {
+                    feedInnerPhoto = GsonUtils.convert(illustrationInner, FeedInnerPhoto.class);
+                } catch (Exception e) {
+                    log.error("Convert " + illustrationInner + " to " + FeedInnerPhoto.class.getName()
+                            + " failed.Errmsg:" + e.getMessage(), e);
+
+                    throw ServiceException.getInternalException("Json数据格式错误");
+                }
+                illustrationList.add(feedInnerPhoto.getIndex(), feedInnerPhoto.getUrl());
+                if (feedInnerPhoto.getIndex() == 0) {
+                    cover = feedInnerPhoto.getUrl();
+                }
+            }
+            spaceFeedListResp.setCover(cover);
+            spaceFeedListResp.setIllustrations(illustrationList);
+        }
+    }
+
+    public static void buildCoverAndIllustrations(ActivityWorksResp activityWorksResp, ActivityWorksInfo info) {
+        if (StringUtils.isEmpty(info.getIllustration())) {
+            activityWorksResp.setCover(info.getCover());
+        } else {
+            String illustration = info.getIllustration();
+            String[] illustrations = StringUtils.split(illustration, ContentDescUtils.JSON_OBJECT_LIST_SPLIT_CHAR);
+            List<String> illustrationList = new ArrayList<String>(illustrations.length);
+            String cover = null;
+            for (String illustrationInner : illustrations) {
+                FeedInnerPhoto feedInnerPhoto;
+                try {
+                    feedInnerPhoto = GsonUtils.convert(illustrationInner, FeedInnerPhoto.class);
+                } catch (Exception e) {
+                    log.error("Convert " + illustrationInner + " to " + FeedInnerPhoto.class.getName()
+                            + " failed.Errmsg:" + e.getMessage(), e);
+
+                    throw ServiceException.getInternalException("Json数据格式错误");
+                }
+                illustrationList.add(feedInnerPhoto.getIndex(), feedInnerPhoto.getUrl());
+                if (feedInnerPhoto.getIndex() == 0) {
+                    cover = feedInnerPhoto.getUrl();
+                }
+            }
+            activityWorksResp.setCover(cover);
+            activityWorksResp.setIllustrations(illustrationList);
+        }
+
+    }
+
+    public static String buildDateDesc(FeedInfo feedInfo) {
+        Date ct = feedInfo.getCreateTime();
+        return DateUtils.getDateMDStringValue(ct);
+    }
+
+    public static void buildFeedCoverAndIllustration(UserFeedListResp userFeedListResp, FeedInfo feedInfo) {
+        if (StringUtils.isEmpty(feedInfo.getIllustration())) {
+            userFeedListResp.setCover(feedInfo.getCover());
+        } else {
+            String illustration = feedInfo.getIllustration();
+            String[] illustrations = StringUtils.split(illustration, JSON_OBJECT_LIST_SPLIT_CHAR);
+            List<String> illustrationList = new ArrayList<String>(illustrations.length);
+            String cover = null;
+            for (String illustrationInner : illustrations) {
+                FeedInnerPhoto feedInnerPhoto;
+                try {
+                    feedInnerPhoto = GsonUtils.convert(illustrationInner, FeedInnerPhoto.class);
+                } catch (Exception e) {
+                    log.error("Convert " + illustrationInner + " to " + FeedInnerPhoto.class.getName()
+                            + " failed.Errmsg:" + e.getMessage(), e);
+
+                    throw ServiceException.getInternalException("Json数据格式错误");
+                }
+                illustrationList.add(feedInnerPhoto.getIndex(), feedInnerPhoto.getUrl());
+                if (feedInnerPhoto.getIndex() == 0) {
+                    cover = feedInnerPhoto.getUrl();
+                }
+            }
+            userFeedListResp.setCover(cover);
+            userFeedListResp.setIllustrations(illustrationList);
+        }
+    }
+
+    public static List<WikiPhaseResp> buildWikiContent(WikiInfo wikiInfo, boolean desc) {
+        String content = wikiInfo.getContent();
+        String[] contents = StringUtils.split(content, JSON_OBJECT_LIST_SPLIT_CHAR);
+        List<WikiPhaseResp> ret = new ArrayList<WikiPhaseResp>(contents.length);
+        for (String contentJson : contents) {
+            WikiPhaseResp add;
+            try {
+                add = GsonUtils.convert(contentJson, WikiPhaseResp.class);
+            } catch (Exception e) {
+                String errMsg = "Convert " + contentJson + " to " + WikiPhaseResp.class.getName() + " failed.Errmsg:"
+                        + e.getMessage();
+                log.error(errMsg, e);
+                continue;
+            }
+            ret.add(add);
+        }
+        return ret;
+    }
+
+    public static List<String> buildPhase(String activityRule) {
+        if (StringUtils.isEmpty(activityRule)) {
+            return new ArrayList<String>(0);
+        }
+        String[] rules = activityRule.split("<br/>");
+        if (rules.length == 1) {
+            rules = activityRule.split("\r\n");
+        }
+        if (rules.length == 1) {
+            rules = activityRule.split("\n");
+        }
+        return Arrays.asList(rules);
+    }
 }
