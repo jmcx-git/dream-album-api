@@ -9,11 +9,13 @@ CREATE TABLE IF NOT EXISTS `wiki_info`(
     PRIMARY KEY (`id`)
 )Engine=InnoDB DEFAULT CHARSET=utf8 COMMENT '如何玩转光阴之旅';
 
+ALTER TABLE `activity_works_info` add column `illustration` text after `cover`;
+ALTER TABLE `user_notice_info` add column `img_url` varchar(255) after `desc`;
+ALTER TABLE `activity_info` add column `prize_date` datetime after `end_date`;
+
 update feed_info set illustration = concat('{"index":0,"url":"', `illustration`);
 update feed_info set illustration = concat(`illustration`, '"}');
 update activity_works_info set illustration = concat('{"index":0,"url":"', `cover`);
 update activity_works_info set illustration = concat(`illustration`, '"}');
 
-ALTER TABLE `activity_works_info` add column `illustration` text after `cover`;
-ALTER TABLE `user_notice_info` add column `img_url` varchar(255) after `desc`;
-ALTER TABLE `activity_info` add column `prize_date` datetime after `end_date`;
+
