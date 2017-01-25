@@ -3,6 +3,7 @@
 package com.jmcxclub.dream.family.service.impl;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 import javax.annotation.Resource;
 
@@ -14,6 +15,7 @@ import redis.clients.jedis.ShardedJedisPool;
 
 import com.dreambox.core.dao.CommonDao;
 import com.dreambox.core.dao.LoadDao;
+import com.dreambox.core.utils.DateUtils;
 import com.dreambox.core.utils.RedisCacheUtils;
 import com.dreambox.web.exception.ServiceException;
 import com.jmcxclub.dream.family.dao.ActivityVoteDetailInfoDao;
@@ -36,6 +38,19 @@ public class ActivityVoteDetailInfoServiceImpl extends ActivityVoteDetailInfoSer
 
     private String ukPkPrefixKey = "acti:vote:detail:pk:uk";
     private String infoPrefixKey = "acti:vote:detail:info";
+    private String userDayMaxVoteCountKey = "acti:vote:user:day:count";
+
+    @Override
+    public boolean addOrIgnoreData(ActivityVoteDetailInfo g) throws ServiceException {
+        String key = RedisCacheUtils.buildKey(userDayMaxVoteCountKey, String.valueOf(g.getUserId()),
+                DateUtils.getDateYMDStringValue(new Date()));
+        if (RedisCacheUtils.incr(key, getJedisPool()) > 2) {
+            return false;
+
+        }
+        RedisCacheUtils.expiresKey(key, 60 * 60 * 24, getJedisPool());
+        return super.addOrIgnoreData(g);
+    }
 
     @Override
     protected String buildUkPkPrefixKey() {
