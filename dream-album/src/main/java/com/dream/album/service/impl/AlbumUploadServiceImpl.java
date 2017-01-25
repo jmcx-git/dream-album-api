@@ -224,7 +224,6 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
         ua.setAlbumId(userAlbumInfo.getAlbumId());
         ua.setRank(albumItemInfo.getRank());// 在album中所有图片的第几张
         ua.setAlbumItemId(albumItemId);
-        // ua.setPreviewImgUrl(albumItemInfo.getPreviewImgUrl());
         userAlbumItemInfoService.addData(ua);
         UserAlbumItemInfo userAlbumItemInfo = userAlbumItemInfoService.getUserAlbumItemInfoByUk(ua);
         if (userAlbumItemInfo == null) {
@@ -257,76 +256,52 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
             userAlbumItemEditInfoService.addData(g);
         }
 
+        // 检查该用户相册单页数据是否已经上传完毕,若数据完整则制作相册子图
+        if (checkComplete(userAlbumItemInfo)) {
+            UserAlbumItemEditInfo a = new UserAlbumItemEditInfo();
+            a.setUserAlbumItemId(userAlbumItemInfo.getId());
+            // 获取对应子页的编辑信息数据
+            List<UserAlbumItemEditInfo> editInfos = userAlbumItemEditInfoService.listDirectFromDb(a);
+            // 获取对应子页的模版信息
+            AlbumItemInfo i = albumItemInfoService.getDirectFromDb(userAlbumItemInfo.getAlbumItemId());
+            List<MergeImgWithMultipartModel> datas = new ArrayList<MergeImgWithMultipartModel>();
+            // 根据是否上传图片来填充合图所需的数据
+            for (UserAlbumItemEditInfo userAlbumItemEditInfo : editInfos) {
+                MergeImgWithMultipartModel data = new MergeImgWithMultipartModel();
+                if (StringUtils.isNotBlank(userAlbumItemEditInfo.getUserOriginImgUrl())) {
+                    // 上传图片，将上传的图片及图片编辑信息填充进去
+                    data.setPath(userAlbumItemInfoService.getUserOriginImgPath(userAlbumItemEditInfo
+                            .getUserOriginImgUrl()));
+                    data.setUserAlbumItemEditInfo(userAlbumItemEditInfo);
+                    data.setClipDefault(false);
+                    datas.add(data);
+                } else {
+                    // 未上传图片，填充默认预览图对应的编辑信息以裁剪该编辑区域的默认图填充至合成图中
+                    data.setPath(albumItemInfoService.getDefaultPreImgPath(i));
+                    data.setUserAlbumItemEditInfo(userAlbumItemEditInfo);
+                    data.setClipDefault(true);
+                    datas.add(data);
+                }
+            }
+            // 开始合成
+            if (datas.size() > 0) {
+                MergeImgFileResp mergeImgFileResp;
+                try {
+                    mergeImgFileResp = imgService.mergeToPreviewImgWithMultipart(
+                            albumItemInfoService.getEditImgPath(i), i, datas);
+                    // 合成完毕，设置子页预览图地址信息
+                    userAlbumItemInfo.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
+                    userAlbumItemInfoService.addData(userAlbumItemInfo);
+                } catch (Exception e) {
+                    log.error("album lite make pre img fail!errMsg:" + e.getMessage());
+                    return new ApiRespWrapper<String>(-1, "相册生成失异常!errMsg:" + e.getMessage());
+                }
+            }
+        }
+
+        // 根据子页rank与约定标记判断是否是最后一页的制作，现在是由多并发转线性操作，不存在乱序影响
         if (albumItemInfo.getRank() + 1 == albumInfo.getTotalItems()
                 && CompleteEnum.COMPLETED.getStatus() == isComplete) {
-            UserAlbumItemInfo uaNew = new UserAlbumItemInfo();
-            uaNew.setUserAlbumId(userAlbumInfo.getId());
-            // 根据用户信息id拉取用户相册最新的操作记录历史
-            List<UserAlbumItemInfo> uaItems = new ArrayList<UserAlbumItemInfo>();
-            int times = 0;
-            do {
-                /**
-                 * 控制一次上传多图并发时，只允许所有图片记录都生成以后才制作预览图
-                 */
-                uaItems = userAlbumItemInfoService.listDirectFromDb(uaNew);
-                if (uaItems != null && uaItems.size() == albumInfo.getTotalItems() && checkComplete(uaItems)) {
-                    break;
-                } else {
-                    try {
-                        Thread.sleep(2000);
-                        times++;
-                    } catch (InterruptedException e) {
-                        log.warn("thread sleep catch a error : " + e.getMessage());
-                        return new ApiRespWrapper<String>(-1, "相册生成失异常!errMsg:" + e.getMessage());
-                    }
-                }
-            } while (times < 10);
-            if (times >= 10) {
-                return new ApiRespWrapper<String>(-1, "相册生成失败,时间超时!");
-            }
-            // TODO
-            // 数据完整以后开始合成单张预览图
-            for (UserAlbumItemInfo info : uaItems) {
-                // 循环用户相册子页数据
-                UserAlbumItemEditInfo a = new UserAlbumItemEditInfo();
-                a.setUserAlbumItemId(info.getId());
-                // 获取对应子页的编辑信息数据
-                List<UserAlbumItemEditInfo> editInfos = userAlbumItemEditInfoService.listDirectFromDb(a);
-                // 获取对应子页的模版信息
-                AlbumItemInfo i = albumItemInfoService.getDirectFromDb(info.getAlbumItemId());
-                List<MergeImgWithMultipartModel> datas = new ArrayList<MergeImgWithMultipartModel>();
-                for (UserAlbumItemEditInfo userAlbumItemEditInfo : editInfos) {
-                    MergeImgWithMultipartModel data = new MergeImgWithMultipartModel();
-                    if (StringUtils.isNotBlank(userAlbumItemEditInfo.getUserOriginImgUrl())) {
-                        data.setPath(userAlbumItemInfoService.getUserOriginImgPath(userAlbumItemEditInfo
-                                .getUserOriginImgUrl()));
-                        data.setUserAlbumItemEditInfo(userAlbumItemEditInfo);
-                        data.setClipDefault(false);
-                        datas.add(data);
-                    } else {
-                        data.setPath(albumItemInfoService.getDefaultPreImgPath(i));
-                        data.setUserAlbumItemEditInfo(userAlbumItemEditInfo);
-                        data.setClipDefault(true);
-                        datas.add(data);
-                    }
-                }
-                if (datas.size() > 0) {
-                    MergeImgFileResp mergeImgFileResp;
-                    try {
-                        mergeImgFileResp = imgService.mergeToPreviewImgWithMultipart(
-                                albumItemInfoService.getEditImgPath(i), i, datas);
-                        info.setPreviewImgUrl(mergeImgFileResp.getUrlPath());
-                        userAlbumItemInfoService.addData(info);
-                    } catch (Exception e) {
-                        log.error("album lite make pre img fail!errMsg:" + e.getMessage());
-                        return new ApiRespWrapper<String>(-1, "相册生成失异常!errMsg:" + e.getMessage());
-                    }
-                }
-                // else {
-                // info.setPreviewImgUrl(i.getPreviewImgUrl());
-                // userAlbumItemInfoService.addData(info);
-                // }
-            }
             // 生成相册标题
             userAlbumInfo.setTitle(albumInfo.getTitle() + " "
                     + DateUtils.formatStr(new Date(), DateUtils.YYYYMMDDHHMM_FORMAT));
@@ -338,16 +313,14 @@ public class AlbumUploadServiceImpl implements AlbumUploadService {
         return new ApiRespWrapper<String>(0, "数据添加成功!", String.valueOf(userAlbumId));
     }
 
-    private boolean checkComplete(List<UserAlbumItemInfo> items) {
+    private boolean checkComplete(UserAlbumItemInfo item) {
         boolean isComplete = true;
-        for (UserAlbumItemInfo item : items) {
-            UserAlbumItemEditInfo g = new UserAlbumItemEditInfo();
-            g.setUserAlbumItemId(item.getId());
-            List<UserAlbumItemEditInfo> editInfos = userAlbumItemEditInfoService.listDirectFromDb(g);
-            AlbumItemInfo info = albumItemInfoService.getDirectFromDb(item.getAlbumItemId());
-            if (CollectionUtils.emptyOrNull(editInfos) || info == null || editInfos.size() != info.getEditCount()) {
-                isComplete = false;
-            }
+        UserAlbumItemEditInfo g = new UserAlbumItemEditInfo();
+        g.setUserAlbumItemId(item.getId());
+        List<UserAlbumItemEditInfo> editInfos = userAlbumItemEditInfoService.listDirectFromDb(g);
+        AlbumItemInfo info = albumItemInfoService.getDirectFromDb(item.getAlbumItemId());
+        if (CollectionUtils.emptyOrNull(editInfos) || info == null || editInfos.size() != info.getEditCount()) {
+            isComplete = false;
         }
         return isComplete;
     }

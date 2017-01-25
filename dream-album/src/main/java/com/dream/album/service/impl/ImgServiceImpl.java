@@ -141,7 +141,7 @@ public class ImgServiceImpl implements ImgService {
                     albumItemInfo.getImgHeight(), datas, filePath);
         } catch (IOException e) {
             log.error("Merge image file to preview file faied. Errmsg:" + e.getMessage(), e);
-            throw ServiceException.getInternalException("Merge image files failed.");
+            throw ServiceException.getInternalException("Merge image files failed." + e.getMessage());
         }
         return new MergeImgFileResp(filePath, StringUtils.replace(filePath, imgLocalDir, imgPrefixUrl));
     }
