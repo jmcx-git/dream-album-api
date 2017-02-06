@@ -10,6 +10,17 @@ import com.dreambox.core.dto.StatusSerializable;
  *
  */
 public class ActivityWorksInfo extends StatusSerializable {
+
+    public static void main(String[] args) {
+        for (int i = 8; i < 62; i++) {
+            int userId = 66666666 + i;
+            System.out.println("INSERT INTO activity_works_info values(null,1," + userId
+                    + ",0,'我的小宝贝','', 'https://cdn.mokous.com/activity/works/2017-01-25/t_" + i
+                    + ".jpg','{\"index\":0,\"url\":\"https://cdn.mokous.com/activity/works/2017-01-25/t_" + i
+                    + ".jpg\"}','',0,0,now(), now());");
+        }
+    }
+
     /**
      * 
      */

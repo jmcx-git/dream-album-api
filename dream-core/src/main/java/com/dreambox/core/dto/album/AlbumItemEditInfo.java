@@ -1,5 +1,8 @@
 package com.dreambox.core.dto.album;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
 import com.dreambox.core.DbStatus;
 
 /**
@@ -7,6 +10,21 @@ import com.dreambox.core.DbStatus;
  * @date 2016年12月29日
  */
 public class AlbumItemEditInfo extends DbStatus {
+    public static void main(String[] args) {
+        File file = new File("/Users/luofei/Downloads/宝宝图片");
+        File[] files = file.listFiles(new FilenameFilter() {
+
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.startsWith("宝");
+            }
+        });
+        int i = 20;
+        for (File f : files) {
+            f.renameTo(new File(f.getParent(), "t_" + i + ".jpg"));
+            i++;
+        }
+    }
 
     /**
      * 
