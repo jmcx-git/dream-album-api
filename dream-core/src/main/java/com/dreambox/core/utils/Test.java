@@ -18,8 +18,8 @@ import com.dreambox.web.utils.CollectionUtils;
 
 public class Test {
     public static void main(String[] args) {
-        String[] files = new String[] { "/Users/luofei/Desktop/t-1.png", "/Users/luofei/Desktop/t-2.png",
-                "/Users/luofei/Desktop/t-3.png", "/Users/luofei/Desktop/t-4.png" };
+        String[] files = new String[] { "/Users/luofei/Desktop/imgs/e-1.png", "/Users/luofei/Desktop/imgs/e-2.png",
+                "/Users/luofei/Desktop/imgs/e-3.png", "/Users/luofei/Desktop/imgs/e-4.png" };
         // Get Image
         for (String file : files) {
             ImageIcon icon = new ImageIcon(file);

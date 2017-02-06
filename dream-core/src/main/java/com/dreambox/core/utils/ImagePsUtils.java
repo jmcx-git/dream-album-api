@@ -69,7 +69,7 @@ public class ImagePsUtils {
             }
         }
         File outputFile = new File(toPath);
-        outputFile.mkdirs();
+        outputFile.getParentFile().mkdirs();
         try {
             ImageIO.write(newBufferedImage, "jpg", outputFile);
             outputFile.setReadable(true, false);
@@ -103,7 +103,7 @@ public class ImagePsUtils {
             newBufferedImage.createGraphics().drawImage(ImageIO.read(new File(coverPath)), x, y, width, height, null);
             newBufferedImage.createGraphics().drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
             File outputFile = new File(toPath);
-            outputFile.mkdirs();
+            outputFile.getParentFile().mkdirs();
             ImageIO.write(newBufferedImage, "jpg", outputFile);
             outputFile.setReadable(true, false);
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class ImagePsUtils {
             g2d.drawImage(convertBufferedImage, x, y, width + x, height + y, startX, startY, endX, endY, null);
             g2d.drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
             File outputFile = new File(toPath);
-            outputFile.mkdirs();
+            outputFile.getParentFile().mkdirs();
             ImageIO.write(newBufferedImage, "jpg", outputFile);
             outputFile.setReadable(true, false);
         } catch (Exception e) {
@@ -202,7 +202,7 @@ public class ImagePsUtils {
             }
             g2d.drawImage(ImageIO.read(new File(bgImagePath)), 0, 0, null);
             File outputFile = new File(toPath);
-            outputFile.mkdirs();
+            outputFile.getParentFile().mkdirs();
             ImageIO.write(newBufferedImage, "jpg", outputFile);
             outputFile.setReadable(true, false);
         } catch (Exception e) {
