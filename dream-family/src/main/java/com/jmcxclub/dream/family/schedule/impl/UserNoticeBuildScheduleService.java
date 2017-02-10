@@ -23,7 +23,6 @@ import com.jmcxclub.dream.family.dto.NoticeBuildEnum;
 import com.jmcxclub.dream.family.dto.PrizeInfo;
 import com.jmcxclub.dream.family.dto.UserNoticeInfo;
 import com.jmcxclub.dream.family.dto.UserNoticeReadEnum;
-import com.jmcxclub.dream.family.model.AboutUsResp;
 import com.jmcxclub.dream.family.service.ActivityInfoService;
 import com.jmcxclub.dream.family.service.ActivityPrizeInfoService;
 import com.jmcxclub.dream.family.service.ActivityUserPrizeInfoService;
