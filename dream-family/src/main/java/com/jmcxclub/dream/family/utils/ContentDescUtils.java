@@ -181,7 +181,7 @@ public class ContentDescUtils {
 
     public static String buildNotice(PrizeInfo prizeInfo, ActivityInfo activityInfo, ActivityWorksInfo activityWorksInfo) {
         // 恭喜您，在***活动中，获得大奖一份，请前往发现，找到活动，获取相关信息，或者通过下方与客房对话图标联系我们。
-        return "恭喜您，在【" + activityInfo.getTitle() + "】活动中，获得大奖一份，请点击下方蓝色按钮与客服对话，获取兑奖详情。";
+        return "恭喜您，在【" + activityInfo.getTitle() + "】活动中，获得大奖一份，在微信中添加朋友,输入客服微信号【Niubihao110】，与之对话，获取兑奖详情。";
     }
 
     public static String buildNoticeTimeDesc(Date createTime) {
