@@ -112,7 +112,7 @@ public class UserNoticeBuildScheduleService extends AbstractScheduleService {
                 userNoticeInfo.setDesc(desc);
                 userNoticeInfo.setUserId(data.getUserId());
                 userNoticeInfo.setRead(UserNoticeReadEnum.INIT.getFlag());
-                userNoticeInfo.setImgUrl(new AboutUsResp().getOfficialServiceQrCode());
+                userNoticeInfo.setImgUrl(null);
                 userNoticeInfos.add(userNoticeInfo);
             }
             userNoticeInfoService.batchAdd(userNoticeInfos);
